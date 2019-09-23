@@ -1,0 +1,36 @@
+.btn {
+	padding: 8px 16px;
+	margin: auto;
+	display: block;
+
+	padding: 12px 16px;
+
+	color: dodgerblue;
+	background: transparent;
+	border: 1px solid dodgerblue;
+
+	transition: all 0.2s ease-out;
+
+	&:hover,
+	&:focus,
+	&.selected {
+		outline: none;
+
+		padding: 12px 16px;
+
+		color: #fff;
+		background: dodgerBlue;
+		border: 1px solid dodgerBlue;
+
+		transition: all 0.2s ease-in;
+	}
+}
+
+.btn--round {
+	border-radius: 100em;
+}
+
+.btn--big {
+	width: 6em;
+	height: 3em;
+}
