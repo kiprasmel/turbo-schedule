@@ -15,7 +15,7 @@
 		"serve": "node dist/index.js"
 	},
 	"dependencies": {
-		"@turbo-schedule/common": "1.0.0",
+		"@turbo-schedule/common": "0.1.0",
 		"@types/cheerio": "^0.22.13",
 		"@types/fs-extra": "^8.0.0",
 		"@types/node-fetch": "^2.5.0",
