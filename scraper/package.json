@@ -1,0 +1,46 @@
+{
+	"name": "@turbo-schedule/scraper",
+	"version": "0.1.0",
+	"description": "",
+	"main": "dist/index.js",
+	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
+	"license": "",
+	"scripts": {
+		"start": "yarn run dev",
+		"watch:ts": "tsc -w",
+		"watch:node": "nodemon --ignore saved-content/ dist/index.js",
+		"dev": "concurrently \"yarn run watch:ts\" \"yarn run watch:node\"",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsc",
+		"serve": "node dist/index.js"
+	},
+	"dependencies": {
+		"@turbo-schedule/common": "1.0.0",
+		"@types/cheerio": "^0.22.13",
+		"@types/fs-extra": "^8.0.0",
+		"@types/node-fetch": "^2.5.0",
+		"@types/prettier": "^1.18.2",
+		"@types/request": "^2.48.2",
+		"axios": "^0.19.0",
+		"cheerio": "^1.0.0-rc.3",
+		"concurrently": "^4.1.2",
+		"encoding": "^0.1.12",
+		"fs-extra": "^8.1.0",
+		"iconv-lite": "^0.5.0",
+		"node-fetch": "^2.6.0",
+		"nodemon": "^1.19.1",
+		"prettier": "^1.18.2",
+		"request": "^2.88.0"
+	},
+	"devDependencies": {
+		"@types/node": "^12.7.2",
+		"typescript": "^3.6.2"
+	},
+	"keywords": [
+		"turbo",
+		"schedule",
+		"scraper",
+		"sarpik",
+		"kpg"
+	]
+}
