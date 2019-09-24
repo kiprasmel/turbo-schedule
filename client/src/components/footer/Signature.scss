@@ -1,0 +1,47 @@
+$xpink: #ff4488;
+$xlightdark: #34475a;
+$xlight: #fff;
+
+.footer {
+	text-align: center;
+	// background: $xlightdark;
+	// color: $xlight;
+	font-size: 0.95rem;
+}
+
+a {
+	text-decoration: none;
+}
+
+.name {
+	width: 50%;
+	margin: auto;
+
+	display: block;
+
+	padding: 1em 1em;
+
+	font-size: 1.125em;
+	font-weight: bold;
+
+	&:hover {
+		font-size: 1.125em;
+
+		color: #000;
+		text-decoration: none;
+
+		background: rgba($xpink, 0.9);
+	}
+}
+
+@media (max-width: 1210px) {
+	.name {
+		width: 75%;
+	}
+}
+
+@media (max-width: 800px) {
+	.name {
+		width: 100%;
+	}
+}
