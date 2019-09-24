@@ -1,7 +1,26 @@
 {
+	"name": "turbo-schedule",
 	"private": true,
-	"workspaces": [
-		"packages/*"
-	],
-	"scripts": {}
+	"workspaces": {
+		"packages": [
+			"common",
+			"scraper",
+			"server",
+			"client"
+		]
+	},
+	"scripts": {
+		"dev": "yarn --cwd server/ run dev",
+		"purge": "rimraf ./*/node_modules && rimraf ./node_modules",
+		"install:prod": "yarn install --production",
+		"test": "lerna run test",
+		"build": "lerna run build",
+		"serve": "yarn --cwd server run serve",
+		"prepare-docker": "yarn purge && yarn install && yarn build",
+		"full-deploy": ""
+	},
+	"devDependencies": {
+		"lerna": "^3.16.4",
+		"rimraf": "^3.0.0"
+	}
 }

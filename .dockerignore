@@ -1,0 +1,17 @@
+*
+!package.json
+!yarn.lock
+
+!common/package.json
+!scraper/package.json
+!server/package.json
+!client/package.json
+
+!common/dist
+!scraper/dist
+!server/dist
+!client/build
+
+#### this sucks
+###!server/postinstall.ts
+###!server/src/config.ts
