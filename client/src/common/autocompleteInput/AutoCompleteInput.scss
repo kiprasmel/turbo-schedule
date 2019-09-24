@@ -1,0 +1,14 @@
+.enter {
+	font-size: 5em;
+	margin-top: 1em;
+	cursor: pointer;
+
+	outline: none;
+	transition: color 0.2s ease-in-out;
+}
+
+.enter:hover,
+.enter:focus {
+	color: deepskyblue;
+	transition: color 0.2s ease-in-out;
+}
