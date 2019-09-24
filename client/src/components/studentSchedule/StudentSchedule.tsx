@@ -3,14 +3,14 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import "./StudentSchedule.scss";
 
 import StudentListModal from "./StudentListModal";
-import { ILesson } from "../../model/Lesson";
+import { ILesson } from "../../models/Lesson";
 import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
 import { useRenderCount } from "../../hooks/useRenderCount";
 
-import { fetchStudentSchedule } from "../../util/fetchStudentSchedule";
+import { fetchStudentSchedule } from "../../utils/fetchStudentSchedule";
 import DaySelector from "./DaySelector";
-import { ScheduleDay, getTodaysScheduleDay } from "../../util/selectSchedule";
+import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
 import OneDaySchedule from "./OneDaySchedule";
 

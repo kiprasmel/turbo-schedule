@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { ICurrentLangContext, CurrentLangContext } from "../app/currentLangContext/currentLangContext";
+import { ICurrentLangContext, CurrentLangContext } from "../components/currentLangContext/currentLangContext";
 
 import { translations, ITranslations } from "./i18n";
 import { Dictionary } from "./Dictionary";
@@ -19,7 +19,6 @@ export const _useTranslation = <Translations extends ITranslations>(
 	_CurrentLangContext: ICurrentLangContext,
 	_translations: Translations
 ) => {
-	console.log("_useTranslation called");
 	const { currentLang } = useContext(_CurrentLangContext);
 
 	const translation: Dictionary = _translations[currentLang];

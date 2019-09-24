@@ -3,18 +3,18 @@ import { Router, Switch, Route } from "react-router-dom";
 
 import "./App.scss";
 
-import CurrentLangContextProvider from "./app/currentLangContext/CurrentLangContextProvider";
+import CurrentLangContextProvider from "./components/currentLangContext/CurrentLangContextProvider";
 
 /** pages */
-import Header from "./app/header/Header";
-import Landing from "./app/landing/Landing";
-import StudentSchedule from "./app/studentSchedule/StudentSchedule";
-import Footer from "./app/footer/Footer";
+import Header from "./components/header/Header";
+import Landing from "./components/landing/Landing";
+import StudentSchedule from "./components/studentSchedule/StudentSchedule";
+import Footer from "./components/footer/Footer";
 
 /** misc */
-import { history } from "./util/history";
+import { history } from "./utils/history";
 
-import { logCoolStuff } from "./util/logCoolStuff";
+import { logCoolStuff } from "./utils/logCoolStuff";
 
 logCoolStuff();
 

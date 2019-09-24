@@ -68,7 +68,5 @@ export const isLessonHappeningNow = (dayIndex: number, timeIndex: number): IIsLe
 
 	const howMuchDone: number = diffFromEndToNow / diffFromStartAndEnd;
 
-	console.log("howMuchDone", howMuchDone);
-
 	return { isHappeningNow: true, howMuchDone };
 };

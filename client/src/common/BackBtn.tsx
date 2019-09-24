@@ -1,6 +1,6 @@
 import React from "react";
 
-import { history } from "../util/history";
+import { history } from "../utils/history";
 import { useTranslation } from "../i18n/useTranslation";
 
 const BackBtn = () => {

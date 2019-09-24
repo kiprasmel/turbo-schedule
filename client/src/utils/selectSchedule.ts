@@ -1,4 +1,4 @@
-import { ILesson } from "../model/Lesson";
+import { ILesson } from "../models/Lesson";
 import { getWeekdayIndex, IWeekdayIndex } from "./getWeekday";
 
 // export interface IScheduleDay {

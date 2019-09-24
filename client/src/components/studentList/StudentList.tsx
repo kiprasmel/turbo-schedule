@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./StudentList.scss";
 
-import { fetchStudentsList } from "../../util/fetchStudentsList";
+import { fetchStudentsList } from "../../utils/fetchStudentsList";
 import AutoCompleteInput from "../../common/autocompleteInput/AutoCompleteInput";
 
-import { history } from "../../util/history";
+import { history } from "../../utils/history";
 
 import { useTranslation } from "../../i18n/useTranslation";
 

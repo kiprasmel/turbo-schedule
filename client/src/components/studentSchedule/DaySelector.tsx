@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { scheduleDaysArray, ScheduleDay } from "../../util/selectSchedule";
+import { scheduleDaysArray, ScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
 
 export interface DaySelectorProps {
