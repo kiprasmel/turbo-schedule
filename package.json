@@ -10,13 +10,13 @@
 		]
 	},
 	"scripts": {
-		"dev": "yarn --cwd server/ run dev",
 		"purge": "rimraf ./*/node_modules && rimraf ./node_modules",
-		"install:prod": "yarn install --production",
+		"reinstall": "yarn purge && yarn install",
+		"dev": "yarn --cwd server/ run dev",
 		"test": "lerna run test",
 		"build": "lerna run build",
+		"cleanbuild": "yarn reinstall && yarn build",
 		"serve": "yarn --cwd server run serve",
-		"prepare-docker": "yarn purge && yarn install && yarn build",
 		"full-deploy": ""
 	},
 	"devDependencies": {
