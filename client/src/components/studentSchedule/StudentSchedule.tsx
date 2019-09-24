@@ -6,7 +6,7 @@ import StudentListModal from "./StudentListModal";
 import { ILesson } from "../../model/Lesson";
 import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
-import { useRenderCount } from "../../util/useRenderCount";
+import { useRenderCount } from "../../hooks/useRenderCount";
 
 import { fetchStudentSchedule } from "../../util/fetchStudentSchedule";
 import DaySelector from "./DaySelector";

@@ -1,7 +1,7 @@
 import React, { FC, Fragment } from "react";
 
 import LessonTextBox, { ILessonTextBox } from "./LessonTextBox";
-import { useRenderCount } from "../../util/useRenderCount";
+import { useRenderCount } from "../../hooks/useRenderCount";
 
 import { getLessonTimesFormatted, isLessonHappeningNow } from "../../util/getLessonTimes";
 
