@@ -15,6 +15,7 @@ You can also run `turbo-schedule` locally:
 ```sh
 sudo docker pull kipras/turbo-schedule
 sudo docker run -p 5000:5000 --name turbo-schedule kipras/turbo-schedule
+# to stop: sudo docker stop turbo-schedule
 ```
 
 & open <a href="http://localhost:5000">localhost:5000</a>
@@ -22,7 +23,7 @@ sudo docker run -p 5000:5000 --name turbo-schedule kipras/turbo-schedule
 * or from source:
 
 ```sh
-git clone https://github.com/sarpik/turbo-schedule.git # or git clone git@github.com:sarpik/turbo-schedule.git
+git clone https://github.com/sarpik/turbo-schedule.git # or: git clone git@github.com:sarpik/turbo-schedule.git
 cd turbo-schedule/
 yarn install
 yarn build
@@ -34,7 +35,7 @@ yarn serve
 ## Development
 
 ```sh
-git clone https://github.com/sarpik/turbo-schedule.git # or git clone git@github.com:sarpik/turbo-schedule.git
+git clone https://github.com/sarpik/turbo-schedule.git # or: git clone git@github.com:sarpik/turbo-schedule.git
 cd turbo-schedule
 yarn install
 yarn dev
