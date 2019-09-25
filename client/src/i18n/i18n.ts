@@ -27,6 +27,27 @@ export const defaultLang: ILang = "lt";
 
 export const availableLangs: Array<ILang> = Object.keys(translations).map((translation) => translation as ILang);
 
+const localStorageIdentifier: string = "lang";
+
+export const setLang = (newLang: ILang) => {
+	localStorage.setItem(localStorageIdentifier, newLang);
+};
+
+export const getLang = (): ILang => {
+	const currentLang: ILang | string | null = localStorage.getItem(localStorageIdentifier);
+
+	/**
+	 * make sure since localStorage could've been modified
+	 * not by us.
+	 */
+
+	if (availableLangs.includes(currentLang as ILang)) {
+		return currentLang as ILang;
+	}
+
+	return defaultLang;
+};
+
 // i18n
 // 	.use(initReactI18next) // passes i18n down to react-i18next
 // 	.init({
