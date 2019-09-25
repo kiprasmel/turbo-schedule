@@ -12,8 +12,8 @@ const weekdays: Array<string> = [
 
 export const en: Dictionary = {
 	Language: "Language",
-	en: "English",
-	lt: "Lithuanian",
+	en: "English (Anglų)",
+	lt: "Lithuanian (Lietuvių)",
 	weekday: (index: number) => weekdays[index],
 	"I am": "I am",
 	"Student not found": (name: string) => `Student "${name}" not found...`,
@@ -32,4 +32,7 @@ export const en: Dictionary = {
 	"Go back": "Go back",
 	Lesson: "Lesson",
 	custom: (count: number, count2: number | undefined) => `Sup nerd ${count}, how're you doing, ${count2}`,
+	Close: "Close",
+	Empty__lesson: "Empty",
+	Students: "Students",
 };

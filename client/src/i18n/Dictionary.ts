@@ -19,4 +19,7 @@ export interface Dictionary {
 	"Go back": string;
 	Lesson: string;
 	custom: (count: number, count2?: number) => string;
+	Close: string;
+	Empty__lesson: string;
+	Students: string;
 }
