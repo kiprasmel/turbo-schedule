@@ -30,11 +30,9 @@
 		"node-fetch": "^2.6.0",
 		"react": "^16.9.0",
 		"react-dom": "^16.9.0",
-		"react-dropdown": "^1.6.4",
 		"react-modal": "^3.10.1",
 		"react-router-dom": "^5.0.1",
 		"react-scripts": "3.1.2",
-		"react-simple-dropdown": "^3.2.3",
 		"typescript": "3.6.2"
 	},
 	"devDependencies": {
