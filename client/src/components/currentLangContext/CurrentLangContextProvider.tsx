@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 
 import { ICurrentLangContextValue, CurrentLangContext } from "./currentLangContext";
 
-import { ILang, defaultLang, availableLangs } from "../../i18n/i18n";
+import { ILang, defaultLang, availableLangs, getLang, setLang } from "../../i18n/i18n";
 
 export interface ICurrentLangContextProviderProps {
 	/** nothing yet, except `children` by default */
@@ -11,7 +11,7 @@ export interface ICurrentLangContextProviderProps {
 const CurrentLangContextProvider: FC<ICurrentLangContextProviderProps> = ({ children }) => {
 	const [contextValue, setContextValue] = useState<ICurrentLangContextValue>({
 		availableLangs: availableLangs,
-		currentLang: defaultLang,
+		currentLang: getLang(),
 		setLang: (newLang: ILang = defaultLang): ILang => {
 			/**
 			 * update self to trigger a re-render
@@ -21,6 +21,8 @@ const CurrentLangContextProvider: FC<ICurrentLangContextProviderProps> = ({ chil
 			 * )
 			 */
 			setContextValue((_contextValue) => ({ ...contextValue, currentLang: newLang }));
+
+			setLang(newLang);
 
 			return contextValue.currentLang;
 		},
