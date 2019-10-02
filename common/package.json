@@ -3,14 +3,18 @@
 	"version": "0.1.0",
 	"description": "",
 	"main": "dist/index.js",
+	"typings": "dist/index.d.ts",
 	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
 	"license": "",
 	"scripts": {
+		"dev": "ts-node-dev src/index.ts",
+		"watch:ts": "tsc -w",
 		"build": "rimraf ./dist && tsc"
 	},
 	"dependencies": {},
 	"devDependencies": {
 		"rimraf": "^3.0.0",
-		"typescript": "^3.6.3"
+		"ts-node-dev": "^1.0.0-pre.43",
+		"typescript": "^3.7.0-beta"
 	}
 }
