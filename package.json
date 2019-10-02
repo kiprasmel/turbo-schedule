@@ -12,7 +12,7 @@
 	"scripts": {
 		"reinstall": "yarn purge:modules && yarn install",
 		"tsc": "tsc",
-		"watch": "tsc -b -w # WARNING - THIS IS BROKEN - RUN `tsc -b -w` YOURSELF with your global `typescript@beta` installation",
+		"watch": "tsc -b -w # WARNING - this might produce unexpected results - see https://github.com/microsoft/TypeScript/issues/33770",
 		"purge:build": "rimraf client/build && rimraf ./*/dist",
 		"purge:modules": "rimraf ./*/node_modules && rimraf ./node_modules",
 		"purge": "yarn purge:build && yarn purge:modules",
@@ -21,7 +21,8 @@
 		"dev:scraper": "yarn --cwd ./scraper/ watch:ts",
 		"dev:common": "yarn --cwd ./common/ watch:ts",
 		"dev:old": "concurrently \"yarn dev:server\" \"yarn dev:client\" \"yarn dev:scraper\" \"yarn dev:common\"",
-		"dev": "concurrently \"yarn dev:server\" \"yarn dev:client\"",
+		"dev:no-ts": "concurrently \"yarn dev:server\" \"yarn dev:client\"",
+		"dev": "concurrently --names \"0: typescript,1: server,2: client\" \"yarn watch\" \"yarn dev:server\" \"yarn dev:client\"",
 		"test": "lerna run test",
 		"bad_build": "yarn purge:build && lerna run build",
 		"build:old": "yarn purge:build && yarn --cwd common build && yarn --cwd scraper build && yarn --cwd server build && yarn --cwd client build",

@@ -41,11 +41,6 @@ git clone https://github.com/sarpik/turbo-schedule.git
 cd turbo-schedule
 yarn install
 yarn build
-
-# 1st terminal:
-tsc -b -w
-
-# 2nd terminal:
 yarn dev
 ```
 
