@@ -6,11 +6,10 @@ import { getHtml } from "./getHtml";
 
 import { handleScheduleRowspans } from "./handleScheduleRowspans";
 import { removeUselessTdsFromSchedule } from "./removeUselessTdsFromSchedule";
-import { saveFile, fileIsAlreadySaved, getSavedFile } from "./htmlSaving";
+import { saveFile, fileIsAlreadySaved } from "./htmlSaving";
 import { getYYYYMMDD } from "@turbo-schedule/common";
 import { writeJSONToFileSimple } from "./writeJSONToFile";
 import { inspect } from "util";
-import { getCircularReplacer } from "./getCircularReplacer";
 import { extractLessonsArray } from "./extractLessons";
 import { removeCheerioesCirculars } from "./removeCheerioesCirculars";
 
@@ -46,6 +45,8 @@ const extractStudentName = (scheduleItems: Array<CheerioElement>): string | unde
 	} catch (err) {
 		console.log("Errored, scheduleItems:", scheduleItems);
 		console.error(err);
+
+		return undefined;
 	}
 };
 
@@ -60,15 +61,15 @@ const prepareScheduleItems = (html: string): Array<CheerioElement> => {
 
 	const rawScheduleItems: Array<CheerioElement> = $("tr td", firstTable).toArray();
 
-	console.log("b4 extract name");
-
 	const studentNameAndClass: string | null = extractStudentName(rawScheduleItems) || null;
 
 	if (!studentNameAndClass) {
+		/**
+		 * TODO - is this considered an error & should we abort here?
+		 */
+
 		return [];
 	}
-
-	console.log("after extract name");
 
 	// writeJSONToFileSimple(rawScheduleItems, savingPath + "/" + studentNameAndClass, "schedule-items.0-raw.json");
 

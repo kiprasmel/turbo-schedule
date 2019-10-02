@@ -37,9 +37,10 @@ export const scrape = async (options: IOptions = { savePath: "saved-content" }):
 		/** END testing */
 
 		/** TODO - returns wrongly! */
-		const allStudentSchedulesArray__BAD_RETURN_FIXME: Array<any> = await getAllStudentScheduleHtmlInParallel(
-			studentsDataArray
-		);
+		// const allStudentSchedulesArray__BAD_RETURN_FIXME: Array<any> = await getAllStudentScheduleHtmlInParallel(
+		// 	studentsDataArray
+		// );
+		await getAllStudentScheduleHtmlInParallel(studentsDataArray);
 
 		// const uniqueLessonsArray: Array<any> = await createUniqueLessonsArray(allStudentSchedulesArray);
 		const uniqueLessonsArray: Array<any> = await createUniqueLessonsArray();
@@ -55,6 +56,7 @@ export const scrape = async (options: IOptions = { savePath: "saved-content" }):
 			/** TODO - this is NOT good lmao */
 			if (options.savePath !== "saved-content") {
 				await move("saved-content", options.savePath);
+				console.log("Moved content");
 			}
 		} catch (err) {
 			console.log("Failed moving, probly already exists");

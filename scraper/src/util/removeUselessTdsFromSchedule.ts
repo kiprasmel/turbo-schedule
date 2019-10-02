@@ -1,7 +1,7 @@
-const extractTime = (currentRawScheduleItem: CheerioElement) => {
-	const { children } = currentRawScheduleItem;
-	return children[0] && children[0].children[2] && children[0].children[2].data;
-};
+// const extractTime = (currentRawScheduleItem: CheerioElement) => {
+// 	const { children } = currentRawScheduleItem;
+// 	return children[0] && children[0].children[2] && children[0].children[2].data;
+// };
 
 export const removeUselessTdsFromSchedule = (
 	scheduleItemsReference: Array<CheerioElement>,
@@ -49,7 +49,7 @@ export const removeUselessTdsFromSchedule = (
 
 	/** remove unwanted ones */
 	const cleanedUpScheduleItems: Array<CheerioElement> = scheduleItems.filter(
-		(item, index) => !indexesContainingNotLessons.includes(index)
+		(_item, index) => !indexesContainingNotLessons.includes(index)
 	);
 
 	return cleanedUpScheduleItems;

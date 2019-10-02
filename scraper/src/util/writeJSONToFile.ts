@@ -1,10 +1,10 @@
 import fs from "fs";
 import prettier, { BuiltInParserName, CustomParser } from "prettier";
-
 import { handleError } from "./handleError";
 import { saveFile } from "./htmlSaving";
-import { removeCircular } from "./getCircularReplacer";
-import { removeCheerioesCirculars } from "./removeCheerioesCirculars";
+
+// import { removeCircular } from "./getCircularReplacer";
+// import { removeCheerioesCirculars } from "./removeCheerioesCirculars";
 
 /** TODO options */
 
