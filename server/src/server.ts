@@ -50,7 +50,7 @@ app.listen(PORT, async () => {
 	console.log(`~ Server listening on port ${PORT} @ environment ${process.env.NODE_ENV}`);
 
 	/** TODO - figure out where to place this */
-	await runScraperCronjob();
+	runScraperCronjob();
 });
 
 process.on("SIGINT", () => {

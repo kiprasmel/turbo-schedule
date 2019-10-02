@@ -1,20 +1,20 @@
-const extractLessonV2 = (currentRawScheduleItem: CheerioElement) => {
-	const { children } = currentRawScheduleItem;
+// const extractLessonV2 = (currentRawScheduleItem: CheerioElement) => {
+// 	const { children } = currentRawScheduleItem;
 
-	const lesson: { [key: string]: string } = {
-		className: (children[0] && children[0].children[0] && children[0].children[0].data) || "",
-		/** [1] is `<br>` */
-		teacherName: (children[0] && children[0].children[2] && children[0].children[2].data) || "",
-		/** [3] is `<br>` */
-		classRoom: children[0].children[0].children[0].data || "",
+// 	const lesson: { [key: string]: string } = {
+// 		className: (children[0] && children[0].children[0] && children[0].children[0].data) || "",
+// 		/** [1] is `<br>` */
+// 		teacherName: (children[0] && children[0].children[2] && children[0].children[2].data) || "",
+// 		/** [3] is `<br>` */
+// 		classRoom: children[0].children[0].children[0].data || "",
 
-		// classRoom: (children[4] && children[4].data) || "",
-	};
+// 		// classRoom: (children[4] && children[4].data) || "",
+// 	};
 
-	Object.entries(lesson).forEach(([key, value]) => (lesson[key] = value.replace("\n", "")));
+// 	Object.entries(lesson).forEach(([key, value]) => (lesson[key] = value.replace("\n", "")));
 
-	return lesson;
-};
+// 	return lesson;
+// };
 
 /**
  * a `td` can take up more than one place!

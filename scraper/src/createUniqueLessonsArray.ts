@@ -8,7 +8,7 @@ const studentsPath: string = `saved-content/${getYYYYMMDD()}/students`;
 export const getAllSchedules = async (): Promise<Array<any>> => {
 	//
 	const studentsFolderNames: Array<string> = await fs.promises.readdir(studentsPath, { encoding: "utf-8" });
-	console.log("studentsFolderNames", studentsFolderNames);
+	// console.log("studentsFolderNames", studentsFolderNames);
 
 	const studentsSchedules: Array<any> = studentsFolderNames.map((studentFolderName) => {
 		// const studentsFiles = fs.readdirSync(studentsPath + "/" + studentFolderName);
@@ -51,15 +51,12 @@ export const createUniqueLessonsArray = async (allStudentSchedulesArray?: Array<
 	let uniqueLessonsMap: Map<string, any> = new Map();
 
 	studentSchedulesArray.forEach((studentAndSchedule) => {
-		// const lessonsArray: Array<any> = studentAndSchedule.schedule;
-		console.log("studentAndSchedule", studentAndSchedule);
-		// console.log("lessonsArray", lessonsArray);
-		// // // if ()
+		// console.log("studentAndSchedule", studentAndSchedule);
 
 		const lessonsArray: Array<any> = [...studentAndSchedule.schedule]; /** todo wut? */
 
 		lessonsArray.forEach((lesson) => {
-			console.log("lesson", lesson);
+			// console.log("lesson", lesson);
 			if (!uniqueLessonsMap.has(lesson.id)) {
 				lesson.students = [studentAndSchedule.text /** TODO `id` */];
 
@@ -83,9 +80,6 @@ export const createUniqueLessonsArray = async (allStudentSchedulesArray?: Array<
 	uniqueLessonsArray.sort(sortUniqueLessonsArray);
 
 	writeJSONToFileSimple(uniqueLessonsArray, `saved-content/${getYYYYMMDD()}`, "unique-lessons.json");
-
-	// console.log("uniqueLessonsMap", uniqueLessonsMap);
-	console.log("uniqueLessonsArray", uniqueLessonsArray);
 
 	return uniqueLessonsArray;
 };

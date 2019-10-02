@@ -52,6 +52,7 @@ export const updateLatestDir = async (): Promise<void> => {
 	try {
 		if (pathExists(symlinkFrom)) {
 			await fs.unlink(symlinkFrom);
+			console.log("\nUnlinked old symlink");
 		}
 	} catch (err) {
 		console.warn("\nFailed to unlink symlink, probably didn't exist yet", err);
@@ -59,6 +60,7 @@ export const updateLatestDir = async (): Promise<void> => {
 
 	try {
 		await fs.symlink(symlinkTo, symlinkFrom);
+		console.log("\nCreated new symlink");
 	} catch (err) {
 		console.error("\nFailed to symlink - this is bad!", err);
 	}

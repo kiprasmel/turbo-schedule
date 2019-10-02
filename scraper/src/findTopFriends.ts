@@ -34,7 +34,7 @@ export const findTopFriends = (lessonsArray: Array<any>) => {
 		uniqueFriendsArray.push(friend);
 	});
 
-	console.log("uniqueFriendsArray", uniqueFriendsArray);
+	// console.log("uniqueFriendsArray", uniqueFriendsArray);
 
 	return uniqueFriendsArray;
 };

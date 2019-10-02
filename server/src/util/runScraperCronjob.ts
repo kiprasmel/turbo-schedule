@@ -1,17 +1,16 @@
-import { CronJob } from "cron";
-
 /** TODO - select file save path */
 import scraper from "@turbo-schedule/scraper";
-
+import { CronJob } from "cron";
 import { config } from "../config";
 
-export const runScraperCronjob = async () => {
+export const runScraperCronjob = () => {
 	/** TODO REMOVE - this is for testing only! */
-	if (!!process.env.TRY_INSTANT_SCRAPE) {
-		await scraper({ savePath: config.scrapedDataSavePath });
-	}
+	// if (!!process.env.TRY_INSTANT_SCRAPE) {
+	// 	await scraper({ savePath: config.scrapedDataSavePath });
+	// }
 
-	const myCronJob: CronJob = new CronJob(
+	// const myCronJob: CronJob =
+	new CronJob(
 		/**
 		 * cron ranges (@ https://www.npmjs.com/package/cron#cron-ranges):
 		 *
@@ -23,7 +22,7 @@ export const runScraperCronjob = async () => {
 		 * Day of Week: 0-6 (Sun-Sat)
 		 *
 		 */
-		"0 5 0 * * *",
+		"00 05 00 * * *",
 		async function() {
 			await scraper({ savePath: config.scrapedDataSavePath });
 
@@ -43,8 +42,9 @@ export const runScraperCronjob = async () => {
 
 			console.log("running cron job!", new Date());
 		},
-		() => {}
+		function() {},
+		false
 	);
 
-	myCronJob.start();
+	// myCronJob.start();
 };

@@ -1,9 +1,9 @@
 import cheerio from "cheerio";
 
 import { IStudent, extractStudent } from "../model/Student";
-import { fileIsAlreadySaved, getSavedFile, saveFile } from "./htmlSaving";
+import { fileIsAlreadySaved, getSavedFile } from "./htmlSaving";
 import { getYYYYMMDD } from "@turbo-schedule/common";
-import { writeJSONToFile, writeJSONToFileSimple } from "./writeJSONToFile";
+import { writeJSONToFileSimple } from "./writeJSONToFile";
 
 export interface IScrapesStudentDataArray {
 	html: string;
