@@ -26,7 +26,13 @@ sudo docker run -p 5000:5000 --name turbo-schedule kipras/turbo-schedule
 git clone https://github.com/sarpik/turbo-schedule.git # or: git clone git@github.com:sarpik/turbo-schedule.git
 cd turbo-schedule/
 yarn install
-yarn build
+
+### yarn build # broken! Use the lines below:
+yarn global add typescript@beta
+tsc -b && yarn --cwd client build
+
+node server/dist/predeploy.js
+
 yarn serve
 ```
 
@@ -38,6 +44,17 @@ yarn serve
 git clone https://github.com/sarpik/turbo-schedule.git # or: git clone git@github.com:sarpik/turbo-schedule.git
 cd turbo-schedule
 yarn install
+
+### yarn build # broken! Use the lines below:
+yarn global add typescript@beta
+tsc -b
+
+node server/dist/predeploy.js
+
+# 1st terminal:
+tsc -b -w
+
+# 2nd terminal:
 yarn dev
 ```
 
