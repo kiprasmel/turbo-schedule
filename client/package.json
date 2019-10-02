@@ -8,6 +8,7 @@
 	"proxy": "http://localhost:5000",
 	"homepage": "http://localhost:5000",
 	"scripts": {
+		"dev": "yarn start",
 		"start": "BROWSER=none react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
@@ -33,7 +34,7 @@
 		"react-modal": "^3.10.1",
 		"react-router-dom": "^5.0.1",
 		"react-scripts": "3.1.2",
-		"typescript": "3.6.2"
+		"typescript": "^3.7.0-beta"
 	},
 	"devDependencies": {
 		"node-sass": "^4.12.0"
