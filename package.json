@@ -10,17 +10,32 @@
 		]
 	},
 	"scripts": {
-		"purge": "rimraf ./*/node_modules && rimraf ./node_modules",
-		"reinstall": "yarn purge && yarn install",
-		"dev": "yarn --cwd server/ run dev",
+		"reinstall": "yarn purge:modules && yarn install",
+		"tsc": "tsc",
+		"watch": "tsc -b -w # WARNING - THIS IS BROKEN - RUN `tsc -b -w` YOURSELF with your global `typescript@beta` installation",
+		"purge:build": "rimraf client/build && rimraf ./*/dist",
+		"purge:modules": "rimraf ./*/node_modules && rimraf ./node_modules",
+		"purge": "yarn purge:build && yarn purge:modules",
+		"dev:server": "yarn --cwd ./server/ dev",
+		"dev:client": "yarn --cwd ./client/ dev",
+		"dev:scraper": "yarn --cwd ./scraper/ watch:ts",
+		"dev:common": "yarn --cwd ./common/ watch:ts",
+		"dev:old": "concurrently \"yarn dev:server\" \"yarn dev:client\" \"yarn dev:scraper\" \"yarn dev:common\"",
+		"dev": "concurrently \"yarn dev:server\" \"yarn dev:client\"",
 		"test": "lerna run test",
-		"build": "lerna run build",
+		"bad_build": "yarn purge:build && lerna run build",
+		"build:old": "yarn purge:build && yarn --cwd common build && yarn --cwd scraper build && yarn --cwd server build && yarn --cwd client build",
+		"build": "tsc -b && yarn --cwd client build",
 		"cleanbuild": "yarn reinstall && yarn build",
 		"serve": "yarn --cwd server run serve",
 		"full-deploy": ""
 	},
 	"devDependencies": {
+		"concurrently": "^4.1.2",
 		"lerna": "^3.16.4",
 		"rimraf": "^3.0.0"
+	},
+	"dependencies": {
+		"typescript": "^3.7.0-beta"
 	}
 }
