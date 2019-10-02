@@ -4,7 +4,6 @@
 		{ "path": "common" }, //
 		{ "path": "scraper" },
 		{ "path": "server" },
-		{ "path": "client" },
-		{ "path": "test-server" } /** testing -- TODO remove */
+		{ "path": "client" }
 	]
 }
