@@ -11,10 +11,11 @@
 		"watch:ts": "tsc -w",
 		"build": "rimraf ./dist && tsc"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"typescript": "^3.7.0-beta"
+	},
 	"devDependencies": {
 		"rimraf": "^3.0.0",
-		"ts-node-dev": "^1.0.0-pre.43",
-		"typescript": "^3.7.0-beta"
+		"ts-node-dev": "^1.0.0-pre.43"
 	}
 }

@@ -34,13 +34,13 @@
 		"i18next": "^17.0.13",
 		"moment": "^2.24.0",
 		"react-i18next": "^10.12.2",
-		"react-intl": "^3.2.0"
+		"react-intl": "^3.2.0",
+		"typescript": "^3.7.0-beta"
 	},
 	"devDependencies": {
 		"concurrently": "^4.1.2",
 		"ts-node": "^8.3.0",
-		"ts-node-dev": "^1.0.0-pre.42",
-		"typescript": "^3.7.0-beta"
+		"ts-node-dev": "^1.0.0-pre.42"
 	},
 	"keywords": []
 }
