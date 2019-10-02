@@ -1,11 +1,12 @@
 {
-	"extends": "../tsconfig-base.json",
-	"references": [
-		{ "path": "../common" } //
-	],
 	"compilerOptions": {
-		"composite": true /** project references */,
-		"noEmit": false,
+		"composite": true,
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+
+		"noEmit": false /** I found this to fix some errors */,
+
 		"target": "es6",
 		"module": "commonjs",
 		"lib": [
@@ -14,8 +15,6 @@
 			"es2017",
 			"esnext.asynciterable"
 		],
-		"sourceMap": true,
-		"rootDir": "./src",
 		"outDir": "./dist",
 		"moduleResolution": "node",
 		"removeComments": true,
@@ -36,9 +35,15 @@
 	},
 	"exclude": [
 		"node_modules" //
-	],
-	"include": [
-		"./src/**/*.tsx", //
-		"./src/**/*.ts"
 	]
+	//   "include": [
+	//     "./src/**/*.tsx", //
+	//     "./src/**/*.ts"
+	//   ]
+	// "references": [
+	// 	{ "path": "common" }, //
+	// 	{ "path": "scraper" },
+	// 	{ "path": "server" },
+	// 	{ "path": "client" }
+	// ]
 }

@@ -1,14 +1,12 @@
 {
+	"extends": "../tsconfig-base.json",
 	"compilerOptions": {
+		"composite": false /** override the included tsconfig */,
 		"baseUrl": "src",
 		"outDir": "build/dist",
 		"module": "esnext",
 		"target": "es5",
-		"lib": [
-			"es6", //
-			"dom",
-			"esnext.asynciterable"
-		],
+		"lib": ["es6", "dom", "esnext.asynciterable"],
 		"sourceMap": true,
 		"allowJs": true,
 		"jsx": "react",
@@ -29,16 +27,6 @@
 		"isolatedModules": true,
 		"noEmit": true
 	},
-	"exclude": [
-		"node_modules", //
-		"build",
-		"scripts",
-		"acceptance-tests",
-		"webpack",
-		"jest",
-		"src/setupTests.ts"
-	],
-	"include": [
-		"src" //
-	]
+	"exclude": ["node_modules", "build", "scripts", "acceptance-tests", "webpack", "jest", "src/setupTests.ts"],
+	"include": ["src"]
 }

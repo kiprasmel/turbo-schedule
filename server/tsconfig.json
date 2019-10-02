@@ -1,5 +1,13 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "../tsconfig-base.json",
+	"references": [
+		{
+			"path": "../common"
+		}, //
+		{
+			"path": "../scraper"
+		}
+	],
 	"compilerOptions": {
 		"target": "es6",
 		"module": "commonjs",
@@ -9,7 +17,9 @@
 			"es2017",
 			"esnext.asynciterable"
 		],
+		"noEmit": false,
 		"sourceMap": true,
+		"rootDir": "./src",
 		"outDir": "./dist",
 		"moduleResolution": "node",
 		"removeComments": true,

@@ -7,11 +7,12 @@
 	"license": "",
 	"scripts": {
 		"start": "yarn run dev",
+		"watch": "ts-node-dev src/index.ts",
 		"watch:ts": "tsc -w",
 		"watch:node": "nodemon --ignore saved-content/ dist/index.js",
 		"dev": "concurrently \"yarn run watch:ts\" \"yarn run watch:node\"",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "tsc",
+		"build": "rimraf ./dist && tsc",
 		"serve": "node dist/index.js"
 	},
 	"dependencies": {
@@ -34,7 +35,9 @@
 	},
 	"devDependencies": {
 		"@types/node": "^12.7.2",
-		"typescript": "^3.6.2"
+		"rimraf": "^3.0.0",
+		"ts-node-dev": "^1.0.0-pre.43",
+		"typescript": "^3.7.0-beta"
 	},
 	"keywords": [
 		"turbo",
