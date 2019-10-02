@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"composite": false /** override the included tsconfig */,
 		"baseUrl": "src",
-		"outDir": "build/dist",
+		"outDir": "build",
 		"module": "esnext",
 		"target": "es5",
 		"lib": ["es6", "dom", "esnext.asynciterable"],
