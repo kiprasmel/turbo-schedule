@@ -3,6 +3,7 @@
 	"version": "0.1.0",
 	"description": "",
 	"main": "dist/index.js",
+	"typings": "dist/index.d.ts",
 	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
 	"license": "",
 	"scripts": {
