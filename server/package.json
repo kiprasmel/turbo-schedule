@@ -3,6 +3,7 @@
 	"version": "0.1.0",
 	"description": "",
 	"main": "dist/server.js",
+	"typings": "dist/server.d.ts",
 	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
 	"license": "",
 	"scripts": {
@@ -13,7 +14,6 @@
 		"serve": "cross-env NODE_ENV=production node dist/server.js"
 	},
 	"dependencies": {
-		"@material-ui/core": "^4.4.1",
 		"@turbo-schedule/common": "0.1.0",
 		"@turbo-schedule/scraper": "0.1.0",
 		"@types/cors": "^2.8.6",
@@ -29,17 +29,11 @@
 		"cross-env": "^5.2.1",
 		"express": "^4.17.1",
 		"fs-extra": "^8.1.0",
-		"graphql-tag": "^2.10.1",
 		"helmet": "^3.20.1",
-		"i18next": "^17.0.13",
-		"moment": "^2.24.0",
-		"react-i18next": "^10.12.2",
-		"react-intl": "^3.2.0",
 		"typescript": "^3.7.0-beta"
 	},
 	"devDependencies": {
 		"concurrently": "^4.1.2",
-		"ts-node": "^8.3.0",
 		"ts-node-dev": "^1.0.0-pre.42"
 	},
 	"keywords": []
