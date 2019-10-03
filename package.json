@@ -22,7 +22,7 @@
 		"dev:common": "yarn --cwd ./common/ watch:ts",
 		"dev:old": "concurrently \"yarn dev:server\" \"yarn dev:client\" \"yarn dev:scraper\" \"yarn dev:common\"",
 		"dev:no-ts": "concurrently \"yarn dev:server\" \"yarn dev:client\"",
-		"dev": "concurrently --names \"0: typescript,1: server,2: client\" \"yarn watch\" \"yarn dev:server\" \"yarn dev:client\"",
+		"dev": "concurrently --kill-others --names \"0: typescript,1: server,2: client\" \"yarn watch\" \"yarn dev:server\" \"yarn dev:client\"",
 		"test": "lerna run test",
 		"bad_build": "yarn purge:build && lerna run build",
 		"build:old": "yarn purge:build && yarn --cwd common build && yarn --cwd scraper build && yarn --cwd server build && yarn --cwd client build",
