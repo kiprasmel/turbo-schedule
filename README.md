@@ -53,7 +53,7 @@ yarn dev
 * Projects are split up into the `scraper`, `server`, `client` and `common` folders
 * A mobile app with a very similar use case is being worked on by my friend - don't make a duplicate:D (more info soon, hopefully!)
 
-## Contributing
+## [Contributing](https://github.com/sarpik/turbo-schedule/issues/1)
 
 Contributions are welcome! If you're having problems - feel free to [open an issue](https://github.com/sarpik/turbo-schedule/issues/new) - we're happy to help:)
 
