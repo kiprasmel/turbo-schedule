@@ -47,6 +47,9 @@ jobs:
       # create new version (skips ci to avoid an infinite loop)
       - run: yarn version
 
+      # get & save latest tag
+      - run: echo 'export LATEST_TAG="$(git describe --tags)"' >> $BASH_ENV
+
       ###
       ### BEGIN copy-pasta from circleci
       ###
