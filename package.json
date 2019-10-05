@@ -31,7 +31,7 @@
 		"build": "yarn run build:ts && yarn --cwd client build && cd server && node dist/predeploy.js && cd ..",
 		"cleanbuild": "yarn reinstall && yarn build",
 		"serve": "yarn --cwd server run serve",
-		"version": "lerna version ### configured @ lerna.json ###",
+		"new-version": "lerna version",
 		"docker:build": "docker build -t kipras/turbo-schedule:$TAG . && docker tag kipras/turbo-schedule:$TAG kipras/turbo-schedule:latest",
 		"docker:login": "echo \"$DOCKERHUB_PASSWORD\" | docker login --username \"$DOCKERHUB_USERNAME\" --password-stdin",
 		"docker:push": "docker push kipras/turbo-schedule:$TAG && docker push kipras/turbo-schedule:latest",
