@@ -48,7 +48,7 @@ jobs:
       - run: yarn version
 
       # get & save latest tag
-      - run: echo 'export LATEST_TAG="$(git describe --tags)"' >> $BASH_ENV
+      - run: echo 'export LATEST_TAG=$(git describe --tags)' >> $BASH_ENV
 
       ###
       ### BEGIN copy-pasta from circleci
