@@ -31,17 +31,18 @@ jobs:
 
       - run: yarn install --frozen-lockfile
 
+      - run: yarn build
+
       - save_cache:
           paths:
             - node_modules
             - ~/.cache/yarn
+            - server/saved-content
           key: v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
           # key: v1-dependencies-{{ checksum "yarn.lock" }}
       # not yet
       # run tests!
       #- run: yarn test
-
-      - run: yarn build
 
       - run: git config --global user.email $GIT_USER_EMAIL
       - run: git config --global user.name $GIT_USER_NAME
