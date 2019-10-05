@@ -8,5 +8,6 @@
 			"conventionalCommits": true,
 			"message": "chore(release): [skip ci] \"%s\""
 		}
-	}
+	},
+	"packages": ["common", "scraper", "server", "client"]
 }
