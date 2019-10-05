@@ -2,6 +2,22 @@
 
 🎒 A better schedule web app than our school's one!
 
+<p align="left">
+
+  <a href="https://circleci.com/gh/sarpik/turbo-schedule">
+	<img alt="Circle CI" src="https://circleci.com/gh/sarpik/turbo-schedule.svg?style=shield" />
+  </a>
+
+  <a href="https://hub.docker.com/r/kipras/turbo-schedule">
+    <img alt="Pulls from DockerHub" src="https://img.shields.io/docker/pulls/kipras/turbo-schedule.svg?style=shield" />
+  </a>
+
+<!--  TODO  -->
+  <!-- <a href="https://github.com/sarpik/turbo-schedule/releases">
+    <img alt="latest version" src="https://img.shields.io/github/v/tag/sarpik/turbo-schedule?include_prereleases&sort=semver" />
+  </a> -->
+</p>
+
 ## Try it out!
 
 Visit <a href="https://ts.kipras.org">ts.kipras.org</a>!
