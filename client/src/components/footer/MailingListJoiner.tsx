@@ -13,7 +13,7 @@ import { useTranslation } from "../../i18n/useTranslation";
 
 export const joinMailingList = async (email: string) => {
 	// try {
-	const emailEntry = await axios.post("/api/email", { email: email });
+	const emailEntry = await axios.post("/api/v1/email", { email: email });
 	return emailEntry;
 	// } catch (err) {
 	// 	console.log("Error!", err);
@@ -96,7 +96,7 @@ const MailingListJoiner = () => {
 					// 	margin: "auto",
 					// 	display: "block",
 					onClick={(e) => handleEmailSubmit(e)}
-					// disabled={isSubmitting}
+				// disabled={isSubmitting}
 				>
 					{t("Notify me about the updates!")}
 				</button>

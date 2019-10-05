@@ -4,7 +4,7 @@ export const logCoolStuff = () => {
 Welcome!
 
 There's a public API available if you'd like to tinker:
-/api/**
+/api/v1/**
 
 The github repository will soon be made available too!
 

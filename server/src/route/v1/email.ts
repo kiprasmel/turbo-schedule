@@ -6,9 +6,9 @@ import fs from "fs";
 
 import { Router } from "express";
 
-const router = Router();
+const router: Router = Router();
 
-import { config } from "../config";
+import { config } from "../../config";
 const { scrapedDataSavePath } = config;
 
 const emailFileName = "emails.json";

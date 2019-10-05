@@ -1,10 +1,10 @@
 import { Router } from "express";
 import fs from "fs";
 
-import { config } from "../config";
+import { config } from "../../config";
 const { latestContentPath } = config;
 
-const router = Router();
+const router: Router = Router();
 
 /**
  * get list of students
