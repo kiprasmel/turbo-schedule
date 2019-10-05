@@ -52,8 +52,9 @@ jobs:
       - run: git config --global user.email $GIT_USER_EMAIL
       - run: git config --global user.name $GIT_USER_NAME
 
+      ### Disabled until we get to a stable environment & start from `1.0.0`
       # create new version (skips ci to avoid an infinite loop)
-      - run: yarn lerna version
+      # - run: yarn lerna version
 
       - run: git tag
       - run: echo "$(git tag)"
