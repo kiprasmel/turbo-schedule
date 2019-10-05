@@ -61,33 +61,10 @@ jobs:
       # get & save latest tag
       - run: echo 'export LATEST_TAG=$(git describe --tags)' >> $BASH_ENV
 
-      ###
-      ### BEGIN copy-pasta from circleci
-      ###
       ### install docker
       ### see https://circleci.com/docs/2.0/building-docker-images/
-      ###
       - setup_remote_docker:
           docker_layer_caching: true
-
-      # use a primary image that already has Docker (recommended)
-      # or install it during a build like we do here
-      # - run:
-      #     name: Install Docker client
-      #     command: |
-      #       set -x
-      #       VER="17.03.0-ce"
-      #       curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-      #       tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-      #       mv /tmp/docker/* /usr/bin
-      ### END copy-pasta from circleci
-      #
-      # # build and push Docker image
-      # - run: |
-      #     TAG=0.1.$CIRCLE_BUILD_NUM
-      #     docker build -t   CircleCI-Public/circleci-demo-docker:$TAG .
-      #     docker login -u $DOCKER_USER -p $DOCKER_PASS
-      #     docker push CircleCI-Public/circleci-demo-docker:$TAG
 
       - run: yarn docker:deploy
 
