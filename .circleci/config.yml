@@ -47,6 +47,12 @@ jobs:
       # create new version (skips ci to avoid an infinite loop)
       - run: yarn version
 
+      - run: git tag
+
+      # testing
+      - run: echo 'latest tag $(git describe --tags)'
+
+      ### WARNING BROKEn
       # get & save latest tag
       - run: echo 'export LATEST_TAG=$(git describe --tags)' >> $BASH_ENV
 

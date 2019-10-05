@@ -32,10 +32,10 @@
 		"cleanbuild": "yarn reinstall && yarn build",
 		"serve": "yarn --cwd server run serve",
 		"new-version": "lerna version",
-		"docker:build": "docker build -t kipras/turbo-schedule:$LATEST_TAG . && docker tag kipras/turbo-schedule:$LATEST_TAG kipras/turbo-schedule:latest",
+		"docker:build": "docker build -t kipras/turbo-schedule:latest .",
 		"docker:login": "echo \"$DOCKERHUB_PASSWORD\" | docker login --username \"$DOCKERHUB_USERNAME\" --password-stdin",
-		"docker:push": "docker push kipras/turbo-schedule:$LATEST_TAG && docker push kipras/turbo-schedule:latest",
-		"docker:deploy": "echo \"LATEST_TAG  $LATEST_TAG  ${LATEST_TAG}\" yarn docker:build && yarn docker:login && yarn docker:push"
+		"docker:push": "docker push kipras/turbo-schedule:latest",
+		"docker:deploy": "yarn docker:build && yarn docker:login && yarn docker:push"
 	},
 	"devDependencies": {
 		"concurrently": "^4.1.2",
