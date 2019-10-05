@@ -90,3 +90,9 @@ jobs:
       #     docker push CircleCI-Public/circleci-demo-docker:$TAG
 
       - run: yarn docker:deploy
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
