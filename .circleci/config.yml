@@ -4,9 +4,13 @@
 ###
 ### Check https://circleci.com/docs/2.0/language-javascript/ for more details
 ###
-version: 2.1
+version: 2
 jobs:
   build:
+    branches:
+      only:
+        - master
+
     docker:
       # specify the version you desire here
       - image: circleci/node:lts
@@ -67,12 +71,15 @@ jobs:
           docker_layer_caching: true
 
       - run: yarn docker:deploy
-
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-      - build:
-        filters:
-          branches:
-            only: master
+### I wanted to limit the `build` job to only
+### the `master` branch, but that didn't work
+### so this is no longer needed (currently)
+# workflows:
+#   version: 2
+#   build-deploy:
+#     jobs:
+#       - build:
+#         filters:
+#           branches:
+#             only:
+#               - master
