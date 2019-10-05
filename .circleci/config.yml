@@ -51,8 +51,7 @@ jobs:
       - run: yarn version
 
       - run: git tag
-      - run: echo $(git tag)
-      - run: echo \$(git tag)
+      - run: echo "$(git tag)"
 
       # testing
       - run: echo 'latest tag $(git describe --tags)'
