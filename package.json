@@ -13,6 +13,8 @@
 	"scripts": {
 		"reinstall": "yarn purge:modules && yarn install",
 		"tsc": "tsc",
+		"lerna": "lerna",
+		"le": "lerna",
 		"watch": "tsc -b -w # WARNING - this might produce unexpected results - see https://github.com/microsoft/TypeScript/issues/33770",
 		"purge:build": "rimraf client/build && rimraf ./*/dist",
 		"purge:modules": "rimraf ./*/node_modules && rimraf ./node_modules",
