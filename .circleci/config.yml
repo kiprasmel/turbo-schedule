@@ -41,6 +41,8 @@ jobs:
       # run tests!
       #- run: yarn test
 
+      - run: yarn build
+
       - run: git config --global user.email $GIT_USER_EMAIL
       - run: git config --global user.name $GIT_USER_NAME
 
@@ -48,6 +50,8 @@ jobs:
       - run: yarn version
 
       - run: git tag
+      - run: echo $(git tag)
+      - run: echo \$(git tag)
 
       # testing
       - run: echo 'latest tag $(git describe --tags)'
