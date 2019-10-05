@@ -49,7 +49,7 @@ jobs:
       - run: git config --global user.name $GIT_USER_NAME
 
       # create new version (skips ci to avoid an infinite loop)
-      - run: yarn version
+      - run: yarn lerna version
 
       - run: git tag
       - run: echo "$(git tag)"
