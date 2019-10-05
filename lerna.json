@@ -1,5 +1,12 @@
 {
 	"npmClient": "yarn",
 	"useWorkspaces": true,
-	"version": "independent"
+	"version": "independent",
+	"command": {
+		"version": {
+			"yes": true,
+			"conventionalCommits": true,
+			"message": "chore(release): [skip ci] \"%s\""
+		}
+	}
 }
