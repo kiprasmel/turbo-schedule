@@ -11,6 +11,7 @@
 		]
 	},
 	"scripts": {
+		"start": "yarn dev",
 		"reinstall": "yarn purge:modules && yarn install",
 		"tsc": "tsc",
 		"lerna": "lerna",
