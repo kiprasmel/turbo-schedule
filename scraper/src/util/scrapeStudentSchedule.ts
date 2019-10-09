@@ -169,26 +169,28 @@ const prepareScheduleItems = (html: string): Array<CheerioElement> => {
 
 export const scrapeStudentSchedule = async (studentData: IStudent): Promise<Array<any>> => {
 	console.log("\n==> scrapeStudentSchedule:");
-	const savingPath: string =
-		"saved-content" + "/" + getYYYYMMDD() + "/" + "students" + "/" + studentData.text + "/" + "student-data.json";
+	const savingPathBase: string = "saved-content" + "/" + getYYYYMMDD() + "/" + "students" + "/" + studentData.text;
+
+	const studentDataSavingPath: string = savingPathBase + "/" + "student-data.json";
 
 	// console.log("saving path", savingPath);
 
 	let lessonsArray: Array<any> = [];
 
-	if (fileIsAlreadySaved(savingPath)) {
+	if (fileIsAlreadySaved(studentDataSavingPath)) {
 		console.log(" -> lessonsArray IS saved, taking it from saved file");
 
-		lessonsArray = getSavedStudentDataAndSchedule(savingPath);
+		lessonsArray = getSavedStudentDataAndSchedule(studentDataSavingPath);
 	} else {
 		console.log(" -> lessonsArray IS NOT saved, getting it from url");
 
 		const html: string = await getHtml(studentData.fullScheduleURI);
+		saveFile(html, savingPathBase, "student-data.html");
 
 		const scheduleItems: Array<CheerioElement> = prepareScheduleItems(html);
 
 		if (!scheduleItems.length) {
-			console.warn("\nscheduleItems were empty, skipping!\nsavingPath:", savingPath);
+			console.warn("\nscheduleItems were empty, skipping!\nsavingPathBase:", savingPathBase);
 			return [];
 		}
 
