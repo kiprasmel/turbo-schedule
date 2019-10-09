@@ -4,13 +4,9 @@ import { CronJob } from "cron";
 import { config } from "../config";
 
 export const runScraperCronjob = () => {
-	/** TODO REMOVE - this is for testing only! */
-	// if (!!process.env.TRY_INSTANT_SCRAPE) {
-	// 	await scraper({ savePath: config.scrapedDataSavePath });
-	// }
+	const runImmediately: boolean = !!process.env.START_SCRAPER_NOW;
 
-	// const myCronJob: CronJob =
-	new CronJob(
+	const scraperCronJob: CronJob = new CronJob(
 		/**
 		 * cron ranges (@ https://www.npmjs.com/package/cron#cron-ranges):
 		 *
@@ -24,7 +20,18 @@ export const runScraperCronjob = () => {
 		 */
 		"00 05 00 * * *",
 		async function() {
+			const startDate: Date = new Date();
+
+			console.log("\n~ Starting scraper:", startDate, "\n");
+
 			await scraper({ savePath: config.scrapedDataSavePath });
+
+			const endDate: Date = new Date();
+
+			const msDifference: number = endDate.getTime() - startDate.getTime();
+			const secDifference: number = msDifference / 1000;
+
+			console.log("\n~ Finished scraper.", endDate, "\n difference in secs: ", secDifference, "\n");
 
 			/**
 			 * TODO
@@ -39,12 +46,13 @@ export const runScraperCronjob = () => {
 			 * 		if no, then get the old stuff
 			 *
 			 */
-
-			console.log("running cron job!", new Date());
 		},
-		function() {},
-		false
+		undefined,
+		runImmediately
 	);
 
-	// myCronJob.start();
+	/**
+	 * does not actually start the cronjob - just enables it
+	 */
+	scraperCronJob.start();
 };
