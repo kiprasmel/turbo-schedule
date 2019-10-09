@@ -29,7 +29,7 @@
 		"test": "lerna run test",
 		"bad_build": "yarn purge:build && lerna run build",
 		"build:old": "yarn purge:build && yarn --cwd common build && yarn --cwd scraper build && yarn --cwd server build && yarn --cwd client build",
-		"build:ts": "tsc -b",
+		"build:ts": "tsc -b || npx --package typescript@3.7.0-beta tsc -b",
 		"build": "yarn run build:ts && yarn --cwd client build && cd server && node dist/predeploy.js && cd ..",
 		"cleanbuild": "yarn reinstall && yarn build",
 		"serve": "yarn --cwd server run serve",
