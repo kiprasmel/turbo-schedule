@@ -62,10 +62,12 @@ yarn dev
 
 & open <a href="http://localhost:3000">localhost:3000</a> (note the port - it's `3000`, not `5000` like previously)
 
-### Couple things to know:
+## Couple things to know:
+
+> [`See also` 👇](#See-also) provides for more info!
 
 * This is still a work-in-progress & we're continually working on improving the whole app!
-* We're using [`yarn workspaces`](https://yarnpkg.com/lang/en/docs/workspaces/)
+* We're using [`yarn workspaces`](https://yarnpkg.com/lang/en/docs/workspaces/) + a little of [`lerna`](https://github.com/lerna/lerna) + TypeScript's `Project References`.
 * Projects are split up into the `scraper`, `server`, `client` and `common` folders
 * A mobile app with a very similar use case is being worked on by my friend - don't make a duplicate:D (more info soon, hopefully!)
 
@@ -83,6 +85,13 @@ TL;DR:
 * commit your changes & [create a pull request](https://github.com/sarpik/turbo-schedule/compare)
 
 That's it!
+
+## See also
+
+* TypeScript's `Project references`:
+  * https://www.typescriptlang.org/docs/handbook/project-references.html
+  * https://stackoverflow.com/questions/51631786/how-to-use-project-references-in-typescript-3-0
+  * https://github.com/RyanCavanaugh/learn-a
 
 ## [License](./LICENSE)
 
