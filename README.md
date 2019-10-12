@@ -64,10 +64,14 @@ yarn dev
 
 ## Couple things to know:
 
-> [`See also` 👇](#See-also) provides for more info!
-
 * This is still a work-in-progress & we're continually working on improving the whole app!
-* We're using [`yarn workspaces`](https://yarnpkg.com/lang/en/docs/workspaces/) + a little of [`lerna`](https://github.com/lerna/lerna) + TypeScript's `Project References`.
+
+* <details> <summary>We're using <a href="https://yarnpkg.com/lang/en/docs/workspaces/"><code>yarn workspaces</code></a> + a little of <a href="https://github.com/lerna/lerna"><code>lerna</code></a> + TypeScript's <a href="https://www.typescriptlang.org/docs/handbook/project-references.html"><code>Project References</code></a>.</summary>
+
+  * https://stackoverflow.com/questions/51631786/how-to-use-project-references-in-typescript-3-0
+  * https://github.com/RyanCavanaugh/learn-a
+</details>
+
 * Projects are split up into the `scraper`, `server`, `client` and `common` folders
 * A mobile app with a very similar use case is being worked on by my friend - don't make a duplicate:D (more info soon, hopefully!)
 
@@ -85,13 +89,6 @@ TL;DR:
 * commit your changes & [create a pull request](https://github.com/sarpik/turbo-schedule/compare)
 
 That's it!
-
-## See also
-
-* TypeScript's `Project references`:
-  * https://www.typescriptlang.org/docs/handbook/project-references.html
-  * https://stackoverflow.com/questions/51631786/how-to-use-project-references-in-typescript-3-0
-  * https://github.com/RyanCavanaugh/learn-a
 
 ## [License](./LICENSE)
 
