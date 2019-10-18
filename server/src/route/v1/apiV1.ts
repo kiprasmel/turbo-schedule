@@ -11,7 +11,7 @@ router.use("/email", emailRouter);
 
 // router.use("/docs", openAPIDocsHandler);
 
-router.use("/docs", (_req, res) => {
+router.use("/docs", (_req, res, next) => {
 	const html: string = `
 		<redoc spec-url="http://localhost:5000/api/docs"></redoc>
 
@@ -21,6 +21,8 @@ router.use("/docs", (_req, res) => {
 
 	res.setHeader("Content-Type", "text/html");
 	res.send(html);
+
+	next();
 });
 
 export { router as apiRouterV1 };
