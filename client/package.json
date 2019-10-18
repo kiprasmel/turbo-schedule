@@ -11,7 +11,7 @@
 		"dev": "yarn start",
 		"start": "cross-env BROWSER=none react-scripts start",
 		"build": "react-scripts build",
-		"test": "react-scripts test",
+		"test": "cross-env CI=true react-scripts test",
 		"eject": "react-scripts eject"
 	},
 	"dependencies": {
