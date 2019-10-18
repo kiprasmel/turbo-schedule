@@ -7,15 +7,7 @@ const { latestContentPath } = config;
 const router: Router = Router();
 
 /**
- * @swagger
- *  /student:
- *    get:
- *      description: Get all students
- *      responses:
- *         200:
- *              description: Success
- *         500:
- *            description: Error
+ * get list of students
  */
 router.get("/", async (_req, res) => {
 	console.log("student/");
@@ -42,23 +34,6 @@ router.get("/", async (_req, res) => {
  * get full schedule of single student by it's name
  *
  * @note make sure to encode the URI component (`studentName`)! (TODO)
- *
- * @swagger
- *  /student/{studentName}:
- *    get:
- *      description: Get a specific student with the full schedule
- *      parameters:
- *        - in: path
- *          name: studentName
- *          required: true
- *          type: string
- *          description: The (full) name of the student
- *      responses:
- *        200:
- *          description: Success
- *        404:
- *          description: Not found
- *
  */
 router.get("/:studentName", async (req, res) => {
 	try {
