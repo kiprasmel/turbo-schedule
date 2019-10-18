@@ -4,11 +4,10 @@
 		"declaration": true,
 		"declarationMap": true,
 		"sourceMap": true,
-
 		"noEmit": false /** I found this to fix some errors */,
-
 		"target": "es6",
 		"module": "commonjs",
+		"strict": true,
 		"lib": [
 			"dom", //
 			"es6",
