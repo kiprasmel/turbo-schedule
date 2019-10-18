@@ -1,27 +1,9 @@
-import openAPIJSDoc, { Options } from "swagger-jsdoc";
+import fs from "fs-extra";
 import { RequestHandler } from "express";
 
-const serverVersion: string = require("../../package.json").version || "";
-
-const options: Options = {
-	swaggerDefinition: {
-		info: {
-			title: "Turbo Schedule",
-			version: serverVersion,
-			description: "🎒 A better schedule web app than our school's one!",
-		},
-	},
-	/** @NOTE - the paths are relative to the (`server`) project's root (where the thing is started from)! */
-	apis: ["./src/route/v1/**.ts", "./src/route/apiRouter.ts"],
-};
-
-console.log("options:");
-console.log(options);
-
-console.log("openAPIJSDoc", openAPIJSDoc);
-
-export const openAPIDocs = openAPIJSDoc(options);
-// export const openAPIDocs = {};
+/** read initially */
+const _openAPIDocs: string = fs.readFileSync("./openAPI.lean.json", { encoding: "utf-8" });
+const openAPIDocs: string = JSON.parse(_openAPIDocs);
 
 export const openAPIDocsHandler: RequestHandler = (_req, res) => {
 	res.setHeader("Content-Type", "application/json");
