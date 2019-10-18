@@ -9,6 +9,7 @@
 	"scripts": {
 		"dev": "ts-node-dev src/index.ts",
 		"watch:ts": "tsc -w",
+		"test": "echo \"TODO: no test specified\" && exit 0",
 		"build": "rimraf ./dist && tsc"
 	},
 	"dependencies": {

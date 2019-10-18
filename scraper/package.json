@@ -12,7 +12,7 @@
 		"watch:ts": "tsc -w ### outdated",
 		"watch:node": "nodemon --ignore saved-content/ dist/index.js ### outdated",
 		"dev": "concurrently \"yarn run watch:ts\" \"yarn run watch:node\"",
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "echo \"TODO: no test specified\" && exit 0",
 		"build": "rimraf ./dist && tsc",
 		"serve": "node dist/index.js"
 	},
