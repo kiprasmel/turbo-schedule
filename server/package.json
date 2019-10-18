@@ -39,7 +39,12 @@
 		"typescript": "^3.7.0-beta"
 	},
 	"devDependencies": {
+		"@types/jest": "^24.0.19",
+		"@types/supertest": "^2.0.8",
 		"concurrently": "^5.0.0",
+		"jest": "^24.9.0",
+		"supertest": "^4.0.2",
+		"ts-jest": "^24.1.0",
 		"ts-node-dev": "^1.0.0-pre.42"
 	},
 	"resolutions": {
