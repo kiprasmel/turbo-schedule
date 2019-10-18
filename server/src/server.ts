@@ -4,6 +4,9 @@ import helmet from "helmet";
 import cors from "cors";
 import path from "path";
 
+import { applyAPIDocsGenerator } from "./util/applyAPIDocsGenerator";
+applyAPIDocsGenerator(app, "./openAPI.json");
+
 const PORT = process.env.PORT || 5000;
 
 /** misc */
