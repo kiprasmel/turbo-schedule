@@ -9,7 +9,7 @@ const router: Router = Router();
 /**
  * get list of students
  */
-router.get("/", async (_req, res) => {
+router.get("/", async (_req, res, next) => {
 	console.log("student/");
 
 	let studentsListFile: string = "";
@@ -18,7 +18,8 @@ router.get("/", async (_req, res) => {
 	fs.readFile(latestContentPath + "/students-data-array.json", { encoding: "utf-8" }, (err, data) => {
 		if (err) {
 			console.log("error!" + err);
-			return res.status(500).json({ error: err });
+			res.status(500).json({ error: err });
+			return next(err);
 		}
 
 		studentsListFile = data;
@@ -26,7 +27,8 @@ router.get("/", async (_req, res) => {
 
 		studentsList = JSON.parse(studentsListFile);
 
-		return res.json({ studentsList });
+		res.json({ studentsList });
+		return next();
 	});
 });
 
@@ -35,7 +37,7 @@ router.get("/", async (_req, res) => {
  *
  * @note make sure to encode the URI component (`studentName`)! (TODO)
  */
-router.get("/:studentName", async (req, res) => {
+router.get("/:studentName", async (req, res, next) => {
 	try {
 		console.log("student/:studentName");
 
@@ -67,7 +69,11 @@ router.get("/:studentName", async (req, res) => {
 
 		if (!fileExists) {
 			console.log("file does not exist");
-			return res.status(404).json({ error: "Student not found" });
+
+			const errMsg: string = "Student not found";
+
+			res.status(404).json({ error: errMsg });
+			return next(errMsg);
 		}
 
 		console.log("continuing after testing if exists");
@@ -76,26 +82,24 @@ router.get("/:studentName", async (req, res) => {
 		fs.readFile(filePath, { encoding: "utf-8" }, (err, data) => {
 			if (err) {
 				console.log("error!" + err);
-				return res.status(500).json({ error: err });
+				res.status(500).json({ error: err });
+				return next(err);
 			}
 
 			studentLessonArrayFile = data;
 
 			studentLessonArray = JSON.parse(studentLessonArrayFile);
 
-			return res.json({ studentSchedule: studentLessonArray });
+			res.json({ studentSchedule: studentLessonArray });
+			return next();
 		});
 	} catch (err) {
 		console.log("error!", err);
-		return res.status(500).json({ error: err });
+		res.status(500).json({ error: err });
+		return next(err);
 	}
 
 	return;
-});
-
-router.get("*", async (_req, res) => {
-	console.log("student/* unmatched");
-	return res.status(400).json({ error: "Unmatched route" });
 });
 
 /** --- */

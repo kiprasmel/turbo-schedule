@@ -31,7 +31,7 @@ const defaultFileData: IEmailsFileContent = {
 /**
  * add email to the `emails.json` list
  */
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
 	try {
 		const { email } = req.body;
 		console.log("email", email);
@@ -39,7 +39,9 @@ router.post("/", async (req, res) => {
 		console.log("body", req.body);
 
 		if (!email) {
-			return res.status(400).json({ error: "Email cannot be empty!" });
+			const errMsg: string = "Email cannot be empty!"
+			res.status(400).json({ error: errMsg });
+			return next(errMsg);
 		}
 
 		/**
@@ -85,26 +87,13 @@ router.post("/", async (req, res) => {
 			encoding: "utf-8",
 		});
 
-		return res.json({ emailEntry: newEmailEntry });
+		res.json({ emailEntry: newEmailEntry });
+		return next();
 	} catch (err) {
 		console.log("Error!", err);
-		return res.status(500).json({ error: err });
+		res.status(500).json({ error: err });
+		return next(err);
 	}
-});
-
-/**
- * remove email from the `emails.json` list
- */
-router.delete("/", async (_req, res) => {
-	/**
-	 * TODO
-	 *
-	 *  how do we identify that the same person who submitted the email
-	 * is the one who wants to remove it?
-	 *
-	 */
-
-	return res.status(404).json({ error: "Sorry, not yet implemented!" });
 });
 
 export { router as emailRouter };
