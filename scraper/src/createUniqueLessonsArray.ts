@@ -83,5 +83,3 @@ export const createUniqueLessonsArray = async (allStudentSchedulesArray?: Array<
 
 	return uniqueLessonsArray;
 };
-
-createUniqueLessonsArray();
