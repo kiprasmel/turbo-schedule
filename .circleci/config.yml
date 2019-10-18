@@ -69,7 +69,7 @@ jobs:
       ### install docker
       ### see https://circleci.com/docs/2.0/building-docker-images/
       - setup_remote_docker:
-          docker_layer_caching: true
+          docker_layer_caching: false # no longer available for the free tier? :/
 
       - run: yarn docker:deploy
 ### I wanted to limit the `build` job to only
