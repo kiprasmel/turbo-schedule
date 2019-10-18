@@ -102,11 +102,6 @@ router.get("/:studentName", async (req, res, next) => {
 	return;
 });
 
-router.get("*", async (_req, res) => {
-	console.log("student/* unmatched");
-	return res.status(400).json({ error: "Unmatched route" });
-});
-
 /** --- */
 
 export { router as studentRouter };
