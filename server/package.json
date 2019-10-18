@@ -9,7 +9,7 @@
 	"scripts": {
 		"start": "yarn dev",
 		"dev": "ts-node-dev script/start-server.ts",
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "cross-env NODE_ENV=test jest --config=./test/jest.config.js",
 		"build:ts": "tsc -b",
 		"build:content": "node ./dist/script/scrape-content.js   # depends on `build:ts`",
 		"build:docs": "node ./dist/script/generate-openapi-docs.js # depends on `build:ts`",
@@ -42,6 +42,7 @@
 		"@types/jest": "^24.0.19",
 		"@types/supertest": "^2.0.8",
 		"concurrently": "^5.0.0",
+		"cross-env": "^6.0.3",
 		"jest": "^24.9.0",
 		"supertest": "^4.0.2",
 		"ts-jest": "^24.1.0",
