@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // server.ts
 
 /**
@@ -11,6 +12,9 @@
  * without instantly starting it.
  *
  */
+=======
+import "./util/loadDotEnv";
+>>>>>>> 04ce97e... feat: Install `dotenv` & create `loadDotEnv` util & use it
 
 import express from "express";
 import helmet from "helmet";
