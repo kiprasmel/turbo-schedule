@@ -4,8 +4,9 @@ import { useTranslation } from "i18n/useTranslation";
 
 /**
  * http://reactcommunity.org/react-modal/accessibility/#app-element
+ * https://github.com/reactjs/react-modal/issues/576#issuecomment-394116847
  */
-ReactModal.setAppElement("#root");
+ReactModal.setAppElement("body");
 
 interface ICloseBtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	handleClose: () => any;
