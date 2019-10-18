@@ -13,9 +13,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 /** routes */
-import { apiRouterV1 } from "./route/v1/apiV1";
-
-app.use("/api/v1", apiRouterV1);
+import { apiRouter } from "./route/apiRouter";
+app.use("/api", apiRouter);
 
 // app.use("*", (req, res) => {
 // 	return res.status(400).json({ error: "bad request!" });
