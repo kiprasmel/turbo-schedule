@@ -5,7 +5,7 @@ import cors from "cors";
 import path from "path";
 
 import { applyAPIDocsGenerator } from "./util/applyAPIDocsGenerator";
-applyAPIDocsGenerator(app, "./openAPI.json");
+applyAPIDocsGenerator(app, "./openAPI.json" /** relative to where the script is ran from */); /** non-production only */
 
 const PORT = process.env.PORT || 5000;
 
