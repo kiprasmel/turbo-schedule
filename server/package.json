@@ -8,7 +8,7 @@
 	"license": "",
 	"scripts": {
 		"start": "yarn dev",
-		"dev": "ts-node-dev src/server.ts",
+		"dev": "ts-node-dev src/index.ts",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "tsc",
 		"serve": "cross-env NODE_ENV=production node dist/server.js"
