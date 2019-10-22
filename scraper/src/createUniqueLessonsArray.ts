@@ -10,18 +10,31 @@ export const getAllSchedules = async (): Promise<Array<any>> => {
 	const studentsFolderNames: Array<string> = await fs.promises.readdir(studentsPath, { encoding: "utf-8" });
 	// console.log("studentsFolderNames", studentsFolderNames);
 
+	let howManyFailed: number = 0;
+
 	const studentsSchedules: Array<any> = studentsFolderNames.map((studentFolderName) => {
 		// const studentsFiles = fs.readdirSync(studentsPath + "/" + studentFolderName);
-		const studentScheduleBuffer: string = fs.readFileSync(
-			studentsPath + "/" + studentFolderName + "/" + "student-data.json",
-			{
-				encoding: "utf-8",
-			}
-		);
+		try {
+			const studentScheduleBuffer: string = fs.readFileSync(
+				studentsPath + "/" + studentFolderName + "/" + "student-data.json",
+				{
+					encoding: "utf-8",
+				}
+			);
 
-		const studentSchedule = JSON.parse(studentScheduleBuffer);
+			const studentSchedule = JSON.parse(studentScheduleBuffer);
 
-		return studentSchedule;
+			return studentSchedule;
+		} catch (err) {
+			howManyFailed++;
+
+			console.error(
+				`! Error - failed getting / parsing student's schedule from \`student-data.json\` ${howManyFailed}`,
+				err
+			);
+
+			return null;
+		}
 	});
 
 	// console.log("studentScheduels", studentsSchedules);
