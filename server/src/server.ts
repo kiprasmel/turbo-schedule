@@ -16,20 +16,26 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import path from "path";
+import { Server } from "http";
 
 import { applyAPIDocsGenerator } from "./util/applyAPIDocsGenerator";
 import { apiRouter } from "./route/apiRouter";
 import { runScraperCronjob } from "./util/runScraperCronjob";
 
+export interface StartServerOptions {
+	openAPISavePathAndFilename?: string;
+	portOverride?: number | string;
+}
+
 export const app = express();
 
-export function startServer(callback: () => any = () => {}) {
-	applyAPIDocsGenerator(
-		app,
-		"./openAPI.json" /** relative to where the script is ran from */
-	); /** non-production only */
+// export function startServer(callback: StartServerCallback = () => {}): Server {
+export async function startServer({
+	openAPISavePathAndFilename = path.join(__dirname, "..", "generated", "openAPI.json"),
+	portOverride = undefined
+}: StartServerOptions = {}): Promise<Server> {
 
-	const PORT = process.env.PORT || 5000;
+	const PORT: number | string = process.env.PORT ?? portOverride ?? 5000;
 
 	/** misc */
 	app.use(helmet()); // https://helmetjs.github.io/
@@ -70,8 +76,6 @@ export function startServer(callback: () => any = () => {}) {
 
 		/** TODO - figure out where to place this */
 		runScraperCronjob();
-
-		callback();
 	});
 
 	process.on("SIGINT", () => {
