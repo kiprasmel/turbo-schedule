@@ -1,6 +1,7 @@
 import { Router } from "express";
-import fs from "fs";
+import fs from "fs-extra";
 
+import { isProd } from "../../../src/util/isProd";
 import { config } from "../../config";
 const { latestContentPath } = config;
 
@@ -10,26 +11,23 @@ const router: Router = Router();
  * get list of students
  */
 router.get("/", async (_req, res, next) => {
-	console.log("student/");
+	try {
+		console.log("student/");
 
-	let studentsListFile: string = "";
-	let studentsList: Array<any> = [];
+		const studentsListFile: string = await fs.readFile(latestContentPath + "/students-data-array.json", {
+			encoding: "utf-8",
+		});
 
-	fs.readFile(latestContentPath + "/students-data-array.json", { encoding: "utf-8" }, (err, data) => {
-		if (err) {
-			console.log("error!" + err);
-			res.status(500).json({ error: err });
-			return next(err);
-		}
-
-		studentsListFile = data;
-		// console.log("TCL: studentsListFile", studentsListFile);
-
-		studentsList = JSON.parse(studentsListFile);
+		const studentsList: Array<any> = JSON.parse(studentsListFile);
 
 		res.json({ studentsList });
-		return next();
-	});
+
+		return !isProd() ? next() : res.end();
+	} catch (err) {
+		console.log("error!", err);
+		res.status(500).json({ studentsList: [], error: err });
+		return !isProd() ? next(err) : res.end();
+	}
 });
 
 /**
@@ -39,67 +37,31 @@ router.get("/", async (_req, res, next) => {
  */
 router.get("/:studentName", async (req, res, next) => {
 	try {
-		console.log("student/:studentName");
+		const studentName = decodeURIComponent(req.params.studentName);
 
-		let { studentName } = req.params;
-
-		console.log("studentName", studentName, "decoded", decodeURIComponent(studentName));
-
-		studentName = decodeURIComponent(studentName);
-
-		let studentLessonArrayFile: string = "";
-		let studentLessonArray: Array<any> = [];
+		console.log(`/student:${studentName}`);
 
 		const filePath: string = `${latestContentPath}/lessons/${studentName}.json`;
 
-		// fs.access(filePath, (err) => {})
-		// const error = await fsPromises.stat(filePath);
-		// console.log("error?", error);
-
-		// let fileExists: boolean = !!error;
-		const fileExists: boolean = await fs.promises
-			.access(filePath)
-			.then(() => true)
-			.catch(() => false);
-
-		//(filePath, (exists: boolean) => {
-		// 	fileExists = exists;
-		// 	console.log("fileExists =", fileExists);
-		// });
+		const fileExists: boolean = await fs.pathExists(filePath);
 
 		if (!fileExists) {
-			console.log("file does not exist");
-
 			const errMsg: string = "Student not found";
 
 			res.status(404).json({ error: errMsg });
-			return next(errMsg);
+			return !isProd() ? next(errMsg) : res.end();
 		}
 
-		console.log("continuing after testing if exists");
+		const studentLessonArrayFile: string = await fs.readFile(filePath, { encoding: "utf-8" });
+		const studentLessonArray: Array<any> = JSON.parse(studentLessonArrayFile);
 
-		// fs.readFile(`saved-content/2019-09-03/lessons/${studentName}`, { encoding: "utf-8" }, (err, data) => {
-		fs.readFile(filePath, { encoding: "utf-8" }, (err, data) => {
-			if (err) {
-				console.log("error!" + err);
-				res.status(500).json({ error: err });
-				return next(err);
-			}
-
-			studentLessonArrayFile = data;
-
-			studentLessonArray = JSON.parse(studentLessonArrayFile);
-
-			res.json({ studentSchedule: studentLessonArray });
-			return next();
-		});
+		res.json({ studentSchedule: studentLessonArray });
+		return !isProd() ? next() : res.end();
 	} catch (err) {
 		console.log("error!", err);
 		res.status(500).json({ error: err });
-		return next(err);
+		return !isProd() ? next(err) : res.end();
 	}
-
-	return;
 });
 
 /** --- */
