@@ -1,7 +1,7 @@
 {
 	"npmClient": "yarn",
 	"useWorkspaces": true,
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"command": {
 		"version": {
 			"yes": true,
@@ -9,5 +9,10 @@
 			"message": "chore(release): [skip ci] \"%s\""
 		}
 	},
-	"packages": ["common", "scraper", "server", "client"]
+	"packages": [
+		"common",
+		"scraper",
+		"server",
+		"client"
+	]
 }

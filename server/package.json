@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/server",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "",
 	"main": "dist/src/server.js",
 	"typings": "dist/src/server.d.ts",
@@ -17,8 +17,8 @@
 		"serve": "cross-env NODE_ENV=production node dist/script/start-server.js"
 	},
 	"dependencies": {
-		"@turbo-schedule/common": "0.1.0",
-		"@turbo-schedule/scraper": "0.1.0",
+		"@turbo-schedule/common": "^1.0.0",
+		"@turbo-schedule/scraper": "^1.0.0",
 		"@types/cors": "^2.8.6",
 		"@types/cron": "^1.7.1",
 		"@types/express": "^4.17.1",
