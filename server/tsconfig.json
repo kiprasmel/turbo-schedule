@@ -19,7 +19,7 @@
 		],
 		"noEmit": false,
 		"sourceMap": true,
-		"rootDir": "./src",
+		/** we currently do NOT use neither `rootDir` nor `rootDirs` here */
 		"outDir": "./dist",
 		"moduleResolution": "node",
 		"removeComments": true,
