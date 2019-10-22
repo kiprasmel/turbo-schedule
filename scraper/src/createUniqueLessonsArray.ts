@@ -63,7 +63,11 @@ export const createUniqueLessonsArray = async (allStudentSchedulesArray?: Array<
 	// let uniqueLessonsSet: Set<ILesson> = new Set<ILesson>();
 	let uniqueLessonsMap: Map<string, any> = new Map();
 
-	studentSchedulesArray.forEach((studentAndSchedule) => {
+	for (const studentAndSchedule of studentSchedulesArray) {
+		if (!studentAndSchedule) {
+			continue;
+		}
+
 		// console.log("studentAndSchedule", studentAndSchedule);
 
 		const lessonsArray: Array<any> = [...studentAndSchedule.schedule]; /** todo wut? */
@@ -81,7 +85,7 @@ export const createUniqueLessonsArray = async (allStudentSchedulesArray?: Array<
 				uniqueLessonsMap.set(lesson.id, updatedLesson);
 			}
 		});
-	});
+	}
 
 	// const uniqueLessonsArray: Array<any> = [...uniqueLessonsMap.];
 	let uniqueLessonsArray: Array<any> = [];
