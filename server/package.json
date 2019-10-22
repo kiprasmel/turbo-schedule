@@ -2,8 +2,8 @@
 	"name": "@turbo-schedule/server",
 	"version": "0.1.0",
 	"description": "",
-	"main": "dist/server.js",
-	"typings": "dist/server.d.ts",
+	"main": "dist/src/server.js",
+	"typings": "dist/src/server.d.ts",
 	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
 	"license": "",
 	"scripts": {
