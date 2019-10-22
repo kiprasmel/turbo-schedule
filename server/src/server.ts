@@ -4,7 +4,7 @@
  * The server.
  *
  * This does NOT start the server - it exports the `startServer` function
- * which is used in `index.ts` to actually start the server
+ * which is used in `server/script/start-server.ts`
  *
  * This is useful since we need to start the server
  * in other places too & this makes the server importable
