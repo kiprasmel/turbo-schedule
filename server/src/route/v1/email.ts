@@ -3,13 +3,13 @@
  * https://www.codota.com/code/javascript/functions/fs/promises
  */
 import fs from "fs";
-
 import { Router } from "express";
 
-const router: Router = Router();
-
+import { isProd } from "../../../src/util/isProd";
 import { config } from "../../config";
 const { scrapedDataSavePath } = config;
+
+const router: Router = Router();
 
 const emailFileName = "emails.json";
 const savingPathAndName = scrapedDataSavePath + "/" + emailFileName;
@@ -39,9 +39,9 @@ router.post("/", async (req, res, next) => {
 		console.log("body", req.body);
 
 		if (!email) {
-			const errMsg: string = "Email cannot be empty!"
+			const errMsg: string = "Email cannot be empty!";
 			res.status(400).json({ error: errMsg });
-			return next(errMsg);
+			return !isProd() ? next(errMsg) : res.end();
 		}
 
 		/**
@@ -69,7 +69,7 @@ router.post("/", async (req, res, next) => {
 		}
 
 		const emailsFile: string = await fs.promises.readFile(savingPathAndName, { encoding: "utf-8" });
-		let fileContent: IEmailsFileContent = JSON.parse(emailsFile);
+		let fileContent: IEmailsFileContent = !!emailsFile ? JSON.parse(emailsFile) : defaultFileData;
 
 		/**
 		 * TODO - handle duplicates?
@@ -88,11 +88,11 @@ router.post("/", async (req, res, next) => {
 		});
 
 		res.json({ emailEntry: newEmailEntry });
-		return next();
+		return !isProd() ? next() : res.end();
 	} catch (err) {
 		console.log("Error!", err);
 		res.status(500).json({ error: err });
-		return next(err);
+		return !isProd() ? next(err) : res.end();
 	}
 });
 

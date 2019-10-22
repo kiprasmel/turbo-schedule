@@ -1,7 +1,8 @@
 # Custom
 
-/saved-content*/
+saved-content*/
 /dist/
+/generated/
 
 # Logs
 logs

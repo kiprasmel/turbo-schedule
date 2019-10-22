@@ -2,16 +2,19 @@
 	"name": "@turbo-schedule/server",
 	"version": "0.1.0",
 	"description": "",
-	"main": "dist/server.js",
-	"typings": "dist/server.d.ts",
+	"main": "dist/src/server.js",
+	"typings": "dist/src/server.d.ts",
 	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
 	"license": "",
 	"scripts": {
 		"start": "yarn dev",
-		"dev": "ts-node-dev src/server.ts",
+		"dev": "ts-node-dev script/start-server.ts",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "tsc",
-		"serve": "cross-env NODE_ENV=production node dist/server.js"
+		"build:ts": "tsc -b",
+		"build:content": "node ./dist/script/scrape-content.js   # depends on `build:ts`",
+		"build:docs": "node ./dist/script/generate-openapi-docs.js # depends on `build:ts`",
+		"build": "yarn build:ts && yarn build:content && yarn build:docs",
+		"serve": "cross-env NODE_ENV=production node dist/script/start-server.js"
 	},
 	"dependencies": {
 		"@turbo-schedule/common": "0.1.0",
@@ -30,6 +33,8 @@
 		"express-oas-generator": "^1.0.10",
 		"fs-extra": "^8.1.0",
 		"helmet": "^3.20.1",
+		"node-fetch": "^2.6.0",
+		"openapi-types": "^1.3.5",
 		"redoc": "^2.0.0-rc.16",
 		"typescript": "^3.7.0-beta"
 	},

@@ -55,7 +55,7 @@ export const scrape = async (options: IOptions = { savePath: "saved-content" }):
 		try {
 			/** TODO - this is NOT good lmao */
 			if (options.savePath !== "saved-content") {
-				await move("saved-content", options.savePath);
+				await move("saved-content", options.savePath, { overwrite: true });
 				console.log("Moved content");
 			}
 		} catch (err) {
