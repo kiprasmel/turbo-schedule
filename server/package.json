@@ -8,10 +8,10 @@
 	"license": "",
 	"scripts": {
 		"start": "yarn dev",
-		"dev": "ts-node-dev src/index.ts",
+		"dev": "ts-node-dev script/start-server.ts",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "tsc",
-		"serve": "cross-env NODE_ENV=production node dist/server.js"
+		"build:ts": "tsc -b",
+		"serve": "cross-env NODE_ENV=production node dist/script/start-server.js"
 	},
 	"dependencies": {
 		"@turbo-schedule/common": "0.1.0",
