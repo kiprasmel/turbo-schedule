@@ -1,5 +1,8 @@
 # Dockerfile
 #
+# NOTE - this assumes you've already ran `yarn setup`!
+# TODO - multi-stage builds
+#
 # name=turbo-schedule
 #
 # building:
@@ -8,7 +11,6 @@
 # running standalone:
 # $ docker run -p 5000:5000 kipras/$name
 #
-# TODO - multi-stage builds
 #
 
 FROM node as node
@@ -30,19 +32,17 @@ COPY client/package.json ./client/
 # since `node-sass` won't get installed in react app
 # meaning that the app won't compile
 ###RUN yarn install --production
-RUN yarn install
+###RUN yarn install --frozen-lockfile
+
+COPY ./node_modules ./node_modules
 
 COPY common/dist ./common/dist
 COPY scraper/dist ./scraper/dist
 COPY server/dist ./server/dist
 COPY client/build ./client/build
 
-# TODO FIXME - this is hacky (((OR IS IT???)))
-# RUN yarn --cwd server run __postinstall
-RUN node server/dist/predeploy.js
-
 # not yet needed
-#COPY .env ...
+#COPY server/.env ./server/.env
 
 ENV NODE_ENV=production
 
