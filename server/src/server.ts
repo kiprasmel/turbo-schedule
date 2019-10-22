@@ -92,15 +92,12 @@ export async function startServer({
 	}
 
 	/** serving */
-	app.listen(PORT, async () => {
+	const server: Server = app.listen(PORT, async () => {
 		console.log(`~ Server listening on PORT \`${PORT}\` @ NODE_ENV \`${process.env.NODE_ENV}\``);
 
 		/** TODO - figure out where to place this */
 		runScraperCronjob();
 	});
 
-	process.on("SIGINT", () => {
-		console.log("Bye bye!");
-		process.exit();
-	});
+	return server;
 }
