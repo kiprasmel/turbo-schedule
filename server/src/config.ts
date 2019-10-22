@@ -8,7 +8,7 @@ export interface IConfig {
 
 const scrapedDataDir: string = "saved-content";
 
-const scrapedDataSavePath: string = join(__dirname, "../", scrapedDataDir);
+const scrapedDataSavePath: string = join(__dirname, "..", scrapedDataDir);
 
 /**
  *
