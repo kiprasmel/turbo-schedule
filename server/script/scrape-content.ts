@@ -7,7 +7,7 @@
  *
  * This should be run ON PRODUCTION RELEASE (figure out when EXACTLY),
  * and on development environments,
- * because the files get moved to `dist/saved-content`,
+ * because the files get moved to `dist/src/saved-content`,
  * and on development this is NOT what we want!
  *
  * the server should (maybe) himself activate the scrapign stuff,
@@ -29,7 +29,7 @@
 
 // // import { join } from "path";
 import scraper from "@turbo-schedule/scraper";
-import { config } from "./config";
+import { config } from "../src/config";
 
 // // /**
 // //  * since the `predeploy` script is going to be placed
