@@ -16,6 +16,7 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import path from "path";
+import fs from "fs-extra";
 import { Server } from "http";
 
 import { applyAPIDocsGenerator } from "./util/applyAPIDocsGenerator";
@@ -59,11 +60,31 @@ export async function startServer({
 	if (process.env.NODE_ENV === "production") {
 		console.log("~ Server's using client's production build");
 		/** serve static assets */
-		app.use(express.static(path.join(__dirname, "../", "../", "client", "build")));
+		const pathNormal: string = path.join(__dirname, "../", "../", "client", "build");
+		const pathOnceBuilt: string = path.join(__dirname, "../", "../", "../", "client", "build");
+		let pathToUse: string = "";
+
+		if (fs.pathExistsSync(pathOnceBuilt)) {
+			pathToUse = pathOnceBuilt;
+			console.log("~ Using the `built` path");
+		} else if (fs.pathExistsSync(pathNormal)) {
+			pathToUse = pathNormal;
+			console.log("~ Using the `normal` path");
+		} else {
+			throw new Error("~ Static assets path does not exist!");
+		}
+
+		app.use(express.static(pathToUse));
+
+		const indexHtmlFilePath: string = path.join(pathToUse, "index.html");
+
+		if (!fs.pathExistsSync(indexHtmlFilePath)) {
+			throw new Error("~ Static index.html file does not exist!");
+		}
 
 		/** capture everything that's outside our API routes and send the built react application (index.html file) */
 		app.get("/*", (_req, res) => {
-			res.sendFile(path.join(__dirname, "../", "../", "client", "build", "index.html"));
+			res.sendFile(indexHtmlFilePath);
 			// res.sendFile(path.resolve(__dirname, "turbo-schedule-client", "build", "index.html"));
 		});
 	} else {
