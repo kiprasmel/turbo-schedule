@@ -1,9 +1,14 @@
 import fetch from "node-fetch";
 
 export const fetchStudentsList = async () => {
-	const response = await fetch("api/v1/student");
+	try {
+		const response = await fetch("api/v1/student");
 
-	const body: { studentsList: Array<any> } = await response.json();
+		const body: { studentsList: Array<any> } = await response.json();
 
-	return body.studentsList;
+		return body.studentsList;
+	} catch (err) {
+		console.error("Error @ fetchStudentsList", err);
+		return [];
+	}
 };
