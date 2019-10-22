@@ -95,6 +95,11 @@ export async function startServer({
 	const server: Server = app.listen(PORT, async () => {
 		console.log(`~ Server listening on PORT \`${PORT}\` @ NODE_ENV \`${process.env.NODE_ENV}\``);
 
+		await applyAPIDocsGenerator(
+			app,
+			openAPISavePathAndFilename
+		); /** non-production only */
+
 		/** TODO - figure out where to place this */
 		runScraperCronjob();
 	});
