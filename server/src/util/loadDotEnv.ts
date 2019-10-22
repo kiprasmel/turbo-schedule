@@ -20,7 +20,7 @@
 import dotenv from "dotenv";
 import { join } from "path";
 
-const dotenvFileName: string = process.env.NODE_ENV === "test" ? ".env.test" : ".env";
+const dotenvFileName: string = ".env";
 
 const dotenvResult: dotenv.DotenvConfigOutput = dotenv.config({
 	path: join(__dirname, "../", "../", dotenvFileName),
