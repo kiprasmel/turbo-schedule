@@ -42,8 +42,7 @@ sudo docker run -p 5000:5000 --name turbo-schedule kipras/turbo-schedule
 git clone https://github.com/sarpik/turbo-schedule.git
 # or:  git clone git@github.com:sarpik/turbo-schedule.git
 cd turbo-schedule/
-yarn install
-yarn build
+yarn setup
 yarn serve
 ```
 
@@ -55,8 +54,7 @@ yarn serve
 git clone https://github.com/sarpik/turbo-schedule.git
 # or:  git clone git@github.com:sarpik/turbo-schedule.git
 cd turbo-schedule
-yarn install
-yarn build
+yarn setup
 yarn dev
 ```
 
