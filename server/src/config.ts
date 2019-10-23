@@ -4,6 +4,7 @@ export interface IConfig {
 	scrapedDataDir: string;
 	scrapedDataSavePath: string;
 	latestContentPath: string;
+	generatedDirPath: string;
 }
 
 const scrapedDataDir: string = "saved-content";
@@ -21,4 +22,5 @@ export const config: IConfig = {
 	scrapedDataDir,
 	scrapedDataSavePath,
 	latestContentPath: scrapedDataSavePath + "/" + "latest",
+	generatedDirPath: join(__dirname, "..", "generated"),
 };
