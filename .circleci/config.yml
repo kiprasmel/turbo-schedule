@@ -56,11 +56,13 @@ jobs:
       - run: echo "$(git tag)"
 
       # testing
-      - run: echo 'latest tag $(git describe --tags)'
+      - run: echo "second latest tag $(git describe --tags)"
 
       ### WARNING BROKEn
       # get & save latest tag
-      - run: echo 'export LATEST_TAG=$(git describe --tags)' >> $BASH_ENV
+      - run: echo "export SECOND_LATEST_TAG=$(git describe --tags)" >> $BASH_ENV
+
+      - run: echo "$SECOND_LATEST_TAG"
 
       ### install docker
       ### see https://circleci.com/docs/2.0/building-docker-images/
