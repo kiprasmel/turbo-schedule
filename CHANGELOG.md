@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/sarpik/turbo-schedule/compare/v1.2.1...v1.3.0) (2019-10-23)
+
+
+### Bug Fixes
+
+* **ci:** Try `echo`ing properly with double quotes ([c7ff40e](https://github.com/sarpik/turbo-schedule/commit/c7ff40e3e7c5939ec18c8cdabdb037e02ddd1688))
+
+
+### Features
+
+* **ci:** Run `yarn lerna version` once done deploying ([2313066](https://github.com/sarpik/turbo-schedule/commit/2313066bcdbc5f914563a28ce3049164a41cea9e))
+* **server:** Refactor `email` route & handle duplicates ([bd1dbb3](https://github.com/sarpik/turbo-schedule/commit/bd1dbb308ea2b919324ffc4653428d0a21b56434))
+* **tests:** Update `email` route tests ([bc56341](https://github.com/sarpik/turbo-schedule/commit/bc56341fadc746ff9be5c842cc52eafb86bdbb04))
+
+
+
+
+
 ## [1.2.1](https://github.com/sarpik/turbo-schedule/compare/v1.2.0...v1.2.1) (2019-10-23)
 
 
