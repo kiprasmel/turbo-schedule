@@ -5,7 +5,7 @@ import expressOasGenerator from "express-oas-generator";
 import fs, { pathExistsSync, removeSync } from "fs-extra";
 
 // export const applyAPIDocsGenerator = (app: Express, savePath: string | undefined = undefined) => {
-export const applyAPIDocsGenerator = async (app: Express, savePathAndFilename: string) => {
+export const applyAPIDocsGenerator = (app: Express, savePathAndFilename: string) => {
 	try {
 		if (process.env.NODE_ENV === "production") {
 			/**
@@ -22,7 +22,7 @@ export const applyAPIDocsGenerator = async (app: Express, savePathAndFilename: s
 
 		const delay: number = 2000;
 
-		await expressOasGenerator.init(
+		expressOasGenerator.init(
 			app,
 			(spec: any) => {
 				let pkgPath: string | null = null;

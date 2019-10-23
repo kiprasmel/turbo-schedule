@@ -3,6 +3,9 @@
 # testing
 /test-server/
 
+# untracked stuff that I might want to use later
+/stuff/
+
 /node_modules/
 
 # ts

@@ -30,11 +30,10 @@ export interface StartServerOptions {
 
 export const app = express();
 
-// export function startServer(callback: StartServerCallback = () => {}): Server {
-export async function startServer({
+export function startServer({
 	openAPISavePathAndFilename = path.join(__dirname, "..", "generated", "openAPI.json"),
 	portOverride = undefined
-}: StartServerOptions = {}): Promise<Server> {
+}: StartServerOptions = {}): Server {
 
 	const PORT: number | string = process.env.PORT ?? portOverride ?? 5000;
 
@@ -92,10 +91,10 @@ export async function startServer({
 	}
 
 	/** serving */
-	const server: Server = app.listen(PORT, async () => {
+	const server: Server = app.listen(PORT, () => {
 		console.log(`~ Server listening on PORT \`${PORT}\` @ NODE_ENV \`${process.env.NODE_ENV}\``);
 
-		await applyAPIDocsGenerator(
+		applyAPIDocsGenerator(
 			app,
 			openAPISavePathAndFilename
 		); /** non-production only */
