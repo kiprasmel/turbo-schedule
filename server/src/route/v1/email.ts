@@ -1,8 +1,4 @@
-/**
- * `fs` promises:
- * https://www.codota.com/code/javascript/functions/fs/promises
- */
-import fs from "fs";
+import fs, { WriteOptions } from "fs-extra";
 import { Router } from "express";
 
 import { isProd } from "../../../src/util/isProd";
@@ -11,8 +7,8 @@ const { scrapedDataSavePath } = config;
 
 const router: Router = Router();
 
-const emailFileName = "emails.json";
-const savingPathAndName = scrapedDataSavePath + "/" + emailFileName;
+const emailFileName: string = "emails.json";
+const savingPathAndName: string = scrapedDataSavePath + "/" + emailFileName;
 
 export interface IEmail {
 	created: string;
@@ -28,15 +24,14 @@ const defaultFileData: IEmailsFileContent = {
 	emailsArray: [],
 };
 
+const writeJSONOptions: WriteOptions = { encoding: "utf-8", EOL: "\n", spaces: "\t" };
+
 /**
  * add email to the `emails.json` list
  */
 router.post("/", async (req, res, next) => {
 	try {
 		const { email } = req.body;
-		console.log("email", email);
-
-		console.log("body", req.body);
 
 		if (!email) {
 			const errMsg: string = "Email cannot be empty!";
@@ -48,32 +43,20 @@ router.post("/", async (req, res, next) => {
 		 * TODO - validation?
 		 */
 
-		/** create dir if not present */
-		const dirExists: boolean = await fs.promises
-			.access(scrapedDataSavePath)
-			.then(() => true)
-			.catch(() => false);
-
-		if (!dirExists) {
-			await fs.promises.mkdir(scrapedDataSavePath, { recursive: true });
+		/** create file & write default data if not present */
+		if (!(await fs.pathExists(savingPathAndName))) {
+			await fs.outputJSON(savingPathAndName, defaultFileData, writeJSONOptions);
 		}
 
-		/** create file if not present */
-		const fileExists: boolean = await fs.promises
-			.access(savingPathAndName)
-			.then(() => true)
-			.catch(() => false);
-
-		if (!fileExists) {
-			await fs.promises.writeFile(savingPathAndName, JSON.stringify(defaultFileData), { encoding: "utf-8" });
-		}
-
-		const emailsFile: string = await fs.promises.readFile(savingPathAndName, { encoding: "utf-8" });
+		const emailsFile: string = await fs.readFile(savingPathAndName, { encoding: "utf-8" });
 		let fileContent: IEmailsFileContent = !!emailsFile ? JSON.parse(emailsFile) : defaultFileData;
 
-		/**
-		 * TODO - handle duplicates?
-		 */
+		/** handle duplicates */
+		if (fileContent.emailsArray.some((emailOjb) => emailOjb.email === email)) {
+			const warningMsg: string = "Email already exists";
+			res.status(403).json({ emailEntry: email, error: warningMsg });
+			return !isProd() ? next(warningMsg) : res.end();
+		}
 
 		const newEmailEntry: IEmail = {
 			created: new Date().toISOString(),
@@ -83,14 +66,11 @@ router.post("/", async (req, res, next) => {
 
 		fileContent.emailsArray.push(newEmailEntry);
 
-		await fs.promises.writeFile(savingPathAndName, JSON.stringify(fileContent), {
-			encoding: "utf-8",
-		});
+		await fs.writeJSON(savingPathAndName, fileContent, writeJSONOptions);
 
 		res.json({ emailEntry: newEmailEntry });
 		return !isProd() ? next() : res.end();
 	} catch (err) {
-		console.log("Error!", err);
 		res.status(500).json({ error: err });
 		return !isProd() ? next(err) : res.end();
 	}

@@ -10,13 +10,17 @@ const leanDocsPath = join(__dirname, "..", "..", "..", "generated", "./openAPI.l
 
 let openAPIDocsJSON: string = "{}";
 
-export const openAPIDocsJSONHandler: RequestHandler = (_req, res, next) => {
+/**
+ * TODO - figure out if we need to read the json file
+ * on every request or just read it initially and stick with it.
+ */
+export const openAPIDocsJSONHandler: RequestHandler = async (_req, res, next) => {
 	try {
-		if (!fs.pathExistsSync(leanDocsPath)) {
+		if (!(await fs.pathExists(leanDocsPath))) {
 			openAPIDocsJSON = "{}";
-			console.log("  ! openAPIDocsJSON not found!");
+			console.log("  ! openAPIDocsJSON not found (`%s`)", leanDocsPath);
 		} else {
-			openAPIDocsJSON = fs.readJsonSync(leanDocsPath, {
+			openAPIDocsJSON = await fs.readJSON(leanDocsPath, {
 				encoding: "utf-8",
 			});
 		}
@@ -25,8 +29,7 @@ export const openAPIDocsJSONHandler: RequestHandler = (_req, res, next) => {
 		res.send(openAPIDocsJSON);
 		return !isProd() ? next() : res.end();
 	} catch (err) {
-		console.error("! openAPIDocsJSON: Failed reading / parsing docs!", err);
-		return !isProd() ? next(err) : res.end();
+		return next(err); /** this is intended to be handled by `next` either way */
 	}
 };
 
@@ -44,7 +47,6 @@ export const openAPIDocsHTMLHandler: RequestHandler = (_req, res, next) => {
 
 		return !isProd() ? next() : res.end();
 	} catch (err) {
-		console.error(err);
 		return next(err); /** this is intended to be handled by `next` either way */
 	}
 };
