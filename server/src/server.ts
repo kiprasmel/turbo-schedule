@@ -22,6 +22,7 @@ import { Server } from "http";
 import { applyAPIDocsGenerator } from "./util/applyAPIDocsGenerator";
 import { apiRouter } from "./route/apiRouter";
 import { enableScraperCronjob } from "./util/enableScraperCronjob";
+import { setupLogger } from "./util/setupLogger";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(helmet()); // https://helmetjs.github.io/
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+setupLogger(app);
 
 /** routes */
 app.use("/api", apiRouter);
