@@ -14,6 +14,11 @@
   <!-- <a href="https://github.com/sarpik/turbo-schedule/releases">
     <img alt="latest version" src="https://img.shields.io/github/v/tag/sarpik/turbo-schedule?include_prereleases&sort=semver" />
   </a> -->
+
+  <a href="https://github.com/semantic-release/semantic-release">
+	<img alt="Semantic release" src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg">
+  </a>
+
 </p>
 
 🎒 A better schedule web app than our school's one!
