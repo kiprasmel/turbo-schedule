@@ -4,7 +4,7 @@ import scraper from "@turbo-schedule/scraper";
 import { CronJob } from "cron";
 import { config } from "../config";
 
-export const enableScraperCronjob = () => {
+export const enableScraperCronjob = (): void => {
 	const runImmediately: boolean = !!process.env.START_SCRAPER_NOW;
 
 	const scraperCronJob: CronJob = new CronJob(
