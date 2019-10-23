@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/sarpik/turbo-schedule/compare/v1.1.0...v1.2.0) (2019-10-23)
+
+
+### Bug Fixes
+
+* **server:** Disable `debug` for `loadDotEnv` ([0167af2](https://github.com/sarpik/turbo-schedule/commit/0167af2da345e0f1406e3d1e565def013e41a6f2))
+* **server:** Extract `app`s middleware out of `startServer` for proper exports ([b0e01a2](https://github.com/sarpik/turbo-schedule/commit/b0e01a2abccdd04dacdd7f068bb05b8d7892a13c))
+* **server:** Set `PORT` env var once tests are ran ([3a436b3](https://github.com/sarpik/turbo-schedule/commit/3a436b30b575a7b588b117b02bea02fb33cca3e5))
+* **server:** Simplify `.env` naming & usage ([93aede4](https://github.com/sarpik/turbo-schedule/commit/93aede452cd924b057eb623c2dae5029dc3e623d))
+
+
+### Features
+
+* **server:** Create `.env.example` ([1b600d7](https://github.com/sarpik/turbo-schedule/commit/1b600d737f02e490aad27cf0e42fbf7cf6fb20b3))
+* Install `dotenv` & create `loadDotEnv` util & use it ([b389b9a](https://github.com/sarpik/turbo-schedule/commit/b389b9a8b1fb0d00e40b80420c638c3fbf63a701))
+* **server:** Install jest, ts-jest, supertest & their types ([e82b2f2](https://github.com/sarpik/turbo-schedule/commit/e82b2f2fd3f173b9811a27a007a5e96ae24787b4))
+* **tests:** Create my first ever test! 🧪 ([644715b](https://github.com/sarpik/turbo-schedule/commit/644715b297e5283a672d9ee7236cd14d08b7c89e))
+* **tests:** Create tests for `/email` API ([1b206b7](https://github.com/sarpik/turbo-schedule/commit/1b206b7115e7929f1c0a90349e597a27cf6b5941))
+* **tests:** Create tests for `/student` API ([d6dabcc](https://github.com/sarpik/turbo-schedule/commit/d6dabccc7e312abd16978259e0273282205ba4ba))
+* Create `jest.config.js` & a yarn script for jest ([59a5673](https://github.com/sarpik/turbo-schedule/commit/59a5673e94bc07d95e26f4978423feceee8203bf))
+
+
+
+
+
 # [1.1.0](https://github.com/sarpik/turbo-schedule/compare/v1.0.0...v1.1.0) (2019-10-23)
 
 
