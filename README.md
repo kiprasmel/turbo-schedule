@@ -21,7 +21,9 @@
 
 </p>
 
+<p style="margin:1.5em 0;">
 🎒 A better schedule web app than our school's one!
+</p>
 
 ## Try it out!
 
