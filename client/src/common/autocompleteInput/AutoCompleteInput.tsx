@@ -49,13 +49,7 @@ const AutoCompleteInput = ({
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
 
-		const allowedChars = /^[A-Za-z0-9_-\s]*$/;
-
-		const valueIsValid: boolean = !value || allowedChars.test(value);
-
-		if (valueIsValid) {
-			setSearchString(value);
-		}
+		setSearchString(value);
 	};
 
 	const handleOnKeyDown = (e: React.KeyboardEvent, autoCompletionIndex: number = 0) => {
