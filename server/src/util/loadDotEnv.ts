@@ -24,7 +24,7 @@ const dotenvFileName: string = ".env";
 
 const dotenvResult: dotenv.DotenvConfigOutput = dotenv.config({
 	path: join(__dirname, "../", "../", dotenvFileName),
-	debug: process.env.DEBUG === "true",
+	debug: false /** way too much spam, no need */,
 	encoding: "utf8",
 });
 
