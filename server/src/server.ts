@@ -23,11 +23,6 @@ import { applyAPIDocsGenerator } from "./util/applyAPIDocsGenerator";
 import { apiRouter } from "./route/apiRouter";
 import { enableScraperCronjob } from "./util/enableScraperCronjob";
 
-export interface StartServerOptions {
-	openAPISavePathAndFilename?: string;
-	portOverride?: number | string;
-}
-
 const app = express();
 
 /** misc */
@@ -79,6 +74,11 @@ if (process.env.NODE_ENV === "production") {
 
 /** export the express app after it's set up - the tests use it */
 export { app };
+
+export interface StartServerOptions {
+	openAPISavePathAndFilename?: string;
+	portOverride?: number | string;
+}
 
 export function startServer({
 	openAPISavePathAndFilename = path.join(__dirname, "..", "generated", "openAPI.json"),
