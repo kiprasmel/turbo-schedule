@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/sarpik/turbo-schedule/compare/v1.2.0...v1.2.1) (2019-10-23)
+
+
+### Bug Fixes
+
+* **server:** Get rid of `.env` & relatives ([d80be08](https://github.com/sarpik/turbo-schedule/commit/d80be08088cc94e06b0775ba061b268d5c7f44b4))
+
+
+
+
+
 # [1.2.0](https://github.com/sarpik/turbo-schedule/compare/v1.1.0...v1.2.0) (2019-10-23)
 
 
