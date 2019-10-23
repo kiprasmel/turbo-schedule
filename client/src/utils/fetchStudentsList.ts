@@ -1,12 +1,18 @@
-import fetch from "node-fetch";
+import axios, { AxiosResponse } from "axios";
 
-export const fetchStudentsList = async () => {
+interface Response {
+	studentsList: any[];
+}
+
+export const fetchStudentsList = async (): Promise<any[]> => {
 	try {
-		const response = await fetch("api/v1/student");
+		const response: AxiosResponse<Response> = await axios.get<Response>("/api/v1/student");
 
-		const body: { studentsList: Array<any> } = await response.json();
+		const {
+			data: { studentsList = [] },
+		} = response;
 
-		return body.studentsList;
+		return studentsList;
 	} catch (err) {
 		console.error("Error @ fetchStudentsList", err);
 		return [];

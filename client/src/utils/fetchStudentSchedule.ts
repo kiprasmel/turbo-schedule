@@ -1,9 +1,17 @@
-import fetch from "node-fetch";
+import axios, { AxiosResponse } from "axios";
 
-export const fetchStudentSchedule = async (studentName: string) => {
-	const response = await fetch(`api/v1/student/${encodeURIComponent(studentName)}`);
+interface Response {
+	studentSchedule: any[];
+}
 
-	const body: { studentSchedule: any } = await response.json();
+export const fetchStudentSchedule = async (studentName: string): Promise<any[]> => {
+	const response: AxiosResponse<Response> = await axios.get<Response>(
+		`/api/v1/student/${encodeURIComponent(studentName)}`
+	);
 
-	return body.studentSchedule;
+	const {
+		data: { studentSchedule },
+	} = response;
+
+	return studentSchedule;
 };
