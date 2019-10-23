@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/sarpik/turbo-schedule/compare/v1.0.0...v1.1.0) (2019-10-23)
+
+
+### Bug Fixes
+
+* **client:** Get rid of input's value validation altogether ([75acdb1](https://github.com/sarpik/turbo-schedule/commit/75acdb1c20ab5fe6d5811f80e6b39043319b6ae4))
+* **client:** Validate the whole value instead of only the first char ([0047722](https://github.com/sarpik/turbo-schedule/commit/0047722b6c466d118b40439c54651a5da734d6a4))
+* **server:** Do not use `localhost` for `redoc`s `spec-url` ([0a22ed3](https://github.com/sarpik/turbo-schedule/commit/0a22ed3f2df20a964277c021d21facc69432bd34))
+* **server:** Remove `async/await` from useless places ([7ced520](https://github.com/sarpik/turbo-schedule/commit/7ced52018b745436668485aace6995f9f63d0e25))
+* **server:** Update .gitignore - allow `generated/` ([676ba6d](https://github.com/sarpik/turbo-schedule/commit/676ba6d8b83bad316ebb2ac99a9bda14900f7179))
+
+
+### Features
+
+* **server:** Use `axios` instead of `fetch` & improve typescript ([ffa47b3](https://github.com/sarpik/turbo-schedule/commit/ffa47b3ee8cda3e41ad112ffc9a6771d5b794a13))
+
+
+
+
+
 # 1.0.0 (2019-10-22)
 
 
