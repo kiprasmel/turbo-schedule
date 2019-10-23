@@ -21,7 +21,7 @@ import { Server } from "http";
 
 import { applyAPIDocsGenerator } from "./util/applyAPIDocsGenerator";
 import { apiRouter } from "./route/apiRouter";
-import { runScraperCronjob } from "./util/runScraperCronjob";
+import { enableScraperCronjob } from "./util/enableScraperCronjob";
 
 export interface StartServerOptions {
 	openAPISavePathAndFilename?: string;
@@ -93,7 +93,7 @@ export function startServer({
 		applyAPIDocsGenerator(app, openAPISavePathAndFilename); /** non-production only */
 
 		/** TODO - figure out where to place this */
-		runScraperCronjob();
+		enableScraperCronjob();
 	});
 
 	return server;
