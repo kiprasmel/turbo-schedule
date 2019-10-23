@@ -12,6 +12,8 @@
  *
  */
 
+import "./util/loadDotEnv";
+
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
@@ -28,76 +30,69 @@ export interface StartServerOptions {
 	portOverride?: number | string;
 }
 
-export const app = express();
+const app = express();
+
+/** misc */
+app.use(helmet()); // https://helmetjs.github.io/
+app.use(cors());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+/** routes */
+app.use("/api", apiRouter);
+
+/**
+ * TODO - if we're making independant microservices,
+ * this will probably have to go.
+ */
+if (process.env.NODE_ENV === "production") {
+	console.log("~ Server's using client's production build");
+	/** serve static assets */
+	const pathNormal: string = path.join(__dirname, "../", "../", "client", "build");
+	const pathOnceBuilt: string = path.join(__dirname, "../", "../", "../", "client", "build");
+	let pathToUse: string = "";
+
+	if (fs.pathExistsSync(pathOnceBuilt)) {
+		pathToUse = pathOnceBuilt;
+		console.log("~ Using the `built` path");
+	} else if (fs.pathExistsSync(pathNormal)) {
+		pathToUse = pathNormal;
+		console.log("~ Using the `normal` path");
+	} else {
+		throw new Error("~ Static assets path does not exist!");
+	}
+
+	app.use(express.static(pathToUse));
+
+	const indexHtmlFilePath: string = path.join(pathToUse, "index.html");
+
+	if (!fs.pathExistsSync(indexHtmlFilePath)) {
+		throw new Error("~ Static index.html file does not exist!");
+	}
+
+	/** capture everything that's outside our API routes and send the built react application (index.html file) */
+	app.get("/*", (_req, res) => {
+		res.sendFile(indexHtmlFilePath);
+		// res.sendFile(path.resolve(__dirname, "turbo-schedule-client", "build", "index.html"));
+	});
+} else {
+	console.log("~ Server is NOT using client's prod build");
+}
+
+/** export the express app after it's set up - the tests use it */
+export { app };
 
 export function startServer({
 	openAPISavePathAndFilename = path.join(__dirname, "..", "generated", "openAPI.json"),
-	portOverride = undefined
+	portOverride = undefined,
 }: StartServerOptions = {}): Server {
-
-	const PORT: number | string = process.env.PORT ?? portOverride ?? 5000;
-
-	/** misc */
-	app.use(helmet()); // https://helmetjs.github.io/
-	app.use(cors());
-	app.use(express.urlencoded({ extended: false }));
-	app.use(express.json());
-
-	/** routes */
-	app.use("/api", apiRouter);
-
-	// app.use("*", (req, res) => {
-	// 	return res.status(400).json({ error: "bad request!" });
-	// });
-
-	/**
-	 *
-	 * TODO - if we're making independant microservices,
-	 * this will probably have to go.
-	 *
-	 */
-	if (process.env.NODE_ENV === "production") {
-		console.log("~ Server's using client's production build");
-		/** serve static assets */
-		const pathNormal: string = path.join(__dirname, "../", "../", "client", "build");
-		const pathOnceBuilt: string = path.join(__dirname, "../", "../", "../", "client", "build");
-		let pathToUse: string = "";
-
-		if (fs.pathExistsSync(pathOnceBuilt)) {
-			pathToUse = pathOnceBuilt;
-			console.log("~ Using the `built` path");
-		} else if (fs.pathExistsSync(pathNormal)) {
-			pathToUse = pathNormal;
-			console.log("~ Using the `normal` path");
-		} else {
-			throw new Error("~ Static assets path does not exist!");
-		}
-
-		app.use(express.static(pathToUse));
-
-		const indexHtmlFilePath: string = path.join(pathToUse, "index.html");
-
-		if (!fs.pathExistsSync(indexHtmlFilePath)) {
-			throw new Error("~ Static index.html file does not exist!");
-		}
-
-		/** capture everything that's outside our API routes and send the built react application (index.html file) */
-		app.get("/*", (_req, res) => {
-			res.sendFile(indexHtmlFilePath);
-			// res.sendFile(path.resolve(__dirname, "turbo-schedule-client", "build", "index.html"));
-		});
-	} else {
-		console.log("~ Server is NOT using client's prod build");
-	}
+	const PORT: number | string = portOverride ?? process.env.PORT ?? 5000;
 
 	/** serving */
 	const server: Server = app.listen(PORT, () => {
 		console.log(`~ Server listening on PORT \`${PORT}\` @ NODE_ENV \`${process.env.NODE_ENV}\``);
 
-		applyAPIDocsGenerator(
-			app,
-			openAPISavePathAndFilename
-		); /** non-production only */
+		applyAPIDocsGenerator(app, openAPISavePathAndFilename); /** non-production only */
 
 		/** TODO - figure out where to place this */
 		runScraperCronjob();
