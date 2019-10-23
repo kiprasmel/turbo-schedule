@@ -33,7 +33,7 @@ export const openAPIDocsJSONHandler: RequestHandler = (_req, res, next) => {
 export const openAPIDocsHTMLHandler: RequestHandler = (_req, res, next) => {
 	try {
 		const html: string = `
-		<redoc spec-url="http://localhost:5000/api/v1/docs.json"></redoc>
+		<redoc spec-url="/api/v1/docs.json"></redoc>
 
 		<!--  NOTE - the script MUST come AFTER the 'redoc' thing lmao  -->
 		<script src="https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"> </script>
