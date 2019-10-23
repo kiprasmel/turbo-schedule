@@ -6,7 +6,7 @@
 		"version": {
 			"yes": true,
 			"conventionalCommits": true,
-			"message": "chore(release): [skip ci] \"%s\""
+			"message": "%s\n\n[skip ci]"
 		}
 	},
 	"packages": [
