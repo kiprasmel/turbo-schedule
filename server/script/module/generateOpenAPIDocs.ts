@@ -25,7 +25,7 @@ export async function generateOpenAPIDocs(savePathAndFilename: string): Promise<
 	try {
 		console.log("\n => generateOpenAPIDocs:");
 
-		console.log("  -> path & filname:      `%s`", savePathAndFilename);
+		console.log("  -> path & filname: `%s`", savePathAndFilename);
 
 		/** make sure the generated directory exists; create it otherwise */
 		const savePath: string = parse(savePathAndFilename).dir;
@@ -42,7 +42,7 @@ export async function generateOpenAPIDocs(savePathAndFilename: string): Promise<
 
 		/** start the server */
 		console.log("  -> starting server:");
-		const server: Server = await startServer({
+		const server: Server = startServer({
 			openAPISavePathAndFilename: savePathAndFilename,
 			portOverride: serverPort,
 		});
