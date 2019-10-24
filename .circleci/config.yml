@@ -46,7 +46,7 @@ jobs:
           key: v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
           # key: v1-dependencies-{{ checksum "yarn.lock" }}
 
-      - run: yarn test
+      # - run: yarn test # SOON BBY
 
       - run: git config --global user.email $GIT_USER_EMAIL
       - run: git config --global user.name $GIT_USER_NAME
@@ -72,7 +72,6 @@ jobs:
 
       # create new version (& push to github) (skips ci to avoid an infinite loop)
       - run: yarn lerna version
-
 ### I wanted to limit the `build` job to only
 ### the `master` branch, but that didn't work
 ### so this is no longer needed (currently)
