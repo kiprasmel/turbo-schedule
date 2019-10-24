@@ -32,6 +32,6 @@ describe("/email API", () => {
 		expect(res1.status).toBe(200);
 
 		expect(res2.status).toBe(403);
-		expect(res2.body).toMatchObject({ emailEntry: email, error: "Email already exists" });
+		expect(res2.body).toMatchObject({ emailEntry: { email }, message: "Email already exists" });
 	});
 });
