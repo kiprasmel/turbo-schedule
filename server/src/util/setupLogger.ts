@@ -4,8 +4,7 @@ import path from "path";
 import morgan from "morgan";
 import rfs from "rotating-file-stream";
 
-import { config } from "../config";
-const { generatedDirPath } = config;
+import { generatedDirPath } from "../config";
 
 export const setupLogger = (app: Express, logDirPath: string = path.join(generatedDirPath, "log")): void => {
 	fs.ensureDirSync(logDirPath);

@@ -1,9 +1,9 @@
 import { Router } from "express";
 import fs from "fs-extra";
+import path from "path";
 
 import { isProd } from "../../../src/util/isProd";
-import { config } from "../../config";
-const { latestContentPath } = config;
+import { latestScrapedDataDirPath } from "../../config";
 
 const router: Router = Router();
 
@@ -12,17 +12,14 @@ const router: Router = Router();
  */
 router.get("/", async (_req, res, next) => {
 	try {
-		const studentsListFile: string = await fs.readFile(latestContentPath + "/students-data-array.json", {
-			encoding: "utf-8",
-		});
-
-		const studentsList: Array<any> = JSON.parse(studentsListFile);
+		const studentsListFilePath: string = path.join(latestScrapedDataDirPath, "students-data-array.json");
+		const studentsList: any[] = await fs.readJSON(studentsListFilePath, { encoding: "utf-8" });
 
 		res.json({ studentsList });
-
 		return !isProd() ? next() : res.end();
 	} catch (err) {
-		res.status(500).json({ studentsList: [], error: err });
+		console.error(err);
+		res.status(500).json({ studentsList: [], message: err });
 		return !isProd() ? next(err) : res.end();
 	}
 });
@@ -34,25 +31,25 @@ router.get("/", async (_req, res, next) => {
  */
 router.get("/:studentName", async (req, res, next) => {
 	try {
-		const studentName = decodeURIComponent(req.params.studentName);
-
-		const filePath: string = `${latestContentPath}/lessons/${studentName}.json`;
-
-		const fileExists: boolean = await fs.pathExists(filePath);
+		const studentName: string = decodeURIComponent(req.params.studentName);
+		const studentLessonsFilePath: string = path.join(latestScrapedDataDirPath, "lessons", studentName + ".json");
+		const fileExists: boolean = await fs.pathExists(studentLessonsFilePath);
 
 		if (!fileExists) {
-			const errMsg: string = "Student not found";
+			const message: string = "Student not found";
 
-			res.status(404).json({ error: errMsg });
-			return !isProd() ? next(errMsg) : res.end();
+			console.warn(message);
+			res.status(404).json({ studentSchedule: [], message });
+			return !isProd() ? next(message) : res.end();
 		}
 
-		const studentLessonArray: Array<any> = await fs.readJSON(filePath, { encoding: "utf-8" });
+		const studentLessons: any[] = await fs.readJSON(studentLessonsFilePath, { encoding: "utf-8" });
 
-		res.json({ studentSchedule: studentLessonArray });
+		res.json({ studentSchedule: studentLessons });
 		return !isProd() ? next() : res.end();
 	} catch (err) {
-		res.status(500).json({ error: err });
+		console.error(err);
+		res.status(500).json({ studentSchedule: [], message: err });
 		return !isProd() ? next(err) : res.end();
 	}
 });

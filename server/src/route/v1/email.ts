@@ -1,14 +1,14 @@
 import fs, { WriteOptions } from "fs-extra";
+import path from "path";
 import { Router } from "express";
 
 import { isProd } from "../../../src/util/isProd";
-import { config } from "../../config";
-const { scrapedDataSavePath } = config;
+import { scrapedDataDirPath } from "../../config";
 
 const router: Router = Router();
 
 const emailFileName: string = "emails.json";
-const savingPathAndName: string = scrapedDataSavePath + "/" + emailFileName;
+const savingPathAndName: string = path.join(scrapedDataDirPath, emailFileName);
 
 export interface IEmail {
 	created: string;
@@ -34,9 +34,11 @@ router.post("/", async (req, res, next) => {
 		const { email } = req.body;
 
 		if (!email) {
-			const errMsg: string = "Email cannot be empty!";
-			res.status(400).json({ error: errMsg });
-			return !isProd() ? next(errMsg) : res.end();
+			const message: string = "Field `email` is missing";
+
+			console.warn(message);
+			res.status(422).json({ emailEntry: null, message });
+			return !isProd() ? next(message) : res.end();
 		}
 
 		/**
@@ -53,9 +55,11 @@ router.post("/", async (req, res, next) => {
 
 		/** handle duplicates */
 		if (fileContent.emailsArray.some((emailOjb) => emailOjb.email === email)) {
-			const warningMsg: string = "Email already exists";
-			res.status(403).json({ emailEntry: email, error: warningMsg });
-			return !isProd() ? next(warningMsg) : res.end();
+			const message: string = "Email already exists";
+
+			console.warn(message);
+			res.status(403).json({ emailEntry: { email }, message });
+			return !isProd() ? next(message) : res.end();
 		}
 
 		const newEmailEntry: IEmail = {
@@ -71,7 +75,8 @@ router.post("/", async (req, res, next) => {
 		res.json({ emailEntry: newEmailEntry });
 		return !isProd() ? next() : res.end();
 	} catch (err) {
-		res.status(500).json({ error: err });
+		console.error(err);
+		res.status(500).json({ message: err });
 		return !isProd() ? next(err) : res.end();
 	}
 });

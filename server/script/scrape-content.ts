@@ -1,5 +1,5 @@
-#!/usr/bin/env node
-// predeploy.ts (predeploy.js)
+#!/usr/bin/env ts-node-dev
+// scrape-content.ts (scrape-content.js)
 
 /**
  *
@@ -27,20 +27,7 @@
  *
  */
 
-// // import { join } from "path";
 import scraper from "@turbo-schedule/scraper";
-import { config } from "../src/config";
+import { scrapedDataDirPath } from "../src/config";
 
-// // /**
-// //  * since the `predeploy` script is going to be placed
-// //  * into `./dist/`, we need to up the directory level
-// //  * by 1
-// //  *
-// //  * TODO fix the scraper itself
-// //  * or compile the predeploy script straight here
-// //  * without placing into `dist`
-// //  */
-// // // let savePath: string = join(__dirname, "../", config.scrapedDataDir);
-let savePath: string = config.scrapedDataSavePath;
-
-scraper({ savePath });
+scraper({ savePath: scrapedDataDirPath });

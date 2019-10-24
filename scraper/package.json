@@ -7,14 +7,14 @@
 	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
 	"license": "",
 	"scripts": {
-		"start": "yarn run dev",
-		"watch": "ts-node-dev src/index.ts",
-		"watch:ts": "tsc -w ### outdated",
-		"watch:node": "nodemon --ignore saved-content/ dist/index.js ### outdated",
-		"dev": "concurrently \"yarn run watch:ts\" \"yarn run watch:node\"",
+		"start": "yarn dev",
 		"test": "echo \"TODO: no test specified\" && exit 0",
 		"build": "rimraf ./dist && tsc",
-		"serve": "node dist/index.js"
+		"serve": "node dist/index.js",
+		"-----": "-----",
+		"watch:ts": "tsc -b -w",
+		"watch:scraper": "ts-node-dev src/index.ts",
+		"dev": "concurrently --raw --kill-others --names \"0: tsc,1: scraper\" \"yarn run watch:ts\" \"yarn run watch:scraper\""
 	},
 	"dependencies": {
 		"@turbo-schedule/common": "^1.0.0",

@@ -8,7 +8,6 @@
 	"proxy": "http://localhost:5000",
 	"homepage": "http://localhost:5000",
 	"scripts": {
-		"dev": "yarn start",
 		"start": "cross-env BROWSER=none react-scripts start",
 		"build": "react-scripts build",
 		"test": "cross-env CI=true react-scripts test",
