@@ -18,12 +18,16 @@ describe("/student API", () => {
 		});
 	});
 
-	it("should not return a non-existant student", async () => {
+	it("should return an empty schedule for a non-existant student", async () => {
 		const invalidStudentName: string = "ayyy lmao totally invalid student name XD";
 		const res: request.Response = await request(app).get(`/api/v1/student/${invalidStudentName}`);
 
 		expect(res.status).toBe(404);
-		expect(res.body).toHaveProperty("error");
+
+		expect(res.body).toHaveProperty("message");
+
+		expect(res.body).toHaveProperty("studentSchedule");
+		expect(res.body.studentSchedule).toEqual([]);
 	});
 
 	it("should return a specific student", async () => {
@@ -32,7 +36,7 @@ describe("/student API", () => {
 		 * & clean up after.
 		 * (applies to all tests; I'm just new to testing, we'll figure it out!)
 		 */
-		const studentName: string = "Melnikovas Kipras IIIe";
+		const studentName: string = encodeURIComponent("Melnikovas Kipras IIIe");
 
 		const res: request.Response = await request(app).get(`/api/v1/student/${studentName}`);
 
