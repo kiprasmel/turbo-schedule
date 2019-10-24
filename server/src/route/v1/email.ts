@@ -1,13 +1,14 @@
 import fs, { WriteOptions } from "fs-extra";
+import path from "path";
 import { Router } from "express";
 
 import { isProd } from "../../../src/util/isProd";
-import { scrapedDataSavePath } from "../../config";
+import { scrapedDataDirPath } from "../../config";
 
 const router: Router = Router();
 
 const emailFileName: string = "emails.json";
-const savingPathAndName: string = scrapedDataSavePath + "/" + emailFileName;
+const savingPathAndName: string = path.join(scrapedDataDirPath, emailFileName);
 
 export interface IEmail {
 	created: string;

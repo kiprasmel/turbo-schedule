@@ -2,7 +2,7 @@
 /** TODO - rename to `enableScraperCronJob` */
 import scraper from "@turbo-schedule/scraper";
 import { CronJob } from "cron";
-import { scrapedDataSavePath } from "../config";
+import { scrapedDataDirPath } from "../config";
 
 export const enableScraperCronjob = (): void => {
 	const runImmediately: boolean = !!process.env.START_SCRAPER_NOW;
@@ -25,7 +25,7 @@ export const enableScraperCronjob = (): void => {
 
 			console.log("\n~ Starting scraper:", startDate, "\n");
 
-			await scraper({ savePath: scrapedDataSavePath });
+			await scraper({ savePath: scrapedDataDirPath });
 
 			const endDate: Date = new Date();
 
