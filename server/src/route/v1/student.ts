@@ -16,10 +16,9 @@ router.get("/", async (_req, res, next) => {
 		const studentsList: any[] = await fs.readJSON(studentsListFilePath, { encoding: "utf-8" });
 
 		res.json({ studentsList });
-
 		return !isProd() ? next() : res.end();
 	} catch (err) {
-		res.status(500).json({ studentsList: [], error: err });
+		res.status(500).json({ studentsList: [], message: err });
 		return !isProd() ? next(err) : res.end();
 	}
 });
@@ -36,10 +35,10 @@ router.get("/:studentName", async (req, res, next) => {
 		const fileExists: boolean = await fs.pathExists(studentLessonsFilePath);
 
 		if (!fileExists) {
-			const errMsg: string = "Student not found";
+			const message: string = "Student not found";
 
-			res.status(404).json({ studentSchedule: [], error: errMsg });
-			return !isProd() ? next(errMsg) : res.end();
+			res.status(404).json({ studentSchedule: [], message });
+			return !isProd() ? next(message) : res.end();
 		}
 
 		const studentLessons: any[] = await fs.readJSON(studentLessonsFilePath, { encoding: "utf-8" });
@@ -47,7 +46,7 @@ router.get("/:studentName", async (req, res, next) => {
 		res.json({ studentSchedule: studentLessons });
 		return !isProd() ? next() : res.end();
 	} catch (err) {
-		res.status(500).json({ studentSchedule: [], error: err });
+		res.status(500).json({ studentSchedule: [], message: err });
 		return !isProd() ? next(err) : res.end();
 	}
 });
