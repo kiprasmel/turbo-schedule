@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/sarpik/turbo-schedule/compare/v1.4.0...v1.5.0) (2019-10-24)
+
+
+### Bug Fixes
+
+* **server:** Clean up `email` & `student` routes ([3bc1343](https://github.com/sarpik/turbo-schedule/commit/3bc13438c0759f896aff74fe677f80f336477f98))
+* **server:** Clean up directory/file (path) naming @ config ([ab080bf](https://github.com/sarpik/turbo-schedule/commit/ab080bf700de73e6edd4033d201397ed22a1e41d))
+* **server:** Fix config imports in `script/` dir ([7b96cdd](https://github.com/sarpik/turbo-schedule/commit/7b96cdd3e50268db45a1c7de8c0bb7ec02e30284))
+* **server:** Realise that you need to watch all ts files! ([0d8f80b](https://github.com/sarpik/turbo-schedule/commit/0d8f80bae034ca697a7a6893553b9db14730a2b7))
+* **server:** Update config imports (clean AF!) ([87c35ea](https://github.com/sarpik/turbo-schedule/commit/87c35eaf772bb8ec67b99f8c940b5703975c09a0))
+* **server:** Update to latest config exports ([c2c75cd](https://github.com/sarpik/turbo-schedule/commit/c2c75cd6f8bfd6bc88aae5b840d66314c3317d0c))
+
+
+### Features
+
+* **server:** Export config vars directly, not inside an {} 🚀 ([d4324cc](https://github.com/sarpik/turbo-schedule/commit/d4324cc522082435672eb1c97b728e514ce98438))
+* **server:** Provide default return values from API ([78097f3](https://github.com/sarpik/turbo-schedule/commit/78097f3df7cc4dad5db6314f2b746560bee7b1c3))
+* **server:** Start logging warnings/errors to console ([355f74a](https://github.com/sarpik/turbo-schedule/commit/355f74a2452553b288201a7c58b1cd0d92069f69))
+
+
+
+
+
 # [1.4.0](https://github.com/sarpik/turbo-schedule/compare/v1.3.0...v1.4.0) (2019-10-23)
 
 
