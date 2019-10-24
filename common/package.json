@@ -7,8 +7,7 @@
 	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
 	"license": "",
 	"scripts": {
-		"dev": "ts-node-dev src/index.ts",
-		"watch:ts": "tsc -w",
+		"watch:ts": "tsc -b -w",
 		"test": "echo \"TODO: no test specified\" && exit 0",
 		"build": "rimraf ./dist && tsc"
 	},
