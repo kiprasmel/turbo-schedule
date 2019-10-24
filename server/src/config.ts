@@ -1,26 +1,14 @@
+// config.ts
+/**
+ * @note
+ * paths are relative to THIS file (config.ts),
+ * because we use `__dirname`
+ * to keep everything consistant
+ */
+
 import { join } from "path";
 
-export interface IConfig {
-	scrapedDataDir: string;
-	scrapedDataSavePath: string;
-	latestContentPath: string;
-	generatedDirPath: string;
-}
-
-const scrapedDataDir: string = "saved-content";
-
-const scrapedDataSavePath: string = join(__dirname, "..", scrapedDataDir);
-
-/**
- *
- * @note
- *
- * paths are relative to the directory this config is placed at.
- *
- */
-export const config: IConfig = {
-	scrapedDataDir,
-	scrapedDataSavePath,
-	latestContentPath: scrapedDataSavePath + "/" + "latest",
-	generatedDirPath: join(__dirname, "..", "generated"),
-};
+export const scrapedDataDir: string = "saved-content";
+export const scrapedDataSavePath: string = join(__dirname, "..", scrapedDataDir);
+export const latestContentPath: string = scrapedDataSavePath + "/" + "latest";
+export const generatedDirPath: string = join(__dirname, "..", "generated");
