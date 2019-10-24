@@ -8,7 +8,9 @@
 	"license": "",
 	"scripts": {
 		"start": "yarn dev",
-		"dev": "ts-node-dev script/start-server.ts",
+		"watch:ts": "tsc -b -w",
+		"watch:server": "ts-node-dev script/start-server.ts",
+		"dev": "concurrently --raw --kill-others --names \"0: tsc,1: server\" \"yarn watch:ts\" \"yarn watch:server\"",
 		"test": "cross-env NODE_ENV=test PORT=5069 jest --config=./test/jest.config.js",
 		"build:ts": "tsc -b",
 		"build:content": "node ./dist/script/scrape-content.js     # depends on `build:ts`",
