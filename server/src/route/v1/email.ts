@@ -35,7 +35,7 @@ router.post("/", async (req, res, next) => {
 
 		if (!email) {
 			const errMsg: string = "Email cannot be empty!";
-			res.status(400).json({ error: errMsg });
+			res.status(400).json({ emailEntry: null, error: errMsg });
 			return !isProd() ? next(errMsg) : res.end();
 		}
 

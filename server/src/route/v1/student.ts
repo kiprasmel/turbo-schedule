@@ -38,7 +38,7 @@ router.get("/:studentName", async (req, res, next) => {
 		if (!fileExists) {
 			const errMsg: string = "Student not found";
 
-			res.status(404).json({ error: errMsg });
+			res.status(404).json({ studentSchedule: [], error: errMsg });
 			return !isProd() ? next(errMsg) : res.end();
 		}
 
@@ -47,7 +47,7 @@ router.get("/:studentName", async (req, res, next) => {
 		res.json({ studentSchedule: studentLessons });
 		return !isProd() ? next() : res.end();
 	} catch (err) {
-		res.status(500).json({ error: err });
+		res.status(500).json({ studentSchedule: [], error: err });
 		return !isProd() ? next(err) : res.end();
 	}
 });
