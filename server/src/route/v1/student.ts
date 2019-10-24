@@ -18,6 +18,7 @@ router.get("/", async (_req, res, next) => {
 		res.json({ studentsList });
 		return !isProd() ? next() : res.end();
 	} catch (err) {
+		console.error(err);
 		res.status(500).json({ studentsList: [], message: err });
 		return !isProd() ? next(err) : res.end();
 	}
@@ -37,6 +38,7 @@ router.get("/:studentName", async (req, res, next) => {
 		if (!fileExists) {
 			const message: string = "Student not found";
 
+			console.warn(message);
 			res.status(404).json({ studentSchedule: [], message });
 			return !isProd() ? next(message) : res.end();
 		}
@@ -46,6 +48,7 @@ router.get("/:studentName", async (req, res, next) => {
 		res.json({ studentSchedule: studentLessons });
 		return !isProd() ? next() : res.end();
 	} catch (err) {
+		console.error(err);
 		res.status(500).json({ studentSchedule: [], message: err });
 		return !isProd() ? next(err) : res.end();
 	}

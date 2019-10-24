@@ -36,6 +36,7 @@ router.post("/", async (req, res, next) => {
 		if (!email) {
 			const message: string = "Field `email` is missing";
 
+			console.warn(message);
 			res.status(422).json({ emailEntry: null, message });
 			return !isProd() ? next(message) : res.end();
 		}
@@ -56,6 +57,7 @@ router.post("/", async (req, res, next) => {
 		if (fileContent.emailsArray.some((emailOjb) => emailOjb.email === email)) {
 			const message: string = "Email already exists";
 
+			console.warn(message);
 			res.status(403).json({ emailEntry: { email }, message });
 			return !isProd() ? next(message) : res.end();
 		}
@@ -73,6 +75,7 @@ router.post("/", async (req, res, next) => {
 		res.json({ emailEntry: newEmailEntry });
 		return !isProd() ? next() : res.end();
 	} catch (err) {
+		console.error(err);
 		res.status(500).json({ message: err });
 		return !isProd() ? next(err) : res.end();
 	}
