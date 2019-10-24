@@ -2,8 +2,7 @@ import { Router } from "express";
 import fs from "fs-extra";
 
 import { isProd } from "../../../src/util/isProd";
-import { config } from "../../config";
-const { latestContentPath } = config;
+import { latestContentPath } from "../../config";
 
 const router: Router = Router();
 

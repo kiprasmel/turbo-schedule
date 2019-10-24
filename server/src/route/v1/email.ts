@@ -2,8 +2,7 @@ import fs, { WriteOptions } from "fs-extra";
 import { Router } from "express";
 
 import { isProd } from "../../../src/util/isProd";
-import { config } from "../../config";
-const { scrapedDataSavePath } = config;
+import { scrapedDataSavePath } from "../../config";
 
 const router: Router = Router();
 
