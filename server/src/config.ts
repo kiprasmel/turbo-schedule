@@ -8,7 +8,6 @@
 
 import { join } from "path";
 
-export const scrapedDataDir: string = "saved-content";
-export const scrapedDataSavePath: string = join(__dirname, "..", scrapedDataDir);
-export const latestContentPath: string = scrapedDataSavePath + "/" + "latest";
-export const generatedDirPath: string = join(__dirname, "..", "generated");
+export const generatedDirPath: string = join(__dirname, "..", "generated"); /** dir for all generated stuff */
+export const scrapedDataDirPath: string = join(__dirname, "..", "saved-content");
+export const latestScrapedDataDirPath: string = join(scrapedDataDirPath, "latest");
