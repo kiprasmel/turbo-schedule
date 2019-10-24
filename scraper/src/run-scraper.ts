@@ -1,19 +1,18 @@
-#!/usr/bin/env node
+#!/usr/bin/env ts-node-dev
 // run-scraper.ts
+
 /**
- * first compile with `tsc`,
- * then run with `node`
+ * @usage
+ * `./run-scraper ./path/for/saving/content/`
  *
- * `$1` is the `savePath`
- *
+ * @note
+ * when          in typescript, run with `ts-node-dev` or simply `./`;
+ * when compiled to javascript, run with `node`;
  */
 
 import scraper from "./index";
 
-let { argv } = process;
-
-argv = argv.splice(2);
-
+const argv: string[] = process.argv.splice(2);
 const savePath: string = argv[0];
 
 scraper({ savePath });
