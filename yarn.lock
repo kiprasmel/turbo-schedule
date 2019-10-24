@@ -12798,22 +12798,10 @@ svgo@^1.0.0, svgo@^1.2.2:
     unquote "~1.1.1"
     util.promisify "~1.0.0"
 
-swagger-ui-dist@^3.18.1:
-  version "3.24.0"
-  resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-3.24.0.tgz#700aa1981d7a4077bf993f44b6da5966416160a6"
-  integrity sha512-5uAjeEqV+zbtalBDXAIrkqUZwsUHYwvBSeGYlFcLj1ERS3jfprL4OPLSSriDoeXCtNmWzpz5aooV2qJW+DqdUQ==
-
 swagger-ui-express@^3.0.8:
   version "3.0.10"
   resolved "https://registry.yarnpkg.com/swagger-ui-express/-/swagger-ui-express-3.0.10.tgz#c72b32107a57a47913f3b46003e8fd62a7378ea2"
   integrity sha1-xysyEHpXpHkT87RgA+j9Yqc3jqI=
-
-swagger-ui-express@^4.1.2:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/swagger-ui-express/-/swagger-ui-express-4.1.2.tgz#fa4ca5337bce207c760a0b9340348159ebf8ffa4"
-  integrity sha512-bVT16qj6WdNlEKFkSLOoTeGuqEm2lfOFRq6mVHAx+viA/ikORE+n4CS3WpVcYmQzM4HE6+DUFgAWcMRBJNpjcw==
-  dependencies:
-    swagger-ui-dist "^3.18.1"
 
 swagger2openapi@^5.3.1:
   version "5.3.1"
