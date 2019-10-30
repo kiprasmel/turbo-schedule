@@ -9,7 +9,7 @@
 	"scripts": {
 		"start": "yarn dev",
 		"test": "echo \"TODO: no test specified\" && exit 0",
-		"build": "rimraf ./dist && tsc",
+		"build": "tsc",
 		"serve": "node dist/index.js",
 		"-----": "-----",
 		"watch:ts": "tsc -b -w",
@@ -31,7 +31,6 @@
 	"devDependencies": {
 		"@types/node": "^12.7.2",
 		"nodemon": "^1.19.3",
-		"rimraf": "^3.0.0",
 		"ts-node-dev": "^1.0.0-pre.43",
 		"typescript": "^3.8.0-dev.20191030"
 	},
