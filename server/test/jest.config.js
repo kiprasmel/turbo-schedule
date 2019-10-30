@@ -13,4 +13,5 @@ module.exports = {
 	moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
 	"testEnvironment": "node",
 	globalSetup: "./setup.ts",
+	globalTeardown: "./teardown.ts",
 }
