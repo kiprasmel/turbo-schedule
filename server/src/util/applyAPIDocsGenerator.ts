@@ -20,7 +20,7 @@ export const applyAPIDocsGenerator = (app: Express, savePathAndFilename: string)
 			removeSync(savePathAndFilename);
 		}
 
-		const delay: number = 2000;
+		const delay: number = 0;
 
 		expressOasGenerator.init(
 			app,
