@@ -11,11 +11,9 @@
 		"test": "echo \"TODO: no test specified\" && exit 0",
 		"build": "rimraf ./dist && tsc"
 	},
-	"dependencies": {
-		"typescript": "^3.7.0-beta"
-	},
 	"devDependencies": {
 		"rimraf": "^3.0.0",
-		"ts-node-dev": "^1.0.0-pre.43"
+		"ts-node-dev": "^1.0.0-pre.43",
+		"typescript": "^3.8.0-dev.20191030"
 	}
 }

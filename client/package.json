@@ -31,13 +31,13 @@
 		"react-dom": "^16.9.0",
 		"react-modal": "^3.10.1",
 		"react-router-dom": "^5.0.1",
-		"react-scripts": "3.2.0",
-		"typescript": "^3.7.0-beta"
+		"react-scripts": "3.2.0"
 	},
 	"devDependencies": {
 		"concurrently": "^5.0.0",
 		"cross-env": "^6.0.3",
-		"node-sass": "^4.12.0"
+		"node-sass": "^4.12.0",
+		"typescript": "^3.8.0-dev.20191030"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
