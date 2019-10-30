@@ -6,7 +6,7 @@ import { isProd } from "../../../src/util/isProd";
 
 /** read initially (@note - wont update until you restart!) */
 
-const leanDocsPath = join(__dirname, "..", "..", "..", "generated", "./openAPI.lean.json");
+const leanDocsPath = join(__dirname, "..", "..", "..", "generated", "./openAPI.json");
 
 let openAPIDocsJSON: string = "{}";
 
