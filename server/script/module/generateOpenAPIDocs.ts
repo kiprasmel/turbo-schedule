@@ -12,12 +12,9 @@
  */
 
 import fs from "fs-extra";
-import { Server } from "http";
-import fetch from "node-fetch";
+import { execSync } from "child_process";
 
 import { OpenAPISpec } from "./index";
-import { startServer } from "../../src/server";
-import { modifyGeneratedAPIDocs } from "./modifyGeneratedAPIDocs";
 import { parse } from "path";
 
 // export function generateOpenAPIDocs(saveDirPath: string, saveFilename: string): OpenAPISpec | undefined {
@@ -38,37 +35,22 @@ export async function generateOpenAPIDocs(savePathAndFilename: string): Promise<
 			fs.removeSync(savePathAndFilename);
 		}
 
-		const serverPort: number = 5069;
-
-		/** start the server */
-		console.log("  -> starting server:");
-		const server: Server = startServer({
-			openAPISavePathAndFilename: savePathAndFilename,
-			portOverride: serverPort,
-		});
-
-		/** access the API docs so that the json file is written. TODO UPSTREAM */
-		await fetch(`http://localhost:${serverPort}/api-docs`);
-
 		/**
-		 * TODO FIXME UPSTREAM
-		 * This was needed previously.
-		 * Currently it's working without this
-		 * but some patching might be needed,
-		 * so until upstream fixes it -
-		 * I'm keeping it just in case
-		 */
-		// while (!fs.pathExistsSync(savePathAndFilename)) {
-		// 	console.log("waiting");
-		// }
-
-		/**
-		 * TODO - FUTURE - run API tests to get all the docs
+		 * There are no official docs for running jest programmatically
+		 * https://github.com/facebook/jest/issues/5048
+		 * -_-
 		 */
 
-		/** close the server once everything has been generated */
-		console.log("  -> stopping server");
-		server.close();
+		// // await jest.run(["--config", join(__dirname, "..", "..", "test", "jest.config.js")]);
+
+		console.log("  -> Running tests to generate API docs (stdout will be printed on finish):");
+
+		try {
+			execSync("yarn test --forceExit --color=always");
+			console.log("");
+		} catch (err) {
+			throw err;
+		}
 
 		const generatedDocsUnmodified: string = fs.readFileSync(savePathAndFilename, { encoding: "utf-8" });
 
@@ -77,15 +59,15 @@ export async function generateOpenAPIDocs(savePathAndFilename: string): Promise<
 			throw new Error("Generated docs are empty!");
 		}
 
-		/** modify the generated docs to our liking */
-		console.log("  -> creating a lean version of the docs:");
-		const generatedDocs: OpenAPISpec | undefined = modifyGeneratedAPIDocs(savePathAndFilename);
+		console.log("  -> parsing docs from JSON");
+		let generatedDocs: OpenAPISpec = JSON.parse(generatedDocsUnmodified);
 
+		console.log("  -> done - returning docs");
 		return generatedDocs;
 	} catch (err) {
 		console.error(err);
 		return undefined;
 	} finally {
-		console.log(" /generateOpenAPIDocs\n");
+		console.log("\n /generateOpenAPIDocs\n");
 	}
 }
