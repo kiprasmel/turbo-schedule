@@ -2,7 +2,7 @@
 
 import { Express } from "express";
 import expressOasGenerator from "express-oas-generator";
-import fs, { pathExistsSync, removeSync } from "fs-extra";
+import fs from "fs-extra";
 
 // export const applyAPIDocsGenerator = (app: Express, savePath: string | undefined = undefined) => {
 export const applyAPIDocsGenerator = (app: Express, savePathAndFilename: string): void => {
@@ -16,8 +16,8 @@ export const applyAPIDocsGenerator = (app: Express, savePathAndFilename: string)
 		}
 
 		/** clean up the old generated thing */
-		if (!!savePathAndFilename && pathExistsSync(savePathAndFilename)) {
-			removeSync(savePathAndFilename);
+		if (!!savePathAndFilename && fs.pathExistsSync(savePathAndFilename)) {
+			fs.removeSync(savePathAndFilename);
 		}
 
 		const delay: number = 0;

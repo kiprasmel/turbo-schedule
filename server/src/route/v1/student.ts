@@ -51,10 +51,11 @@ router.get("/:studentName", async (req, res, next) => {
 		const fileExists: boolean = await fs.pathExists(studentLessonsFilePath);
 
 		if (!fileExists) {
-			const message: string = "Student not found";
+			const message: string = `Student not found (${studentName})`;
 
 			console.warn(message);
 			res.status(404).json({ studentSchedule: [], message });
+
 			return !isProd() ? next(message) : res.end();
 		}
 

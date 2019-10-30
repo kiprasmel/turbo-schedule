@@ -42,8 +42,4 @@
 		"node_modules", //
 		"dist"
 	]
-	// "include": [
-	// 	"./src/**/*.tsx", //
-	// 	"./src/**/*.ts"
-	// ]
 }
