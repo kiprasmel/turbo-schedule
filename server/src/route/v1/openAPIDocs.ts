@@ -35,12 +35,38 @@ export const openAPIDocsJSONHandler: RequestHandler = async (_req, res, next) =>
 
 export const openAPIDocsHTMLHandler: RequestHandler = (_req, res, next) => {
 	try {
+		/**
+		 * see https://github.com/Redocly/redoc#deployment
+		 */
+
 		const html: string = `
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>ReDoc</title>
+		<!-- needed for adaptive design -->
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet"> -->
+
+		<!--
+		ReDoc doesn't change outer page styles
+		-->
+		<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		</style>
+	</head>
+	<body>
 		<redoc spec-url="/api/v1/docs.json" hide-download-button></redoc>
 
-			<!--  NOTE - the script MUST come AFTER the 'redoc' thing lmao  -->
-			<script src="https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"> </script>
-		`;
+		<!--  NOTE - the script MUST come AFTER the 'redoc' thing lmao  -->
+		<script src="https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"> </script>
+	</body>
+</html>
+`;
 
 		res.setHeader("Content-Type", "text/html");
 		res.send(html);
