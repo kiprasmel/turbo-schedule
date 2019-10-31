@@ -35,6 +35,11 @@ jobs:
 
       - run: yarn install --frozen-lockfile
 
+      # required for being able to test early (before building everything)
+      - run: yarn build:ts
+
+      - run: yarn test
+
       ### TODO - do NOT scrape on build to avoid the same stuff in docker container
       - run: yarn build
 
@@ -45,8 +50,6 @@ jobs:
             - server/dist/saved-content
           key: v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
           # key: v1-dependencies-{{ checksum "yarn.lock" }}
-
-      # - run: yarn test # SOON BBY
 
       - run: git config --global user.email $GIT_USER_EMAIL
       - run: git config --global user.name $GIT_USER_NAME

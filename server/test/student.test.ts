@@ -1,58 +1,140 @@
-import request from "supertest";
-import { app } from "../src/server";
+import fs from "fs-extra";
+import path from "path";
+
+import { request, Response } from "./utils";
+import { latestScrapedDataDirPath, pathToStudentDataArrayFile } from "../src/config";
 
 describe("/student API", () => {
+	it("should fail if the student list file does not exist", async () => {
+		try {
+			const res: Response = await request.get(`/api/v1/student`);
+
+			expect(res.status).toBe(500);
+			expect(res.body).toMatchObject({
+				studentsList: [],
+				message: "Student list file not found (server error)!",
+			});
+		} finally {
+		}
+	});
+
 	it("should return a list of students", async () => {
-		const res: request.Response = await request(app).get(`/api/v1/student`);
+		const content: any[] = [
+			{
+				href: "x300111e_melni_kip220.htm",
+				baseScheduleURI: "http://kpg.lt/Tvarkarastis",
+				fullScheduleURI: "http://kpg.lt/Tvarkarastis/x300111e_melni_kip220.htm",
+				text: "Melnikovas Kipras IIIe",
+			},
+			{
+				href: "x300112c_baltu_sim457.htm",
+				baseScheduleURI: "http://kpg.lt/Tvarkarastis",
+				fullScheduleURI: "http://kpg.lt/Tvarkarastis/x300112c_baltu_sim457.htm",
+				text: "Baltūsis Simonas IVGc",
+			},
+		];
 
-		expect(res.type).toMatch(/json/);
-		expect(res.status).toBe(200);
+		try {
+			fs.ensureDirSync(latestScrapedDataDirPath);
+			fs.writeJSONSync(pathToStudentDataArrayFile, content, { encoding: "utf-8" });
 
-		expect(res.body).toHaveProperty("studentsList");
+			const res: Response = await request.get(`/api/v1/student`);
 
-		res.body.studentsList.forEach((student: any) => {
-			expect(student).toHaveProperty("href");
-			expect(student).toHaveProperty("baseScheduleURI");
-			expect(student).toHaveProperty("fullScheduleURI");
-			expect(student).toHaveProperty("text");
-		});
+			expect(res.type).toMatch(/json/);
+			expect(res.status).toBe(200);
+
+			expect(res.body).toHaveProperty("studentsList");
+
+			res.body.studentsList.forEach((student: any) => {
+				expect(student).toHaveProperty("href");
+				expect(student).toHaveProperty("baseScheduleURI");
+				expect(student).toHaveProperty("fullScheduleURI");
+				expect(student).toHaveProperty("text");
+			});
+		} finally {
+			fs.removeSync(latestScrapedDataDirPath);
+			fs.removeSync(pathToStudentDataArrayFile);
+		}
 	});
 
 	it("should return an empty schedule for a non-existant student", async () => {
-		const invalidStudentName: string = "ayyy lmao totally invalid student name XD";
-		const res: request.Response = await request(app).get(`/api/v1/student/${invalidStudentName}`);
+		const invalidStudentName: string = "ayyy lmao totally invalid student name XD " + new Date().getTime();
 
-		expect(res.status).toBe(404);
+		const encodedInvalidStudentName: string = encodeURIComponent(invalidStudentName);
 
-		expect(res.body).toHaveProperty("message");
+		try {
+			const res: Response = await request.get(`/api/v1/student/${encodedInvalidStudentName}`);
 
-		expect(res.body).toHaveProperty("studentSchedule");
-		expect(res.body.studentSchedule).toEqual([]);
+			expect(res.status).toBe(404);
+
+			expect(res.body).toHaveProperty("message");
+
+			expect(res.body).toHaveProperty("studentSchedule");
+			expect(res.body.studentSchedule).toEqual([]);
+		} finally {
+		}
 	});
 
 	it("should return a specific student", async () => {
-		/**
-		 * TODO - it'd be best to manually create the student here
-		 * & clean up after.
-		 * (applies to all tests; I'm just new to testing, we'll figure it out!)
-		 */
-		const studentName: string = encodeURIComponent("Melnikovas Kipras IIIe");
+		const studentName: string = "Chad RMarkdown";
+		const content = [
+			{
+				isEmpty: false,
+				dayIndex: 0,
+				timeIndex: 0,
+				id: "day:0/time:0/name:The angle ain't blunt - I'm blunt",
+				name: "The angle ain't blunt - I'm blunt",
+				teacher: "Snoop Dawg",
+				cabinet: "The Chamber (36 - 9 = 25)",
+				students: ["Alice from Wonderland IIIGe", "Bob the Builder IIIGa", "Charlie the Angel IVGx"],
+			},
+		];
 
-		const res: request.Response = await request(app).get(`/api/v1/student/${studentName}`);
+		const pathToDir: string = path.join(latestScrapedDataDirPath, "lessons");
+		const pathToFile: string = path.join(pathToDir, studentName + ".json");
 
-		expect(res.status).toBe(200);
+		try {
+			fs.ensureDirSync(pathToDir);
+			fs.writeJSONSync(pathToFile, content, { encoding: "utf-8" });
 
-		expect(res.body).toHaveProperty("studentSchedule");
+			const encodedStudentName: string = encodeURIComponent(studentName);
+			const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
 
-		res.body.studentSchedule.forEach((scheduleItem: any) => {
-			expect(scheduleItem).toHaveProperty("isEmpty");
-			expect(scheduleItem).toHaveProperty("dayIndex");
-			expect(scheduleItem).toHaveProperty("timeIndex");
-			expect(scheduleItem).toHaveProperty("id");
-			expect(scheduleItem).toHaveProperty("name");
-			expect(scheduleItem).toHaveProperty("teacher");
-			expect(scheduleItem).toHaveProperty("cabinet");
-			expect(scheduleItem).toHaveProperty("students");
-		});
+			expect(res.status).toBe(200);
+
+			expect(res.body).toHaveProperty("studentSchedule");
+			expect(res.body.studentSchedule).toMatchObject(content);
+
+			res.body.studentSchedule.forEach((scheduleItem: any) => {
+				expect(scheduleItem).toHaveProperty("isEmpty");
+				expect(scheduleItem).toHaveProperty("dayIndex");
+				expect(scheduleItem).toHaveProperty("timeIndex");
+				expect(scheduleItem).toHaveProperty("id");
+				expect(scheduleItem).toHaveProperty("name");
+				expect(scheduleItem).toHaveProperty("teacher");
+				expect(scheduleItem).toHaveProperty("cabinet");
+				expect(scheduleItem).toHaveProperty("students");
+			});
+		} finally {
+			fs.removeSync(pathToFile);
+			fs.removeSync(pathToDir);
+		}
+	});
+
+	/**
+	 * wtf
+	 * the last test is not registered/parsed correctly
+	 * by the express-oas-generator, I assume,
+	 * and it's not registered.
+	 *
+	 * Calling `request.get` fixes this problem.
+	 * I'll investigate.
+	 */
+	it("should be the last test to avoid a bug", async () => {
+		try {
+			await request.get(`/api/v1`); /** this solves the issue - the heck? */
+		} finally {
+			console.log("last test done");
+		}
 	});
 });

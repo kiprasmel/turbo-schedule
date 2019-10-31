@@ -34,13 +34,6 @@
 	},
 	"exclude": [
 		"node_modules", //
-		/**
-		 * TODO - consider using this if an error is present that files cannot be written
-		 *
-		 * (exclude the `outDir`)
-		 *
-		 * see https://github.com/microsoft/TypeScript/issues/14538#issuecomment-438853315
-		 */
 		"./dist"
 	]
 }

@@ -13,6 +13,21 @@ const router: Router = Router();
 router.get("/", async (_req, res, next) => {
 	try {
 		const studentsListFilePath: string = path.join(latestScrapedDataDirPath, "students-data-array.json");
+		const fileExists: boolean = await fs.pathExists(studentsListFilePath);
+
+		if (!fileExists) {
+			/**
+			 * this is bad because this is not dependant on any inputs -
+			 * this only happens if we failed setting up something ourselves.
+			 */
+			const message: string = `Student list file not found (server error)!`;
+
+			console.error(message);
+			res.status(500).json({ studentsList: [], message });
+
+			return !isProd() ? next(message) : res.end();
+		}
+
 		const studentsList: any[] = await fs.readJSON(studentsListFilePath, { encoding: "utf-8" });
 
 		res.json({ studentsList });
@@ -36,10 +51,11 @@ router.get("/:studentName", async (req, res, next) => {
 		const fileExists: boolean = await fs.pathExists(studentLessonsFilePath);
 
 		if (!fileExists) {
-			const message: string = "Student not found";
+			const message: string = `Student not found (${studentName})`;
 
 			console.warn(message);
 			res.status(404).json({ studentSchedule: [], message });
+
 			return !isProd() ? next(message) : res.end();
 		}
 

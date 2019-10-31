@@ -1,21 +1,26 @@
 diff --git a/node_modules/express-oas-generator/index.js b/node_modules/express-oas-generator/index.js
-index 3a4a287..66e3201 100644
+index 3a4a287..75eb07e 100644
 --- a/node_modules/express-oas-generator/index.js
 +++ b/node_modules/express-oas-generator/index.js
-@@ -170,8 +170,6 @@ module.exports.init = (aApp, aPredefinedSpec, aPath, aWriteInterval, aApiDocsPat
-     next();
-   });
+@@ -142,7 +142,7 @@ function updateSchemesAndHost(req) {
+   }
+ }
  
--  // make sure we list routes after they are configured
--  setTimeout(() => {
-     // middleware to handle requests
-     app.use((req, res, next) => {
-       try {
-@@ -188,7 +186,6 @@ module.exports.init = (aApp, aPredefinedSpec, aPath, aWriteInterval, aApiDocsPat
-       next();
-     });
-     init(aApiDocsPath);
--  }, 1000);
- };
- 
- module.exports.getSpec = () => {
+-module.exports.init = (aApp, aPredefinedSpec, aPath, aWriteInterval, aApiDocsPath = 'api-docs') => {
++module.exports.init = (aApp, aPredefinedSpec, aPath, aWriteInterval, aApiDocsPath = 'api-docs', onWriteCallback = () => {}) => {
+   app = aApp;
+   predefinedSpec = aPredefinedSpec;
+   const writeInterval = aWriteInterval || 10 * 1000;
+@@ -164,6 +164,12 @@ module.exports.init = (aApp, aPredefinedSpec, aPath, aWriteInterval, aApiDocsPat
+           if (err) {
+             throw new Error(`Cannot store the specification into ${fullPath} because of ${err.message}`);
+           }
++          try {
++            onWriteCallback();
++          } catch (e) {
++            console.error('Failed in the `onWriteCallback()` - check your stuff!');
++            throw new Error(err);
++          }
+         });
+       }
+     } catch (e) {}

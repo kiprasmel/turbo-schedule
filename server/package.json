@@ -8,7 +8,7 @@
 	"license": "",
 	"scripts": {
 		"start": "yarn dev",
-		"test": "cross-env NODE_ENV=test PORT=5069 jest --config=./test/jest.config.js",
+		"test": "yarn test:dev --forceExit",
 		"build": "yarn build:ts && yarn build:content && yarn build:docs",
 		"serve": "cross-env NODE_ENV=production node dist/script/start-server.js",
 		"-----": "-----",
@@ -17,7 +17,9 @@
 		"dev": "concurrently --raw --kill-others --names \"0: tsc,1: server\" \"yarn watch:ts\" \"yarn watch:server\"",
 		"build:ts": "tsc -b",
 		"build:content": "node ./dist/script/scrape-content.js     # depends on `build:ts`",
-		"build:docs": "node ./dist/script/generate-openapi-docs.js # depends on `build:ts`"
+		"build:docs": "ts-node-dev ./script/generate-openapi-docs.ts && mkdir -p ./dist/generated/ && cp ./generated/openAPI.json ./dist/generated/openAPI.json",
+		"test:dev": "cross-env NODE_ENV=test PORT=5069 jest --config=./test/jest.config.js",
+		"test:prod": "cp -f ./test/jest.config.js ./dist/test/ && cross-env NODE_ENV=production PORT=5069 jest --config ./dist/test/jest.config.js  # depends on `build:ts`"
 	},
 	"dependencies": {
 		"@turbo-schedule/common": "^1.5.0",
@@ -41,8 +43,7 @@
 		"node-fetch": "^2.6.0",
 		"openapi-types": "^1.3.5",
 		"redoc": "^2.0.0-rc.16",
-		"rotating-file-stream": "^1.4.6",
-		"typescript": "^3.7.0-beta"
+		"rotating-file-stream": "^1.4.6"
 	},
 	"devDependencies": {
 		"@types/jest": "^24.0.19",
@@ -52,7 +53,8 @@
 		"jest": "^24.9.0",
 		"supertest": "^4.0.2",
 		"ts-jest": "^24.1.0",
-		"ts-node-dev": "^1.0.0-pre.42"
+		"ts-node-dev": "^1.0.0-pre.42",
+		"typescript": "^3.8.0-dev.20191030"
 	},
 	"resolutions": {
 		"express-oas-generator/swagger-ui-express": "^4.1.2"

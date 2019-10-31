@@ -26,6 +26,9 @@ import { setupLogger } from "./util/setupLogger";
 
 const app = express();
 
+const openAPISavePathAndFilename = path.join(__dirname, "..", "generated", "openAPI.json");
+applyAPIDocsGenerator(app, openAPISavePathAndFilename); /** non-production only */
+
 /** misc */
 app.use(helmet()); // https://helmetjs.github.io/
 app.use(cors());
@@ -83,16 +86,13 @@ export interface StartServerOptions {
 }
 
 export function startServer({
-	openAPISavePathAndFilename = path.join(__dirname, "..", "generated", "openAPI.json"),
-	portOverride = undefined,
+	portOverride = undefined, //
 }: StartServerOptions = {}): Server {
 	const PORT: number | string = portOverride ?? process.env.PORT ?? 5000;
 
 	/** serving */
 	const server: Server = app.listen(PORT, () => {
 		console.log(`~ Server listening on PORT \`${PORT}\` @ NODE_ENV \`${process.env.NODE_ENV}\``);
-
-		applyAPIDocsGenerator(app, openAPISavePathAndFilename); /** non-production only */
 
 		/** TODO - figure out where to place this */
 		enableScraperCronjob();
