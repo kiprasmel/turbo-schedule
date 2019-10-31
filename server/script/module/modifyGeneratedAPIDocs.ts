@@ -106,7 +106,7 @@ Some useful resources:
 		<a
 			href="https://github.com/sarpik/turbo-schedule/"
 			target="_blank"
-			rel="noopener noreferrer"\
+			rel="noopener"\
 		>
 			github.com/sarpik/turbo-schedule
 		</a>
@@ -117,7 +117,7 @@ Some useful resources:
 		<a
 			href="https://github.com/sarpik/turbo-schedule/issues/1"
 			target="_blank"
-			rel="noopener noreferrer"
+			rel="noopener"
 		>
 			github.com/sarpik/turbo-schedule/issues/1
 		</a>
@@ -128,7 +128,7 @@ Some useful resources:
 		<a
 			href="https://github.com/sarpik/turbo-schedule/issues/new"
 			target="_blank"
-			rel="noopener noreferrer"\
+			rel="noopener"\
 		>
 			https://github.com/sarpik/turbo-schedule/issues/new
 		</a>
