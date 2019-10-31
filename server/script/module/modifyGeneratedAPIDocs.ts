@@ -24,90 +24,161 @@
  */
 
 import fs from "fs-extra";
-import { join, parse } from "path";
 
-import { OpenAPISpec } from "./index"
+import { OpenAPISpec } from "./index";
 
 export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPISpec | undefined {
 	try {
 		console.log("\n => modifyGeneratedAPIDocs:");
 
-		// const savePathAndFilename: string = join(saveDirPath, saveDirFilename);
-
 		if (!fs.pathExistsSync(savePathAndFilename)) {
 			console.error("  ! openAPI file does not exist in save path!", savePathAndFilename);
 			return undefined;
 		} else {
-			console.log("  -> path exists: `%s`", savePathAndFilename)
+			console.log("  -> path exists: `%s`", savePathAndFilename);
 		}
 
 		let generatedDocs: OpenAPISpec = fs.readJSONSync(savePathAndFilename, { encoding: "utf-8" });
 
-		generatedDocs = trimExampleLengthToOne(generatedDocs);
+		generatedDocs.info.title = "turbo-schedule's REST API";
+		generatedDocs.info.version = `v1`;
 
-		/** write the new generated docs */
-		const { dir: saveDir, name: extensionlessFilename } = parse(savePathAndFilename);
+		/** TODO html */
+		// const docsDescription: string = fs.readFileSync(join(__dirname, "docsDescription.html"), { encoding: "utf-8" });
+		// docsDescription.replace(/\n+/g, "\n");
+		// docsDescription.replace(/\t/g, "").replace(/\\t/g, "");
 
-		const newFilename: string = extensionlessFilename + ".lean.json"
-		const newSavePathAndFilename: string = join(saveDir, newFilename)
+		generatedDocs.info.description = docsDescription;
 
-		if (fs.pathExistsSync(newSavePathAndFilename)) {
-			console.log("  -> old file exists - removing it")
-			fs.removeSync(newSavePathAndFilename);
-		}
+		fs.writeJSONSync(savePathAndFilename, generatedDocs, { encoding: "utf-8" });
 
-		fs.writeJSONSync(newSavePathAndFilename, generatedDocs, { encoding: "utf-8" });
-
-		console.log("  -> saved modified openAPI docs to `%s`", newSavePathAndFilename)
+		console.log("  -> saved modified openAPI docs to `%s`", savePathAndFilename);
 		console.log("  -> new  generated openAPI docs:\n", generatedDocs);
 
 		return generatedDocs;
 	} catch (err) {
 		console.error("  ! Error:\n", err);
 		return undefined;
-	} finally  {
-		console.log(" /modifyGeneratedAPIDocs\n");
+	} finally {
+		console.log("\n /modifyGeneratedAPIDocs\n");
 	}
 }
 
-function logEmpty(what: string) {
-	console.log(`\`${what}\` not found / empty`);
-}
+/**
+ * Having a `html` document did not turn out great lmao
+ * (
+ *	mostly parsing issues because in the end,
+ *	it just a string being sent
+ *	+ it interprets markdown (but not that great xd)
+ * )
+ */
+const docsDescription: string = `\
+<!-- docsDescription.html -->
 
-function trimExampleLengthToOne<T extends OpenAPISpec>(generatedDocsReference: T): T {
-	const generatedDocs: T = { ...generatedDocsReference };
+Welcome to the API documentation!
 
-	Object.entries(generatedDocs.paths).forEach(([_pathKey, pathValue]) => {
-		Object.entries(pathValue as object).forEach(([_reqMethodKey, reqMethodValue]) => {
-			if (!reqMethodValue?.responses){
-				logEmpty("responses");
-			} else {
-				Object.entries(reqMethodValue.responses as object).forEach(([_resCodeKey, resCodeValue]) => {
-						console.log("resCodeValue", resCodeValue);
-						if (!resCodeValue?.schema?.properties) {
-							logEmpty("schema / schema.properties");
-						}
-						else {
-						Object.entries(resCodeValue.schema.properties as object).forEach(([_propKey, propValue]) => {
-							if (!propValue?.example) {
-								logEmpty("property / property.example");
-							} else {
-								if (!Array.isArray(propValue.example)) {
-									// continue;
-								} else {
-									if (propValue.example.length > 1) {
-										propValue.example = propValue.example[0];
-										console.log("  -> Sliced example's array to contain only 1 element!")
-										console.log("Example", propValue.example);
-									}
-								}
-							}
-						})
-					}
-				})
-			}
-		});
-	});
+Some useful resources:
 
-	return generatedDocs;
-}
+<ul>
+	<li>
+		<a
+			href="/"
+			target="_blank"
+			rel="noopener"\
+		>
+			The app itself
+		</a>
+	</li>
+
+	<li>
+		The OpenAPI (swagger) specification -\
+		<a
+			href="/api/v1/docs.json"
+			target="_blank"
+			rel="noopener"\
+		>
+			/api/v1/docs.json
+		</a>
+	</li>
+
+	<li>
+		GitHub repository -\
+		<a
+			href="https://github.com/sarpik/turbo-schedule/"
+			target="_blank"
+			rel="noopener noreferrer"\
+		>
+			github.com/sarpik/turbo-schedule
+		</a>
+	</li>
+
+	<li>
+		Roadmap -\
+		<a
+			href="https://github.com/sarpik/turbo-schedule/issues/1"
+			target="_blank"
+			rel="noopener noreferrer"
+		>
+			github.com/sarpik/turbo-schedule/issues/1
+		</a>
+	</li>
+
+	<li>
+		Reporting an issue -\
+		<a
+			href="https://github.com/sarpik/turbo-schedule/issues/new"
+			target="_blank"
+			rel="noopener noreferrer"\
+		>
+			https://github.com/sarpik/turbo-schedule/issues/new
+		</a>
+	</li>
+</ul>
+		`.replace(/\t/g, "");
+
+// function logEmpty(what: string) {
+// 	console.log(`\`${what}\` not found / empty`);
+// }
+
+/**
+ * We no longer need this
+ * since the docs are generated from the tests,
+ * meaning that we never have any ridiculous examples etc.
+ */
+// function trimExampleLengthToOne<T extends OpenAPISpec>(generatedDocsReference: T): T {
+// 	const generatedDocs: T = { ...generatedDocsReference };
+
+// 	Object.entries(generatedDocs.paths).forEach(([_pathKey, pathValue]) => {
+// 		Object.entries(pathValue as object).forEach(([_reqMethodKey, reqMethodValue]) => {
+// 			if (!reqMethodValue?.responses){
+// 				logEmpty("responses");
+// 			} else {
+// 				Object.entries(reqMethodValue.responses as object).forEach(([_resCodeKey, resCodeValue]) => {
+// 						console.log("resCodeValue", resCodeValue);
+// 						if (!resCodeValue?.schema?.properties) {
+// 							logEmpty("schema / schema.properties");
+// 						}
+// 						else {
+// 						Object.entries(resCodeValue.schema.properties as object).forEach(([_propKey, propValue]) => {
+// 							if (!propValue?.example) {
+// 								logEmpty("property / property.example");
+// 							} else {
+// 								if (!Array.isArray(propValue.example)) {
+// 									// continue;
+// 								} else {
+// 									if (propValue.example.length > 1) {
+// 										propValue.example = propValue.example[0];
+// 										console.log("  -> Sliced example's array to contain only 1 element!")
+// 										console.log("Example", propValue.example);
+// 									}
+// 								}
+// 							}
+// 						})
+// 					}
+// 				})
+// 			}
+// 		});
+// 	});
+
+// 	return generatedDocs;
+// }
