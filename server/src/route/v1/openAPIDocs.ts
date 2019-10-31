@@ -36,11 +36,11 @@ export const openAPIDocsJSONHandler: RequestHandler = async (_req, res, next) =>
 export const openAPIDocsHTMLHandler: RequestHandler = (_req, res, next) => {
 	try {
 		const html: string = `
-		<redoc spec-url="/api/v1/docs.json"></redoc>
+		<redoc spec-url="/api/v1/docs.json" hide-download-button></redoc>
 
-		<!--  NOTE - the script MUST come AFTER the 'redoc' thing lmao  -->
-		<script src="https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"> </script>
-	`;
+			<!--  NOTE - the script MUST come AFTER the 'redoc' thing lmao  -->
+			<script src="https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"> </script>
+		`;
 
 		res.setHeader("Content-Type", "text/html");
 		res.send(html);
