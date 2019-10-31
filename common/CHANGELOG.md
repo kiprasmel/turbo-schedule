@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/sarpik/turbo-schedule/compare/v1.5.0...v1.6.0) (2019-10-31)
+
+
+### Features
+
+* **common:** Create `delay` util ([a5a374e](https://github.com/sarpik/turbo-schedule/commit/a5a374e383349399de3e5020c8f11301c19d215f))
+
+
+
+
+
 # [1.5.0](https://github.com/sarpik/turbo-schedule/compare/v1.4.0...v1.5.0) (2019-10-24)
 
 **Note:** Version bump only for package @turbo-schedule/common

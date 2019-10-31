@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/sarpik/turbo-schedule/compare/v1.5.0...v1.6.0) (2019-10-31)
+
+
+### Bug Fixes
+
+* **server:** Add `--forceExit` to `jest`/`test` script ([9df1016](https://github.com/sarpik/turbo-schedule/commit/9df101636a938a7c25c27c70fd174a31e9403669))
+* **server:** Handle if file exists checking @ student-list ([b1bb972](https://github.com/sarpik/turbo-schedule/commit/b1bb9724ba5def9c3fb835129fd3ae117894bbe4))
+* **server:** Make `applyAPIDocsGenerator` the first middleware! 🚀 ([0467a88](https://github.com/sarpik/turbo-schedule/commit/0467a88192007c480a3cbc9cec687921abba52e4))
+* **server:** Modify `build:docs` script - make it independent ([0f43d6c](https://github.com/sarpik/turbo-schedule/commit/0f43d6cede067309bb241142274cca299f1264dc))
+* **server:** Serve openAPI docs from the same filename ([6c03181](https://github.com/sarpik/turbo-schedule/commit/6c03181e809b7fcf3db15fcd024a11f9e1a1dd26))
+* **server:** Use `child_process.execSync` to run tests w/ script! ([90360f8](https://github.com/sarpik/turbo-schedule/commit/90360f8d306fbb77c2cc2e576b0e7d8e1117fa71))
+* **test:** Stop ignoring `test/` folder in `server/tsconfig.json` ([e8d01b6](https://github.com/sarpik/turbo-schedule/commit/e8d01b61adc5548b61cc84ec055ff1d2a42124e5))
+
+
+### Features
+
+* **server:** Add `pathToStudentDataArrayFile` to config ([7998e42](https://github.com/sarpik/turbo-schedule/commit/7998e42428346659eb09450ca530228ef1b3e886))
+* **server:** Create `build:docs` npm script ([917c353](https://github.com/sarpik/turbo-schedule/commit/917c3538b5f26fb7306d33b2589f6645cf9fbe9c))
+* **server:** Create `fakeDb` test utility! 🤡 ([0d510f9](https://github.com/sarpik/turbo-schedule/commit/0d510f9ac282441803e447f6d12201d4379c641c))
+* **server:** Start using `modifyGeneratedAPIDocs` again! 🔥 ([f5bb5c3](https://github.com/sarpik/turbo-schedule/commit/f5bb5c339ab9696083554ef5efbc857bca16df8e))
+* **server:** Write modified docs to same file; provide html description ([bd58c90](https://github.com/sarpik/turbo-schedule/commit/bd58c90c2724641dc67eb24200ff5b0266a5451c))
+
+
+
+
+
 # [1.5.0](https://github.com/sarpik/turbo-schedule/compare/v1.4.0...v1.5.0) (2019-10-24)
 
 
