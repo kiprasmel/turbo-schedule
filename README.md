@@ -29,7 +29,7 @@
 
 Visit <a href="https://ts.kipras.org">ts.kipras.org</a>!
 
-> there's also a public API available - docs are coming soon!
+> there's also a public API available - <a href="https://ts.kipras.org/api/v1/docs/">ts.kipras.org/api/v1/docs</a> 🚀
 
 You can also run `turbo-schedule` locally:
 
