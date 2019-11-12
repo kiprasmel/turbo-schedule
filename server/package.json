@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/server",
-	"version": "1.6.0",
+	"version": "1.6.1",
 	"description": "",
 	"main": "dist/src/server.js",
 	"typings": "dist/src/server.d.ts",
@@ -22,8 +22,8 @@
 		"test:prod": "cp -f ./test/jest.config.js ./dist/test/ && cross-env NODE_ENV=production PORT=5069 jest --config ./dist/test/jest.config.js  # depends on `build:ts`"
 	},
 	"dependencies": {
-		"@turbo-schedule/common": "^1.6.0",
-		"@turbo-schedule/scraper": "^1.6.0",
+		"@turbo-schedule/common": "^1.6.1",
+		"@turbo-schedule/scraper": "^1.6.1",
 		"@types/cors": "^2.8.6",
 		"@types/cron": "^1.7.1",
 		"@types/express": "^4.17.1",
