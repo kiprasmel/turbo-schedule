@@ -66,19 +66,24 @@ describe("/student API", () => {
 	});
 
 	it("should return an empty schedule for a non-existant student", async () => {
-		const invalidStudentName: string = "ayyy lmao totally invalid student name XD " + new Date().getTime();
+		const invalidStudentName: string =
+			"ayyy lmao totally invalid student name XD " + new Date().getTime();
 
-		const encodedInvalidStudentName: string = encodeURIComponent(invalidStudentName);
+		const encodedInvalidStudentName: string = encodeURIComponent(
+			invalidStudentName
+		);
 
 		try {
-			const res: Response = await request.get(`/api/v1/student/${encodedInvalidStudentName}`);
+			const res: Response = await request.get(
+				`/api/v1/student/${encodedInvalidStudentName}`
+			);
 
 			expect(res.status).toBe(404);
 
 			expect(res.body).toHaveProperty("message");
 
-			expect(res.body).toHaveProperty("studentSchedule");
-			expect(res.body.studentSchedule).toEqual([]);
+			expect(res.body).toHaveProperty("lessons");
+			expect(res.body.lessons).toEqual([]);
 		} finally {
 		}
 	});
@@ -94,11 +99,18 @@ describe("/student API", () => {
 				name: "The angle ain't blunt - I'm blunt",
 				teacher: "Snoop Dawg",
 				cabinet: "The Chamber (36 - 9 = 25)",
-				students: ["Alice from Wonderland IIIGe", "Bob the Builder IIIGa", "Charlie the Angel IVGx"],
-			},
+				students: [
+					"Alice from Wonderland IIIGe",
+					"Bob the Builder IIIGa",
+					"Charlie the Angel IVGx"
+				]
+			}
 		];
 
-		const pathToDir: string = path.join(latestScrapedDataDirPath, "lessons");
+		const pathToDir: string = path.join(
+			latestScrapedDataDirPath,
+			"lessons"
+		);
 		const pathToFile: string = path.join(pathToDir, studentName + ".json");
 
 		try {
@@ -106,14 +118,16 @@ describe("/student API", () => {
 			fs.writeJSONSync(pathToFile, content, { encoding: "utf-8" });
 
 			const encodedStudentName: string = encodeURIComponent(studentName);
-			const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
+			const res: Response = await request.get(
+				`/api/v1/student/${encodedStudentName}`
+			);
 
 			expect(res.status).toBe(200);
 
-			expect(res.body).toHaveProperty("studentSchedule");
-			expect(res.body.studentSchedule).toMatchObject(content);
+			expect(res.body).toHaveProperty("lessons");
+			expect(res.body.lessons).toMatchObject(content);
 
-			res.body.studentSchedule.forEach((scheduleItem: any) => {
+			res.body.lessons.forEach((scheduleItem: any) => {
 				expect(scheduleItem).toHaveProperty("isEmpty");
 				expect(scheduleItem).toHaveProperty("dayIndex");
 				expect(scheduleItem).toHaveProperty("timeIndex");
@@ -140,7 +154,9 @@ describe("/student API", () => {
 	 */
 	it("should be the last test to avoid a bug", async () => {
 		try {
-			await request.get(`/api/v1`); /** this solves the issue - the heck? */
+			await request.get(
+				`/api/v1`
+			); /** this solves the issue - the heck? */
 		} finally {
 			console.log("last test done");
 		}
