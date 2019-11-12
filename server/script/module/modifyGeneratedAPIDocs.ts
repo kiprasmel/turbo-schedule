@@ -47,6 +47,7 @@ export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPIV3.D
 		// docsDescription.replace(/\n+/g, "\n");
 		// docsDescription.replace(/\t/g, "").replace(/\\t/g, "");
 
+		generatedDocs.servers = docsServers;
 		generatedDocs.info.description = docsDescription;
 
 		/**
@@ -75,6 +76,17 @@ export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPIV3.D
 		console.log("\n /modifyGeneratedAPIDocs\n");
 	}
 }
+
+const docsServers: OpenAPIV3.ServerObject[] = [
+	{
+		"url": "https://ts.kipras.org",
+		// "description": "Main server"
+	},
+	// {
+	// 	"url": "https://tt.kipras.org",
+	// 	// "description": "Main server, just on a different sub-domain using a CNAME"
+	// }
+]
 
 /**
  * Having a `html` document did not turn out great lmao
