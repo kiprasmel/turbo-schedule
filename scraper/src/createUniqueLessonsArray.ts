@@ -70,7 +70,7 @@ export const createUniqueLessonsArray = async (allStudentSchedulesArray?: Array<
 
 		// console.log("studentAndSchedule", studentAndSchedule);
 
-		const lessonsArray: Array<any> = [...studentAndSchedule.schedule]; /** todo wut? */
+		const lessonsArray: Array<any> = [...studentAndSchedule.lessons]; /** todo wut? */
 
 		lessonsArray.forEach((lesson) => {
 			// console.log("lesson", lesson);

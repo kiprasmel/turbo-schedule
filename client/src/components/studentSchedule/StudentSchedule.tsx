@@ -8,7 +8,7 @@ import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
 import { useRenderCount } from "../../hooks/useRenderCount";
 
-import { fetchStudentSchedule } from "../../utils/fetchStudentSchedule";
+import { fetchStudent } from "../../utils/fetchStudent";
 import DaySelector from "./DaySelector";
 import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
@@ -51,7 +51,9 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	const { studentName } = match.params;
 
-	const todaysScheduleDay: ScheduleDay = getTodaysScheduleDay({ defaultToDay: 0 });
+	const todaysScheduleDay: ScheduleDay = getTodaysScheduleDay({
+		defaultToDay: 0,
+	});
 	const [selectedDay, setSelectedDay] = useState<ScheduleDay>(todaysScheduleDay);
 
 	// const [selectedSchedule, setSelectedSchedule] = useState<Array<Array<ILesson>> | Array<ILesson>>([]);
@@ -73,9 +75,9 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		const wrapper = async () => {
 			try {
 				setIsLoading(true);
-				const studentSchedule: Array<any> = await fetchStudentSchedule(studentName);
+				const { lessons } = await fetchStudent(studentName);
 
-				if (!studentSchedule) {
+				if (!lessons || !lessons.length) {
 					setScheduleByDays([[]]);
 					setIsLoading(false);
 					return;
@@ -83,7 +85,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 				const scheduleByDays: Array<Array<any>> = [];
 
-				studentSchedule.forEach((lesson) => {
+				lessons.forEach((lesson) => {
 					/** make sure there's always an array inside an array */
 					if (!scheduleByDays[lesson.dayIndex]) {
 						scheduleByDays.push([]);

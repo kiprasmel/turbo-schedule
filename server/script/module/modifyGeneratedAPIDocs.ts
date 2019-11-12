@@ -23,11 +23,10 @@
  *
  */
 
+import { OpenAPIV3, OpenAPIV2 } from "openapi-types";
 import fs from "fs-extra";
 
-import { OpenAPISpec } from "./index";
-
-export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPISpec | undefined {
+export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPIV3.Document | undefined {
 	try {
 		console.log("\n => modifyGeneratedAPIDocs:");
 
@@ -38,7 +37,7 @@ export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPISpec
 			console.log("  -> path exists: `%s`", savePathAndFilename);
 		}
 
-		let generatedDocs: OpenAPISpec = fs.readJSONSync(savePathAndFilename, { encoding: "utf-8" });
+		let generatedDocs: OpenAPIV3.Document = fs.readJSONSync(savePathAndFilename, { encoding: "utf-8" });
 
 		generatedDocs.info.title = "turbo-schedule's REST API";
 		generatedDocs.info.version = `v1`;
@@ -48,14 +47,28 @@ export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPISpec
 		// docsDescription.replace(/\n+/g, "\n");
 		// docsDescription.replace(/\t/g, "").replace(/\\t/g, "");
 
+		generatedDocs.servers = docsServers;
 		generatedDocs.info.description = docsDescription;
 
-		fs.writeJSONSync(savePathAndFilename, generatedDocs, { encoding: "utf-8" });
+		/**
+		 * uh oh it's currently V2
+		 * and I need to delete a prop from it.error
+		 *
+		 * Redoc converts it to V3 itself.
+		 * We'll implement this @ express-oas-generator soon,
+		 * so this is fine.
+		 */
+		const generatedDocsV2: OpenAPIV2.Document = generatedDocs as unknown as OpenAPIV2.Document;
+
+		delete generatedDocsV2.host;
+
+		fs.writeJSONSync(savePathAndFilename, generatedDocsV2, { encoding: "utf-8" });
 
 		console.log("  -> saved modified openAPI docs to `%s`", savePathAndFilename);
-		console.log("  -> new  generated openAPI docs:\n", generatedDocs);
+		console.log("  -> new  generated openAPI docs:\n", generatedDocsV2);
 
-		return generatedDocs;
+		/** TODO */
+		return generatedDocsV2 as unknown as OpenAPIV3.Document;
 	} catch (err) {
 		console.error("  ! Error:\n", err);
 		return undefined;
@@ -63,6 +76,17 @@ export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPISpec
 		console.log("\n /modifyGeneratedAPIDocs\n");
 	}
 }
+
+const docsServers: OpenAPIV3.ServerObject[] = [
+	{
+		"url": "https://ts.kipras.org",
+		// "description": "Main server"
+	},
+	// {
+	// 	"url": "https://tt.kipras.org",
+	// 	// "description": "Main server, just on a different sub-domain using a CNAME"
+	// }
+]
 
 /**
  * Having a `html` document did not turn out great lmao
@@ -145,7 +169,7 @@ Some useful resources:
  * since the docs are generated from the tests,
  * meaning that we never have any ridiculous examples etc.
  */
-// function trimExampleLengthToOne<T extends OpenAPISpec>(generatedDocsReference: T): T {
+// function trimExampleLengthToOne<T extends OpenAPIV3>(generatedDocsReference: T): T {
 // 	const generatedDocs: T = { ...generatedDocsReference };
 
 // 	Object.entries(generatedDocs.paths).forEach(([_pathKey, pathValue]) => {

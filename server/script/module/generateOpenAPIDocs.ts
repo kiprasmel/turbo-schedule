@@ -11,15 +11,15 @@
  *
  */
 
+import { OpenAPIV3 } from "openapi-types"
 import fs from "fs-extra";
 import { execSync } from "child_process";
 
-import { OpenAPISpec } from "./index";
 import { parse } from "path";
 import { modifyGeneratedAPIDocs } from "./modifyGeneratedAPIDocs";
 
 // export function generateOpenAPIDocs(saveDirPath: string, saveFilename: string): OpenAPISpec | undefined {
-export async function generateOpenAPIDocs(savePathAndFilename: string): Promise<OpenAPISpec | undefined> {
+export async function generateOpenAPIDocs(savePathAndFilename: string): Promise<OpenAPIV3.Document | undefined> {
 	try {
 		console.log("\n => generateOpenAPIDocs:");
 
@@ -61,7 +61,7 @@ export async function generateOpenAPIDocs(savePathAndFilename: string): Promise<
 		}
 
 		console.log("  -> cleaning up generated docs:");
-		const generatedDocs: OpenAPISpec | undefined = modifyGeneratedAPIDocs(savePathAndFilename);
+		const generatedDocs: OpenAPIV3.Document | undefined = modifyGeneratedAPIDocs(savePathAndFilename);
 
 		console.log("  -> done - returning docs");
 		return generatedDocs;
