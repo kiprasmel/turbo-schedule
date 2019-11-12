@@ -8,7 +8,7 @@ import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
 import { useRenderCount } from "../../hooks/useRenderCount";
 
-import { fetchStudentLessons } from "../../utils/fetchStudentLessons";
+import { fetchStudent } from "../../utils/fetchStudent";
 import DaySelector from "./DaySelector";
 import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
@@ -36,9 +36,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const baseWeekStyles: React.CSSProperties = { verticalAlign: "top" };
 	const weekStyles: React.CSSProperties = {
 		...baseWeekStyles,
-		...(windowWidth > 777
-			? { display: "inline-block" }
-			: { display: "block" })
+		...(windowWidth > 777 ? { display: "inline-block" } : { display: "block" }),
 	};
 
 	const throttledWindowWidth = useRef(
@@ -54,11 +52,9 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const { studentName } = match.params;
 
 	const todaysScheduleDay: ScheduleDay = getTodaysScheduleDay({
-		defaultToDay: 0
+		defaultToDay: 0,
 	});
-	const [selectedDay, setSelectedDay] = useState<ScheduleDay>(
-		todaysScheduleDay
-	);
+	const [selectedDay, setSelectedDay] = useState<ScheduleDay>(todaysScheduleDay);
 
 	// const [selectedSchedule, setSelectedSchedule] = useState<Array<Array<ILesson>> | Array<ILesson>>([]);
 
@@ -73,19 +69,15 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	// };
 
 	const [isLoading, setIsLoading] = useState(true);
-	const [scheduleByDays, setScheduleByDays] = useState([[]] as Array<
-		Array<ILesson>
-	>);
+	const [scheduleByDays, setScheduleByDays] = useState([[]] as Array<Array<ILesson>>);
 
 	useEffect(() => {
 		const wrapper = async () => {
 			try {
 				setIsLoading(true);
-				const studentSchedule: Array<any> = await fetchStudentLessons(
-					studentName
-				);
+				const { lessons } = await fetchStudent(studentName);
 
-				if (!studentSchedule) {
+				if (!lessons || !lessons.length) {
 					setScheduleByDays([[]]);
 					setIsLoading(false);
 					return;
@@ -93,7 +85,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 				const scheduleByDays: Array<Array<any>> = [];
 
-				studentSchedule.forEach(lesson => {
+				lessons.forEach((lesson) => {
 					/** make sure there's always an array inside an array */
 					if (!scheduleByDays[lesson.dayIndex]) {
 						scheduleByDays.push([]);
@@ -116,13 +108,11 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	const [showStudents, setShowStudents] = useState(false);
 
-	const [selectedLesson, setSelectedLesson] = useState<ILesson>(
-		() => new ILesson()
-	);
+	const [selectedLesson, setSelectedLesson] = useState<ILesson>(() => new ILesson());
 
 	const handleLessonMouseClick = useCallback(
 		(_e: React.MouseEvent, lesson: ILesson) => {
-			setShowStudents(_showStudents => !_showStudents);
+			setShowStudents((_showStudents) => !_showStudents);
 			setSelectedLesson(lesson);
 		},
 		[setShowStudents, setSelectedLesson]
@@ -152,12 +142,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		);
 	}
 
-	if (
-		!scheduleByDays ||
-		!scheduleByDays.length ||
-		!scheduleByDays[0] ||
-		!scheduleByDays[0].length
-	) {
+	if (!scheduleByDays || !scheduleByDays.length || !scheduleByDays[0] || !scheduleByDays[0].length) {
 		return (
 			<>
 				<BackBtn />
@@ -174,27 +159,20 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 			<h1>{studentName}</h1>
 
-			<DaySelector
-				selectedDay={selectedDay}
-				handleClick={(_e, day) => setSelectedDay(day)}
-			/>
+			<DaySelector selectedDay={selectedDay} handleClick={(_e, day) => setSelectedDay(day)} />
 
 			<br />
 
 			{selectedDay === "Week" ? (
 				scheduleByDays.map((lessonsArray, index) => (
 					<div key={index} style={weekStyles}>
-						<h3 style={{ padding: "1em 2em" }}>
-							{t("weekday")(index)}
-						</h3>
+						<h3 style={{ padding: "1em 2em" }}>{t("weekday")(index)}</h3>
 
 						<OneDaySchedule
 							key={index}
 							lessonsArray={lessonsArray}
 							handleLessonMouseClick={handleLessonMouseClick}
-							handleLessonKeyboardClick={
-								handleLessonKeyboardClick
-							}
+							handleLessonKeyboardClick={handleLessonKeyboardClick}
 							// ulProps={{ style: { display: "inline-block" } }}
 						/>
 					</div>
@@ -211,9 +189,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 			<StudentListModal
 				isOpen={showStudents}
-				handleClose={() =>
-					setShowStudents(_showStudents => !_showStudents)
-				}
+				handleClose={() => setShowStudents((_showStudents) => !_showStudents)}
 				lesson={selectedLesson}
 			></StudentListModal>
 		</>

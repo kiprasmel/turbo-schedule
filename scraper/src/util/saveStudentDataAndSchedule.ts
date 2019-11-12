@@ -7,15 +7,15 @@ const savingPath: string = "saved-content" + "/" + getYYYYMMDD() + "/" + "studen
 
 const filename: string = "student-data.json";
 
-export const saveStudentDataAndSchedule = (studentData: IStudent, schedule: any) => {
-	const content = {
+export const saveStudentDataAndSchedule = (studentData: IStudent, lessons: any): IStudent => {
+	const student: IStudent = {
 		...studentData,
-		schedule: schedule,
+		lessons: lessons,
 	};
 
-	writeJSONToFileSimple(content, savingPath + "/" + content.text, filename);
+	writeJSONToFileSimple(student, savingPath + "/" + student.text, filename);
 
-	return content;
+	return student;
 };
 
 // export const getSavedStudentDataAndSchedule = (studentData: IStudent) => {
