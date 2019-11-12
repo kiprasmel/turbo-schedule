@@ -1,51 +1,59 @@
 import fs from "fs-extra";
 import path from "path";
+import { IStudent } from "@turbo-schedule/scraper/src/model/Student";
 
 import { request, Response } from "./utils";
-import { latestScrapedDataDirPath, pathToStudentDataArrayFile } from "../src/config";
+import {
+	latestScrapedDataDirPath,
+	pathToStudentDataArrayFile
+} from "../src/config";
 
 describe("/student API", () => {
-	it("should fail if the student list file does not exist", async () => {
+	it("should fail if the students array file does not exist", async () => {
 		try {
 			const res: Response = await request.get(`/api/v1/student`);
 
 			expect(res.status).toBe(500);
 			expect(res.body).toMatchObject({
-				studentsList: [],
-				message: "Student list file not found (server error)!",
+				students: [],
+				message: "Students array file not found (server error)!"
 			});
 		} finally {
 		}
 	});
 
-	it("should return a list of students", async () => {
-		const content: any[] = [
+	it("should return an array of students", async () => {
+		const content: IStudent[] = [
 			{
 				href: "x300111e_melni_kip220.htm",
 				baseScheduleURI: "http://kpg.lt/Tvarkarastis",
-				fullScheduleURI: "http://kpg.lt/Tvarkarastis/x300111e_melni_kip220.htm",
-				text: "Melnikovas Kipras IIIe",
+				fullScheduleURI:
+					"http://kpg.lt/Tvarkarastis/x300111e_melni_kip220.htm",
+				text: "Melnikovas Kipras IIIe"
 			},
 			{
 				href: "x300112c_baltu_sim457.htm",
 				baseScheduleURI: "http://kpg.lt/Tvarkarastis",
-				fullScheduleURI: "http://kpg.lt/Tvarkarastis/x300112c_baltu_sim457.htm",
-				text: "Baltūsis Simonas IVGc",
-			},
+				fullScheduleURI:
+					"http://kpg.lt/Tvarkarastis/x300112c_baltu_sim457.htm",
+				text: "Baltūsis Simonas IVGc"
+			}
 		];
 
 		try {
 			fs.ensureDirSync(latestScrapedDataDirPath);
-			fs.writeJSONSync(pathToStudentDataArrayFile, content, { encoding: "utf-8" });
+			fs.writeJSONSync(pathToStudentDataArrayFile, content, {
+				encoding: "utf-8"
+			});
 
 			const res: Response = await request.get(`/api/v1/student`);
 
 			expect(res.type).toMatch(/json/);
 			expect(res.status).toBe(200);
 
-			expect(res.body).toHaveProperty("studentsList");
+			expect(res.body).toHaveProperty("students");
 
-			res.body.studentsList.forEach((student: any) => {
+			res.body.students.forEach((student: IStudent) => {
 				expect(student).toHaveProperty("href");
 				expect(student).toHaveProperty("baseScheduleURI");
 				expect(student).toHaveProperty("fullScheduleURI");

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./StudentList.scss";
+import { IStudent } from "@turbo-schedule/scraper/src/model/Student";
 
-import { fetchStudentsList } from "../../utils/fetchStudentsList";
+import { fetchStudents } from "../../utils/fetchStudents";
 import AutoCompleteInput from "../../common/autocompleteInput/AutoCompleteInput";
 
 import { history } from "../../utils/history";
@@ -15,7 +16,7 @@ const StudentList = () => {
 
 	useEffect(() => {
 		const wrapper = async () => {
-			const studentsList: Array<any> = await fetchStudentsList();
+			const studentsList: Array<IStudent> = await fetchStudents();
 
 			setStudentsList(studentsList);
 		};

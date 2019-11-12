@@ -1,6 +1,7 @@
 import { Router } from "express";
 import fs from "fs-extra";
 import path from "path";
+import { IStudent } from "@turbo-schedule/scraper/src/model/Student";
 
 import { isProd } from "../../../src/util/isProd";
 import { latestScrapedDataDirPath } from "../../config";
@@ -8,33 +9,38 @@ import { latestScrapedDataDirPath } from "../../config";
 const router: Router = Router();
 
 /**
- * get list of students
+ * get an array of students
  */
 router.get("/", async (_req, res, next) => {
 	try {
-		const studentsListFilePath: string = path.join(latestScrapedDataDirPath, "students-data-array.json");
-		const fileExists: boolean = await fs.pathExists(studentsListFilePath);
+		const studentsArrayFilePath: string = path.join(
+			latestScrapedDataDirPath,
+			"students-data-array.json"
+		);
+		const fileExists: boolean = await fs.pathExists(studentsArrayFilePath);
 
 		if (!fileExists) {
 			/**
 			 * this is bad because this is not dependant on any inputs -
 			 * this only happens if we failed setting up something ourselves.
 			 */
-			const message: string = `Student list file not found (server error)!`;
+			const message: string = `Students array file not found (server error)!`;
 
 			console.error(message);
-			res.status(500).json({ studentsList: [], message });
+			res.status(500).json({ students: [], message });
 
 			return !isProd() ? next(message) : res.end();
 		}
 
-		const studentsList: any[] = await fs.readJSON(studentsListFilePath, { encoding: "utf-8" });
+		const students: IStudent[] = await fs.readJSON(studentsArrayFilePath, {
+			encoding: "utf-8"
+		});
 
-		res.json({ studentsList });
+		res.json({ students: students });
 		return !isProd() ? next() : res.end();
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ studentsList: [], message: err });
+		res.status(500).json({ students: [], message: err });
 		return !isProd() ? next(err) : res.end();
 	}
 });
