@@ -1,7 +1,7 @@
 import { Router } from "express";
 import fs from "fs-extra";
 import path from "path";
-import { IStudent } from "@turbo-schedule/scraper/src/model/Student";
+import { IStudent, Student } from "@turbo-schedule/common";
 
 import { isProd } from "../../../src/util/isProd";
 import { latestScrapedDataDirPath } from "../../config";

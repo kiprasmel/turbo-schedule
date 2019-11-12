@@ -1,6 +1,6 @@
 import fs from "fs-extra";
 import path from "path";
-import { IStudent } from "@turbo-schedule/scraper/src/model/Student";
+import { IStudent } from "@turbo-schedule/common";
 
 import { request, Response } from "./utils";
 import {

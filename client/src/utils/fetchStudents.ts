@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { IStudent } from "@turbo-schedule/scraper/src/model/Student";
+import { IStudent } from "@turbo-schedule/common";
 
 interface Response {
 	students: IStudent[];

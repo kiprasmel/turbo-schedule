@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./StudentList.scss";
-import { IStudent } from "@turbo-schedule/scraper/src/model/Student";
+import { IStudent } from "@turbo-schedule/common";
 
 import { fetchStudents } from "../../utils/fetchStudents";
 import AutoCompleteInput from "../../common/autocompleteInput/AutoCompleteInput";
