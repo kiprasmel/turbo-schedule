@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.2](https://github.com/sarpik/turbo-schedule/compare/v1.6.1...v1.6.2) (2019-11-13)
+
+
+### Bug Fixes
+
+* **server:** Bring back & fix the tests for `/student/:studentName` ([2d58ac0](https://github.com/sarpik/turbo-schedule/commit/2d58ac04c404f8cf9b2b8e0ecfae2fac14ca8705))
+* **server:** Return consistent `emailEntry` fields ([0ac1324](https://github.com/sarpik/turbo-schedule/commit/0ac1324e331e3eb0bb30c7dbfe7031ec106be36d))
+
+
+
+
+
 ## [1.6.1](https://github.com/sarpik/turbo-schedule/compare/v1.6.0...v1.6.1) (2019-11-12)
 
 
