@@ -1,6 +1,7 @@
 import fs, { WriteOptions } from "fs-extra";
 import path from "path";
 import { Router } from "express";
+import { Email } from "@turbo-schedule/common";
 
 import { isProd } from "../../../src/util/isProd";
 import { scrapedDataDirPath } from "../../config";
@@ -9,22 +10,6 @@ const router: Router = Router();
 
 const emailFileName: string = "emails.json";
 const savingPathAndName: string = path.join(scrapedDataDirPath, emailFileName);
-
-export interface IEmail {
-	created?: string;
-	ip?: string;
-	email?: string;
-}
-
-export class Email implements IEmail {
-	created: string = "";
-	ip: string = "";
-	email: string = "";
-
-	constructor(data?: IEmail) {
-		Object.assign(this, data);
-	}
-}
 
 export interface EmailsFileContent {
 	emailsArray: Array<Email>;
