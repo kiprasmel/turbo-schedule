@@ -97,9 +97,9 @@ describe("/student API", () => {
 		const studentName: string = "Chad RMarkdown";
 
 		const student: IStudent = {
-			href: "x300111e_something_something-else220.htm",
+			href: "foo_bar.htm",
 			baseScheduleURI: "http://kpg.lt/Tvarkarastis",
-			fullScheduleURI: "http://kpg.lt/Tvarkarastis/x300111e_something_something-else220.htm",
+			fullScheduleURI: "http://kpg.lt/Tvarkarastis/foo_bar.htm",
 			text: studentName,
 			lessons: [
 				{

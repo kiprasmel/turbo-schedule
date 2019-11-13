@@ -1,4 +1,5 @@
 import { request, Response } from "./utils";
+import { IEmail, Email } from "@turbo-schedule/common";
 
 describe("/email API", () => {
 	it("should accept a new email & return it back", async () => {
@@ -8,11 +9,13 @@ describe("/email API", () => {
 
 		expect(res.status).toBe(200);
 
-		const looselyExpectedObj = {
-			emailEntry: { email },
-		};
+		expect(res.body).toHaveProperty("emailEntry");
+		expect(res.body.emailEntry).toHaveProperty("created");
+		expect(res.body.emailEntry).toHaveProperty("email");
+		expect(res.body.emailEntry).toHaveProperty("ip");
 
-		expect(res.body).toMatchObject(looselyExpectedObj);
+		const looselyExpectedObj: IEmail = { email: email };
+		expect(res.body.emailEntry).toMatchObject(looselyExpectedObj);
 	});
 
 	it("should not accept a duplicate email & should return the old one", async () => {
@@ -24,16 +27,17 @@ describe("/email API", () => {
 		const res2: Response = await makeRequest();
 
 		expect(res1.status).toBe(200);
-
 		expect(res2.status).toBe(403);
-		expect(res2.body).toMatchObject({ emailEntry: { email }, message: "Email already exists" });
+
+		const expectedObj: Email = new Email({ email: email });
+		expect(res2.body).toMatchObject({ emailEntry: expectedObj, message: "Email already exists" });
 	});
 
 	it("should inform about a missing `email` field", async () => {
 		const res: Response = await request.post(`/api/v1/email`);
 
 		expect(res.status).toBe(422);
-		expect(res.body).toMatchObject({ emailEntry: null, message: "Field `email` is missing" });
+		expect(res.body).toMatchObject({ emailEntry: new Email(), message: "Field `email` is missing" });
 	});
 
 	it("should be the last test to avoid a bug", async () => {
