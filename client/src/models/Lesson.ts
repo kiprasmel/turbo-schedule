@@ -4,7 +4,7 @@ export class ILesson {
 	id: string = "";
 
 	name: string = "";
-	cabinet: string = "";
+	room: string = "";
 	teacher: string = "";
 	students: Array<string> = [];
 

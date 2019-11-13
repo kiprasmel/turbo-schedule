@@ -21,14 +21,14 @@ const Lesson: FC<ILessonProps> = React.memo(
 	({ lessonIndex, lesson, handleLessonMouseClick, handleLessonKeyboardClick }) => {
 		useRenderCount("lesson");
 
-		const { id, name, cabinet, teacher, students, dayIndex, timeIndex } = lesson;
+		const { id, name, room, teacher, students, dayIndex, timeIndex } = lesson;
 
 		/** TODO `howMuchDone` */
 		let { isHappeningNow } = isLessonHappeningNow(dayIndex, timeIndex);
 
 		const textBoxes: Array<ILessonTextBox> = [
 			{ logo: lessonLogo, text: name },
-			{ logo: classRoomLogo, text: cabinet },
+			{ logo: classRoomLogo, text: room },
 			{ logo: teacherLogo, text: teacher },
 			{ logo: clockLogo, text: getLessonTimesFormatted(timeIndex) },
 			{ logo: studentLogo, text: students.length },

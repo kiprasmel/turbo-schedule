@@ -37,7 +37,7 @@ export const extractLesson = (scheduleItem: CheerioElement, dayIndex: number, ti
 			id: "",
 			name: null,
 			teacher: null,
-			cabinet: null,
+			room: null,
 		};
 
 		lesson.id = createLessonId(lesson.dayIndex, lesson.timeIndex, lesson.name);
@@ -53,7 +53,7 @@ export const extractLesson = (scheduleItem: CheerioElement, dayIndex: number, ti
 
 	const teacherName = unsafeTeacherName.data || "";
 
-	const cabinetName = unsafeCabinetName.data || "";
+	const roomName = unsafeCabinetName.data || "";
 
 	/** */
 
@@ -64,7 +64,7 @@ export const extractLesson = (scheduleItem: CheerioElement, dayIndex: number, ti
 		id: "",
 		name: removeNewline(lessonName),
 		teacher: removeNewline(teacherName),
-		cabinet: removeNewline(cabinetName),
+		room: removeNewline(roomName),
 	};
 
 	lesson.id = createLessonId(lesson.dayIndex, lesson.timeIndex, lesson.name);
