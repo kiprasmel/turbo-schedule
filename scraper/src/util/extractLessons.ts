@@ -19,17 +19,17 @@ export const extractLesson = (scheduleItem: CheerioElement, dayIndex: number, ti
 	// const lessonItem = scheduleItem.children[0].children[0]; //.children[0];
 	// const lessonItem = scheduleItem.children[0].children[0].children[0].data;
 
-	const itemWithClassNameTeacherAndCabinet = scheduleItem.children[0] /** always skip this */.children;
+	const itemWithClassNameTeacherAndRoom = scheduleItem.children[0] /** always skip this */.children;
 
 	/** */
 
-	const unsafeLessonName = itemWithClassNameTeacherAndCabinet[0].children;
+	const unsafeLessonName = itemWithClassNameTeacherAndRoom[0].children;
 	/** skip `[1]` */
-	const unsafeTeacherName = itemWithClassNameTeacherAndCabinet[2];
+	const unsafeTeacherName = itemWithClassNameTeacherAndRoom[2];
 	/** skip `[3]` */
-	const unsafeCabinetName = itemWithClassNameTeacherAndCabinet[4];
+	const unsafeRoomName = itemWithClassNameTeacherAndRoom[4];
 
-	if (!unsafeLessonName || !unsafeTeacherName || !unsafeCabinetName) {
+	if (!unsafeLessonName || !unsafeTeacherName || !unsafeRoomName) {
 		let lesson = {
 			isEmpty: true,
 			dayIndex: dayIndex,
@@ -37,7 +37,7 @@ export const extractLesson = (scheduleItem: CheerioElement, dayIndex: number, ti
 			id: "",
 			name: null,
 			teacher: null,
-			cabinet: null,
+			room: null,
 		};
 
 		lesson.id = createLessonId(lesson.dayIndex, lesson.timeIndex, lesson.name);
@@ -53,7 +53,7 @@ export const extractLesson = (scheduleItem: CheerioElement, dayIndex: number, ti
 
 	const teacherName = unsafeTeacherName.data || "";
 
-	const cabinetName = unsafeCabinetName.data || "";
+	const roomName = unsafeRoomName.data || "";
 
 	/** */
 
@@ -64,7 +64,7 @@ export const extractLesson = (scheduleItem: CheerioElement, dayIndex: number, ti
 		id: "",
 		name: removeNewline(lessonName),
 		teacher: removeNewline(teacherName),
-		cabinet: removeNewline(cabinetName),
+		room: removeNewline(roomName),
 	};
 
 	lesson.id = createLessonId(lesson.dayIndex, lesson.timeIndex, lesson.name);

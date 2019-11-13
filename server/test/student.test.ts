@@ -109,7 +109,7 @@ describe("/student API", () => {
 					id: "day:0/time:0/name:The angle ain't blunt - I'm blunt",
 					name: "The angle ain't blunt - I'm blunt",
 					teacher: "Snoop Dawg",
-					cabinet: "The Chamber (36 - 9 = 25)",
+					room: "The Chamber (36 - 9 = 25)",
 					students: ["Alice from Wonderland IIIGe", "Bob the Builder IIIGa", "Charlie the Angel IVGx"],
 				},
 			],
@@ -144,7 +144,7 @@ describe("/student API", () => {
 				expect(scheduleItem).toHaveProperty("id");
 				expect(scheduleItem).toHaveProperty("name");
 				expect(scheduleItem).toHaveProperty("teacher");
-				expect(scheduleItem).toHaveProperty("cabinet");
+				expect(scheduleItem).toHaveProperty("room");
 				expect(scheduleItem).toHaveProperty("students");
 			});
 		} finally {

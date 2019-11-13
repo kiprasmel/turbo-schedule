@@ -22,9 +22,9 @@ export const scrapeStudentsDataArray = (studentsListHtml: string, baseScheduleUR
 	// console.log("student", { ...student });
 
 	/** first is useless and so is the last one, we take the middle table */
-	const classesAndCabinetsAndStudentsListTable = $("table")[1];
+	const classesAndRoomsAndStudentsListTable = $("table")[1];
 
-	const tableDescriptionArray = $("tr td", classesAndCabinetsAndStudentsListTable).toArray();
+	const tableDescriptionArray = $("tr td", classesAndRoomsAndStudentsListTable).toArray();
 	// console.log("TCL: tableDescriptionArray", tableDescriptionArray);
 
 	let studentListStartIndex: number = -1;
