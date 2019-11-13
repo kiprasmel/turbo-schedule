@@ -1,9 +1,9 @@
 import fs from "fs-extra";
-// import path from "path";
+import path from "path";
 import { IStudent } from "@turbo-schedule/common";
 
 import { request, Response } from "./utils";
-import { latestScrapedDataDirPath, pathToStudentDataArrayFile } from "../src/config";
+import { latestScrapedDataDirPath, pathToStudentDataArrayFile, getStudentFilePath } from "../src/config";
 
 describe("/student API", () => {
 	it("should fail if the students array file does not exist", async () => {
@@ -81,68 +81,80 @@ describe("/student API", () => {
 		}
 	});
 
-	/** BEGIN HACK */
-	// it("should return a specific student", async () => {
-	// 	const studentName: string = "Chad RMarkdown";
+	/**
+	 * BEGIN HACK
+	 *
+	 * Alright, so currently there's an issue that we need to read
+	 * from 2 separate files
+	 * in order to get both the student's information
+	 * AND it's lessons array.
+	 *
+	 * This is a problem in the current way we save things
+	 * with out scraper, and we'll fix this sooner or later.
+	 *
+	 */
+	it("should return a specific student", async () => {
+		const studentName: string = "Chad RMarkdown";
 
-	// 	const content: Array<{ student: IStudent }> = [
-	// 		{
-	// 			student: {
-	// 				href: "",
-	// 				baseScheduleURI: "",
-	// 				fullScheduleURI: "",
-	// 				text: studentName,
-	// 				lessons: [
-	// 					{
-	// 						isEmpty: false,
-	// 						dayIndex: 0,
-	// 						timeIndex: 0,
-	// 						id: "day:0/time:0/name:The angle ain't blunt - I'm blunt",
-	// 						name: "The angle ain't blunt - I'm blunt",
-	// 						teacher: "Snoop Dawg",
-	// 						cabinet: "The Chamber (36 - 9 = 25)",
-	// 						students: [
-	// 							"Alice from Wonderland IIIGe",
-	// 							"Bob the Builder IIIGa",
-	// 							"Charlie the Angel IVGx",
-	// 						],
-	// 					},
-	// 				],
-	// 			},
-	// 		},
-	// 	];
+		const student: IStudent = {
+			href: "foo_bar.htm",
+			baseScheduleURI: "http://kpg.lt/Tvarkarastis",
+			fullScheduleURI: "http://kpg.lt/Tvarkarastis/foo_bar.htm",
+			text: studentName,
+			lessons: [
+				{
+					isEmpty: false,
+					dayIndex: 0,
+					timeIndex: 0,
+					id: "day:0/time:0/name:The angle ain't blunt - I'm blunt",
+					name: "The angle ain't blunt - I'm blunt",
+					teacher: "Snoop Dawg",
+					cabinet: "The Chamber (36 - 9 = 25)",
+					students: ["Alice from Wonderland IIIGe", "Bob the Builder IIIGa", "Charlie the Angel IVGx"],
+				},
+			],
+		};
 
-	// 	const pathToDir: string = path.join(latestScrapedDataDirPath, "lessons");
-	// 	const pathToFile: string = path.join(pathToDir, studentName + ".json");
+		const pathToLessonsDir: string = path.join(latestScrapedDataDirPath, "lessons");
+		const pathToLessonsFile: string = path.join(pathToLessonsDir, studentName + ".json");
 
-	// 	try {
-	// 		fs.ensureDirSync(pathToDir);
-	// 		fs.writeJSONSync(pathToFile, content, { encoding: "utf-8" });
+		const pathToStudentFile: string = getStudentFilePath(studentName);
+		const pathToStudentDir: string = path.parse(pathToStudentFile).dir;
 
-	// 		const encodedStudentName: string = encodeURIComponent(studentName);
-	// 		const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
+		try {
+			fs.ensureDirSync(pathToLessonsDir);
+			fs.writeJSONSync(pathToLessonsFile, student.lessons, { encoding: "utf-8" });
 
-	// 		expect(res.status).toBe(200);
+			fs.ensureDirSync(pathToStudentDir);
+			fs.writeJSONSync(pathToStudentFile, { ...student, lessons: [] });
 
-	// 		expect(res.body).toHaveProperty("student");
-	// 		expect(res.body.student).toHaveProperty("lessons");
-	// 		expect(res.body.student.lessons).toMatchObject(content);
+			const encodedStudentName: string = encodeURIComponent(studentName);
+			const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
 
-	// 		res.body.student.lessons.forEach((scheduleItem: any) => {
-	// 			expect(scheduleItem).toHaveProperty("isEmpty");
-	// 			expect(scheduleItem).toHaveProperty("dayIndex");
-	// 			expect(scheduleItem).toHaveProperty("timeIndex");
-	// 			expect(scheduleItem).toHaveProperty("id");
-	// 			expect(scheduleItem).toHaveProperty("name");
-	// 			expect(scheduleItem).toHaveProperty("teacher");
-	// 			expect(scheduleItem).toHaveProperty("cabinet");
-	// 			expect(scheduleItem).toHaveProperty("students");
-	// 		});
-	// 	} finally {
-	// 		fs.removeSync(pathToFile);
-	// 		fs.removeSync(pathToDir);
-	// 	}
-	// });
+			expect(res.status).toBe(200);
+
+			expect(res.body).toHaveProperty("student");
+			expect(res.body.student).toHaveProperty("lessons");
+			expect(res.body.student).toMatchObject(student);
+
+			res.body.student.lessons.forEach((scheduleItem: any) => {
+				expect(scheduleItem).toHaveProperty("isEmpty");
+				expect(scheduleItem).toHaveProperty("dayIndex");
+				expect(scheduleItem).toHaveProperty("timeIndex");
+				expect(scheduleItem).toHaveProperty("id");
+				expect(scheduleItem).toHaveProperty("name");
+				expect(scheduleItem).toHaveProperty("teacher");
+				expect(scheduleItem).toHaveProperty("cabinet");
+				expect(scheduleItem).toHaveProperty("students");
+			});
+		} finally {
+			fs.removeSync(pathToLessonsFile);
+			fs.removeSync(pathToLessonsDir);
+
+			fs.removeSync(pathToStudentFile);
+			fs.removeSync(pathToStudentDir);
+		}
+	});
 	/** END HACK */
 
 	/**

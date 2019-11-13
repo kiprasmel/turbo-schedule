@@ -1,6 +1,7 @@
 import fs, { WriteOptions } from "fs-extra";
 import path from "path";
 import { Router } from "express";
+import { Email } from "@turbo-schedule/common";
 
 import { isProd } from "../../../src/util/isProd";
 import { scrapedDataDirPath } from "../../config";
@@ -10,17 +11,11 @@ const router: Router = Router();
 const emailFileName: string = "emails.json";
 const savingPathAndName: string = path.join(scrapedDataDirPath, emailFileName);
 
-export interface IEmail {
-	created: string;
-	ip: string;
-	email: string;
+export interface EmailsFileContent {
+	emailsArray: Array<Email>;
 }
 
-export interface IEmailsFileContent {
-	emailsArray: Array<IEmail>;
-}
-
-const defaultFileData: IEmailsFileContent = {
+const defaultFileData: EmailsFileContent = {
 	emailsArray: [],
 };
 
@@ -37,7 +32,7 @@ router.post("/", async (req, res, next) => {
 			const message: string = "Field `email` is missing";
 
 			console.warn(message);
-			res.status(422).json({ emailEntry: null, message });
+			res.status(422).json({ emailEntry: new Email(), message });
 			return !isProd() ? next(message) : res.end();
 		}
 
@@ -51,22 +46,22 @@ router.post("/", async (req, res, next) => {
 		}
 
 		const emailsFile: string = await fs.readFile(savingPathAndName, { encoding: "utf-8" });
-		let fileContent: IEmailsFileContent = !!emailsFile ? JSON.parse(emailsFile) : defaultFileData;
+		let fileContent: EmailsFileContent = !!emailsFile ? JSON.parse(emailsFile) : defaultFileData;
 
 		/** handle duplicates */
 		if (fileContent.emailsArray.some((emailOjb) => emailOjb.email === email)) {
 			const message: string = "Email already exists";
 
 			console.warn(message);
-			res.status(403).json({ emailEntry: { email }, message });
+			res.status(403).json({ emailEntry: new Email({ email: email, ip: "", created: "" }), message });
 			return !isProd() ? next(message) : res.end();
 		}
 
-		const newEmailEntry: IEmail = {
+		const newEmailEntry: Email = new Email({
 			created: new Date().toISOString(),
 			ip: req.ip,
 			email: email,
-		};
+		});
 
 		fileContent.emailsArray.push(newEmailEntry);
 
@@ -76,7 +71,7 @@ router.post("/", async (req, res, next) => {
 		return !isProd() ? next() : res.end();
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ message: err });
+		res.status(500).json({ emailEntry: new Email(), message: err });
 		return !isProd() ? next(err) : res.end();
 	}
 });
