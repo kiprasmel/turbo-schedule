@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/server",
-	"version": "1.6.2",
+	"version": "1.6.3",
 	"description": "",
 	"main": "dist/src/server.js",
 	"typings": "dist/src/server.d.ts",
@@ -23,7 +23,7 @@
 	},
 	"dependencies": {
 		"@turbo-schedule/common": "^1.6.2",
-		"@turbo-schedule/scraper": "^1.6.2",
+		"@turbo-schedule/scraper": "^1.6.3",
 		"@types/cors": "^2.8.6",
 		"@types/cron": "^1.7.1",
 		"@types/express": "^4.17.1",
