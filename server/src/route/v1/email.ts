@@ -11,16 +11,26 @@ const emailFileName: string = "emails.json";
 const savingPathAndName: string = path.join(scrapedDataDirPath, emailFileName);
 
 export interface IEmail {
-	created: string;
-	ip: string;
-	email: string;
+	created?: string;
+	ip?: string;
+	email?: string;
 }
 
-export interface IEmailsFileContent {
-	emailsArray: Array<IEmail>;
+export class Email implements IEmail {
+	created: string = "";
+	ip: string = "";
+	email: string = "";
+
+	constructor(data?: IEmail) {
+		Object.assign(this, data);
+	}
 }
 
-const defaultFileData: IEmailsFileContent = {
+export interface EmailsFileContent {
+	emailsArray: Array<Email>;
+}
+
+const defaultFileData: EmailsFileContent = {
 	emailsArray: [],
 };
 
@@ -51,7 +61,7 @@ router.post("/", async (req, res, next) => {
 		}
 
 		const emailsFile: string = await fs.readFile(savingPathAndName, { encoding: "utf-8" });
-		let fileContent: IEmailsFileContent = !!emailsFile ? JSON.parse(emailsFile) : defaultFileData;
+		let fileContent: EmailsFileContent = !!emailsFile ? JSON.parse(emailsFile) : defaultFileData;
 
 		/** handle duplicates */
 		if (fileContent.emailsArray.some((emailOjb) => emailOjb.email === email)) {
@@ -62,11 +72,11 @@ router.post("/", async (req, res, next) => {
 			return !isProd() ? next(message) : res.end();
 		}
 
-		const newEmailEntry: IEmail = {
+		const newEmailEntry: Email = new Email({
 			created: new Date().toISOString(),
 			ip: req.ip,
 			email: email,
-		};
+		});
 
 		fileContent.emailsArray.push(newEmailEntry);
 
