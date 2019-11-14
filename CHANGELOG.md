@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.4](https://github.com/sarpik/turbo-schedule/compare/v1.6.3...v1.6.4) (2019-11-14)
+
+
+### Bug Fixes
+
+* Remove `eoas-gen` patch ([1981ab8](https://github.com/sarpik/turbo-schedule/commit/1981ab81902f069d8c7c2b0f9e19fdc0f9f3757c))
+
+
+
+
+
 ## [1.6.3](https://github.com/sarpik/turbo-schedule/compare/v1.6.2...v1.6.3) (2019-11-13)
 
 
