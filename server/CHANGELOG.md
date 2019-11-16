@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.5](https://github.com/sarpik/turbo-schedule/compare/v1.6.4...v1.6.5) (2019-11-16)
+
+
+### Bug Fixes
+
+* **server:** Use `--force` with `cp` when updating openAPI docs ([dae731d](https://github.com/sarpik/turbo-schedule/commit/dae731d3e71cd17d30b2228975f086ee9d95c35b))
+* **server:** Use the newer `eoas-gen` API for docs generation ([91003d6](https://github.com/sarpik/turbo-schedule/commit/91003d6242bf1d67fb8a6eaa15009d9d647c4849))
+
+
+
+
+
 ## [1.6.4](https://github.com/sarpik/turbo-schedule/compare/v1.6.3...v1.6.4) (2019-11-14)
 
 **Note:** Version bump only for package @turbo-schedule/server
