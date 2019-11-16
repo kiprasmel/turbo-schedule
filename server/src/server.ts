@@ -13,13 +13,14 @@
  */
 
 import express from "express";
+import { handleResponses, handleRequests } from "express-oas-generator";
 import helmet from "helmet";
 import cors from "cors";
 import path from "path";
 import fs from "fs-extra";
 import { Server } from "http";
 
-import { applyAPIDocsGenerator } from "./util/applyAPIDocsGenerator";
+import { isProd } from "./util/isProd";
 import { apiRouter } from "./route/apiRouter";
 import { enableScraperCronjob } from "./util/enableScraperCronjob";
 import { setupLogger } from "./util/setupLogger";
@@ -27,7 +28,9 @@ import { setupLogger } from "./util/setupLogger";
 const app = express();
 
 const openAPISavePathAndFilename = path.join(__dirname, "..", "generated", "openAPI.json");
-applyAPIDocsGenerator(app, openAPISavePathAndFilename); /** non-production only */
+if (!isProd()) {
+	handleResponses(app, { specOutputPath: openAPISavePathAndFilename, writeIntervalMs: 0 });
+}
 
 /** misc */
 app.use(helmet()); // https://helmetjs.github.io/
@@ -75,6 +78,14 @@ if (process.env.NODE_ENV === "production") {
 	});
 } else {
 	console.log("~ Server is NOT using client's prod build");
+}
+
+/**
+ * handle the app's `requests`
+ * this SHALL be the last middleware.
+ */
+if (!isProd()) {
+	handleRequests(app);
 }
 
 /** export the express app after it's set up - the tests use it */
