@@ -32,6 +32,14 @@ if (!isProd()) {
 	handleResponses(app, { specOutputPath: openAPISavePathAndFilename, writeIntervalMs: 0 });
 }
 
+/** config */
+
+/**
+ * we're using this together with `nginx`.
+ * See https://github.com/expressjs/morgan/issues/214#issuecomment-555068350
+ */
+app.set("trust proxy", true);
+
 /** misc */
 app.use(helmet()); // https://helmetjs.github.io/
 app.use(cors());
