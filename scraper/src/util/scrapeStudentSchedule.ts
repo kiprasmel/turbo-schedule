@@ -61,7 +61,7 @@ const prepareScheduleItems = (html: string): Array<CheerioElement> => {
 
 	const rawScheduleItems: Array<CheerioElement> = $("tr td", firstTable).toArray();
 
-	const studentNameAndClass: string | null = extractStudentName(rawScheduleItems) || null;
+	const studentNameAndClass: string | undefined = extractStudentName(rawScheduleItems);
 
 	if (!studentNameAndClass) {
 		/**
@@ -145,7 +145,7 @@ const prepareScheduleItems = (html: string): Array<CheerioElement> => {
 	// const preparedHtmlStringArray: Array<string> = scheduleItems.map((rawItem) => $.html(rawItem)) /** works */;
 
 	// /**
-	//  * TODO - take care of `null`
+	//  * TODO - take care of `undefined` studentNameAndClass
 	//  */
 	// const preparedHtml: string = preparedHtmlStringArray.join("");
 

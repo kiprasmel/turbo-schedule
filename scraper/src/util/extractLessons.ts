@@ -1,5 +1,5 @@
-const removeNewline = (content: string) => {
-	return content.replace("\n", "");
+const removeNewlineAndTrim = (content: string) => {
+	return content.replace("\n", "").trim();
 };
 
 const createLessonId = (dayIndex: number, timeIndex: number, lessonName: string | null): string => {
@@ -62,14 +62,14 @@ export const extractLesson = (scheduleItem: CheerioElement, dayIndex: number, ti
 		dayIndex: dayIndex,
 		timeIndex: timeIndex,
 		id: "",
-		name: removeNewline(lessonName),
-		teacher: removeNewline(teacherName),
-		room: removeNewline(roomName),
+		name: removeNewlineAndTrim(lessonName),
+		teacher: removeNewlineAndTrim(teacherName),
+		room: removeNewlineAndTrim(roomName),
 	};
 
 	lesson.id = createLessonId(lesson.dayIndex, lesson.timeIndex, lesson.name);
 
-	// Object.keys(lesson).map((key) => (lesson[key] = removeNewline(lesson[key])));
+	// Object.keys(lesson).map((key) => (lesson[key] = removeNewlineAndTrim(lesson[key])));
 
 	// console.log("\nlesson", lesson);
 
