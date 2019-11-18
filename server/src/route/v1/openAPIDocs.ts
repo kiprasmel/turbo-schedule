@@ -1,12 +1,10 @@
 import fs from "fs-extra";
-import { join } from "path";
 import { RequestHandler } from "express";
 
+import { openAPIFilePath } from "../../config";
 import { isProd } from "../../../src/util/isProd";
 
 /** read initially (@note - wont update until you restart!) */
-
-const leanDocsPath = join(__dirname, "..", "..", "..", "generated", "./openAPI.json");
 
 let openAPIDocsJSON: string = "{}";
 
@@ -16,11 +14,11 @@ let openAPIDocsJSON: string = "{}";
  */
 export const openAPIDocsJSONHandler: RequestHandler = async (_req, res, next) => {
 	try {
-		if (!(await fs.pathExists(leanDocsPath))) {
+		if (!(await fs.pathExists(openAPIFilePath))) {
 			openAPIDocsJSON = "{}";
-			console.log("  ! openAPIDocsJSON not found (`%s`)", leanDocsPath);
+			console.log("  ! openAPIDocsJSON not found (`%s`)", openAPIFilePath);
 		} else {
-			openAPIDocsJSON = await fs.readJSON(leanDocsPath, {
+			openAPIDocsJSON = await fs.readJSON(openAPIFilePath, {
 				encoding: "utf-8",
 			});
 		}

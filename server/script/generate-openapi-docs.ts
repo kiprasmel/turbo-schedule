@@ -10,8 +10,8 @@
  * when compiled to javascript, run with `node`;
  */
 
-import { join } from "path";
 import { generateOpenAPIDocs } from "./module/generateOpenAPIDocs";
+import { openAPIFilePath } from "../src/config";
 
 const argv: string[] = process.argv.splice(2);
 let savePathAndFilename: string;
@@ -19,7 +19,7 @@ let savePathAndFilename: string;
 if (argv.length) {
 	savePathAndFilename = argv[0];
 } else {
-	savePathAndFilename = join(__dirname, "..", "generated", "openAPI.json");
+	savePathAndFilename = openAPIFilePath;
 }
 
 (async () => {
