@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.6](https://github.com/sarpik/turbo-schedule/compare/v1.6.5...v1.6.6) (2019-11-18)
+
+
+### Bug Fixes
+
+* **scraper:** Return empty strings instead of `null` for `lessons` ([d43c3db](https://github.com/sarpik/turbo-schedule/commit/d43c3db10249df7be11dc9149b65afd6fe8dc458))
+* **server:** Set app to trust proxy ([c600edc](https://github.com/sarpik/turbo-schedule/commit/c600edc6444c74c0eb318357ca92c8cc78be080e)), closes [/github.com/expressjs/morgan/issues/214#issuecomment-555068350](https://github.com//github.com/expressjs/morgan/issues/214/issues/issuecomment-555068350)
+
+
+
+
+
 ## [1.6.5](https://github.com/sarpik/turbo-schedule/compare/v1.6.4...v1.6.5) (2019-11-16)
 
 
