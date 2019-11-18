@@ -20,10 +20,10 @@ import { Server } from "http";
 
 import { openAPIFilePath } from "./config";
 import { isProd } from "./util/isProd";
-import { apiRouter } from "./route/apiRouter";
-import { enableScraperCronjob } from "./util/enableScraperCronjob";
 import { setupLogger } from "./util/setupLogger";
+import { apiRouter } from "./route/apiRouter";
 import { serveStaticClientInProd } from "./util/serveStaticClientInProd";
+import { enableScraperCronjob } from "./util/enableScraperCronjob";
 
 const app = express();
 
