@@ -4,7 +4,7 @@ import path from "path";
 import { IStudent, Student } from "@turbo-schedule/common";
 
 import { isProd } from "../../../src/util/isProd";
-import { latestScrapedDataDirPath, getStudentFilePath } from "../../config";
+import { latestScrapedDataDirPath, studentDataArrayFilePath, getStudentFilePath } from "../../config";
 
 const router: Router = Router();
 
@@ -13,8 +13,7 @@ const router: Router = Router();
  */
 router.get("/", async (_req, res, next) => {
 	try {
-		const studentsArrayFilePath: string = path.join(latestScrapedDataDirPath, "students-data-array.json");
-		const fileExists: boolean = await fs.pathExists(studentsArrayFilePath);
+		const fileExists: boolean = await fs.pathExists(studentDataArrayFilePath);
 
 		if (!fileExists) {
 			/**
@@ -29,7 +28,7 @@ router.get("/", async (_req, res, next) => {
 			return !isProd() ? next(message) : res.end();
 		}
 
-		const students: IStudent[] = await fs.readJSON(studentsArrayFilePath, {
+		const students: IStudent[] = await fs.readJSON(studentDataArrayFilePath, {
 			encoding: "utf-8",
 		});
 

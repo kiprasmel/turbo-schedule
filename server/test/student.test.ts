@@ -3,7 +3,7 @@ import path from "path";
 import { IStudent } from "@turbo-schedule/common";
 
 import { request, Response } from "./utils";
-import { latestScrapedDataDirPath, pathToStudentDataArrayFile, getStudentFilePath } from "../src/config";
+import { latestScrapedDataDirPath, studentDataArrayFilePath, getStudentFilePath } from "../src/config";
 
 describe("/student API", () => {
 	it("should fail if the students array file does not exist", async () => {
@@ -39,7 +39,7 @@ describe("/student API", () => {
 
 		try {
 			fs.ensureDirSync(latestScrapedDataDirPath);
-			fs.writeJSONSync(pathToStudentDataArrayFile, content, {
+			fs.writeJSONSync(studentDataArrayFilePath, content, {
 				encoding: "utf-8",
 			});
 
@@ -58,7 +58,7 @@ describe("/student API", () => {
 			});
 		} finally {
 			fs.removeSync(latestScrapedDataDirPath);
-			fs.removeSync(pathToStudentDataArrayFile);
+			fs.removeSync(studentDataArrayFilePath);
 		}
 	});
 

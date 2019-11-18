@@ -16,21 +16,28 @@ import express from "express";
 import { handleResponses, handleRequests } from "express-oas-generator";
 import helmet from "helmet";
 import cors from "cors";
-import path from "path";
-import fs from "fs-extra";
 import { Server } from "http";
 
+import { openAPIFilePath } from "./config";
 import { isProd } from "./util/isProd";
-import { apiRouter } from "./route/apiRouter";
-import { enableScraperCronjob } from "./util/enableScraperCronjob";
 import { setupLogger } from "./util/setupLogger";
+import { apiRouter } from "./route/apiRouter";
+import { serveStaticClientInProd } from "./util/serveStaticClientInProd";
+import { enableScraperCronjob } from "./util/enableScraperCronjob";
 
 const app = express();
 
-const openAPISavePathAndFilename = path.join(__dirname, "..", "generated", "openAPI.json");
 if (!isProd()) {
-	handleResponses(app, { specOutputPath: openAPISavePathAndFilename, writeIntervalMs: 0 });
+	handleResponses(app, { specOutputPath: openAPIFilePath, writeIntervalMs: 0 });
 }
+
+/** config */
+
+/**
+ * we're using this together with `nginx`.
+ * See https://github.com/expressjs/morgan/issues/214#issuecomment-555068350
+ */
+app.set("trust proxy", true);
 
 /** misc */
 app.use(helmet()); // https://helmetjs.github.io/
@@ -42,43 +49,7 @@ setupLogger(app);
 /** routes */
 app.use("/api", apiRouter);
 
-/**
- * TODO - if we're making independant microservices,
- * this will probably have to go.
- */
-if (process.env.NODE_ENV === "production") {
-	console.log("~ Server's using client's production build");
-	/** serve static assets */
-	const pathNormal: string = path.join(__dirname, "../", "../", "client", "build");
-	const pathOnceBuilt: string = path.join(__dirname, "../", "../", "../", "client", "build");
-	let pathToUse: string = "";
-
-	if (fs.pathExistsSync(pathOnceBuilt)) {
-		pathToUse = pathOnceBuilt;
-		console.log("~ Using the `built` path");
-	} else if (fs.pathExistsSync(pathNormal)) {
-		pathToUse = pathNormal;
-		console.log("~ Using the `normal` path");
-	} else {
-		throw new Error("~ Static assets path does not exist!");
-	}
-
-	app.use(express.static(pathToUse));
-
-	const indexHtmlFilePath: string = path.join(pathToUse, "index.html");
-
-	if (!fs.pathExistsSync(indexHtmlFilePath)) {
-		throw new Error("~ Static index.html file does not exist!");
-	}
-
-	/** capture everything that's outside our API routes and send the built react application (index.html file) */
-	app.get("/*", (_req, res) => {
-		res.sendFile(indexHtmlFilePath);
-		// res.sendFile(path.resolve(__dirname, "turbo-schedule-client", "build", "index.html"));
-	});
-} else {
-	console.log("~ Server is NOT using client's prod build");
-}
+serveStaticClientInProd(app);
 
 /**
  * handle the app's `requests`
@@ -92,7 +63,6 @@ if (!isProd()) {
 export { app };
 
 export interface StartServerOptions {
-	openAPISavePathAndFilename?: string;
 	portOverride?: number | string;
 }
 
