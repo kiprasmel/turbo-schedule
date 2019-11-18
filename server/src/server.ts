@@ -63,7 +63,6 @@ if (!isProd()) {
 export { app };
 
 export interface StartServerOptions {
-	openAPISavePathAndFilename?: string;
 	portOverride?: number | string;
 }
 
