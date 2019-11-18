@@ -16,9 +16,9 @@ import express from "express";
 import { handleResponses, handleRequests } from "express-oas-generator";
 import helmet from "helmet";
 import cors from "cors";
-import path from "path";
 import { Server } from "http";
 
+import { openAPIFilePath } from "./config";
 import { isProd } from "./util/isProd";
 import { apiRouter } from "./route/apiRouter";
 import { enableScraperCronjob } from "./util/enableScraperCronjob";
@@ -27,9 +27,8 @@ import { serveStaticClientInProd } from "./util/serveStaticClientInProd";
 
 const app = express();
 
-const openAPISavePathAndFilename = path.join(__dirname, "..", "generated", "openAPI.json");
 if (!isProd()) {
-	handleResponses(app, { specOutputPath: openAPISavePathAndFilename, writeIntervalMs: 0 });
+	handleResponses(app, { specOutputPath: openAPIFilePath, writeIntervalMs: 0 });
 }
 
 /** config */
