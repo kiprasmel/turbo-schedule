@@ -47,7 +47,6 @@ jobs:
           paths:
             - node_modules
             - ~/.cache/yarn
-            - server/dist/saved-content
           key: v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
           # key: v1-dependencies-{{ checksum "yarn.lock" }}
 
