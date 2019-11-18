@@ -35,9 +35,9 @@ export const extractLesson = (scheduleItem: CheerioElement, dayIndex: number, ti
 			dayIndex: dayIndex,
 			timeIndex: timeIndex,
 			id: "",
-			name: null,
-			teacher: null,
-			room: null,
+			name: "",
+			teacher: "",
+			room: "",
 		};
 
 		lesson.id = createLessonId(lesson.dayIndex, lesson.timeIndex, lesson.name);
