@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0](https://github.com/sarpik/turbo-schedule/compare/v1.6.6...v1.7.0) (2019-11-20)
+
+
+### Bug Fixes
+
+* **scraper:** Handle errors @ `getStudentsListHtml` ([0db3150](https://github.com/sarpik/turbo-schedule/commit/0db3150b182eb48a1cd4ee21845a0580698719ae))
+* **scraper:** Handle errors @ `scrapeStudentSchedule` ([51db295](https://github.com/sarpik/turbo-schedule/commit/51db2958662a4ee586702d8a37bdbf61401d01a1))
+* **scraper:** Handle failed responses @ `getHtml` 🧯 ([4738c45](https://github.com/sarpik/turbo-schedule/commit/4738c4582d1bc467756d4964fe79115325e23bc5))
+
+
+### Features
+
+* **scraper:** Retry on failed scrapes! ⛑ ([0ad5093](https://github.com/sarpik/turbo-schedule/commit/0ad5093572310c1ce27777ae43ac97ae70a75d10))
+
+
+
+
+
 ## [1.6.6](https://github.com/sarpik/turbo-schedule/compare/v1.6.5...v1.6.6) (2019-11-18)
 
 

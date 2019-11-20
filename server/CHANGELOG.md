@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0](https://github.com/sarpik/turbo-schedule/compare/v1.6.6...v1.7.0) (2019-11-20)
+
+**Note:** Version bump only for package @turbo-schedule/server
+
+
+
+
+
 ## [1.6.6](https://github.com/sarpik/turbo-schedule/compare/v1.6.5...v1.6.6) (2019-11-18)
 
 
