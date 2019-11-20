@@ -168,6 +168,7 @@ const prepareScheduleItems = (html: string): Array<CheerioElement> => {
 };
 
 export const scrapeStudentSchedule = async (studentData: IStudent): Promise<Array<any>> => {
+	try {
 	console.log("\n==> scrapeStudentSchedule:");
 	const savingPathBase: string = "saved-content" + "/" + getYYYYMMDD() + "/" + "students" + "/" + studentData.text;
 
@@ -201,4 +202,8 @@ export const scrapeStudentSchedule = async (studentData: IStudent): Promise<Arra
 	// console.log("TCL: scrapeStudentSchedule -> lessonsArray", lessonsArray);
 
 	return lessonsArray;
+	} catch (err) {
+		console.error(err);
+		return Promise.reject(new Error(err));
+	}
 };
