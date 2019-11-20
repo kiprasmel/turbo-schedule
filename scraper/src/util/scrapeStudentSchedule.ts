@@ -168,37 +168,43 @@ const prepareScheduleItems = (html: string): Array<CheerioElement> => {
 };
 
 export const scrapeStudentSchedule = async (studentData: IStudent): Promise<Array<any>> => {
-	console.log("\n==> scrapeStudentSchedule:");
-	const savingPathBase: string = "saved-content" + "/" + getYYYYMMDD() + "/" + "students" + "/" + studentData.text;
+	try {
+		// console.log("\n==> scrapeStudentSchedule:");
+		const savingPathBase: string =
+			"saved-content" + "/" + getYYYYMMDD() + "/" + "students" + "/" + studentData.text;
 
-	const studentDataSavingPath: string = savingPathBase + "/" + "student-data.json";
+		const studentDataSavingPath: string = savingPathBase + "/" + "student-data.json";
 
-	// console.log("saving path", savingPath);
+		// console.log("saving path", savingPath);
 
-	let lessonsArray: Array<any> = [];
+		let lessonsArray: Array<any> = [];
 
-	if (fileIsAlreadySaved(studentDataSavingPath)) {
-		console.log(" -> lessonsArray IS saved, taking it from saved file");
+		if (fileIsAlreadySaved(studentDataSavingPath)) {
+			// console.log(" -> lessonsArray IS saved, taking it from saved file");
 
-		lessonsArray = getSavedStudentDataAndSchedule(studentDataSavingPath);
-	} else {
-		console.log(" -> lessonsArray IS NOT saved, getting it from url");
+			lessonsArray = getSavedStudentDataAndSchedule(studentDataSavingPath);
+		} else {
+			// console.log(" -> lessonsArray IS NOT saved, getting it from url");
 
-		const html: string = await getHtml(studentData.fullScheduleURI);
-		saveFile(html, savingPathBase, "student-data.html");
+			const html: string = await getHtml(studentData.fullScheduleURI);
+			saveFile(html, savingPathBase, "student-data.html");
 
-		const scheduleItems: Array<CheerioElement> = prepareScheduleItems(html);
+			const scheduleItems: Array<CheerioElement> = prepareScheduleItems(html);
 
-		if (!scheduleItems.length) {
-			console.warn("\nscheduleItems were empty, skipping!\nsavingPathBase:", savingPathBase);
-			return [];
+			if (!scheduleItems.length) {
+				console.warn("\nscheduleItems were empty, skipping!\nsavingPathBase:", savingPathBase);
+				return [];
+			}
+
+			lessonsArray = extractLessonsArray(scheduleItems);
+			saveStudentDataAndSchedule(studentData, lessonsArray);
 		}
 
-		lessonsArray = extractLessonsArray(scheduleItems);
-		saveStudentDataAndSchedule(studentData, lessonsArray);
+		// console.log("TCL: scrapeStudentSchedule -> lessonsArray", lessonsArray);
+
+		return lessonsArray;
+	} catch (err) {
+		console.error(err);
+		return Promise.reject(new Error(err));
 	}
-
-	// console.log("TCL: scrapeStudentSchedule -> lessonsArray", lessonsArray);
-
-	return lessonsArray;
 };

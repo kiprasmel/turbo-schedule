@@ -16,13 +16,27 @@ export const getHtml = async (url: string): Promise<string> => {
 		// console.log("parsed", parsed);
 
 		const response = await fetch(url);
+
+		/**
+		 * See https://github.github.io/fetch#Error
+		 */
+		if (!response.ok) {
+			const err: Error = new Error(response.statusText);
+
+			console.error("Failed @ `getHtml`:", err);
+			return Promise.reject(err);
+		}
+
+		// console.log("response status:", response.status, "ok", response.ok);
+
 		const dataBuffer: Buffer = await response.buffer();
 
 		const parsedHtml: string = iconv.decode(dataBuffer, "windows-1257");
 
 		return parsedHtml;
-	} catch (error) {
-		console.error("Error! Failed to `getHtml`: " + error);
-		return Promise.reject("Failed");
+	} catch (err) {
+		/** this probably will never be reached */
+		console.error("Error! Failed to `getHtml`: ", err);
+		return Promise.reject(new Error(err));
 	}
 };
