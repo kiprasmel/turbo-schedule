@@ -21,20 +21,25 @@ const savingPathAndFile: string = savingPath + "/" + savingFilename;
 /** the thing that's actually used by the utility functions */
 
 export const getStudentsListHtml = async (baseUrl: string): Promise<string> => {
-	console.log("\n==> getStudentsListHtml:");
+	try {
+		console.log("\n==> getStudentsListHtml:");
 
-	let todaysHtml: string;
+		let todaysHtml: string;
 
-	if (fileIsAlreadySaved(savingPathAndFile)) {
-		console.log(" -> html IS saved, taking it from saved file");
-		todaysHtml = getSavedFile(savingPathAndFile);
-	} else {
-		console.log(" -> html IS NOT saved, getting it from url");
-		todaysHtml = await getHtml(baseUrl);
-		saveFile(todaysHtml, savingPath, savingFilename);
+		if (fileIsAlreadySaved(savingPathAndFile)) {
+			console.log(" -> html IS saved, taking it from saved file");
+			todaysHtml = getSavedFile(savingPathAndFile);
+		} else {
+			console.log(" -> html IS NOT saved, getting it from url");
+			todaysHtml = await getHtml(baseUrl);
+			saveFile(todaysHtml, savingPath, savingFilename);
+		}
+
+		return todaysHtml;
+	} catch (err) {
+		console.error(err);
+		return Promise.reject(new Error(err));
 	}
-
-	return todaysHtml;
 };
 
 /** TODO - only remake the symlink if the "latest" directory changed */
