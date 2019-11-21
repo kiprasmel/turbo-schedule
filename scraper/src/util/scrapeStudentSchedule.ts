@@ -8,15 +8,15 @@ import { handleScheduleRowspans } from "./handleScheduleRowspans";
 import { removeUselessTdsFromSchedule } from "./removeUselessTdsFromSchedule";
 import { saveFile, fileIsAlreadySaved } from "./htmlSaving";
 import { getYYYYMMDD } from "@turbo-schedule/common";
-import { writeJSONToFileSimple } from "./writeJSONToFile";
-import { inspect } from "util";
+// import { writeJSONToFileSimple } from "./writeJSONToFile";
+// import { inspect } from "util";
 import { extractLessonsArray } from "./extractLessons";
 import { removeCheerioesCirculars } from "./removeCheerioesCirculars";
 
 import prettier from "prettier";
 import { getSavedStudentDataAndSchedule, saveStudentDataAndSchedule } from "./saveStudentDataAndSchedule";
 
-const savingPath: string = "saved-content" + "/" + getYYYYMMDD() + "/" + "students";
+// const savingPath: string = "saved-content" + "/" + getYYYYMMDD() + "/" + "students";
 
 const extractStudentName = (scheduleItems: Array<CheerioElement>): string | undefined => {
 	try {
@@ -73,12 +73,16 @@ const prepareScheduleItems = (html: string): Array<CheerioElement> => {
 
 	// writeJSONToFileSimple(rawScheduleItems, savingPath + "/" + studentNameAndClass, "schedule-items.0-raw.json");
 
-	saveFile(
-		inspect(rawScheduleItems, { showHidden: true, showProxy: true, compact: true }),
-		// JSON.stringify(rawScheduleItems, getCircularReplacer()),
-		savingPath + "/" + studentNameAndClass,
-		"raw-schedule-items.json"
-	);
+	/**
+	 * might be useful for some debugging,
+	 * but I've never actually needed this.
+	 */
+	// // saveFile(
+	// // 	inspect(rawScheduleItems, { showHidden: true, showProxy: true, compact: true }),
+	// // 	// JSON.stringify(rawScheduleItems, getCircularReplacer()),
+	// // 	savingPath + "/" + studentNameAndClass,
+	// // 	"raw-schedule-items.json"
+	// // );
 
 	let removedCirculars = removeCheerioesCirculars(rawScheduleItems);
 
@@ -86,11 +90,12 @@ const prepareScheduleItems = (html: string): Array<CheerioElement> => {
 
 	// const prettified: string = prettier.format(stringified, { parser: "json" });
 
-	writeJSONToFileSimple(
-		removedCirculars,
-		savingPath + "/" + studentNameAndClass,
-		"schedule-items.0.5-removed-circular.json"
-	);
+	/** same here - maybe debugging, but I've never used this. */
+	// // writeJSONToFileSimple(
+	// // 	removedCirculars,
+	// // 	savingPath + "/" + studentNameAndClass,
+	// // 	"schedule-items.0.5-removed-circular.json"
+	// // );
 
 	// saveFile(
 	// 	// prettier.format(JSON.stringify(removedCirculars), { parser: "json-stringify`" }),
@@ -113,11 +118,12 @@ const prepareScheduleItems = (html: string): Array<CheerioElement> => {
 
 	scheduleItemsWithProperRowspans = removeCheerioesCirculars(scheduleItemsWithProperRowspans);
 
-	writeJSONToFileSimple(
-		scheduleItemsWithProperRowspans,
-		savingPath + "/" + studentNameAndClass,
-		"schedule-items.1-proper-rowspans.json"
-	);
+	/** same here */
+	// // writeJSONToFileSimple(
+	// // 	scheduleItemsWithProperRowspans,
+	// // 	savingPath + "/" + studentNameAndClass,
+	// // 	"schedule-items.1-proper-rowspans.json"
+	// // );
 
 	/** STEP 2 */
 
@@ -130,11 +136,12 @@ const prepareScheduleItems = (html: string): Array<CheerioElement> => {
 
 	scheduleItemsWithoutUselessTds = removeCheerioesCirculars(scheduleItemsWithoutUselessTds);
 
-	writeJSONToFileSimple(
-		scheduleItemsWithoutUselessTds,
-		savingPath + "/" + studentNameAndClass,
-		"schedule-items.2-no-useless-tds.json"
-	);
+	/** same here */
+	// // writeJSONToFileSimple(
+	// // 	scheduleItemsWithoutUselessTds,
+	// // 	savingPath + "/" + studentNameAndClass,
+	// // 	"schedule-items.2-no-useless-tds.json"
+	// // );
 
 	/** reference (todo - copy) for easier access (alias) */
 	const scheduleItems = scheduleItemsWithoutUselessTds;
