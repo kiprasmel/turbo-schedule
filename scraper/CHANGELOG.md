@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.2](https://github.com/sarpik/turbo-schedule/compare/v1.7.1...v1.7.2) (2019-11-21)
+
+
+### Bug Fixes
+
+* **scraper:** Stop saving bs & make scraper 4X FASTER!! 🌠🚀 ([13f765c](https://github.com/sarpik/turbo-schedule/commit/13f765cea3a7acbaad002acffdfd5ffdb94f7973))
+
+
+
+
+
 # [1.7.0](https://github.com/sarpik/turbo-schedule/compare/v1.6.6...v1.7.0) (2019-11-20)
 
 
