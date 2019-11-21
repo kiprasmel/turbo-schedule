@@ -1,3 +1,4 @@
+import { studentsPageURI, baseScheduleURI } from "./config";
 import { IStudent } from "./model/Student";
 
 import { getStudentsListHtml, updateLatestDir } from "./util/getStudentsListHTML";
@@ -10,16 +11,6 @@ import { IOptions } from "./options";
 
 import { move } from "fs-extra";
 
-export interface IConfig {
-	studentsPageURI: string;
-	baseScheduleURI: string;
-}
-
-const config: IConfig = {
-	studentsPageURI: "http://kpg.lt/Tvarkarastis/Index.htm",
-	baseScheduleURI: "http://kpg.lt/Tvarkarastis",
-};
-
 export const scrape = async (options: IOptions = { savePath: "saved-content" }): Promise<void> => {
 	/** TEMP - typescript fix - default params don't help -_- */
 	if (!options.savePath) {
@@ -28,9 +19,9 @@ export const scrape = async (options: IOptions = { savePath: "saved-content" }):
 
 	try {
 		console.log("\n==> scraper\n");
-		const studentsListHtml: string = await getStudentsListHtml(config.studentsPageURI);
+		const studentsListHtml: string = await getStudentsListHtml(studentsPageURI);
 
-		let studentsDataArray: Array<IStudent> = await getStudentsDataArray(studentsListHtml, config.baseScheduleURI);
+		let studentsDataArray: Array<IStudent> = await getStudentsDataArray(studentsListHtml, baseScheduleURI);
 
 		/** BEGIN testing - add limit for quick runs */
 		// studentsDataArray = studentsDataArray.splice(0, 10);
