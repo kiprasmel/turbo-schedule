@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/server",
-	"version": "1.7.0",
+	"version": "1.7.1",
 	"description": "",
 	"main": "dist/src/server.js",
 	"typings": "dist/src/server.d.ts",

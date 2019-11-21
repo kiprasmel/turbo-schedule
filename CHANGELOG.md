@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.1](https://github.com/sarpik/turbo-schedule/compare/v1.7.0...v1.7.1) (2019-11-21)
+
+
+### Reverts
+
+* Revert "refactor(server): Move `scrapedDataDirPath` into `generated/`" ([cf247f7](https://github.com/sarpik/turbo-schedule/commit/cf247f747fd72ed78b43538c41250240c33c93ff))
+
+
+
+
+
 # [1.7.0](https://github.com/sarpik/turbo-schedule/compare/v1.6.6...v1.7.0) (2019-11-20)
 
 
