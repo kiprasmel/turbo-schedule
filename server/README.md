@@ -4,8 +4,6 @@
 
 ## Development notes
 
-TODO rename `saved-content/` to `database/` (we can't right now because scraper has hard-coded stuff atm)
-
 ### Why is the `database/` folder not inside `generated/`?
 
 I've had them separated, then I tried to put `database/` into `generated/`, but there's a flaw with docker volumes that limits us from doing this:
