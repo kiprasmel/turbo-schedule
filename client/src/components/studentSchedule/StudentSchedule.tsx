@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import "./StudentSchedule.scss";
 
 import StudentListModal from "./StudentListModal";
-import { ILesson } from "../../models/Lesson";
+import { ILesson } from "@turbo-schedule/common";
 import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
 import { useRenderCount } from "../../hooks/useRenderCount";

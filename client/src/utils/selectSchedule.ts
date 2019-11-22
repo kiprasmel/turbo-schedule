@@ -1,4 +1,4 @@
-import { ILesson } from "../models/Lesson";
+import { ILesson } from "@turbo-schedule/common";
 import { getWeekdayIndex, IWeekdayIndex } from "./getWeekday";
 
 // export interface IScheduleDay {
