@@ -1,13 +1,13 @@
-import { IStudent } from "./model/Student";
+import { Student } from "./model/Student";
 import { scrapeStudentSchedule } from "./util/scrapeStudentSchedule";
 
 interface IPromiseObj<T = any> {
-	studentData: IStudent;
+	studentData: Student;
 	startedPromise: Promise<T>;
 	succeeded: boolean;
 }
 
-const startPromise = async (studentData: IStudent) => await scrapeStudentSchedule(studentData);
+const startPromise = async (studentData: Student) => await scrapeStudentSchedule(studentData);
 
 /**
  * TODO - this name is not describing this function correctly :D
@@ -16,7 +16,7 @@ const startPromise = async (studentData: IStudent) => await scrapeStudentSchedul
  * because you'll get temporarily blocked by the firewall lmao
  *
  */
-export const getAllStudentScheduleHtmlInParallel = async (studentsDataArray: Array<IStudent>): Promise<Array<any>> => {
+export const getAllStudentScheduleHtmlInParallel = async (studentsDataArray: Array<Student>): Promise<Array<any>> => {
 	let scrapableSchedulePromiseArray: Array<IPromiseObj<Array<any> | undefined>> = studentsDataArray.map(
 		(studentData) => {
 			return {
