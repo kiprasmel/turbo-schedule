@@ -1,14 +1,14 @@
 export interface ILesson {
-	isEmpty: boolean;
-	dayIndex: number;
-	timeIndex: number;
-	id: string;
+	isEmpty?: boolean;
+	dayIndex?: number;
+	timeIndex?: number;
+	id?: string;
 
-	name: string;
-	teacher: string;
-	room: string;
+	name?: string;
+	teacher?: string;
+	room?: string;
 
-	students: Array<string>;
+	students?: Array<string>;
 }
 
 export class Lesson implements ILesson {
