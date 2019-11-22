@@ -1,6 +1,6 @@
 import cheerio from "cheerio";
 
-import { IStudent } from "../model/Student";
+import { Student } from "../model/Student";
 
 import { getHtml } from "./getHtml";
 
@@ -174,7 +174,7 @@ const prepareScheduleItems = (html: string): Array<CheerioElement> => {
 	// return preparedHtml;
 };
 
-export const scrapeStudentSchedule = async (studentData: IStudent): Promise<Array<any>> => {
+export const scrapeStudentSchedule = async (studentData: Student): Promise<Array<any>> => {
 	try {
 		// console.log("\n==> scrapeStudentSchedule:");
 		const savingPathBase: string =

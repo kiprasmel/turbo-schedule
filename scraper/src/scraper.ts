@@ -1,5 +1,5 @@
 import { studentsPageURI, baseScheduleURI } from "./config";
-import { IStudent } from "./model/Student";
+import { Student } from "./model/Student";
 
 import { getStudentsListHtml, updateLatestDir } from "./util/getStudentsListHTML";
 import { getStudentsDataArray } from "./util/scrapeStudents";
@@ -21,7 +21,7 @@ export const scrape = async (options: IOptions = { savePath: "saved-content" }):
 		console.log("\n==> scraper\n");
 		const studentsListHtml: string = await getStudentsListHtml(studentsPageURI);
 
-		let studentsDataArray: Array<IStudent> = await getStudentsDataArray(studentsListHtml, baseScheduleURI);
+		let studentsDataArray: Array<Student> = await getStudentsDataArray();
 
 		/** BEGIN testing - add limit for quick runs */
 		// studentsDataArray = studentsDataArray.splice(0, 10);
