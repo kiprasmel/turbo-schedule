@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
 import Lesson, { ILessonProps } from "./Lesson";
-import { ILesson } from "../../models/Lesson";
+import { ILesson } from "@turbo-schedule/common";
 
 export interface IOneDayScheduleProps extends Omit<ILessonProps, "lesson" | "lessonIndex"> {
 	lessonsArray: Array<ILesson>;
