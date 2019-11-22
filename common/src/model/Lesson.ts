@@ -1,16 +1,27 @@
-/** TODO - move to `@turbo-schedule/common`? */
+export interface ILesson {
+	isEmpty: boolean;
+	dayIndex: number;
+	timeIndex: number;
+	id: string;
 
-export class ILesson {
+	name: string;
+	teacher: string;
+	room: string;
+
+	students: Array<string>;
+}
+
+export class Lesson implements ILesson {
+	isEmpty: boolean = true;
+	dayIndex: number = -1;
+	timeIndex: number = -1;
 	id: string = "";
 
 	name: string = "";
-	room: string = "";
 	teacher: string = "";
-	students: Array<string> = [];
+	room: string = "";
 
-	dayIndex: number = -1;
-	timeIndex: number = -1;
-	isEmpty: boolean = true;
+	students: Array<string> = [];
 
 	constructor(data?: ILesson) {
 		Object.assign(this, data);
