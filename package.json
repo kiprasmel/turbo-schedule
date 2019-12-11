@@ -8,6 +8,10 @@
 			"scraper",
 			"server",
 			"client"
+		],
+		"nohoist": [
+			"client/eslint",
+			"client/eslint/**"
 		]
 	},
 	"scripts": {
