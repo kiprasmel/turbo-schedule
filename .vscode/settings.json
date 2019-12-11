@@ -1,3 +1,21 @@
 {
-	"typescript.tsdk": "node_modules/typescript/lib"
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"eslint.workingDirectories": [
+		{
+			"directory": "./client",
+			"changeProcessCWD": true
+		},
+		{
+			"directory": "./server",
+			"changeProcessCWD": true
+		},
+		{
+			"directory": "./scraper",
+			"changeProcessCWD": true
+		},
+		{
+			"directory": "./common",
+			"changeProcessCWD": true
+		}
+	]
 }
