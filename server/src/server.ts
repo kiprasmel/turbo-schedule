@@ -56,7 +56,7 @@ serveStaticClientInProd(app);
  * this SHALL be the last middleware.
  */
 if (!isProd()) {
-	handleRequests(app);
+	handleRequests();
 }
 
 /** export the express app after it's set up - the tests use it */
