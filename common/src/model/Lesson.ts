@@ -1,29 +1,92 @@
-export interface ILesson {
-	isEmpty?: boolean;
-	dayIndex?: number;
-	timeIndex?: number;
-	id?: string;
+/* eslint-disable import/no-cycle */
+import { Student } from "./Student";
 
-	name?: string;
-	teacher?: string;
-	room?: string;
+export class NonUniqueLesson {
+	readonly id: string = "";
 
-	students?: Array<string>;
-}
+	readonly isEmpty: boolean = true;
+	readonly dayIndex: number = -1;
+	readonly timeIndex: number = -1;
 
-export class Lesson implements ILesson {
-	isEmpty: boolean = true;
-	dayIndex: number = -1;
-	timeIndex: number = -1;
-	id: string = "";
+	readonly name: string = "";
+	readonly teacher: string = "";
+	readonly room: string = "";
 
-	name: string = "";
-	teacher: string = "";
-	room: string = "";
-
-	students: Array<string> = [];
-
-	constructor(data?: ILesson) {
+	constructor(data?: Partial<NonUniqueLesson>) {
 		Object.assign(this, data);
+
+		this.id = NonUniqueLesson.createNonUniqueId(this);
+	}
+
+	/**
+	 * @note duplicates WILL exist!
+	 *
+	 * We use the `id` to merge together the duplicates
+	 * and create the "Unique" lessons (`Lesson` class below),
+	 * whom are indeed unique.
+	 */
+	// get id(): string {
+	// 	const id: string = NonUniqueLesson.createNonUniqueId(this);
+	// 	return id;
+	// }
+
+	/**
+	 * the id:
+	 * * WILL NOT BE unique, IF a {NonUniqueLesson} is passed in;
+	 * * WILL     BE unique, IF a {Lesson}          is passed in.
+	 */
+	public static createNonUniqueId(lesson: NonUniqueLesson | Lesson): string {
+		const { isEmpty, dayIndex, timeIndex, name, teacher, room } = lesson;
+
+		const id: string = `${isEmpty}/${dayIndex}/${timeIndex}/${name}/${teacher}/${room}`;
+		return id;
+	}
+
+	/**
+	 * sorts the lessons array,
+	 * first by the day index,
+	 * then by the time index.
+	 *
+	 * Earlier day / earlier time comes first.
+	 *
+	 * Won't mutate.
+	 *
+	 * TODO use `subtraction || deeper subtraction`
+	 */
+	public static sortArray = (lessons: Lesson[]): Lesson[] =>
+		[...lessons].sort((A: Lesson, B: Lesson) => {
+			if (A.dayIndex < B.dayIndex) {
+				return -1;
+			} else if (A.dayIndex > B.dayIndex) {
+				return 1;
+			} else {
+				if (A.timeIndex < B.timeIndex) {
+					return -1;
+				} else if (A.timeIndex > B.timeIndex) {
+					return 1;
+				} else return 0;
+			}
+		});
+}
+/**
+ * the "Unique" lesson
+ */
+export class Lesson extends NonUniqueLesson implements Omit<NonUniqueLesson, "nonUniqueId"> {
+	id: string;
+	students: Array<Student["id"]> = [];
+
+	constructor(data?: Partial<Lesson> | Partial<NonUniqueLesson>) {
+		super(data);
+		Object.assign(this, data);
+
+		this.id = Lesson.createUniqueId(this);
+	}
+
+	public static createUniqueId(lesson: Lesson): string {
+		/**
+		 * this id WILL be unique, by definition, since we're passing in a unique lesson.
+		 */
+		const uniqueId: string = NonUniqueLesson.createNonUniqueId(lesson);
+		return uniqueId;
 	}
 }
