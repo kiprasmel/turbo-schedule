@@ -1,6 +1,7 @@
 # Custom
 
-saved-content*/
+saved-content*/ # old, will remove later
+database*/
 /dist/
 
 # Logs
