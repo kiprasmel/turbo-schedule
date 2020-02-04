@@ -1,8 +1,12 @@
-import { IOptions } from "./options";
 import { scrape } from "./scraper";
+import { IScraperConfig, createScraperConfig } from "./config";
 
-const scraper = async (options: IOptions) => {
-	await scrape(options);
+export * from "./config";
+
+const scraper = async (outDir: string): Promise<void> => {
+	const config: IScraperConfig = createScraperConfig(outDir);
+
+	await scrape(config);
 };
 
 export default scraper;
