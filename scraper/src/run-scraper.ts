@@ -13,6 +13,6 @@
 import scraper from "./index";
 
 const argv: string[] = process.argv.splice(2);
-const savePath: string = argv[0];
+const outDir: string = argv[0];
 
-scraper({ savePath });
+scraper(outDir);
