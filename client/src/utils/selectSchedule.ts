@@ -1,4 +1,4 @@
-import { ILesson } from "@turbo-schedule/common";
+import { Lesson } from "@turbo-schedule/common";
 import { getWeekdayIndex, IWeekdayIndex } from "./getWeekday";
 
 // export interface IScheduleDay {
@@ -36,7 +36,7 @@ export type ScheduleDayKind = IScheduleDays[keyof IScheduleDays];
 
 export const scheduleDaysArray: Array<ScheduleDay> = ["Week", 0, 1, 2, 3, 4];
 
-export const selectSchedule = (scheduleByDays: Array<Array<ILesson>>, day: ScheduleDay) => {
+export const selectSchedule = (scheduleByDays: Array<Array<Lesson>>, day: ScheduleDay) => {
 	if (day === "Week") {
 		return scheduleByDays;
 	}
