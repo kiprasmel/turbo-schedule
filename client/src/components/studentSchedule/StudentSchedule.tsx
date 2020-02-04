@@ -83,7 +83,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 					return;
 				}
 
-				const scheduleByDays: Array<Array<any>> = [];
+				const scheduleByDays: Array<Array<Lesson>> = [];
 
 				lessons.forEach((lesson) => {
 					/** make sure there's always an array inside an array */
