@@ -1,0 +1,13 @@
+diff --git a/node_modules/express-oas-generator/lib/utils.js b/node_modules/express-oas-generator/lib/utils.js
+index 3749e12..5ef309d 100644
+--- a/node_modules/express-oas-generator/lib/utils.js
++++ b/node_modules/express-oas-generator/lib/utils.js
+@@ -55,8 +55,6 @@ const fillExamples = (schema, vals) => {
+   for (const prop in schema.properties) {
+     if (schema.properties[prop].type === 'object') {
+       fillExamples(schema.properties[prop], vals[prop]);
+-    } else if (schema.properties[prop].type === 'array') {
+-      schema.properties[prop].example = [vals[prop][0]];
+     } else {
+       schema.properties[prop].example = prop === 'password' ? '******' : vals[prop];
+     }
