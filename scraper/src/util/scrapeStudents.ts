@@ -1,20 +1,9 @@
 import cheerio from "cheerio";
 
-import { IStudent, extractStudent } from "../model/Student";
-import { fileIsAlreadySaved, getSavedFile } from "./htmlSaving";
-import { getYYYYMMDD } from "@turbo-schedule/common";
-import { writeJSONToFileSimple } from "./writeJSONToFile";
+import { studentsPageURI, StudentFromList } from "@turbo-schedule/common";
+import { getStudentsListHtml } from "./getStudentsListHtml";
 
-export interface IScrapesStudentDataArray {
-	html: string;
-	baseScheduleURI: string;
-}
-
-const savingPath: string = "saved-content" + "/" + getYYYYMMDD();
-const savingFilename: string = "students-data-array.json";
-const savingPathAndFile: string = savingPath + "/" + savingFilename;
-
-export const scrapeStudentsDataArray = (studentsListHtml: string, baseScheduleURI: string): Array<IStudent> => {
+const scrapeStudentList = (studentsListHtml: string): StudentFromList[] => {
 	const $ = cheerio.load(studentsListHtml);
 
 	// const student = $("font a")[300];
@@ -65,8 +54,9 @@ export const scrapeStudentsDataArray = (studentsListHtml: string, baseScheduleUR
 	// const students = $("font a").toArray();
 	// console.log(students);
 
-	let studentsDataArray: Array<IStudent> = students.map(
-		(rawStudentHtml: CheerioElement): IStudent => extractStudent(rawStudentHtml, baseScheduleURI)
+	const studentsDataArray: StudentFromList[] = students.map(
+		({ attribs, children }: CheerioElement): StudentFromList =>
+			new StudentFromList({ originalHref: attribs.href, text: children[0].data || "" })
 	);
 
 	// console.log(studentsDataArray);
@@ -75,31 +65,13 @@ export const scrapeStudentsDataArray = (studentsListHtml: string, baseScheduleUR
 	return studentsDataArray;
 };
 
-export const getStudentsDataArray = async (
-	studentsListHtml: string,
-	baseScheduleURI: string
-): Promise<Array<IStudent>> => {
-	console.log("\n==> getStudentsDataArray:");
+/**
+ * studentsWithoutLessons
+ */
+export const getStudentList = async (): Promise<StudentFromList[]> => {
+	const studentsListHtml: string = await getStudentsListHtml(studentsPageURI);
 
-	let studentsDataArray: Array<IStudent> = [];
+	const studentList: StudentFromList[] = scrapeStudentList(studentsListHtml);
 
-	if (fileIsAlreadySaved(savingPathAndFile)) {
-		console.log(" -> json IS saved, taking it from saved file");
-
-		studentsDataArray = JSON.parse(getSavedFile(savingPathAndFile));
-
-		// 	// const parsedData = JSON.parse(getSavedFile(savingPathAndFile));
-
-		// 	// Object.keys(parsedData).forEach((key) => {
-		// 	// 	studentsDataArray.push(parsedData[key]);
-		// 	// });
-	} else {
-		console.log(" -> json IS NOT saved, getting it from studentsListHtml");
-
-		studentsDataArray = scrapeStudentsDataArray(studentsListHtml, baseScheduleURI);
-
-		writeJSONToFileSimple(studentsDataArray, savingPath, savingFilename);
-	}
-
-	return studentsDataArray;
+	return studentList;
 };
