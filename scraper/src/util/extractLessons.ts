@@ -1,27 +1,18 @@
-const removeNewlineAndTrim = (content: string) => {
-	return content.replace("\n", "").trim();
-};
+import { NonUniqueLesson } from "@turbo-schedule/common";
 
-const createLessonId = (dayIndex: number, timeIndex: number, lessonName: string | null): string => {
-	return `day:${dayIndex}/time:${timeIndex}/name:${lessonName}`;
-};
+const removeNewlineAndTrim = (content: string) => content.replace("\n", "").trim();
 
-export const extractLesson = (scheduleItem: CheerioElement, dayIndex: number, timeIndex: number) => {
+const extractLesson = (
+	scheduleItem: CheerioElement,
+	dayIndex: number,
+	timeIndex: number
+): NonUniqueLesson | undefined => {
 	/** the schedule item was useless and was deleted, so skip it */
 	if (!scheduleItem) {
-		return null;
+		return undefined;
 	}
 
-	// const idBase: string = `day-${dayIndex}/time-${timeIndex}`;
-
-	// console.log("scheduleItem", scheduleItem.children[0].children);
-
-	// const lessonItem = scheduleItem.children[0].children[0]; //.children[0];
-	// const lessonItem = scheduleItem.children[0].children[0].children[0].data;
-
 	const itemWithClassNameTeacherAndRoom = scheduleItem.children[0] /** always skip this */.children;
-
-	/** */
 
 	const unsafeLessonName = itemWithClassNameTeacherAndRoom[0].children;
 	/** skip `[1]` */
@@ -30,19 +21,18 @@ export const extractLesson = (scheduleItem: CheerioElement, dayIndex: number, ti
 	const unsafeRoomName = itemWithClassNameTeacherAndRoom[4];
 
 	if (!unsafeLessonName || !unsafeTeacherName || !unsafeRoomName) {
-		let lesson = {
+		/**
+		 * TODO - still provide the values even if more than 0 of them
+		 * are falsy.
+		 *
+		 * TS says they're `CheerioElement[]`, and I don't remember
+		 * if it's possible for them to become falsy.
+		 */
+		const lesson: NonUniqueLesson = new NonUniqueLesson({
 			isEmpty: true,
 			dayIndex: dayIndex,
 			timeIndex: timeIndex,
-			id: "",
-			name: "",
-			teacher: "",
-			room: "",
-		};
-
-		lesson.id = createLessonId(lesson.dayIndex, lesson.timeIndex, lesson.name);
-
-		// console.log("\nlesson", lesson);
+		});
 
 		return lesson;
 	}
@@ -57,17 +47,14 @@ export const extractLesson = (scheduleItem: CheerioElement, dayIndex: number, ti
 
 	/** */
 
-	let lesson = {
+	const lesson: NonUniqueLesson = new NonUniqueLesson({
 		isEmpty: false,
 		dayIndex: dayIndex,
 		timeIndex: timeIndex,
-		id: "",
 		name: removeNewlineAndTrim(lessonName),
 		teacher: removeNewlineAndTrim(teacherName),
 		room: removeNewlineAndTrim(roomName),
-	};
-
-	lesson.id = createLessonId(lesson.dayIndex, lesson.timeIndex, lesson.name);
+	});
 
 	// Object.keys(lesson).map((key) => (lesson[key] = removeNewlineAndTrim(lesson[key])));
 
@@ -76,7 +63,7 @@ export const extractLesson = (scheduleItem: CheerioElement, dayIndex: number, ti
 	return lesson;
 };
 
-export const extractLessonsArray = (scheduleItemsArray: Array<CheerioElement>) => {
+export const extractLessonsArray = (scheduleItemsArray: Array<CheerioElement>): NonUniqueLesson[] => {
 	// scheduleItemsArray = scheduleItemsArray.splice(0, 15);
 	// const lessonsArray: Array<any> = scheduleItemsArray.map((scheduleItem, index) => extractLesson(scheduleItem, index));
 
@@ -101,14 +88,22 @@ export const extractLessonsArray = (scheduleItemsArray: Array<CheerioElement>) =
 	const howManyWorkdays: number = 5;
 	const howManyLessonsMax: number = 9; /** todo automatic */
 
-	const extractedLessonsArray: Array<any> = [];
+	const extractedLessonsArray: Array<NonUniqueLesson> = [];
 
 	/** go NOT from left to right & down, but from TOP to bottom & left */
 	for (let workDay = 0; workDay < howManyWorkdays; ++workDay) {
 		for (let lessonTime = 0; lessonTime < howManyLessonsMax; ++lessonTime) {
 			const lessonIndex = workDay + lessonTime * howManyWorkdays;
 
-			const extractedLesson = extractLesson(scheduleItemsArray[lessonIndex], workDay, lessonTime);
+			const extractedLesson: NonUniqueLesson | undefined = extractLesson(
+				scheduleItemsArray[lessonIndex],
+				workDay,
+				lessonTime
+			);
+
+			if (!extractedLesson) {
+				continue;
+			}
 
 			extractedLessonsArray.push(extractedLesson);
 		}
