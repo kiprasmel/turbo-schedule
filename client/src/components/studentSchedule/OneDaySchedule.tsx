@@ -1,10 +1,10 @@
 import React, { FC } from "react";
 
-import Lesson, { ILessonProps } from "./Lesson";
-import { ILesson } from "@turbo-schedule/common";
+import LessonItem, { LessonProps } from "./Lesson";
+import { Lesson } from "@turbo-schedule/common";
 
-export interface IOneDayScheduleProps extends Omit<ILessonProps, "lesson" | "lessonIndex"> {
-	lessonsArray: Array<ILesson>;
+export interface IOneDayScheduleProps extends Omit<LessonProps, "lesson" | "lessonIndex"> {
+	lessonsArray: Array<Lesson>;
 
 	// ulProps: React.AllHTMLAttributes<HTMLUListElement>;
 	// rest: any /** TODO like `CloseBtn` */;
@@ -18,7 +18,7 @@ const OneDaySchedule: FC<IOneDayScheduleProps> = ({
 	return (
 		<ul>
 			{lessonsArray.map((lesson, index) => (
-				<Lesson
+				<LessonItem
 					key={lesson.id}
 					lessonIndex={index}
 					lesson={lesson}

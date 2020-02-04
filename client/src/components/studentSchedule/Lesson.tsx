@@ -5,19 +5,19 @@ import { useRenderCount } from "../../hooks/useRenderCount";
 
 import { getLessonTimesFormatted, isLessonHappeningNow } from "../../utils/getLessonTimes";
 
-import { ILesson } from "@turbo-schedule/common";
+import { Lesson } from "@turbo-schedule/common";
 
 import assets from "../../assets";
 const { lessonLogo, classRoomLogo, studentLogo, teacherLogo, clockLogo } = assets;
 
-export interface ILessonProps {
+export interface LessonProps {
 	lessonIndex: number;
-	lesson: ILesson;
-	handleLessonMouseClick: (e: React.MouseEvent, lesson: ILesson) => any;
-	handleLessonKeyboardClick: (e: React.KeyboardEvent, lesson: ILesson) => any;
+	lesson: Lesson;
+	handleLessonMouseClick: (e: React.MouseEvent, lesson: Lesson) => any;
+	handleLessonKeyboardClick: (e: React.KeyboardEvent, lesson: Lesson) => any;
 }
 
-const Lesson: FC<ILessonProps> = React.memo(
+const LessonItem: FC<LessonProps> = React.memo(
 	({ lessonIndex, lesson, handleLessonMouseClick, handleLessonKeyboardClick }) => {
 		useRenderCount("lesson");
 
@@ -75,4 +75,4 @@ const Lesson: FC<ILessonProps> = React.memo(
 	}
 );
 
-export default Lesson;
+export default LessonItem;
