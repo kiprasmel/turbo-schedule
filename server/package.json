@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/server",
-	"version": "1.7.3",
+	"version": "2.0.0",
 	"description": "",
 	"main": "dist/src/server.js",
 	"typings": "dist/src/server.d.ts",
@@ -24,8 +24,8 @@
 		"build:docs:prod": "        node        ./dist/script/generate-openapi-docs.js   # depends on `build:ts`"
 	},
 	"dependencies": {
-		"@turbo-schedule/common": "^1.6.4",
-		"@turbo-schedule/scraper": "^1.7.2",
+		"@turbo-schedule/common": "^2.0.0",
+		"@turbo-schedule/scraper": "^2.0.0",
 		"@types/cors": "^2.8.6",
 		"@types/cron": "^1.7.1",
 		"@types/express": "^4.17.2",

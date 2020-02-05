@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/sarpik/turbo-schedule/compare/v1.7.3...v2.0.0) (2020-02-05)
+
+
+### Bug Fixes
+
+* (revertable) Temporarily stop using `prettier` to avoid CRA errors ([caf8e52](https://github.com/sarpik/turbo-schedule/commit/caf8e52c832402cddff5628a281db806e1125a1d))
+* **common:** Add required dependencies to package.json ([a6729d8](https://github.com/sarpik/turbo-schedule/commit/a6729d83c07c52ada49df1a38b7adb72cd15edf8))
+* **common:** Use dynamic imports to avoid errors in react ([47abfe3](https://github.com/sarpik/turbo-schedule/commit/47abfe3376706935f873c0c592660339fb74872c))
+
+
+### Features
+
+* **common:** Create `applyMixins` util (from ts, for ts) ([adf8f31](https://github.com/sarpik/turbo-schedule/commit/adf8f3199a3292eafc2a38efe022c79522eb18c0))
+* **common:** Create `toJson` util ([8a81a15](https://github.com/sarpik/turbo-schedule/commit/8a81a156a7af146a2a9c244608736e29b0e5eace))
+* **common:** Create `writeToSingleFile(Sync)` utils ([9049b6b](https://github.com/sarpik/turbo-schedule/commit/9049b6be68b91f7041ef8dcda04878b0ef76811f))
+* **common:** Experiment with different ways of creating models ([f364ca7](https://github.com/sarpik/turbo-schedule/commit/f364ca7886f7a0d12880d71517f8d03bda5fc662))
+* **common:** Improve the sh1t outta `Student` model! ([d385e8f](https://github.com/sarpik/turbo-schedule/commit/d385e8fe638529b7db76084f555d22f5b0710002))
+* **common:** Improve the shoes outta `Lesson` model! ([9424abc](https://github.com/sarpik/turbo-schedule/commit/9424abcd79b02863ec6a50bdd15bb3f1185b6f2e))
+
+
+### Reverts
+
+* Revert "feat(common): Experiment with different ways of creating models" ([71d308f](https://github.com/sarpik/turbo-schedule/commit/71d308f5c2001f231b686234fe1a99d82099d799))
+
+
+
+
+
 ## [1.6.4](https://github.com/sarpik/turbo-schedule/compare/v1.6.3...v1.6.4) (2019-11-14)
 
 **Note:** Version bump only for package @turbo-schedule/common

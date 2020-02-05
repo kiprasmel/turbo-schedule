@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/sarpik/turbo-schedule/compare/v1.7.3...v2.0.0) (2020-02-05)
+
+
+### Bug Fixes
+
+* **client:** Update react to `16.12` ([e597761](https://github.com/sarpik/turbo-schedule/commit/e59776113cf7c9a97b92eb7cdaaefa59dbb855e4))
+* **client:** Update tsconfig to reference "../common" pkg ([71a55e9](https://github.com/sarpik/turbo-schedule/commit/71a55e9e2525bc8cb3abab86e2654b9eff43fc76))
+* **client:** Use `?.` to access potentially undefined property ([91210d3](https://github.com/sarpik/turbo-schedule/commit/91210d336f36872e68b6929de8a8653519f7a14a))
+
+
+
+
+
 ## [1.6.4](https://github.com/sarpik/turbo-schedule/compare/v1.6.3...v1.6.4) (2019-11-14)
 
 **Note:** Version bump only for package @turbo-schedule/client

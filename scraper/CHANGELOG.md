@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/sarpik/turbo-schedule/compare/v1.7.3...v2.0.0) (2020-02-05)
+
+
+### Features
+
+* **common:** Improve the sh1t outta `Student` model! ([d385e8f](https://github.com/sarpik/turbo-schedule/commit/d385e8fe638529b7db76084f555d22f5b0710002))
+* **scraper:** Create `memoize` util... ([8f4de3e](https://github.com/sarpik/turbo-schedule/commit/8f4de3e19e81a2b3ec09e6e94d91759b205f62de))
+* **scraper:** Revamp `config` - single source of truth ([fc9a1f0](https://github.com/sarpik/turbo-schedule/commit/fc9a1f06ff45fb3b37404c81f34947e508a68716))
+
+
+### Reverts
+
+* Revert "feat(scraper): Create `memoize` util..." ([8293256](https://github.com/sarpik/turbo-schedule/commit/8293256b1a024442e32b9542e0f18a05fe129c34))
+
+
+
+
+
 ## [1.7.2](https://github.com/sarpik/turbo-schedule/compare/v1.7.1...v1.7.2) (2019-11-21)
 
 

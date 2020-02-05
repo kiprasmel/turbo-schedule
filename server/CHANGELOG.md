@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/sarpik/turbo-schedule/compare/v1.7.3...v2.0.0) (2020-02-05)
+
+
+### Bug Fixes
+
+* **server:** Create a little hack to copy `openAPI.json` once building for production ([9d0b2ab](https://github.com/sarpik/turbo-schedule/commit/9d0b2abd8fa82fcd2679525db86bd37def05e2da))
+* **server:** Update npm scripts to properly separate dev vs prod environments ([0e71458](https://github.com/sarpik/turbo-schedule/commit/0e714586aa70be514363aef24f9277c155ef7130))
+
+
+
+
+
 ## [1.7.3](https://github.com/sarpik/turbo-schedule/compare/v1.7.2...v1.7.3) (2019-12-27)
 
 

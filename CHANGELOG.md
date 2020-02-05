@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/sarpik/turbo-schedule/compare/v1.7.3...v2.0.0) (2020-02-05)
+
+
+### Bug Fixes
+
+* (revertable) Temporarily stop using `prettier` to avoid CRA errors ([caf8e52](https://github.com/sarpik/turbo-schedule/commit/caf8e52c832402cddff5628a281db806e1125a1d))
+* **ci:** Update build step - use `yarn build:prod` script ([69c13da](https://github.com/sarpik/turbo-schedule/commit/69c13dace279843e5916b04d32bf5f7487aaa07b))
+* **client:** Update react to `16.12` ([e597761](https://github.com/sarpik/turbo-schedule/commit/e59776113cf7c9a97b92eb7cdaaefa59dbb855e4))
+* **client:** Update tsconfig to reference "../common" pkg ([71a55e9](https://github.com/sarpik/turbo-schedule/commit/71a55e9e2525bc8cb3abab86e2654b9eff43fc76))
+* **client:** Use `?.` to access potentially undefined property ([91210d3](https://github.com/sarpik/turbo-schedule/commit/91210d336f36872e68b6929de8a8653519f7a14a))
+* **common:** Add required dependencies to package.json ([a6729d8](https://github.com/sarpik/turbo-schedule/commit/a6729d83c07c52ada49df1a38b7adb72cd15edf8))
+* **common:** Use dynamic imports to avoid errors in react ([47abfe3](https://github.com/sarpik/turbo-schedule/commit/47abfe3376706935f873c0c592660339fb74872c))
+* **docs:** Use proper npm scripts in README's installation guide ([d10da37](https://github.com/sarpik/turbo-schedule/commit/d10da37824b5f7ff155391926fc872b85fb8752a))
+* **root:** Add missing `&&` between 2 npm scripts 🚀 lol ([3c821ac](https://github.com/sarpik/turbo-schedule/commit/3c821acf4a1c071ad6f1e9e59f6f6d12135b0814))
+* **root:** Update npm scripts to properly separate dev vs prod environments ([4b6f5f8](https://github.com/sarpik/turbo-schedule/commit/4b6f5f83ce212e0d27d02011604c32070e125e43))
+* **server:** Create a little hack to copy `openAPI.json` once building for production ([9d0b2ab](https://github.com/sarpik/turbo-schedule/commit/9d0b2abd8fa82fcd2679525db86bd37def05e2da))
+* **server:** Patch `express-oas-generator` to NOT keep only 1 example of an array ([2bd67ad](https://github.com/sarpik/turbo-schedule/commit/2bd67ad6a632420f0b0c4a1da13b4b59571cf957)), closes [/github.com/mpashkovskiy/express-oas-generator/issues/37#issuecomment-582141420](https://github.com//github.com/mpashkovskiy/express-oas-generator/issues/37/issues/issuecomment-582141420)
+* **server:** Update npm scripts to properly separate dev vs prod environments ([0e71458](https://github.com/sarpik/turbo-schedule/commit/0e714586aa70be514363aef24f9277c155ef7130))
+
+
+### Features
+
+* **common:** Create `applyMixins` util (from ts, for ts) ([adf8f31](https://github.com/sarpik/turbo-schedule/commit/adf8f3199a3292eafc2a38efe022c79522eb18c0))
+* **common:** Create `toJson` util ([8a81a15](https://github.com/sarpik/turbo-schedule/commit/8a81a156a7af146a2a9c244608736e29b0e5eace))
+* **common:** Create `writeToSingleFile(Sync)` utils ([9049b6b](https://github.com/sarpik/turbo-schedule/commit/9049b6be68b91f7041ef8dcda04878b0ef76811f))
+* **common:** Experiment with different ways of creating models ([f364ca7](https://github.com/sarpik/turbo-schedule/commit/f364ca7886f7a0d12880d71517f8d03bda5fc662))
+* **common:** Improve the sh1t outta `Student` model! ([d385e8f](https://github.com/sarpik/turbo-schedule/commit/d385e8fe638529b7db76084f555d22f5b0710002))
+* **common:** Improve the shoes outta `Lesson` model! ([9424abc](https://github.com/sarpik/turbo-schedule/commit/9424abcd79b02863ec6a50bdd15bb3f1185b6f2e))
+* **scraper:** Create `memoize` util... ([8f4de3e](https://github.com/sarpik/turbo-schedule/commit/8f4de3e19e81a2b3ec09e6e94d91759b205f62de))
+* **scraper:** Revamp `config` - single source of truth ([fc9a1f0](https://github.com/sarpik/turbo-schedule/commit/fc9a1f06ff45fb3b37404c81f34947e508a68716))
+
+
+### Reverts
+
+* Revert "feat(scraper): Create `memoize` util..." ([8293256](https://github.com/sarpik/turbo-schedule/commit/8293256b1a024442e32b9542e0f18a05fe129c34))
+* Revert "feat(common): Experiment with different ways of creating models" ([71d308f](https://github.com/sarpik/turbo-schedule/commit/71d308f5c2001f231b686234fe1a99d82099d799))
+
+
+
+
+
 ## [1.7.3](https://github.com/sarpik/turbo-schedule/compare/v1.7.2...v1.7.3) (2019-12-27)
 
 
