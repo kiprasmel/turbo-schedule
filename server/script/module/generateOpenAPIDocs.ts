@@ -11,7 +11,7 @@
  *
  */
 
-import { OpenAPIV3 } from "openapi-types"
+import { OpenAPIV3 } from "openapi-types";
 import fs from "fs-extra";
 import { execSync } from "child_process";
 

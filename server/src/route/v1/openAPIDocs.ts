@@ -2,7 +2,7 @@ import fs from "fs-extra";
 import { RequestHandler } from "express";
 
 import { openAPIFilePath } from "../../config";
-import { isProd } from "../../../src/util/isProd";
+import { isProd } from "../../util/isProd";
 
 /** read initially (@note - wont update until you restart!) */
 

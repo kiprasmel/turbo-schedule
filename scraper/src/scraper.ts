@@ -80,7 +80,7 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 				async (finalStudents: Student[]) =>
 					await Promise.all(
 						finalStudents.map(async (student) => {
-							writeToSingleFile(student, path.join(config.studentsDirPath, student.text + ".json"));
+							writeToSingleFile(student, path.join(config.studentsDirPath, `${student.text}.json`));
 							return student;
 						})
 					)
@@ -93,6 +93,5 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		return;
 	} catch (err) {
 		console.error("\nError! \n==> `@turbo-schedule/scraper`\n -> function `scrape`", err);
-		return;
 	}
 };

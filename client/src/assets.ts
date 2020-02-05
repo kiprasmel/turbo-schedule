@@ -16,13 +16,13 @@ export const relativeAssetPaths = {
 	clockLogo: "logo/clock.png",
 };
 
-let assets: typeof relativeAssetPaths = { ...relativeAssetPaths };
+const assets: typeof relativeAssetPaths = { ...relativeAssetPaths };
 
 /** create full asset urls */
 Object.entries(relativeAssetPaths).forEach((assetPath) => {
 	const [key, value] = assetPath;
 
-	const fullAssetUrl: string = baseAssetsUrl + "/" + value;
+	const fullAssetUrl: string = `${baseAssetsUrl}/${value}`;
 
 	assets[key as keyof typeof assets] = fullAssetUrl;
 });

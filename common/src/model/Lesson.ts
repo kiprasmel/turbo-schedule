@@ -57,15 +57,17 @@ export class NonUniqueLesson {
 		[...lessons].sort((A: Lesson, B: Lesson) => {
 			if (A.dayIndex < B.dayIndex) {
 				return -1;
-			} else if (A.dayIndex > B.dayIndex) {
-				return 1;
-			} else {
-				if (A.timeIndex < B.timeIndex) {
-					return -1;
-				} else if (A.timeIndex > B.timeIndex) {
-					return 1;
-				} else return 0;
 			}
+			if (A.dayIndex > B.dayIndex) {
+				return 1;
+			}
+			if (A.timeIndex < B.timeIndex) {
+				return -1;
+			}
+			if (A.timeIndex > B.timeIndex) {
+				return 1;
+			}
+			return 0;
 		});
 }
 /**
@@ -73,6 +75,7 @@ export class NonUniqueLesson {
  */
 export class Lesson extends NonUniqueLesson implements Omit<NonUniqueLesson, "nonUniqueId"> {
 	id: string;
+
 	students: Array<Student["id"]> = [];
 
 	constructor(data?: Partial<Lesson> | Partial<NonUniqueLesson>) {

@@ -25,13 +25,13 @@
  *
  */
 export const handleScheduleRowspans = (scheduleItemsReference: Array<CheerioElement>, tableColumnCount: number) => {
-	let scheduleItems = [...scheduleItemsReference];
+	const scheduleItems = [...scheduleItemsReference];
 	// console.log("before length", scheduleItems.length);
 
 	for (let index = 0; index < scheduleItems.length; ++index) {
-		let current = scheduleItems[index];
+		const current = scheduleItems[index];
 
-		const rowspanAttr = (!!current.attribs["rowspan"] && Number(current.attribs["rowspan"])) || null;
+		const rowspanAttr = (!!current.attribs.rowspan && Number(current.attribs.rowspan)) || null;
 
 		if (rowspanAttr) {
 			// console.log("rowspan!", rowspanAttr, "index", index);
@@ -46,8 +46,8 @@ export const handleScheduleRowspans = (scheduleItemsReference: Array<CheerioElem
 			const newRowspanAttr: string = (rowspanAttr - 1).toString();
 
 			if (Number(newRowspanAttr) > 1) {
-				current.attribs["rowspan"] = newRowspanAttr;
-			} else delete current.attribs["rowspan"];
+				current.attribs.rowspan = newRowspanAttr;
+			} else delete current.attribs.rowspan;
 
 			// console.log(
 			// 	"new current",

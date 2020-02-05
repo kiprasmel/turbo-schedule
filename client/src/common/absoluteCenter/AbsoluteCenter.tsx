@@ -22,12 +22,10 @@ import React from "react";
 // 	);
 // };
 
-const AbsoluteCenter = ({ children }: React.Props<any>) => {
-	return (
-		<div style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-			<div style={{ overflow: "auto", resize: "both" }}>{children}</div>
-		</div>
-	);
-};
+const AbsoluteCenter = ({ children }: React.Props<any>) => (
+	<div style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+		<div style={{ overflow: "auto", resize: "both" }}>{children}</div>
+	</div>
+);
 
 export default AbsoluteCenter;

@@ -17,8 +17,8 @@ export interface ITranslations {
 }
 
 export const translations: ITranslations = {
-	en: en,
-	lt: lt,
+	en,
+	lt,
 };
 
 export type ILang = keyof ITranslations;

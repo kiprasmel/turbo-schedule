@@ -38,7 +38,7 @@ const StudentList = () => {
 			<AutoCompleteInput
 				autoCompletionsArray={studentsList}
 				handleAutoCompletionSelection={handleAutoCompletionSelection}
-				autoFocus={true}
+				autoFocus
 			/>
 		</div>
 	);

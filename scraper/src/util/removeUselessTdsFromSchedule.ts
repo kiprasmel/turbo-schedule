@@ -18,7 +18,7 @@ export const removeUselessTdsFromSchedule = (
 	const workdayIndexes = [2, 3, 4, 5, 6];
 
 	const firstLessonTimeIndex: number = 7;
-	let lessonTimeIndexes: Array<number> = [];
+	const lessonTimeIndexes: Array<number> = [];
 
 	for (let i = 0; i < maxLessonCount; ++i) {
 		lessonTimeIndexes.push(firstLessonTimeIndex + i * tableColumnCount);

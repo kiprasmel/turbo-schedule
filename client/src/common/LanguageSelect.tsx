@@ -1,8 +1,8 @@
 import React, { FC, useState, useContext } from "react";
 
 import { CurrentLangContext, ICurrentLangContextValue } from "../components/currentLangContext/currentLangContext";
+import { ILang } from "../i18n/i18n";
 import { useTranslation } from "../i18n/useTranslation";
-import { ILang } from "i18n/i18n";
 
 interface ILanguageSelectProps {
 	// handleClick: (e: React.MouseEvent, language: ILang) => any;

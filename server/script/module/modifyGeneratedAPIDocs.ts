@@ -33,11 +33,10 @@ export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPIV3.D
 		if (!fs.pathExistsSync(savePathAndFilename)) {
 			console.error("  ! openAPI file does not exist in save path!", savePathAndFilename);
 			return undefined;
-		} else {
-			console.log("  -> path exists: `%s`", savePathAndFilename);
 		}
+		console.log("  -> path exists: `%s`", savePathAndFilename);
 
-		let generatedDocs: OpenAPIV3.Document = fs.readJSONSync(savePathAndFilename, { encoding: "utf-8" });
+		const generatedDocs: OpenAPIV3.Document = fs.readJSONSync(savePathAndFilename, { encoding: "utf-8" });
 
 		generatedDocs.info.title = "turbo-schedule's REST API";
 		generatedDocs.info.version = `v1`;
@@ -58,7 +57,7 @@ export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPIV3.D
 		 * We'll implement this @ express-oas-generator soon,
 		 * so this is fine.
 		 */
-		const generatedDocsV2: OpenAPIV2.Document = generatedDocs as unknown as OpenAPIV2.Document;
+		const generatedDocsV2: OpenAPIV2.Document = (generatedDocs as unknown) as OpenAPIV2.Document;
 
 		delete generatedDocsV2.host;
 
@@ -68,7 +67,7 @@ export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPIV3.D
 		console.log("  -> new  generated openAPI docs:\n", generatedDocsV2);
 
 		/** TODO */
-		return generatedDocsV2 as unknown as OpenAPIV3.Document;
+		return (generatedDocsV2 as unknown) as OpenAPIV3.Document;
 	} catch (err) {
 		console.error("  ! Error:\n", err);
 		return undefined;
@@ -79,14 +78,14 @@ export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPIV3.D
 
 const docsServers: OpenAPIV3.ServerObject[] = [
 	{
-		"url": "https://ts.kipras.org",
+		url: "https://ts.kipras.org",
 		// "description": "Main server"
 	},
 	// {
 	// 	"url": "https://tt.kipras.org",
 	// 	// "description": "Main server, just on a different sub-domain using a CNAME"
 	// }
-]
+];
 
 /**
  * Having a `html` document did not turn out great lmao

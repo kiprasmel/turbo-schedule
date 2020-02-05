@@ -18,44 +18,42 @@ import { logCoolStuff } from "./utils/logCoolStuff";
 
 logCoolStuff();
 
-const App: FC = () => {
-	return (
-		<>
-			<CurrentLangContextProvider>
-				<div className="App">
-					{/* wrap before footer */}
-					<div style={{ minHeight: "100vh" }}>
-						<Header />
-						<Router history={history}>
-							<Switch>
-								<Route exact path="/" component={Landing} />
-								<Route exact path="/:studentName" component={StudentSchedule} />
+const App: FC = () => (
+	<>
+		<CurrentLangContextProvider>
+			<div className="App">
+				{/* wrap before footer */}
+				<div style={{ minHeight: "100vh" }}>
+					<Header />
+					<Router history={history}>
+						<Switch>
+							<Route exact path="/" component={Landing} />
+							<Route exact path="/:studentName" component={StudentSchedule} />
 
-								{/* BACKWARDS-COMPATIBILITY -- REMOVE LATER */}
-								<Route exact path="/student/:studentName" component={StudentSchedule} />
-							</Switch>
-						</Router>
-					</div>
-
-					<Footer />
+							{/* BACKWARDS-COMPATIBILITY -- REMOVE LATER */}
+							<Route exact path="/student/:studentName" component={StudentSchedule} />
+						</Switch>
+					</Router>
 				</div>
-			</CurrentLangContextProvider>
-		</>
 
-		// <div className="App">
-		// 	<Landing />
+				<Footer />
+			</div>
+		</CurrentLangContextProvider>
+	</>
 
-		// 	{/* <header className="App-header">
-		// 		<img src={logo} className="App-logo" alt="logo" />
-		// 		<p>
-		// 			Edit <code>src/App.tsx</code> and save to reload.
-		// 		</p>
-		// 		<a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-		// 			Learn React
-		// 		</a>
-		// 	</header> */}
-		// </div>
-	);
-};
+	// <div className="App">
+	// 	<Landing />
+
+	// 	{/* <header className="App-header">
+	// 		<img src={logo} className="App-logo" alt="logo" />
+	// 		<p>
+	// 			Edit <code>src/App.tsx</code> and save to reload.
+	// 		</p>
+	// 		<a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
+	// 			Learn React
+	// 		</a>
+	// 	</header> */}
+	// </div>
+);
 
 export default App;

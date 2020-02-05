@@ -1,9 +1,9 @@
-import { request, Response } from "./utils";
 import { IEmail, Email } from "@turbo-schedule/common";
+import { request, Response } from "./utils";
 
 describe("/email API", () => {
 	it("should accept a new email & return it back", async () => {
-		const email: string = new Date().getTime() + ".test@kipras.org";
+		const email: string = `${new Date().getTime()}.test@kipras.org`;
 
 		const res: Response = await request.post(`/api/v1/email`).send({ email });
 
@@ -14,12 +14,12 @@ describe("/email API", () => {
 		expect(res.body.emailEntry).toHaveProperty("email");
 		expect(res.body.emailEntry).toHaveProperty("ip");
 
-		const looselyExpectedObj: IEmail = { email: email };
+		const looselyExpectedObj: IEmail = { email };
 		expect(res.body.emailEntry).toMatchObject(looselyExpectedObj);
 	});
 
 	it("should not accept a duplicate email & should return the old one", async () => {
-		const email: string = new Date().getTime() + ".test@kipras.org";
+		const email: string = `${new Date().getTime()}.test@kipras.org`;
 
 		const makeRequest = async (): Promise<Response> => await request.post(`/api/v1/email`).send({ email });
 
@@ -29,7 +29,7 @@ describe("/email API", () => {
 		expect(res1.status).toBe(200);
 		expect(res2.status).toBe(403);
 
-		const expectedObj: Email = new Email({ email: email });
+		const expectedObj: Email = new Email({ email });
 		expect(res2.body).toMatchObject({ emailEntry: expectedObj, message: "Email already exists" });
 	});
 

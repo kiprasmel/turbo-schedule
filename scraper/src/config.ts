@@ -54,7 +54,7 @@ export const createScraperConfig = (outDir: string = defaultOutDir): IScraperCon
 	const studentsFilePath: string = join(latestScrapedDataDirPath, "students.json");
 	const uniqueLessonsFilePath: string = join(latestScrapedDataDirPath, "lessons.json");
 	const studentsDirPath: string = join(latestScrapedDataDirPath, "students");
-	const getStudentFilePath = (studentName: string): string => join(studentsDirPath, studentName + ".json");
+	const getStudentFilePath = (studentName: string): string => join(studentsDirPath, `${studentName}.json`);
 	/** END porting from server */
 
 	return {

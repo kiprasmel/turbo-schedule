@@ -31,7 +31,7 @@ router.get("/", async (_req, res, next) => {
 			encoding: "utf-8",
 		});
 
-		res.json({ students: students });
+		res.json({ students });
 		return !isProd() ? next() : res.end();
 	} catch (err) {
 		console.error(err);
@@ -59,18 +59,18 @@ router.get("/:studentName", async (req, res, next) => {
 			const message: string = `Student not found (${studentName}) (${studentFilePath})`;
 
 			console.warn(message);
-			res.status(404).json({ student: student, message });
+			res.status(404).json({ student, message });
 
 			return !isProd() ? next(message) : res.end();
 		}
 
 		student = { ...student, ...(await fs.readJSON(studentFilePath, { encoding: "utf-8" })) };
 
-		res.json({ student: student });
+		res.json({ student });
 		return !isProd() ? next() : res.end();
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ student: student, message: err });
+		res.status(500).json({ student, message: err });
 		return !isProd() ? next(err) : res.end();
 	}
 });

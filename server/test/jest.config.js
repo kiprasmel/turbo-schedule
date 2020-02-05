@@ -3,15 +3,15 @@
  * https://jestjs.io/docs/en/configuration
  */
 
-const { defaults } = require('jest-config');
+const { defaults } = require("jest-config");
 
 module.exports = {
 	...defaults,
 	transform: {
-		"^.+\\.tsx?$": "ts-jest"
+		"^.+\\.tsx?$": "ts-jest",
 	},
-	moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
-	"testEnvironment": "node",
+	moduleFileExtensions: [...defaults.moduleFileExtensions, "ts", "tsx"],
+	testEnvironment: "node",
 	globalSetup: "./setup.ts",
 	globalTeardown: "./teardown.ts",
-}
+};

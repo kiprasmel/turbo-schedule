@@ -15,8 +15,8 @@ const DaySelector: FC<DaySelectorProps> = ({ selectedDay, handleClick }) => {
 				<button
 					key={dayIndex}
 					onClick={(e) => handleClick(e, dayIndex)}
-					className={"btn" + (dayIndex === selectedDay ? " selected" : "")}
-					style={{ display: "inline-block", width: 100 / scheduleDaysArray.length + "%", minHeight: "30px" }}
+					className={`btn${dayIndex === selectedDay ? " selected" : ""}`}
+					style={{ display: "inline-block", width: `${100 / scheduleDaysArray.length}%`, minHeight: "30px" }}
 				>
 					<span>{dayIndex === "Week" ? t("Week") : dayIndex + 1}</span>
 				</button>

@@ -3,7 +3,7 @@ import path from "path";
 import { Router } from "express";
 import { Email } from "@turbo-schedule/common";
 
-import { isProd } from "../../../src/util/isProd";
+import { isProd } from "../../util/isProd";
 import { scrapedDataDirPath } from "../../config";
 
 const router: Router = Router();
@@ -46,21 +46,21 @@ router.post("/", async (req, res, next) => {
 		}
 
 		const emailsFile: string = await fs.readFile(savingPathAndName, { encoding: "utf-8" });
-		let fileContent: EmailsFileContent = !!emailsFile ? JSON.parse(emailsFile) : defaultFileData;
+		const fileContent: EmailsFileContent = emailsFile ? JSON.parse(emailsFile) : defaultFileData;
 
 		/** handle duplicates */
 		if (fileContent.emailsArray.some((emailOjb) => emailOjb.email === email)) {
 			const message: string = "Email already exists";
 
 			console.warn(message);
-			res.status(403).json({ emailEntry: new Email({ email: email, ip: "", created: "" }), message });
+			res.status(403).json({ emailEntry: new Email({ email, ip: "", created: "" }), message });
 			return !isProd() ? next(message) : res.end();
 		}
 
 		const newEmailEntry: Email = new Email({
 			created: new Date().toISOString(),
 			ip: req.ip,
-			email: email,
+			email,
 		});
 
 		fileContent.emailsArray.push(newEmailEntry);

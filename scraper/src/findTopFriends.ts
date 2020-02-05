@@ -8,14 +8,14 @@ export interface Friend {
 }
 
 export const findTopFriends = (lessonsArray: Array<any>) => {
-	let uniqueFriends: Map<string, Friend> = new Map();
+	const uniqueFriends: Map<string, Friend> = new Map();
 
 	lessonsArray.map((lesson) => {
 		const { schedule } = lesson;
 
 		schedule.forEach((student: any) => {
 			if (!uniqueFriends.has(student)) {
-				const newFriend: Friend = { howManyTimesWeMeet: 0, student: student };
+				const newFriend: Friend = { howManyTimesWeMeet: 0, student };
 
 				uniqueFriends.set(newFriend.student, newFriend);
 			} else {

@@ -1,12 +1,13 @@
 import React, { FC, Fragment } from "react";
 
+import { Lesson } from "@turbo-schedule/common";
+
 import LessonTextBox, { ILessonTextBox } from "./LessonTextBox";
 import { useRenderCount } from "../../hooks/useRenderCount";
 
 import { getLessonTimesFormatted, isLessonHappeningNow } from "../../utils/getLessonTimes";
 
-import { Lesson } from "@turbo-schedule/common";
-
+// eslint-disable-next-line import/newline-after-import
 import assets from "../../assets";
 const { lessonLogo, classRoomLogo, studentLogo, teacherLogo, clockLogo } = assets;
 
@@ -24,7 +25,7 @@ const LessonItem: FC<LessonProps> = React.memo(
 		const { id, name, room, teacher, students, dayIndex, timeIndex } = lesson;
 
 		/** TODO `howMuchDone` */
-		let { isHappeningNow } = isLessonHappeningNow(dayIndex, timeIndex);
+		const { isHappeningNow } = isLessonHappeningNow(dayIndex, timeIndex);
 
 		const textBoxes: Array<ILessonTextBox> = [
 			{ logo: lessonLogo, text: name },

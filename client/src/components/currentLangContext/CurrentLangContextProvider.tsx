@@ -10,7 +10,7 @@ export interface ICurrentLangContextProviderProps {
 
 const CurrentLangContextProvider: FC<ICurrentLangContextProviderProps> = ({ children }) => {
 	const [contextValue, setContextValue] = useState<ICurrentLangContextValue>({
-		availableLangs: availableLangs,
+		availableLangs,
 		currentLang: getLang(),
 		setLang: (newLang: ILang = defaultLang): ILang => {
 			/**

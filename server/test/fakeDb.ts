@@ -6,7 +6,7 @@ import { scrapedDataDirPath } from "../src/config";
 
 export const startFakeDbSync = (): (() => void) => {
 	console.log("\nStarting fake db\n");
-	const pathToDisabledDir: string = scrapedDataDirPath + ".disabled";
+	const pathToDisabledDir: string = `${scrapedDataDirPath}.disabled`;
 
 	/** `/tmp/saved-content-XYZABC/` */
 	const tempPathToLatestScrapedDataDir: string = fs.mkdtempSync(path.join(os.tmpdir(), "saved-content-"));

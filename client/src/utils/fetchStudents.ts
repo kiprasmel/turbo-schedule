@@ -7,12 +7,10 @@ interface Response {
 
 export const fetchStudents = async (): Promise<StudentFromList[]> => {
 	try {
-		const response: AxiosResponse<Response> = await axios.get<Response>(
-			"/api/v1/student"
-		);
+		const response: AxiosResponse<Response> = await axios.get<Response>("/api/v1/student");
 
 		const {
-			data: { students = [] }
+			data: { students = [] },
 		} = response;
 
 		return students;

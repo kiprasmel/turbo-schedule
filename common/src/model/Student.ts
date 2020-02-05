@@ -175,7 +175,7 @@ export class StudentFromList {
 	public async getFilePath(studentsDirPath: string): Promise<string> {
 		const path = await import("path");
 
-		return path.join(studentsDirPath, this.text + ".json");
+		return path.join(studentsDirPath, `${this.text}.json`);
 	}
 
 	// get id(): string {
@@ -229,7 +229,7 @@ export class StudentFromList {
 			return "";
 		}
 
-		return this.firstName + " " + this.lastName;
+		return `${this.firstName} ${this.lastName}`;
 	}
 
 	/**

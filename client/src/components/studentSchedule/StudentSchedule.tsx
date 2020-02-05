@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { throttle } from "lodash";
+
+import { Lesson } from "@turbo-schedule/common";
 
 import "./StudentSchedule.scss";
 
 import StudentListModal from "./StudentListModal";
-import { Lesson } from "@turbo-schedule/common";
 import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
 import { useRenderCount } from "../../hooks/useRenderCount";
@@ -13,8 +15,6 @@ import DaySelector from "./DaySelector";
 import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
 import OneDaySchedule from "./OneDaySchedule";
-
-import { throttle } from "lodash";
 
 export interface IStudentScheduleProps {
 	match: any /** TODO */;
@@ -191,7 +191,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 				isOpen={showStudents}
 				handleClose={() => setShowStudents((_showStudents) => !_showStudents)}
 				lesson={selectedLesson}
-			></StudentListModal>
+			/>
 		</>
 	);
 };

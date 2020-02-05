@@ -51,7 +51,7 @@ describe("/student API", () => {
 	});
 
 	it("should return an empty schedule for a non-existant student", async () => {
-		const invalidStudentName: string = "ayyy lmao totally invalid student name XD " + new Date().getTime();
+		const invalidStudentName: string = `ayyy lmao totally invalid student name XD ${new Date().getTime()}`;
 
 		const encodedInvalidStudentName: string = encodeURIComponent(invalidStudentName);
 
@@ -103,7 +103,7 @@ describe("/student API", () => {
 		});
 
 		const pathToLessonsDir: string = path.join(latestScrapedDataDirPath, "lessons");
-		const pathToLessonsFile: string = path.join(pathToLessonsDir, studentFullNameAndClass + ".json");
+		const pathToLessonsFile: string = path.join(pathToLessonsDir, `${studentFullNameAndClass}.json`);
 
 		const pathToStudentFile: string = getStudentFilePath(studentFullNameAndClass);
 		const pathToStudentDir: string = path.parse(pathToStudentFile).dir;

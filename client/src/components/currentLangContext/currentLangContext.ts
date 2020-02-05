@@ -9,7 +9,7 @@ export interface ICurrentLangContextValue {
 }
 
 let defaultContextValue: ICurrentLangContextValue = {
-	availableLangs: availableLangs,
+	availableLangs,
 	currentLang: defaultLang,
 	/**
 	 * warning - `setLang` will NOT actually update the `defaultContextValue` reference as expected,

@@ -30,8 +30,8 @@ const extractLesson = (
 		 */
 		const lesson: NonUniqueLesson = new NonUniqueLesson({
 			isEmpty: true,
-			dayIndex: dayIndex,
-			timeIndex: timeIndex,
+			dayIndex,
+			timeIndex,
 		});
 
 		return lesson;
@@ -49,8 +49,8 @@ const extractLesson = (
 
 	const lesson: NonUniqueLesson = new NonUniqueLesson({
 		isEmpty: false,
-		dayIndex: dayIndex,
-		timeIndex: timeIndex,
+		dayIndex,
+		timeIndex,
 		name: removeNewlineAndTrim(lessonName),
 		teacher: removeNewlineAndTrim(teacherName),
 		room: removeNewlineAndTrim(roomName),

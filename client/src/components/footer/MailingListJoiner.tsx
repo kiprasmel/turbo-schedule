@@ -13,7 +13,7 @@ import { useTranslation } from "../../i18n/useTranslation";
 
 export const joinMailingList = async (email: string) => {
 	// try {
-	const emailEntry = await axios.post("/api/v1/email", { email: email });
+	const emailEntry = await axios.post("/api/v1/email", { email });
 	return emailEntry;
 	// } catch (err) {
 	// 	console.log("Error!", err);
@@ -65,7 +65,7 @@ const MailingListJoiner = () => {
 			<div style={{ marginTop: "1em", marginBottom: "1em" }}>
 				<input
 					type="email"
-					placeholder={t("eg.") + " kipras@kipras.org"}
+					placeholder={`${t("eg.")} kipras@kipras.org`}
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 					onKeyDown={(e) => handleKeyDown(e)}
@@ -84,7 +84,7 @@ const MailingListJoiner = () => {
 				{/* <input type="submit" value="Pranešti man apie atnaujinimus!"  /> */}
 				<button
 					type="submit"
-					className={"btn btn--round"}
+					className="btn btn--round"
 					style={{
 						cursor: isSubmitting || submitted ? "not-allowed" : "pointer",
 					}}
@@ -96,7 +96,7 @@ const MailingListJoiner = () => {
 					// 	margin: "auto",
 					// 	display: "block",
 					onClick={(e) => handleEmailSubmit(e)}
-				// disabled={isSubmitting}
+					// disabled={isSubmitting}
 				>
 					{t("Notify me about the updates!")}
 				</button>

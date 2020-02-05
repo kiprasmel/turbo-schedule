@@ -39,10 +39,10 @@ const StudentListModal = ({ handleClose, lesson, isOpen, ...rest }: any) => {
 	return (
 		<>
 			<ReactModal
-				shouldCloseOnEsc={true}
-				shouldCloseOnOverlayClick={true}
-				shouldFocusAfterRender={true}
-				shouldReturnFocusAfterClose={true}
+				shouldCloseOnEsc
+				shouldCloseOnOverlayClick
+				shouldFocusAfterRender
+				shouldReturnFocusAfterClose
 				isOpen={isOpen}
 				onRequestClose={() => handleClose()}
 				{...rest}
