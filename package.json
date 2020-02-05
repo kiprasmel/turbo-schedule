@@ -17,7 +17,7 @@
 		"start": "yarn dev  # depends on `setup`",
 		"test": "lerna run test",
 		"build": "     yarn purge:build && yarn build:all",
-		"build:prod": "yarn purge:build yarn build:all:prod",
+		"build:prod": "yarn purge:build && yarn build:all:prod",
 		"serve": "yarn --cwd ./server/ serve",
 		"docker": "yarn docker:deploy",
 		"purge": "yarn purge:all",
