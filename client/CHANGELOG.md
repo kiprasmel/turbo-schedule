@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/sarpik/turbo-schedule/compare/v2.0.0...v2.0.1) (2020-02-05)
+
+
+### Bug Fixes
+
+* **client:** Extend from the correct eslint config (`sarpik`) ([4b34e43](https://github.com/sarpik/turbo-schedule/commit/4b34e433d69450c0bb0b92d639d8da16b59ae073))
+
+
+
+
+
 # [2.0.0](https://github.com/sarpik/turbo-schedule/compare/v1.7.3...v2.0.0) (2020-02-05)
 
 

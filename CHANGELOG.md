@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/sarpik/turbo-schedule/compare/v2.0.0...v2.0.1) (2020-02-05)
+
+
+### Bug Fixes
+
+* **client:** (Questionable) Use `nohoist` for `client`s `eslint` ([3ec4d3e](https://github.com/sarpik/turbo-schedule/commit/3ec4d3eec601d02c0f09afb6647c3d93ce4842f1))
+* **client:** Extend from the correct eslint config (`sarpik`) ([4b34e43](https://github.com/sarpik/turbo-schedule/commit/4b34e433d69450c0bb0b92d639d8da16b59ae073))
+* **lint:** Update `eslint` to `6.x` ([6a8b137](https://github.com/sarpik/turbo-schedule/commit/6a8b1372b17ea1d53a164178bad555cbfb3ad5a8))
+
+
+### Features
+
+* **lint:** Add `eslint.workingDirectories` to `.vscode/settings.json` ([2175fdd](https://github.com/sarpik/turbo-schedule/commit/2175fdd9e335da0395b7de3b2cb70a9f9c3d4599))
+* **lint:** Create `.eslintignore` ([8ab1e94](https://github.com/sarpik/turbo-schedule/commit/8ab1e9450d4296e6728e8f5e934487572f946af7))
+* **lint:** Create `.eslintrc.js` 🚀 ([114c4cc](https://github.com/sarpik/turbo-schedule/commit/114c4cc209bee1519a0ec17bb8a3b930821e87c5))
+* **root:** Create npm scripts for linting & fixing ([db33244](https://github.com/sarpik/turbo-schedule/commit/db33244ead6dc41e67658881c7c108b60db19d23))
+
+
+
+
+
 # [2.0.0](https://github.com/sarpik/turbo-schedule/compare/v1.7.3...v2.0.0) (2020-02-05)
 
 
