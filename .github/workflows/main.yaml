@@ -25,3 +25,18 @@ jobs:
                       ${{ runner.os }}-
 
             - run: yarn install --frozen-lockfile
+
+    test:
+        runs-on: ubuntu-latest
+        needs: [install]
+
+        steps:
+            - run: yarn build:ts
+            - run: yarn test
+
+    build:
+        runs-on: ubuntu-latest
+        needs: [install, test]
+
+        steps:
+            - run: yarn build:prod
