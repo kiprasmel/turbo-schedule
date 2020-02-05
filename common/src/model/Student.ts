@@ -158,15 +158,16 @@ export class StudentFromList {
 	public async writeToFile(studentsDirPath: string): Promise<void> {
 		const fs = await import("fs-extra");
 		const path = await import("path");
-		const prettier = await import("prettier");
+		// const prettier = await import("prettier");  /** TODO FIXME - breaks CRA - see https://github.com/sarpik/turbo-schedule/issues/8 */
 
 		const filePath = await this.getFilePath(studentsDirPath);
 		const dirPath = path.parse(filePath).dir;
 
 		await fs.ensureDir(dirPath);
 
+		// eslint-disable-next-line prefer-const
 		let data: string = JSON.stringify(this);
-		data = prettier.format(data, { parser: "json" });
+		// data = prettier.format(data, { parser: "json" });  /** TODO FIXME - breaks CRA - see https://github.com/sarpik/turbo-schedule/issues/8 */
 
 		await fs.writeFile(filePath, data, { encoding: "utf-8" });
 	}
