@@ -40,3 +40,24 @@ jobs:
 
         steps:
             - run: yarn build:prod
+
+    deploy:
+        if: github.ref == 'master' # only on master branch
+
+        runs-on: ubuntu-latest
+        needs: [install, test, build]
+
+        steps:
+            - run: yarn docker:deploy
+            # create new version (& push to github) (skips ci to avoid an infinite loop)
+            - run: yarn lerna version
+
+            # get the latest tag
+            - run: echo "export LATEST_TAG=$(git describe --tags --abbrev=0)" >> $BASH_ENV
+
+            # print for debugging
+            - run: echo "$LATEST_TAG"
+
+            - run: yarn docker:tag-version
+
+            - run: yarn docker:push-tagged-version
