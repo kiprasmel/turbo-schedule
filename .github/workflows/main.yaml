@@ -1,0 +1,6 @@
+name: install-test-build
+
+on: [push]
+
+env:
+    CI: true
