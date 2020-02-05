@@ -50,7 +50,7 @@
 		"@typescript-eslint/parser": "^2.11.0",
 		"babel-eslint": "^10.0.3",
 		"concurrently": "^5.0.0",
-		"eslint": "5.x",
+		"eslint": "6.x",
 		"eslint-config-airbnb": "^18.0.0",
 		"eslint-config-prettier": "^6.7.0",
 		"eslint-config-sarpik": "0.2.4",
