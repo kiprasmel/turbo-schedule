@@ -8,10 +8,20 @@
 
 import { join } from "path";
 
+import { createScraperConfig, IScraperConfig } from "@turbo-schedule/scraper";
+
 export const generatedDirPath: string = join(__dirname, "..", "generated"); /** dir for all generated stuff */
 export const openAPIFilePath = join(generatedDirPath, "openAPI.json");
+
+/**
+ * @note this is not only the scraped data -
+ * it also contains saved data such as the `emails.json` file
+ * with user submitted emails etc.
+ *
+ * TODO rename
+ */
 export const scrapedDataDirPath: string = join(__dirname, "..", "database");
-export const latestScrapedDataDirPath: string = join(scrapedDataDirPath, "latest");
-export const studentDataArrayFilePath: string = join(latestScrapedDataDirPath, "students-data-array.json");
-export const getStudentFilePath = (studentName: string): string =>
-	join(latestScrapedDataDirPath, "students", studentName, "student-data.json");
+
+export const { studentsFilePath, latestScrapedDataDirPath, getStudentFilePath }: IScraperConfig = createScraperConfig(
+	scrapedDataDirPath
+);

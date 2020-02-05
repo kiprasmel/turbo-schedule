@@ -1,9 +1,9 @@
 import fs from "fs-extra";
 import path from "path";
-import { IStudent } from "@turbo-schedule/common";
+import { StudentFromList, Student } from "@turbo-schedule/common";
 
 import { request, Response } from "./utils";
-import { latestScrapedDataDirPath, studentDataArrayFilePath, getStudentFilePath } from "../src/config";
+import { latestScrapedDataDirPath, studentsFilePath, getStudentFilePath } from "../src/config";
 
 describe("/student API", () => {
 	it("should fail if the students array file does not exist", async () => {
@@ -11,35 +11,28 @@ describe("/student API", () => {
 			const res: Response = await request.get(`/api/v1/student`);
 
 			expect(res.status).toBe(500);
-			expect(res.body).toMatchObject({
-				students: [],
-				message: "Students array file not found (server error)!",
-			});
+			expect(res.body.students).toEqual([]);
+			expect(res.body).toHaveProperty("message");
 		} finally {
+			//
 		}
 	});
 
-	it("should return an array of students", async () => {
-		const content: IStudent[] = [
-			{
-				href: "x300111e_melni_kip220.htm",
-				baseScheduleURI: "http://kpg.lt/Tvarkarastis",
-				fullScheduleURI: "http://kpg.lt/Tvarkarastis/x300111e_melni_kip220.htm",
+	it("should return a list of students", async () => {
+		const studentsFileContent: StudentFromList[] = [
+			new StudentFromList({
+				originalHref: "x300111e_melni_kip220.htm",
 				text: "Melnikovas Kipras IIIe",
-				lessons: [],
-			},
-			{
-				href: "x300112c_baltu_sim457.htm",
-				baseScheduleURI: "http://kpg.lt/Tvarkarastis",
-				fullScheduleURI: "http://kpg.lt/Tvarkarastis/x300112c_baltu_sim457.htm",
+			}),
+			new StudentFromList({
+				originalHref: "x300112c_baltu_sim457.htm",
 				text: "Baltūsis Simonas IVGc",
-				lessons: [],
-			},
+			}),
 		];
 
 		try {
 			fs.ensureDirSync(latestScrapedDataDirPath);
-			fs.writeJSONSync(studentDataArrayFilePath, content, {
+			fs.writeJSONSync(studentsFilePath, studentsFileContent, {
 				encoding: "utf-8",
 			});
 
@@ -50,15 +43,10 @@ describe("/student API", () => {
 
 			expect(res.body).toHaveProperty("students");
 
-			res.body.students.forEach((student: IStudent) => {
-				expect(student).toHaveProperty("href");
-				expect(student).toHaveProperty("baseScheduleURI");
-				expect(student).toHaveProperty("fullScheduleURI");
-				expect(student).toHaveProperty("text");
-			});
+			expect(res.body.students).toEqual(studentsFileContent);
 		} finally {
 			fs.removeSync(latestScrapedDataDirPath);
-			fs.removeSync(studentDataArrayFilePath);
+			fs.removeSync(studentsFilePath);
 		}
 	});
 
@@ -78,6 +66,7 @@ describe("/student API", () => {
 			expect(res.body.student).toHaveProperty("lessons");
 			expect(res.body.student.lessons).toEqual([]);
 		} finally {
+			//
 		}
 	});
 
@@ -94,13 +83,11 @@ describe("/student API", () => {
 	 *
 	 */
 	it("should return a specific student", async () => {
-		const studentName: string = "Chad RMarkdown";
+		const studentFullNameAndClass: string = "Melnikovas Kipras IIIe";
 
-		const student: IStudent = {
-			href: "foo_bar.htm",
-			baseScheduleURI: "http://kpg.lt/Tvarkarastis",
-			fullScheduleURI: "http://kpg.lt/Tvarkarastis/foo_bar.htm",
-			text: studentName,
+		const student: Student = new Student({
+			originalHref: "x300111e_melni_kip220.htm",
+			text: studentFullNameAndClass,
 			lessons: [
 				{
 					isEmpty: false,
@@ -110,15 +97,15 @@ describe("/student API", () => {
 					name: "The angle ain't blunt - I'm blunt",
 					teacher: "Snoop Dawg",
 					room: "The Chamber (36 - 9 = 25)",
-					students: ["Alice from Wonderland IIIGe", "Bob the Builder IIIGa", "Charlie the Angel IVGx"],
+					students: ["Alice Wonderland IIIGe", "Bob Builder IIIa", "Charlie Angel IVGx"],
 				},
 			],
-		};
+		});
 
 		const pathToLessonsDir: string = path.join(latestScrapedDataDirPath, "lessons");
-		const pathToLessonsFile: string = path.join(pathToLessonsDir, studentName + ".json");
+		const pathToLessonsFile: string = path.join(pathToLessonsDir, studentFullNameAndClass + ".json");
 
-		const pathToStudentFile: string = getStudentFilePath(studentName);
+		const pathToStudentFile: string = getStudentFilePath(studentFullNameAndClass);
 		const pathToStudentDir: string = path.parse(pathToStudentFile).dir;
 
 		try {
@@ -126,9 +113,9 @@ describe("/student API", () => {
 			fs.writeJSONSync(pathToLessonsFile, student.lessons, { encoding: "utf-8" });
 
 			fs.ensureDirSync(pathToStudentDir);
-			fs.writeJSONSync(pathToStudentFile, { ...student, lessons: [] });
+			fs.writeJSONSync(pathToStudentFile, { ...student });
 
-			const encodedStudentName: string = encodeURIComponent(studentName);
+			const encodedStudentName: string = encodeURIComponent(studentFullNameAndClass);
 			const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
 
 			expect(res.status).toBe(200);

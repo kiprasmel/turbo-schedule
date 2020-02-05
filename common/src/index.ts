@@ -1,5 +1,9 @@
-export { getYYYYMMDD } from "./util/getYYYYMMDD";
-export { delay } from "./util/delay";
+export * from "./util/getYYYYMMDD";
+export * from "./util/delay";
+export * from "./util/applyMixins";
+export * from "./util/toJson";
+export * from "./util/writeToSingleFile";
 
-export { IStudent, Student } from "./model/Student";
-export { IEmail, Email } from "./model/Email";
+export * from "./model/Student";
+export * from "./model/Lesson";
+export * from "./model/Email";

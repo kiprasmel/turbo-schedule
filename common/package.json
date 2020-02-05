@@ -11,6 +11,10 @@
 		"test": "echo \"TODO: no test specified\" && exit 0",
 		"build": "tsc -b"
 	},
+	"dependencies": {
+		"fs-extra": "^8.1.0",
+		"prettier": "^1.19.1"
+	},
 	"devDependencies": {
 		"ts-node-dev": "^1.0.0-pre.44",
 		"typescript": "^3.7.2"

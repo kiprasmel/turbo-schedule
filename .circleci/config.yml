@@ -41,7 +41,7 @@ jobs:
       - run: yarn test
 
       ### TODO - do NOT scrape on build to avoid the same stuff in docker container
-      - run: yarn build
+      - run: yarn build:prod
 
       - save_cache:
           paths:

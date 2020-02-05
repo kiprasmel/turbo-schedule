@@ -25,7 +25,7 @@ export const enableScraperCronjob = (): void => {
 
 			console.log("\n~ Starting scraper:", startDate, "\n");
 
-			await scraper({ savePath: scrapedDataDirPath });
+			await scraper(scrapedDataDirPath);
 
 			const endDate: Date = new Date();
 

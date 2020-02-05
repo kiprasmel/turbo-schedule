@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import "./StudentSchedule.scss";
 
 import StudentListModal from "./StudentListModal";
-import { ILesson } from "../../models/Lesson";
+import { Lesson } from "@turbo-schedule/common";
 import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
 import { useRenderCount } from "../../hooks/useRenderCount";
@@ -69,7 +69,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	// };
 
 	const [isLoading, setIsLoading] = useState(true);
-	const [scheduleByDays, setScheduleByDays] = useState([[]] as Array<Array<ILesson>>);
+	const [scheduleByDays, setScheduleByDays] = useState([[]] as Array<Array<Lesson>>);
 
 	useEffect(() => {
 		const wrapper = async () => {
@@ -83,7 +83,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 					return;
 				}
 
-				const scheduleByDays: Array<Array<any>> = [];
+				const scheduleByDays: Array<Array<Lesson>> = [];
 
 				lessons.forEach((lesson) => {
 					/** make sure there's always an array inside an array */
@@ -108,10 +108,10 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	const [showStudents, setShowStudents] = useState(false);
 
-	const [selectedLesson, setSelectedLesson] = useState<ILesson>(() => new ILesson());
+	const [selectedLesson, setSelectedLesson] = useState<Lesson>(() => new Lesson());
 
 	const handleLessonMouseClick = useCallback(
-		(_e: React.MouseEvent, lesson: ILesson) => {
+		(_e: React.MouseEvent, lesson: Lesson) => {
 			setShowStudents((_showStudents) => !_showStudents);
 			setSelectedLesson(lesson);
 		},

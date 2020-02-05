@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./StudentList.scss";
-import { IStudent } from "@turbo-schedule/common";
+import { StudentFromList } from "@turbo-schedule/common";
 
 import { fetchStudents } from "../../utils/fetchStudents";
 import AutoCompleteInput from "../../common/autocompleteInput/AutoCompleteInput";
@@ -12,11 +12,11 @@ import { useTranslation } from "../../i18n/useTranslation";
 const StudentList = () => {
 	const t = useTranslation();
 
-	const [studentsList, setStudentsList] = useState();
+	const [studentsList, setStudentsList] = useState<StudentFromList[]>([]);
 
 	useEffect(() => {
 		const wrapper = async () => {
-			const studentsList: Array<IStudent> = await fetchStudents();
+			const studentsList: StudentFromList[] = await fetchStudents();
 
 			setStudentsList(studentsList);
 		};

@@ -1,5 +1,10 @@
 {
 	"extends": "../tsconfig-base.json",
+	"references": [
+		{
+			"path": "../common"
+		} //
+	],
 	"compilerOptions": {
 		"composite": false /** override the included tsconfig */,
 		"baseUrl": "src",
