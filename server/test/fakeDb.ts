@@ -26,28 +26,32 @@ export const startFakeDbSync = (): (() => void) => {
 	fs.symlinkSync(tempPathToLatestScrapedDataDir, scrapedDataDirPath);
 
 	const stopFakeDbSync: () => void = () => {
-		if (fs.pathExistsSync(scrapedDataDirPath)) {
-			/** unlink `/tmp/saved-content-XYZABC/` <-- `saved-content/` */
-			fs.unlinkSync(scrapedDataDirPath);
-		}
-
-		if (fs.pathExistsSync(tempPathToLatestScrapedDataDir)) {
-			/** remove `/tmp/saved-content-XYZABC/` */
-			fs.rmdirSync(tempPathToLatestScrapedDataDir, { recursive: true });
-		}
-
-		if (fs.pathExistsSync(pathToDisabledDir)) {
-			if (!fs.pathExistsSync(scrapedDataDirPath)) {
-				/** `saved-content.disabled/` -> `saved-content/` */
-				fs.moveSync(pathToDisabledDir, scrapedDataDirPath);
-			} else {
-				const message: string = `(stopping) Couldn't move \`${pathToDisabledDir}\` to \`${scrapedDataDirPath}\` - already exists`;
-				console.error(message);
-				throw new Error(message);
+		try {
+			if (fs.pathExistsSync(scrapedDataDirPath)) {
+				/** unlink `/tmp/saved-content-XYZABC/` <-- `saved-content/` */
+				fs.unlinkSync(scrapedDataDirPath);
 			}
-		}
 
-		console.log("\nSuccessfully stopped fake db.\n");
+			if (fs.pathExistsSync(tempPathToLatestScrapedDataDir)) {
+				/** remove `/tmp/saved-content-XYZABC/` */
+				fs.rmdirSync(tempPathToLatestScrapedDataDir, { recursive: true });
+			}
+
+			if (fs.pathExistsSync(pathToDisabledDir)) {
+				if (!fs.pathExistsSync(scrapedDataDirPath)) {
+					/** `saved-content.disabled/` -> `saved-content/` */
+					fs.moveSync(pathToDisabledDir, scrapedDataDirPath);
+				} else {
+					const message: string = `(stopping) Couldn't move \`${pathToDisabledDir}\` to \`${scrapedDataDirPath}\` - already exists`;
+					console.error(message);
+					throw new Error(message);
+				}
+			}
+
+			console.log("\nSuccessfully stopped fake db.\n");
+		} catch (e) {
+			console.error(e);
+		}
 	};
 
 	return stopFakeDbSync;
