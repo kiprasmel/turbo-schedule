@@ -57,7 +57,7 @@ jobs:
             - run: yarn test
 
     build:
-        if: github.ref != 'master' # see `build-and-deploy`
+        if: github.ref != 'refs/heads/master' # see `build-and-deploy`
         runs-on: ubuntu-latest
         needs: [install]
 
@@ -85,7 +85,7 @@ jobs:
             - run: yarn build:prod
 
     build-and-deploy:
-        if: github.ref == 'master' # see `build`
+        if: github.ref == 'refs/heads/master' # see `build`
 
         runs-on: ubuntu-latest
         needs: [install, test]
