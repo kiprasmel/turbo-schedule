@@ -120,6 +120,10 @@ jobs:
               env:
                   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
                   DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+            - run: git config --global user.email ${{ secrets.GIT_USER_EMAIL }}
+            - run: git config --global user.name ${{ secrets.GIT_USER_NAME }}
+
             # create new version (& push to github) (skips ci to avoid an infinite loop)
             - run: yarn lerna version
 
