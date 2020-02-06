@@ -6,28 +6,31 @@ env:
     CI: true
 
 jobs:
-    # install:
-    #     runs-on: ubuntu-latest
+    install:
+        runs-on: ubuntu-latest
 
-    #     steps:
-    #         - uses: actions/checkout@v2
-    #         - uses: actions/setup-node@v1
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
 
-    #         - uses: actions/cache@v1
-    #           env:
-    #               cache-name: cache-node-modules
-    #           with:
-    #               path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-    #               key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-    #               restore-keys: |
-    #                   ${{ runner.os }}-build-${{ env.cache-name }}-
-    #                   ${{ runner.os }}-build-
-    #                   ${{ runner.os }}-
+            # https://github.com/actions/cache/blob/master/examples.md#node---yarn
+            - name: Get yarn cache
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+              id: yarn-cache
 
-    #         - run: yarn install --frozen-lockfile
+            - uses: actions/cache@v1
+              with:
+                  path: ${{ steps.yarn-cache.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
+
+            - run: yarn install --frozen-lockfile
+              if: steps.yarn-cache.outputs.cache-hit != 'true'
 
     test:
         runs-on: ubuntu-latest
+        needs: [install]
 
         steps:
             # BEGIN INSTALL
@@ -56,7 +59,7 @@ jobs:
     build:
         if: github.ref != 'master' # see `build-and-deploy`
         runs-on: ubuntu-latest
-        needs: [test]
+        needs: [install]
 
         steps:
             # BEGIN INSTALL
@@ -85,7 +88,7 @@ jobs:
         if: github.ref == 'master' # see `build`
 
         runs-on: ubuntu-latest
-        needs: [test]
+        needs: [install, test]
 
         steps:
             # BEGIN BUILD
