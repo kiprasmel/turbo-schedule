@@ -124,11 +124,16 @@ jobs:
             - run: yarn lerna version
 
             # get the latest tag
-            - run: echo "export LATEST_TAG=$(git describe --tags --abbrev=0)" >> $BASH_ENV
+            # see https://github.com/actions/starter-workflows/issues/68#issuecomment-552074596
+            - run: echo "::set-env name=LATEST_TAG::$(git describe --tags --abbrev=0)"
 
             # print for debugging
             - run: echo "$LATEST_TAG"
 
             - run: yarn docker:tag-version
+            #   env:
+            #       LATEST_TAG: ${{ LATEST_TAG }}
 
             - run: yarn docker:push-tagged-version
+            #   env:
+            #       LATEST_TAG: ${{ LATEST_TAG }}
