@@ -117,6 +117,9 @@ jobs:
             # END BUILD
 
             - run: yarn docker:deploy
+              env:
+                  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+                  DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
             # create new version (& push to github) (skips ci to avoid an infinite loop)
             - run: yarn lerna version
 
