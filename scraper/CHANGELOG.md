@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.0.3 (2020-02-06)
+
+
+### Bug Fixes
+
+* **ci:** Set git's user `name` & `email` ([9c86fb5](https://github.com/sarpik/turbo-schedule/commit/9c86fb59c4b405bfe36328ab63e16b37495ad64e))
+
+
+
+
+
 ## [2.0.2](https://github.com/sarpik/turbo-schedule/compare/v2.0.1...v2.0.2) (2020-02-05)
 
 **Note:** Version bump only for package @turbo-schedule/scraper
