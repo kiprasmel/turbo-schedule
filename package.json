@@ -27,13 +27,14 @@
 		"serve": "yarn --cwd ./server/ serve",
 		"docker": "yarn docker:deploy",
 		"purge": "yarn purge:all",
+		"updts": "yarn lerna add typescript@latest --dev",
 		"-----": "-----",
 		"watch:ts": "tsc -b -w",
 		"watch:server": "yarn --cwd ./server/ watch:server",
 		"watch:client": "yarn --cwd ./client start",
 		"dev": "concurrently --raw --kill-others --names \"0: tsc,1: server,2: client\" \"yarn watch:ts\" \"yarn watch:server\" \"yarn watch:client\"",
 		"build:ts:normal": "yarn tsc -b",
-		"build:ts:fallback": "npx --package typescript@beta tsc -b && echo \"\nUsed build:ts:fallback!\n\"",
+		"build:ts:fallback": "npx --package typescript@latest tsc -b && echo \"\nUsed build:ts:fallback!\n\"",
 		"build:ts": "yarn build:ts:normal || yarn build:ts:fallback",
 		"build:client:prod": "yarn --cwd ./client/ build",
 		"build:server": "     yarn --cwd ./server/ build",
@@ -73,6 +74,6 @@
 		"postinstall-postinstall": "^2.0.0",
 		"prettier": "^1.16.4",
 		"rimraf": "^3.0.0",
-		"typescript": "^3.7.3"
+		"typescript": "^3.8.2"
 	}
 }
