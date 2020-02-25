@@ -37,7 +37,7 @@
 		"concurrently": "^5.0.0",
 		"cross-env": "^6.0.3",
 		"node-sass": "^4.13.0",
-		"typescript": "^3.8.1-rc"
+		"typescript": "^3.8.2"
 	},
 	"eslintConfig": {
 		"extends": "eslint-config-sarpik"

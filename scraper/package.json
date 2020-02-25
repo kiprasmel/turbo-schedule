@@ -32,7 +32,7 @@
 		"@types/node": "^12.12.7",
 		"nodemon": "^1.19.3",
 		"ts-node-dev": "^1.0.0-pre.44",
-		"typescript": "^3.8.1-rc"
+		"typescript": "^3.8.2"
 	},
 	"keywords": [
 		"turbo",
