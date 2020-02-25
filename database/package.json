@@ -8,6 +8,7 @@
 	"dependencies": {
 		"@turbo-schedule/common": "^2.0.3",
 		"@types/lowdb": "^1.0.9",
+		"fs-extra": "^8.1.0",
 		"lowdb": "^1.0.0"
 	},
 	"devDependencies": {
