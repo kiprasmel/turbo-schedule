@@ -1,6 +1,7 @@
 import path from "path";
 
 import { Student, StudentFromList, StudentWithNonUniqueLessons, writeToSingleFile } from "@turbo-schedule/common";
+import { db, DbSchema } from "@turbo-schedule/database";
 
 import { IScraperConfig } from "./config";
 import { updateLatestDir } from "./util/getStudentsListHtml";
@@ -8,6 +9,7 @@ import { getStudentList } from "./util/scrapeStudents";
 import { getAllStudentsFromListInParallel } from "./getAllStudentsFromListInParallel";
 
 import { populateStudentsWithUniqueLessons } from "./populateStudentsWithUniqueLessons";
+
 // import { populateStudentsWithFriends } from "./populateStudentsWithFriends";
 
 export const scrape = async (config: IScraperConfig): Promise<void> => {
@@ -33,7 +35,9 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			.then(
 				async (studentList: StudentFromList[]) => await writeToSingleFile(studentList, config.studentsFilePath)
 			)
-			// .then((studentList) => studentList.splice(0, 10)) /** uncomment this to quickly test a limited about of students */
+			// .then((studentList) =>
+			// 	studentList.splice(0, 10)
+			// ) /** uncomment this to quickly test a limited about of students */
 			.then((studentList: StudentFromList[]) => getAllStudentsFromListInParallel(studentList))
 			.then((studentsWithNonUniqueLessons: StudentWithNonUniqueLessons[]) =>
 				// // memoizeSync(config.uniqueLessonsFilePath, () =>
@@ -77,13 +81,22 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			 * before the outcome is finally writen to the files.
 			 */
 			.then(
-				async (finalStudents: Student[]) =>
+				async (finalStudents: Student[]) => {
+					const newDbState: DbSchema = {
+						students: finalStudents,
+						lessons: [] /** TODO */,
+					};
+
+					await db.setState(newDbState).write();
+
+					/** TODO REMOVE */
 					await Promise.all(
 						finalStudents.map(async (student) => {
 							writeToSingleFile(student, path.join(config.studentsDirPath, `${student.text}.json`));
 							return student;
 						})
-					)
+					);
+				}
 				// await Student.writeManyToIndividualFiles(finalStudents, config.studentsDirPath)
 			);
 
