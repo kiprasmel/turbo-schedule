@@ -1,7 +1,6 @@
 {
 	"name": "@turbo-schedule/database",
 	"version": "2.0.3",
-	"type": "module",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
 	"author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
