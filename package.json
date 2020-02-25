@@ -6,6 +6,7 @@
 		"packages": [
 			"common",
 			"scraper",
+			"database",
 			"server",
 			"client"
 		],
