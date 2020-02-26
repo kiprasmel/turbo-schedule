@@ -11,7 +11,7 @@ import { updateLatestDir } from "./util/getStudentsListHtml";
 import { getStudentList } from "./util/scrapeStudents";
 import { getAllStudentsFromListInParallel } from "./getAllStudentsFromListInParallel";
 
-import { populateStudentsWithUniqueLessons } from "./populateStudentsWithUniqueLessons";
+import { populateStudentsWithUniqueLessonsSync } from "./populateStudentsWithUniqueLessons";
 import { extractUniqueLessonsSync } from "./extractUniqueLessons";
 
 // import { populateStudentsWithFriends } from "./populateStudentsWithFriends";
@@ -47,7 +47,7 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 
 		const uniqueLessons: Lesson[] = extractUniqueLessonsSync(studentsWithNonUniqueLessons, undefined);
 
-		const uniqueStudents: Student[] = populateStudentsWithUniqueLessons(
+		const uniqueStudents: Student[] = populateStudentsWithUniqueLessonsSync(
 			studentsWithNonUniqueLessons,
 			undefined,
 			uniqueLessons
