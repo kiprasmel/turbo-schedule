@@ -1,6 +1,5 @@
 import {
-	Student, //
-	StudentFromList,
+	StudentFromList, //
 	StudentWithNonUniqueLessons,
 	Lesson,
 } from "@turbo-schedule/common";
@@ -11,7 +10,6 @@ import { updateLatestDir } from "./util/getStudentsListHtml";
 import { getStudentList } from "./util/scrapeStudents";
 import { getAllStudentsFromListInParallel } from "./getAllStudentsFromListInParallel";
 
-import { populateStudentsWithUniqueLessonsSync } from "./populateStudentsWithUniqueLessons";
 import { extractUniqueLessonsSync } from "./extractUniqueLessons";
 
 // import { populateStudentsWithFriends } from "./populateStudentsWithFriends";
@@ -47,12 +45,6 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 
 		const uniqueLessons: Lesson[] = extractUniqueLessonsSync(studentsWithNonUniqueLessons, undefined);
 
-		const uniqueStudents: Student[] = populateStudentsWithUniqueLessonsSync(
-			studentsWithNonUniqueLessons,
-			undefined,
-			uniqueLessons
-		);
-
 		/** BEGIN SOON */
 		// .then((students) => populateStudentsWithFriends(students))
 		// .then((studentsWithFriends) => {
@@ -80,7 +72,7 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 
 		/** create a new database */
 		const newDbState: DbSchema = {
-			students: uniqueStudents,
+			students: studentsFromList,
 			lessons: uniqueLessons,
 		};
 		await db.setState(newDbState).write();
