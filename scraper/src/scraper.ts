@@ -3,7 +3,7 @@ import {
 	StudentWithNonUniqueLessons,
 	Lesson,
 } from "@turbo-schedule/common";
-import { db, DbSchema } from "@turbo-schedule/database";
+import { initDb, Db, DbSchema } from "@turbo-schedule/database";
 
 import { IScraperConfig } from "./config";
 import { updateLatestDir } from "./util/getStudentsListHtml";
@@ -75,6 +75,9 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			students: studentsFromList,
 			lessons: uniqueLessons,
 		};
+
+		const db: Db = await initDb();
+
 		await db.setState(newDbState).write();
 
 		/** TODO REMOVE - no need anymore? or nah? */
