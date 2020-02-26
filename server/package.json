@@ -25,6 +25,7 @@
 	},
 	"dependencies": {
 		"@turbo-schedule/common": "^2.0.3",
+		"@turbo-schedule/database": "^2.0.3",
 		"@turbo-schedule/scraper": "^2.0.3",
 		"@types/cors": "^2.8.6",
 		"@types/cron": "^1.7.1",
