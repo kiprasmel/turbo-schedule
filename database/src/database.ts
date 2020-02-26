@@ -1,31 +1,23 @@
-import { Student, Lesson } from "@turbo-schedule/common";
+import { Lesson, StudentFromList } from "@turbo-schedule/common";
 
-import low from "lowdb";
+import low, { AdapterAsync } from "lowdb";
 import FileAsync from "lowdb/adapters/FileAsync";
-// import { FileAsyncComfy } from "./FileAsyncComfy";
 
 export interface DbSchema {
-	students: Student[];
+	students: StudentFromList[];
 	lessons: Lesson[];
 }
 
-// // const initDb = (): low.LowdbAsyncComfy<DbSchema> => {
-// const adapter: FileAsyncComfy<DbSchema> = new FileAsyncComfy<DbSchema>("database.json") /** TODO FIXME */;
-// // const dbPromise = low(adapter as any /* TODO FIXME */);
-// // const db: low.LowdbSync<DbSchema> = (low(adapter as any /** TODO FIXME */) as unknown) as low.LowdbSync<
-// // 		DbSchema
-// // 	> /** TODO FIXME */;
+export type Db = low.LowdbAsync<DbSchema>;
 
-// const db: low.LowdbAsyncComfy<DbSchema> = low(adapter);
+const initDb = async (): Promise<Db> => {
+	const adapter: AdapterAsync<DbSchema> = new FileAsync<DbSchema>("database.json");
+	const db: Db = await low(adapter);
 
-// // db.defaults({ students: [], lessons: [] });
+	const dbDefaults: DbSchema = { students: [], lessons: [] };
+	db.defaults(dbDefaults);
 
-// // return db;
-// // };
+	return db;
+};
 
-// // const db: low.LowdbAsyncComfy<DbSchema> = initDb();
-
-const adapter = new FileAsync<DbSchema>("database.json");
-const db = low(adapter);
-
-export { db };
+export { initDb };
