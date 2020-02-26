@@ -4,9 +4,10 @@ index 40e6803..980ef36 100644
 +++ b/node_modules/@types/lowdb/index.d.ts
 @@ -256,7 +256,7 @@ declare namespace Lowdb {
    }
-
+ 
    interface lowdb {
 -    <AdapterT extends AdapterAsync>(adapter: AdapterT): Promise<LowdbAsync<AdapterT[ReferenceProperty]>>;
-+    <AdapterT extends AdapterAsync>(adapter: AdapterT):         LowdbAsync<AdapterT[ReferenceProperty]>;
++    <AdapterT extends AdapterAsync>(adapter: AdapterT): LowdbAsync<AdapterT[ReferenceProperty]>;
      <AdapterT extends AdapterSync>(adapter: AdapterT): LowdbSync<AdapterT[ReferenceProperty]>;
    }
+ 
