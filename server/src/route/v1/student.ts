@@ -16,6 +16,13 @@ router.get("/", async (_req, res, next) => {
 
 		const students: StudentFromList[] = db.get("students").value();
 
+		if (!students?.length) {
+			const msg: string = `Students not found (were \`${students}\`)`;
+
+			console.error(msg);
+			return res.status(404).json({ students: [], message: msg });
+		}
+
 		res.json({ students });
 
 		return !isProd() ? next() : res.end();
@@ -44,10 +51,24 @@ router.get("/:studentName", async (req, res, next) => {
 			.find({ text: studentName })
 			.value();
 
+		if (!studentFromList) {
+			const msg: string = `Student not found (was \`${studentFromList}\`)`;
+
+			console.error(msg);
+			return res.status(404).json({ student: new Student(), message: msg });
+		}
+
 		const lessons: Lesson[] = db
 			.get("lessons")
 			.filter((lesson) => lesson.students.includes(studentFromList.text))
 			.value();
+
+		if (!lessons?.length) {
+			const msg: string = `Lessons for student not found (were \`${lessons}\`)`;
+
+			console.error(msg);
+			return res.status(404).json({ student: studentFromList, message: msg });
+		}
 
 		const student: Student = new Student({ ...studentFromList, lessons: lessons });
 
