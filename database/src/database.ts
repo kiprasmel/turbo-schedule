@@ -12,8 +12,10 @@ export const defaultDbState: DbSchema = { students: [], lessons: [] };
 
 export type Db = low.LowdbAsync<DbSchema>;
 
-const initDb = async (): Promise<Db> => {
-	const adapter: AdapterAsync<DbSchema> = new FileAsync<DbSchema>("database.json");
+const initDb = async (
+	storageFile: string = process.env.NODE_ENV === "test" ? "database.test.json" : "database.json"
+): Promise<Db> => {
+	const adapter: AdapterAsync<DbSchema> = new FileAsync<DbSchema>(storageFile);
 	const db: Db = await low(adapter);
 
 	db.defaults(defaultDbState);
