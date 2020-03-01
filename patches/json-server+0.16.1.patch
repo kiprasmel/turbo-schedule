@@ -1,0 +1,36 @@
+diff --git a/node_modules/json-server/lib/server/router/plural.js b/node_modules/json-server/lib/server/router/plural.js
+index c9f6658..ea9ee75 100644
+--- a/node_modules/json-server/lib/server/router/plural.js
++++ b/node_modules/json-server/lib/server/router/plural.js
+@@ -28,10 +28,28 @@ module.exports = (db, name, opts) => {
+   function embed(resource, e) {
+     e && [].concat(e).forEach(externalResource => {
+       if (db.get(externalResource).value) {
+-        const query = {};
++        /**
++		 * allow embedding resources with both
++		 * one-to-one and one-to-many relationships
++		*/
+         const singularResource = pluralize.singular(name);
+-        query[`${singularResource}${opts.foreignKeySuffix}`] = resource.id;
+-        resource[externalResource] = db.get(externalResource).filter(query).value();
++        const pluralResource = pluralize.plural(name);
++
++        const singularKey = `${singularResource}${opts.foreignKeySuffix}`;
++        const pluralKey = `${pluralResource}${opts.foreignKeySuffix}`;
++
++        let singularQuery = {};
++        let pluralQuery = {};
++
++        singularQuery[singularKey] = resource.id;
++        pluralQuery[pluralKey] = !pluralQuery[pluralKey] ? [resource.id] : pluralQuery[pluralKey].push(resource.id);
++
++        resource[externalResource] = db
++            .get(externalResource)
++            .filter((resource, _key, _collection) => {
++                return _.isMatch(resource, singularQuery) || _.isMatch(resource, pluralQuery);
++            })
++            .value();
+       }
+     });
+   } // Expand function used in GET /name and GET /name/id
