@@ -9,6 +9,7 @@
 		"packages": [
 			"common",
 			"scraper",
+			"rectifier",
 			"database",
 			"server",
 			"client"

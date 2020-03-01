@@ -3,6 +3,7 @@
 	"references": [
 		{ "path": "common" }, //
 		{ "path": "scraper" },
+		{ "path": "rectifier" },
 		{ "path": "database" },
 		{ "path": "server" },
 		{ "path": "client" }
