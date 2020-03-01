@@ -24,9 +24,9 @@ import path from "path";
  *
  * ```json
  * lessons: [
- *   { id: "Maths"  , studentsId: ["Alice", "Bob"] },
- *   { id: "Physics", studentsId: ["Alice"       ] },
- *   { id: "Dances" , studentsId: [         "Bob"] }
+ *   { id: "Maths"  , students: ["Alice", "Bob"] },
+ *   { id: "Physics", students: ["Alice"       ] },
+ *   { id: "Dances" , students: [         "Bob"] }
  * ]
  * ```
  *
@@ -52,7 +52,7 @@ export const extractUniqueLessonsSync = (
 		nonUniqueLessons.forEach((nonUniqueLesson: NonUniqueLesson) => {
 			const uniqueLesson: Lesson = uniqueLessonsMap.get(nonUniqueLesson.id) || new Lesson(nonUniqueLesson);
 
-			uniqueLesson.studentsId.push(studentId);
+			uniqueLesson.students.push(studentId);
 
 			uniqueLessonsMap.set(uniqueLesson.id, uniqueLesson);
 		});

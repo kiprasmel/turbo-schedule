@@ -76,7 +76,7 @@ export class NonUniqueLesson {
 export class Lesson extends NonUniqueLesson implements Omit<NonUniqueLesson, "nonUniqueId"> {
 	id: string;
 
-	studentsId: Array<Student["id"]> = [];
+	students: Array<Student["id"]> = [];
 
 	constructor(data?: Partial<Lesson> | Partial<NonUniqueLesson>) {
 		super(data);

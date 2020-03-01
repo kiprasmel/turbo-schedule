@@ -119,7 +119,7 @@ describe("/student API", () => {
 			name: "The angle ain't blunt - I'm blunt",
 			teacher: "Snoop Dawg",
 			room: "The Chamber (36 - 9 = 25)",
-			studentsId: [studentFullNameAndClass, "Alice Wonderland IIIGe", "Bob Builder IIIa", "Charlie Angel IVGx"],
+			students: [studentFullNameAndClass, "Alice Wonderland IIIGe", "Bob Builder IIIa", "Charlie Angel IVGx"],
 		};
 
 		const expectedStudentWithLessons: Student = new Student({ ...student, lessons: [lesson] });

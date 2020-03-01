@@ -60,7 +60,7 @@ router.get("/:studentName", async (req, res, next) => {
 
 		const lessons: Lesson[] = db
 			.get("lessons")
-			.filter((lesson) => lesson.studentsId.includes(studentFromList.text))
+			.filter((lesson) => lesson.students.includes(studentFromList.text))
 			.value();
 
 		if (!lessons?.length) {
