@@ -21,6 +21,7 @@ import { Server } from "http";
 
 import { databaseFile } from "@turbo-schedule/database";
 
+import { mwReadOnly } from "./middleware/mwReadOnly";
 import { openAPIFilePath } from "./config";
 import { isProd } from "./util/isProd";
 import { setupLogger } from "./util/setupLogger";
@@ -31,7 +32,7 @@ import { enableScraperCronjob } from "./util/enableScraperCronjob";
 const app = express();
 
 const jsonServerRouter = jsonServer.router(databaseFile, { foreignKeySuffix: "" });
-app.use("/api/temp", jsonServerRouter); /** TODO RENAME */
+app.use("/api/temp", [mwReadOnly, jsonServerRouter]); /** TODO RENAME */
 
 if (!isProd()) {
 	handleResponses(app, { specOutputPath: openAPIFilePath, writeIntervalMs: 0 });
