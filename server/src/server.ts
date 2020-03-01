@@ -31,9 +31,6 @@ import { enableScraperCronjob } from "./util/enableScraperCronjob";
 
 const app = express();
 
-const jsonServerRouter = jsonServer.router(databaseFile, { foreignKeySuffix: "" });
-app.use("/api/temp", [mwReadOnly, jsonServerRouter]); /** TODO RENAME */
-
 if (!isProd()) {
 	handleResponses(app, { specOutputPath: openAPIFilePath, writeIntervalMs: 0 });
 }
@@ -55,6 +52,9 @@ setupLogger(app);
 
 /** routes */
 app.use("/api", apiRouter);
+
+const jsonServerRouter = jsonServer.router(databaseFile, { foreignKeySuffix: "" });
+app.use("/api/temp", [mwReadOnly, jsonServerRouter]); /** TODO RENAME */
 
 serveStaticClientInProd(app);
 
