@@ -1,16 +1,14 @@
-import fs from "fs-extra";
-import path from "path";
-import { StudentFromList, Student } from "@turbo-schedule/common";
+import { StudentFromList, Lesson, Student } from "@turbo-schedule/common";
 
+import { initDb, Db, defaultDbState } from "@turbo-schedule/database/src";
 import { request, Response } from "./utils";
-import { latestScrapedDataDirPath, studentsFilePath, getStudentFilePath } from "../src/config";
 
 describe("/student API", () => {
 	it("should fail if the students array file does not exist", async () => {
 		try {
 			const res: Response = await request.get(`/api/v1/student`);
 
-			expect(res.status).toBe(500);
+			expect(res.status).toBe(404);
 			expect(res.body.students).toEqual([]);
 			expect(res.body).toHaveProperty("message");
 		} finally {
@@ -30,11 +28,10 @@ describe("/student API", () => {
 			}),
 		];
 
+		const db: Db = await initDb();
+
 		try {
-			fs.ensureDirSync(latestScrapedDataDirPath);
-			fs.writeJSONSync(studentsFilePath, studentsFileContent, {
-				encoding: "utf-8",
-			});
+			await db.setState({ students: studentsFileContent, lessons: [] }).write();
 
 			const res: Response = await request.get(`/api/v1/student`);
 
@@ -45,12 +42,11 @@ describe("/student API", () => {
 
 			expect(res.body.students).toEqual(studentsFileContent);
 		} finally {
-			fs.removeSync(latestScrapedDataDirPath);
-			fs.removeSync(studentsFilePath);
+			await db.setState(defaultDbState).write();
 		}
 	});
 
-	it("should return an empty schedule for a non-existant student", async () => {
+	it("should return an empty student if it does not exist", async () => {
 		const invalidStudentName: string = `ayyy lmao totally invalid student name XD ${new Date().getTime()}`;
 
 		const encodedInvalidStudentName: string = encodeURIComponent(invalidStudentName);
@@ -70,6 +66,31 @@ describe("/student API", () => {
 		}
 	});
 
+	it("should return a student from list (without lessons) if it exists but does not have lessons", async () => {
+		const studentWithoutLessons: StudentFromList = new StudentFromList({
+			originalHref: "x300111e_melni_kip220.htm",
+			text: "Melnikovas Kipras IIIe",
+		});
+
+		const encodedStudentName: string = encodeURIComponent(studentWithoutLessons.text);
+
+		const db: Db = await initDb();
+		db.setState({ students: [studentWithoutLessons], lessons: [] }).write();
+
+		try {
+			const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
+
+			expect(res.status).toBe(404);
+
+			expect(res.body).toHaveProperty("message");
+			expect(res.body).toHaveProperty("student");
+
+			expect(res.body.student).toEqual(studentWithoutLessons);
+		} finally {
+			await db.setState(defaultDbState).write();
+		}
+	});
+
 	/**
 	 * BEGIN HACK
 	 *
@@ -82,38 +103,31 @@ describe("/student API", () => {
 	 * with out scraper, and we'll fix this sooner or later.
 	 *
 	 */
-	it("should return a specific student", async () => {
+	it("should return a specific student with lessons", async () => {
 		const studentFullNameAndClass: string = "Melnikovas Kipras IIIe";
 
-		const student: Student = new Student({
+		const student: StudentFromList = new StudentFromList({
 			originalHref: "x300111e_melni_kip220.htm",
 			text: studentFullNameAndClass,
-			lessons: [
-				{
-					isEmpty: false,
-					dayIndex: 0,
-					timeIndex: 0,
-					id: "day:0/time:0/name:The angle ain't blunt - I'm blunt",
-					name: "The angle ain't blunt - I'm blunt",
-					teacher: "Snoop Dawg",
-					room: "The Chamber (36 - 9 = 25)",
-					students: ["Alice Wonderland IIIGe", "Bob Builder IIIa", "Charlie Angel IVGx"],
-				},
-			],
 		});
 
-		const pathToLessonsDir: string = path.join(latestScrapedDataDirPath, "lessons");
-		const pathToLessonsFile: string = path.join(pathToLessonsDir, `${studentFullNameAndClass}.json`);
+		const lesson: Lesson = {
+			isEmpty: false,
+			dayIndex: 0,
+			timeIndex: 0,
+			id: "day:0/time:0/name:The angle ain't blunt - I'm blunt",
+			name: "The angle ain't blunt - I'm blunt",
+			teacher: "Snoop Dawg",
+			room: "The Chamber (36 - 9 = 25)",
+			students: [studentFullNameAndClass, "Alice Wonderland IIIGe", "Bob Builder IIIa", "Charlie Angel IVGx"],
+		};
 
-		const pathToStudentFile: string = getStudentFilePath(studentFullNameAndClass);
-		const pathToStudentDir: string = path.parse(pathToStudentFile).dir;
+		const expectedStudentWithLessons: Student = new Student({ ...student, lessons: [lesson] });
+
+		const db: Db = await initDb();
 
 		try {
-			fs.ensureDirSync(pathToLessonsDir);
-			fs.writeJSONSync(pathToLessonsFile, student.lessons, { encoding: "utf-8" });
-
-			fs.ensureDirSync(pathToStudentDir);
-			fs.writeJSONSync(pathToStudentFile, { ...student });
+			await db.setState({ students: [student], lessons: [lesson] }).write();
 
 			const encodedStudentName: string = encodeURIComponent(studentFullNameAndClass);
 			const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
@@ -121,25 +135,9 @@ describe("/student API", () => {
 			expect(res.status).toBe(200);
 
 			expect(res.body).toHaveProperty("student");
-			expect(res.body.student).toHaveProperty("lessons");
-			expect(res.body.student).toMatchObject(student);
-
-			res.body.student.lessons.forEach((scheduleItem: any) => {
-				expect(scheduleItem).toHaveProperty("isEmpty");
-				expect(scheduleItem).toHaveProperty("dayIndex");
-				expect(scheduleItem).toHaveProperty("timeIndex");
-				expect(scheduleItem).toHaveProperty("id");
-				expect(scheduleItem).toHaveProperty("name");
-				expect(scheduleItem).toHaveProperty("teacher");
-				expect(scheduleItem).toHaveProperty("room");
-				expect(scheduleItem).toHaveProperty("students");
-			});
+			expect(res.body.student).toEqual(expectedStudentWithLessons);
 		} finally {
-			fs.removeSync(pathToLessonsFile);
-			fs.removeSync(pathToLessonsDir);
-
-			fs.removeSync(pathToStudentFile);
-			fs.removeSync(pathToStudentDir);
+			await db.setState(defaultDbState).write();
 		}
 	});
 	/** END HACK */

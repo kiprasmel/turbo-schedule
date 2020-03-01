@@ -3,7 +3,12 @@
 	"references": [
 		{ "path": "common" }, //
 		{ "path": "scraper" },
+		{ "path": "database" },
 		{ "path": "server" },
 		{ "path": "client" }
+	],
+	"exclude": [
+		"node_modules", //
+		"dist"
 	]
 }

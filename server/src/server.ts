@@ -13,10 +13,13 @@
  */
 
 import express from "express";
+import jsonServer from "json-server";
 import { handleResponses, handleRequests } from "express-oas-generator";
 import helmet from "helmet";
 import cors from "cors";
 import { Server } from "http";
+
+import { databaseFile } from "@turbo-schedule/database";
 
 import { openAPIFilePath } from "./config";
 import { isProd } from "./util/isProd";
@@ -26,6 +29,9 @@ import { serveStaticClientInProd } from "./util/serveStaticClientInProd";
 import { enableScraperCronjob } from "./util/enableScraperCronjob";
 
 const app = express();
+
+const jsonServerRouter = jsonServer.router(databaseFile, { foreignKeySuffix: "" });
+app.use("/api/temp", jsonServerRouter); /** TODO RENAME */
 
 if (!isProd()) {
 	handleResponses(app, { specOutputPath: openAPIFilePath, writeIntervalMs: 0 });

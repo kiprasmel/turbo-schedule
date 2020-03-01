@@ -34,7 +34,7 @@ export const startFakeDbSync = (): (() => void) => {
 
 			if (fs.pathExistsSync(tempPathToLatestScrapedDataDir)) {
 				/** remove `/tmp/saved-content-XYZABC/` */
-				fs.rmdirSync(tempPathToLatestScrapedDataDir, { recursive: true });
+				fs.removeSync(tempPathToLatestScrapedDataDir);
 			}
 
 			if (fs.pathExistsSync(pathToDisabledDir)) {
