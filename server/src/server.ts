@@ -30,7 +30,7 @@ import { enableScraperCronjob } from "./util/enableScraperCronjob";
 
 const app = express();
 
-const jsonServerRouter = jsonServer.router(databaseFile);
+const jsonServerRouter = jsonServer.router(databaseFile, { foreignKeySuffix: "" });
 app.use("/api/temp", jsonServerRouter); /** TODO RENAME */
 
 if (!isProd()) {
