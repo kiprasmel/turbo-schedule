@@ -22,7 +22,7 @@ const LessonItem: FC<LessonProps> = React.memo(
 	({ lessonIndex, lesson, handleLessonMouseClick, handleLessonKeyboardClick }) => {
 		useRenderCount("lesson");
 
-		const { id, name, room, teacher, studentsId, dayIndex, timeIndex } = lesson;
+		const { id, name, room, teacher, students, dayIndex, timeIndex } = lesson;
 
 		/** TODO `howMuchDone` */
 		const { isHappeningNow } = isLessonHappeningNow(dayIndex, timeIndex);
@@ -32,7 +32,7 @@ const LessonItem: FC<LessonProps> = React.memo(
 			{ logo: classRoomLogo, text: room },
 			{ logo: teacherLogo, text: teacher },
 			{ logo: clockLogo, text: getLessonTimesFormatted(timeIndex) },
-			{ logo: studentLogo, text: studentsId?.length || "" },
+			{ logo: studentLogo, text: students?.length || "" },
 		];
 
 		return (

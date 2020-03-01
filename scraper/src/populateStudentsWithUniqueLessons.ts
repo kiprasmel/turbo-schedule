@@ -1,9 +1,9 @@
 import { StudentWithNonUniqueLessons, Lesson, Student } from "@turbo-schedule/common";
 import { extractUniqueLessonsSync } from "./extractUniqueLessons";
 
-const findLessonsForStudent = (studentsId: Student["id"], uniqueLessons: Lesson[]): Lesson[] => {
+const findLessonsForStudent = (studentId: Student["id"], uniqueLessons: Lesson[]): Lesson[] => {
 	const uniqueLessonsForStudent: Lesson[] = uniqueLessons.filter((lesson: Lesson) =>
-		lesson.studentsId.includes(studentsId)
+		lesson.students.includes(studentId)
 	);
 
 	return uniqueLessonsForStudent;
