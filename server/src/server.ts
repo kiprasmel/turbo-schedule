@@ -12,7 +12,7 @@
  *
  */
 
-import express from "express";
+import express, { Express } from "express";
 import jsonServer from "json-server";
 import { handleResponses, handleRequests } from "express-oas-generator";
 import helmet from "helmet";
@@ -29,7 +29,7 @@ import { apiRouter } from "./route/apiRouter";
 import { serveStaticClientInProd } from "./util/serveStaticClientInProd";
 import { enableScraperCronjob } from "./util/enableScraperCronjob";
 
-const app = express();
+const app: Express = express();
 
 if (!isProd()) {
 	handleResponses(app, { specOutputPath: openAPIFilePath, writeIntervalMs: 0 });
