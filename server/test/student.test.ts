@@ -1,6 +1,7 @@
-import { StudentFromList, Lesson, Student } from "@turbo-schedule/common";
 
-import { initDb, Db, defaultDbState } from "@turbo-schedule/database/src";
+import { StudentFromList } from "@turbo-schedule/common";
+import { overrideDbState, initDb } from "@turbo-schedule/database";
+
 import { request, Response } from "./utils";
 
 describe("/student API", () => {
@@ -28,12 +29,14 @@ describe("/student API", () => {
 			}),
 		];
 
-		const db: Db = await initDb();
+		await overrideDbState({ students: studentsFileContent });
 
 		try {
-			await db.setState({ students: studentsFileContent, lessons: [] }).write();
-
 			const res: Response = await request.get(`/api/v1/student`);
+
+			const db = await initDb();
+			const state = await db.getState();
+			console.error("state @ stud list", state);
 
 			expect(res.type).toMatch(/json/);
 			expect(res.status).toBe(200);
@@ -42,7 +45,7 @@ describe("/student API", () => {
 
 			expect(res.body.students).toEqual(studentsFileContent);
 		} finally {
-			await db.setState(defaultDbState).write();
+
 		}
 	});
 
@@ -74,11 +77,15 @@ describe("/student API", () => {
 
 		const encodedStudentName: string = encodeURIComponent(studentWithoutLessons.text);
 
-		const db: Db = await initDb();
-		db.setState({ students: [studentWithoutLessons], lessons: [] }).write();
+		await overrideDbState({ students: [studentWithoutLessons], lessons: [] });
+
 
 		try {
 			const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
+
+			const db = await initDb();
+			const state = await db.getState();
+			console.error("state @ without lessons", state);
 
 			expect(res.status).toBe(404);
 
@@ -87,7 +94,7 @@ describe("/student API", () => {
 
 			expect(res.body.student).toEqual(studentWithoutLessons);
 		} finally {
-			await db.setState(defaultDbState).write();
+			//
 		}
 	});
 
