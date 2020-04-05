@@ -1,10 +1,10 @@
 // teardown.ts
 
-const teardown = (_config: jest.GlobalConfig) => {
+const teardown = async (_config: jest.GlobalConfig): Promise<void> => {
 	global.server.close(() => {
 		console.log("Successfully stopped server.\n");
 	});
-	global.stopFakeDbSync();
+	await global.stopFakeDb();
 };
 
 export default teardown;
