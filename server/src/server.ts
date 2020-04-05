@@ -13,15 +13,15 @@
  */
 
 import express, { Express } from "express";
-import jsonServer from "json-server";
+// import jsonServer from "json-server";
 import { handleResponses, handleRequests } from "express-oas-generator";
 import helmet from "helmet";
 import cors from "cors";
 import { Server } from "http";
 
-import { databaseFile } from "@turbo-schedule/database";
+// import { mwReadOnly } from "./middleware/mwReadOnly";
+// import { mwPickFields } from "./middleware/mwPickFields";
 
-import { mwReadOnly } from "./middleware/mwReadOnly";
 import { openAPIFilePath } from "./config";
 import { isProd } from "./util/isProd";
 import { setupLogger } from "./util/setupLogger";
@@ -53,8 +53,8 @@ setupLogger(app);
 /** routes */
 app.use("/api", apiRouter);
 
-const jsonServerRouter = jsonServer.router(databaseFile, { foreignKeySuffix: "" });
-app.use("/api/temp", [mwReadOnly, jsonServerRouter]); /** TODO RENAME */
+// const jsonServerRouter = jsonServer.router(databaseFile, { foreignKeySuffix: "" });
+// app.use("/api/temp", [mwReadOnly, jsonServerRouter]); /** TODO RENAME */
 
 serveStaticClientInProd(app);
 
