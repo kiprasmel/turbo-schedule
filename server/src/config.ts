@@ -20,7 +20,7 @@ export const openAPIFilePath = join(generatedDirPath, "openAPI.json");
  *
  * TODO rename
  */
-export const scrapedDataDirPath: string = join(__dirname, "..", "database");
+export const scrapedDataDirPath: string = join(__dirname, "..", "..", "database", "data");
 
 export const { studentsFilePath, latestScrapedDataDirPath, getStudentFilePath }: IScraperConfig = createScraperConfig(
 	scrapedDataDirPath
