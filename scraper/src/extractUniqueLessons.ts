@@ -63,7 +63,7 @@ export const extractUniqueLessonsSync = (
 	uniqueLessons = Lesson.sortArray(uniqueLessons);
 
 	if (fileOutputPath) {
-		fs.ensureDir(path.parse(fileOutputPath).dir);
+		fs.ensureDirSync(path.parse(fileOutputPath).dir);
 		fs.writeFileSync(fileOutputPath, toJson(uniqueLessons), { encoding: "utf-8" });
 	}
 
