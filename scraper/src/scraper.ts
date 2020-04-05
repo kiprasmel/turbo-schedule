@@ -3,10 +3,9 @@ import {
 	StudentWithNonUniqueLessons,
 	Lesson,
 } from "@turbo-schedule/common";
-import { initDb, Db, DbSchema } from "@turbo-schedule/database";
+import { DbSchema, setNewDbState } from "@turbo-schedule/database";
 
 import { IScraperConfig } from "./config";
-import { updateLatestDir } from "./util/getStudentsListHtml";
 import { getStudentList } from "./util/scrapeStudents";
 import { getAllStudentsFromListInParallel } from "./getAllStudentsFromListInParallel";
 
@@ -71,17 +70,12 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		// })
 
 		/** create a new database */
-		const newDbState: DbSchema = {
+		const newDbState: Partial<DbSchema> = {
 			students: studentsFromList,
 			lessons: uniqueLessons,
 		};
 
-		const db: Db = await initDb();
-
-		await db.setState(newDbState).write();
-
-		/** TODO REMOVE - no need anymore? or nah? */
-		await updateLatestDir(config);
+		await setNewDbState(newDbState);
 
 		console.log("\n -> scraper finished \n\n");
 		return;
