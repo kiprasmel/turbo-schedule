@@ -80,6 +80,7 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		console.log("\n -> scraper finished \n\n");
 		return;
 	} catch (err) {
-		console.error("\nError! \n==> `@turbo-schedule/scraper`\n -> function `scrape`", err);
+		console.error("\nError! \n==> `@turbo-schedule/scraper`\n -> function `scrape`");
+		throw new Error(err);
 	}
 };
