@@ -16,7 +16,7 @@
 		"watch:ts": "tsc -b -w",
 		"watch:server": "ts-node-dev script/start-server.ts",
 		"dev": "concurrently --raw --kill-others --names \"0: tsc,1: server\" \"yarn watch:ts\" \"yarn watch:server\"",
-		"test:api": "cross-env NODE_ENV=test PORT=5069  jest --config ./test/jest.config.js",
+		"test:api": "mkdir -p ../database/data.test/ && cross-env NODE_ENV=test PORT=5069  jest --config ./test/jest.config.js",
 		"build:ts": "          yarn tsc -b                                                                      ",
 		"build:content": "     yarn ts-node-dev      ./script/scrape-content.ts                                 ",
 		"build:content:prod": "     node        ./dist/script/scrape-content.js          # depends on `build:ts`",
