@@ -12,7 +12,7 @@ const router: Router = Router();
  */
 router.get("/", async (_req, res, next) => {
 	try {
-		const db: Db = await initDb(); /** TODO FIXME */
+		const db: Db = await initDb();
 
 		const students: StudentFromList[] = await db.get("students").value();
 
@@ -42,7 +42,7 @@ router.get("/", async (_req, res, next) => {
  */
 router.get("/:studentName", async (req, res, next) => {
 	try {
-		const db: Db = await initDb(); /** TODO FIXME */
+		const db: Db = await initDb();
 
 		const studentName: string = decodeURIComponent(req.params.studentName);
 
