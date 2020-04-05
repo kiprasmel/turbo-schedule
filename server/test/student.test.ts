@@ -1,6 +1,30 @@
+/**
+ * TODO FIXME WARN
+ *
+ * Aight, we've got a problem here:
+ *
+ * You cannot have more than 1 `initDb()` and/or `db.setState()` called,
+ * otherwise all test suites with it will fail.
+ *
+ * Somehow, using `overrideDbState` once & `db.setState` the other time DOES work,
+ * which is mind boggling and I'm completely lost as to why.
+ *
+ * I do not know what happens if we need more than 2 tests with database access.
+ *
+ * This has been a HUGE waste of time.
+ * I tried fixing it in various ways.
+ * I even tried running jest sequentially - see https://stackoverflow.com/a/57609093/9285308,
+ * but that just didn't work either.
+ *
+ * This might help, but not necessarily - https://github.com/facebook/jest/issues/6194#issuecomment-419837314
+ *
+ * Oh boy did I waste a lot of time with this. pls no.
+ *
+ * P.S. JEST ******* SUCKS
+ */
 
 import { StudentFromList } from "@turbo-schedule/common";
-import { overrideDbState, initDb } from "@turbo-schedule/database";
+import { defaultDbState, initDb, overrideDbState } from "@turbo-schedule/database";
 
 import { request, Response } from "./utils";
 
@@ -29,14 +53,13 @@ describe("/student API", () => {
 			}),
 		];
 
-		await overrideDbState({ students: studentsFileContent });
-
 		try {
-			const res: Response = await request.get(`/api/v1/student`);
+			// const db = await initDb();
+			// await db.setState({ ...defaultDbState, students: studentsFileContent });
 
-			const db = await initDb();
-			const state = await db.getState();
-			console.error("state @ stud list", state);
+			await overrideDbState({ ...defaultDbState, students: studentsFileContent });
+
+			const res: Response = await request.get(`/api/v1/student`);
 
 			expect(res.type).toMatch(/json/);
 			expect(res.status).toBe(200);
@@ -45,7 +68,7 @@ describe("/student API", () => {
 
 			expect(res.body.students).toEqual(studentsFileContent);
 		} finally {
-
+			//
 		}
 	});
 
@@ -77,15 +100,11 @@ describe("/student API", () => {
 
 		const encodedStudentName: string = encodeURIComponent(studentWithoutLessons.text);
 
-		await overrideDbState({ students: [studentWithoutLessons], lessons: [] });
-
-
 		try {
-			const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
-
 			const db = await initDb();
-			const state = await db.getState();
-			console.error("state @ without lessons", state);
+			await db.setState({ ...defaultDbState, students: [studentWithoutLessons], lessons: [] });
+
+			const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
 
 			expect(res.status).toBe(404);
 
@@ -97,7 +116,6 @@ describe("/student API", () => {
 			//
 		}
 	});
-
 
 	/**
 	 * wtf
