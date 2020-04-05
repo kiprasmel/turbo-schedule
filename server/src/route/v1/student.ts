@@ -14,7 +14,7 @@ router.get("/", async (_req, res, next) => {
 	try {
 		const db: Db = await initDb(); /** TODO FIXME */
 
-		const students: StudentFromList[] = db.get("students").value();
+		const students: StudentFromList[] = await db.get("students").value();
 
 		if (!students?.length) {
 			const msg: string = `Students not found (were \`${students}\`)`;
