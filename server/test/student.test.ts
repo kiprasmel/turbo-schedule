@@ -91,56 +91,6 @@ describe("/student API", () => {
 		}
 	});
 
-	/**
-	 * BEGIN HACK
-	 *
-	 * Alright, so currently there's an issue that we need to read
-	 * from 2 separate files
-	 * in order to get both the student's information
-	 * AND it's lessons array.
-	 *
-	 * This is a problem in the current way we save things
-	 * with out scraper, and we'll fix this sooner or later.
-	 *
-	 */
-	it("should return a specific student with lessons", async () => {
-		const studentFullNameAndClass: string = "Melnikovas Kipras IIIe";
-
-		const student: StudentFromList = new StudentFromList({
-			originalHref: "x300111e_melni_kip220.htm",
-			text: studentFullNameAndClass,
-		});
-
-		const lesson: Lesson = {
-			isEmpty: false,
-			dayIndex: 0,
-			timeIndex: 0,
-			id: "day:0/time:0/name:The angle ain't blunt - I'm blunt",
-			name: "The angle ain't blunt - I'm blunt",
-			teacher: "Snoop Dawg",
-			room: "The Chamber (36 - 9 = 25)",
-			students: [studentFullNameAndClass, "Alice Wonderland IIIGe", "Bob Builder IIIa", "Charlie Angel IVGx"],
-		};
-
-		const expectedStudentWithLessons: Student = new Student({ ...student, lessons: [lesson] });
-
-		const db: Db = await initDb();
-
-		try {
-			await db.setState({ students: [student], lessons: [lesson] }).write();
-
-			const encodedStudentName: string = encodeURIComponent(studentFullNameAndClass);
-			const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
-
-			expect(res.status).toBe(200);
-
-			expect(res.body).toHaveProperty("student");
-			expect(res.body.student).toEqual(expectedStudentWithLessons);
-		} finally {
-			await db.setState(defaultDbState).write();
-		}
-	});
-	/** END HACK */
 
 	/**
 	 * wtf
