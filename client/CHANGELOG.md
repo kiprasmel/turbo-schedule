@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.1.2 (2020-04-06)
+
+
+### Bug Fixes
+
+* **db:** Use correct path to `data` when in production ([f04f848](https://github.com/sarpik/turbo-schedule/commit/f04f848c27a4ac1271762ea0da9276895be3850f))
+
+
+
+
+
 ## 2.1.1 (2020-04-06)
 
 
