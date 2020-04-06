@@ -8,3 +8,4 @@ export * from "./util/writeToSingleFile";
 export * from "./model/Student";
 export * from "./model/Lesson";
 export * from "./model/Email";
+export * from "./model/Change";
