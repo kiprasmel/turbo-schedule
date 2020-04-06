@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/sarpik/turbo-schedule/compare/v2.0.3...v2.1.0) (2020-04-06)
+
+
+### Bug Fixes
+
+* Rename `students` to `studentsId` @ `Lesson` model ([8b3f853](https://github.com/sarpik/turbo-schedule/commit/8b3f8530f5906ac6e5b9078676e7f7abf1633d78))
+
+
+### Reverts
+
+* Revert "fix: Rename `students` to `studentsId` @ `Lesson` model" ([0ccbc65](https://github.com/sarpik/turbo-schedule/commit/0ccbc6568b03f81b0f63713a10d2b9f2c82b78a2))
+
+
+
+
+
 ## 2.0.3 (2020-02-06)
 
 

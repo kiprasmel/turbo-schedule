@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/sarpik/turbo-schedule/compare/v2.0.3...v2.1.0) (2020-04-06)
+
+
+### Bug Fixes
+
+* **server:** Disable `json-server` for now ([bf37d05](https://github.com/sarpik/turbo-schedule/commit/bf37d051970c7f09e0f38b636a2411fd191e69f3))
+* **server:** Handle requests when data was not found ([04d0fa3](https://github.com/sarpik/turbo-schedule/commit/04d0fa35da630efb2718d632689e72d21b6c57bc))
+* **server:** Instead of renaming `students` to `studentsId`, empty out the `foreignKeySuffix` ([91b7613](https://github.com/sarpik/turbo-schedule/commit/91b76132aea0ae90c77622256a5fc1eba5d55c80))
+* **server:** Make `/api/temp` READ-ONLY (through `json-server`) ([900dc4f](https://github.com/sarpik/turbo-schedule/commit/900dc4f4c2017c7d84e66dedce189b8beec758bc))
+* **server:** Temporarily fix the "test:api" script ([4468f19](https://github.com/sarpik/turbo-schedule/commit/4468f195d9679884e3025ad04e79b9dc3adb7631))
+* **server:** Use `await` for `db.get` @ `student`s API ([b20f755](https://github.com/sarpik/turbo-schedule/commit/b20f755566c659e7c46be5e33e5cba6e5dcd1d32))
+* **test:** Fix'em server's API tests & explain the hurdle ([5415d6a](https://github.com/sarpik/turbo-schedule/commit/5415d6a395d7230185bf12e23f458c5d21e735ac))
+* **test:** Force removal of temp fake database ([dc7c8ca](https://github.com/sarpik/turbo-schedule/commit/dc7c8cada97714e8403f5b23d142374add69655d))
+* **test:** Update `student`s API tests (0 breaking changes) ([f01977b](https://github.com/sarpik/turbo-schedule/commit/f01977b0ff3e7172082fdd75b8f6a9ddd9d8fd8f))
+* **test:** Update server's API tests to use the new db stuff! ([93e552f](https://github.com/sarpik/turbo-schedule/commit/93e552fc47c396227d89e637b982c7a53a1aefcf))
+* **test:** Use the new db stuff @ server's API tests' setup & teardown ([d0abd8b](https://github.com/sarpik/turbo-schedule/commit/d0abd8baf64d012a247e0a15c5a64aa59334b83a))
+* Rename `students` to `studentsId` @ `Lesson` model ([8b3f853](https://github.com/sarpik/turbo-schedule/commit/8b3f8530f5906ac6e5b9078676e7f7abf1633d78))
+
+
+### Features
+
+* **server:** Add `database` pkg as a dependency ([ee1b068](https://github.com/sarpik/turbo-schedule/commit/ee1b0683fd61a7b191524ed78a3d91426d248b6f))
+* **server:** Change email save path to the new database! 📧 ([0ef0340](https://github.com/sarpik/turbo-schedule/commit/0ef03409d2770245509ba8d1e622a85a495bdbe6))
+* **server:** Create `mwPickFields` middleware util ([2b1ca9c](https://github.com/sarpik/turbo-schedule/commit/2b1ca9c148f726b0d0987bcf0e0c57363275fd9c))
+* **server:** Create `mwReadOnly` middleware ([2af1023](https://github.com/sarpik/turbo-schedule/commit/2af1023e5ebc995f53454a0bf1f8c4308bd2125b))
+* **server:** Install `(@types/)json-server` ([831a12f](https://github.com/sarpik/turbo-schedule/commit/831a12f16e2f0671dc63eda34627aed6d866c82f))
+* **server:** Install dependencies (debug) ([397c9e9](https://github.com/sarpik/turbo-schedule/commit/397c9e9be6b6f86bc7d60bd92cd9dc5df04a6ea7))
+* **server:** Use `json-server`s router @ `/api/temp` ([bcac3c4](https://github.com/sarpik/turbo-schedule/commit/bcac3c4202e6422e0bacf4ddf1a0f317af4d2b14))
+* **server:** Use the new `database` for the `student` API 🚀 ([95163c9](https://github.com/sarpik/turbo-schedule/commit/95163c9d763b3030f0f9d9223057803d8082f119))
+
+
+### Reverts
+
+* Revert "fix: Rename `students` to `studentsId` @ `Lesson` model" ([0ccbc65](https://github.com/sarpik/turbo-schedule/commit/0ccbc6568b03f81b0f63713a10d2b9f2c82b78a2))
+
+
+
+
+
 ## 2.0.3 (2020-02-06)
 
 

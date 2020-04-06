@@ -3,6 +3,77 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/sarpik/turbo-schedule/compare/v2.0.3...v2.1.0) (2020-04-06)
+
+
+### Bug Fixes
+
+* **ci:** Build fully before testing - something's currently missing ([2f9c646](https://github.com/sarpik/turbo-schedule/commit/2f9c6461fe8fc0f856f59c3534c14ab5b06020bb))
+* **ci:** Disable `actions/setup-node` cause of upstream bug ([148dc63](https://github.com/sarpik/turbo-schedule/commit/148dc639804307ceb0afbaf438d57d3f5e57cdf9)), closes [/github.com/actions/setup-node/issues/132#issuecomment-609695951](https://github.com//github.com/actions/setup-node/issues/132/issues/issuecomment-609695951)
+* **ci:** Inline jobs instead of trying to reuse them ([b5fda2c](https://github.com/sarpik/turbo-schedule/commit/b5fda2ce985538501f7b219c2a1c6d709b4a1a0a))
+* **db:** Fix the patch ([2100a28](https://github.com/sarpik/turbo-schedule/commit/2100a28a0a25536bc4424962f40f680d0ab718a1))
+* **db:** Introduce patches for `lowdb` & `@types/lowdb` ([42259b3](https://github.com/sarpik/turbo-schedule/commit/42259b343f5e88a6001776ea4a51ac06fee8563c))
+* **db:** Remove `type: module` ([089ad27](https://github.com/sarpik/turbo-schedule/commit/089ad273672f69a8fc8ed5469f7fd71a76cd356b))
+* **db:** Remove patches for `(@types/)lowdb` - broken ([0a01ad7](https://github.com/sarpik/turbo-schedule/commit/0a01ad7ab90dc864441198b29aee9c6ff575c843))
+* **db:** Remove the `Change` import - too early:D ([efd03d7](https://github.com/sarpik/turbo-schedule/commit/efd03d7ecbabd4d079b728abafa68d9c375fcf73))
+* **db:** Update the database logic to reflect patches ([435f389](https://github.com/sarpik/turbo-schedule/commit/435f389bd5179c7bfde32ac40bc723c761437297))
+* **scraper:** Throw if there's an error ([90a0564](https://github.com/sarpik/turbo-schedule/commit/90a0564972edbf140c49bbc1662a3df5784aa7ae))
+* **scraper:** Use the sync method of `fs.ensureDir` @ `extractUniqueLessonsSync` ([987aa4a](https://github.com/sarpik/turbo-schedule/commit/987aa4a7b2d7f3727df02758659f18608d49935e))
+* **server:** Disable `json-server` for now ([bf37d05](https://github.com/sarpik/turbo-schedule/commit/bf37d051970c7f09e0f38b636a2411fd191e69f3))
+* **server:** Handle requests when data was not found ([04d0fa3](https://github.com/sarpik/turbo-schedule/commit/04d0fa35da630efb2718d632689e72d21b6c57bc))
+* **server:** Instead of renaming `students` to `studentsId`, empty out the `foreignKeySuffix` ([91b7613](https://github.com/sarpik/turbo-schedule/commit/91b76132aea0ae90c77622256a5fc1eba5d55c80))
+* **server:** Make `/api/temp` READ-ONLY (through `json-server`) ([900dc4f](https://github.com/sarpik/turbo-schedule/commit/900dc4f4c2017c7d84e66dedce189b8beec758bc))
+* **server:** Temporarily fix the "test:api" script ([4468f19](https://github.com/sarpik/turbo-schedule/commit/4468f195d9679884e3025ad04e79b9dc3adb7631))
+* **server:** Use `await` for `db.get` @ `student`s API ([b20f755](https://github.com/sarpik/turbo-schedule/commit/b20f755566c659e7c46be5e33e5cba6e5dcd1d32))
+* **test:** Fix'em server's API tests & explain the hurdle ([5415d6a](https://github.com/sarpik/turbo-schedule/commit/5415d6a395d7230185bf12e23f458c5d21e735ac))
+* **test:** Force removal of temp fake database ([dc7c8ca](https://github.com/sarpik/turbo-schedule/commit/dc7c8cada97714e8403f5b23d142374add69655d))
+* **test:** Update `student`s API tests (0 breaking changes) ([f01977b](https://github.com/sarpik/turbo-schedule/commit/f01977b0ff3e7172082fdd75b8f6a9ddd9d8fd8f))
+* **test:** Update server's API tests to use the new db stuff! ([93e552f](https://github.com/sarpik/turbo-schedule/commit/93e552fc47c396227d89e637b982c7a53a1aefcf))
+* **test:** Use the new db stuff @ server's API tests' setup & teardown ([d0abd8b](https://github.com/sarpik/turbo-schedule/commit/d0abd8baf64d012a247e0a15c5a64aa59334b83a))
+* Pass in the correct ENV vars for `yarn test` script ([9bc5de4](https://github.com/sarpik/turbo-schedule/commit/9bc5de4dd699d33c5f0497cafc36589fdd606697))
+* Rename `students` to `studentsId` @ `Lesson` model ([8b3f853](https://github.com/sarpik/turbo-schedule/commit/8b3f8530f5906ac6e5b9078676e7f7abf1633d78))
+
+
+### Features
+
+* **db:** Choose database file based on NODE_ENV ([8b5424f](https://github.com/sarpik/turbo-schedule/commit/8b5424fa14480293364fffd9c2444646eb6d839a))
+* **db:** Create `fakeDb` util ([2dbe4e1](https://github.com/sarpik/turbo-schedule/commit/2dbe4e15dbce10e7c27277d412a55ab3b4292a5c))
+* **db:** Create `injectDb` util ([678bf2b](https://github.com/sarpik/turbo-schedule/commit/678bf2b83991b13b77e8fb2dee10b551a53fac1b))
+* **db:** Create `setNewDbState` (was it a mistake though?:/) ([f1239b1](https://github.com/sarpik/turbo-schedule/commit/f1239b1360970623d6d0028bf231d7a376907413))
+* **db:** Export the `defaultDbState` ([46158f8](https://github.com/sarpik/turbo-schedule/commit/46158f827c8df27532bcb51d0c03909c60d9c5d3))
+* **db:** Extract the name of `databaseFile` & export it ([b55c285](https://github.com/sarpik/turbo-schedule/commit/b55c285c896bc32568479ca3968b3a25aaf426d7))
+* **db:** Install dependencies (debug, uuid, etc) ([09463df](https://github.com/sarpik/turbo-schedule/commit/09463dfe2ad22905b030ce117ecb5aa7acf59530))
+* **db:** Instead of exporting the `db`, export it's `initDb` function ([bb55421](https://github.com/sarpik/turbo-schedule/commit/bb554213dc93854b4b9cb1d88e0dda51327b46f3))
+* **docs:** Create README for `patches` & explain them ([7f5ebe1](https://github.com/sarpik/turbo-schedule/commit/7f5ebe1093370ea0378f1e042229a3750ce3dfcd))
+* **scraper:** Stop using `.then` to cleanup & start also saving lessons to db ([08348bb](https://github.com/sarpik/turbo-schedule/commit/08348bbe0a65dbcbba0d59310575ebebafebceee))
+* **server:** Add `database` pkg as a dependency ([ee1b068](https://github.com/sarpik/turbo-schedule/commit/ee1b0683fd61a7b191524ed78a3d91426d248b6f))
+* **server:** Change email save path to the new database! 📧 ([0ef0340](https://github.com/sarpik/turbo-schedule/commit/0ef03409d2770245509ba8d1e622a85a495bdbe6))
+* **server:** Create `mwPickFields` middleware util ([2b1ca9c](https://github.com/sarpik/turbo-schedule/commit/2b1ca9c148f726b0d0987bcf0e0c57363275fd9c))
+* **server:** Install `(@types/)json-server` ([831a12f](https://github.com/sarpik/turbo-schedule/commit/831a12f16e2f0671dc63eda34627aed6d866c82f))
+* **server:** Install dependencies (debug) ([397c9e9](https://github.com/sarpik/turbo-schedule/commit/397c9e9be6b6f86bc7d60bd92cd9dc5df04a6ea7))
+* Add pkg `database` to workspace ([cd0a920](https://github.com/sarpik/turbo-schedule/commit/cd0a920e8ff41a09d42e56a24f2ae10332d63f83))
+* Create patch for `steno` ([d186245](https://github.com/sarpik/turbo-schedule/commit/d186245bdc5c5e119cec1ac191a85641c1d7cf38))
+* Create the `database` using `lowdb` ([f1d609b](https://github.com/sarpik/turbo-schedule/commit/f1d609bdaf43c4166f31e2eb73ce5b10a82f9a3c))
+* Patch `json-server` to allow one-to-many relationship embedding ([f945a39](https://github.com/sarpik/turbo-schedule/commit/f945a395fdce49f07cbec45d231e190b31f4da25))
+* Update patch for json-server (new one) ([856b001](https://github.com/sarpik/turbo-schedule/commit/856b00104f3bc8adbde3d3463e03615cea23233a))
+* **server:** Create `mwReadOnly` middleware ([2af1023](https://github.com/sarpik/turbo-schedule/commit/2af1023e5ebc995f53454a0bf1f8c4308bd2125b))
+* **server:** Use `json-server`s router @ `/api/temp` ([bcac3c4](https://github.com/sarpik/turbo-schedule/commit/bcac3c4202e6422e0bacf4ddf1a0f317af4d2b14))
+* **server:** Use the new `database` for the `student` API 🚀 ([95163c9](https://github.com/sarpik/turbo-schedule/commit/95163c9d763b3030f0f9d9223057803d8082f119))
+
+
+### Performance Improvements
+
+* **scraper:** (BIG) Do NOT populate students with lessons 💣 ([1de0350](https://github.com/sarpik/turbo-schedule/commit/1de0350f0eef0f1994de33be63fba1f54542cd87))
+
+
+### Reverts
+
+* Revert "fix: Rename `students` to `studentsId` @ `Lesson` model" ([0ccbc65](https://github.com/sarpik/turbo-schedule/commit/0ccbc6568b03f81b0f63713a10d2b9f2c82b78a2))
+
+
+
+
+
 ## 2.0.3 (2020-02-06)
 
 
