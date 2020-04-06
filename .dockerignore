@@ -3,6 +3,7 @@
 !yarn.lock
 
 !common/package.json
+!database/package.json
 !scraper/package.json
 !server/package.json
 !client/package.json
@@ -10,6 +11,7 @@
 !node_modules
 
 !common/dist
+!database/dist
 !scraper/dist
 !server/dist
 !client/build

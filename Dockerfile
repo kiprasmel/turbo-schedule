@@ -24,6 +24,7 @@ COPY package.json yarn.lock ./
 
 # packages
 COPY common/package.json ./common/
+COPY database/package.json ./database/
 COPY scraper/package.json ./scraper/
 COPY server/package.json ./server/
 COPY client/package.json ./client/
@@ -37,6 +38,7 @@ COPY client/package.json ./client/
 COPY ./node_modules ./node_modules
 
 COPY common/dist ./common/dist
+COPY database/dist ./database/dist
 COPY scraper/dist ./scraper/dist
 COPY server/dist ./server/dist
 COPY client/build ./client/build
