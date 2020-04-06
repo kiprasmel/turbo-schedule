@@ -1,4 +1,8 @@
-name: install-test-build-deploy
+#
+# It's hard to re-use code with github's actions atm...
+#
+
+name: install-build-test-deploy
 
 on: [push]
 
@@ -6,34 +10,11 @@ env:
     CI: true
 
 jobs:
-    install:
+    install-build-test:
+        if: github.ref != 'refs/heads/master' # public
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v1
-
-            # https://github.com/actions/cache/blob/master/examples.md#node---yarn
-            - name: Get yarn cache
-              run: echo "::set-output name=dir::$(yarn cache dir)"
-              id: yarn-cache
-
-            - uses: actions/cache@v1
-              with:
-                  path: ${{ steps.yarn-cache.outputs.dir }}
-                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-yarn-
-
-            - run: yarn install --frozen-lockfile
-              if: steps.yarn-cache.outputs.cache-hit != 'true'
-
-    test:
-        runs-on: ubuntu-latest
-        needs: [install, build]
-
-        steps:
-            # BEGIN BUILD
             # BEGIN INSTALL
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
@@ -54,15 +35,19 @@ jobs:
               if: steps.yarn-cache.outputs.cache-hit != 'true'
             # END INSTALL
 
+            # BEGIN BUILD
             - run: yarn build:prod
             # END BUILD
 
+            # BEGIN TEST
             - run: yarn test
+            # END TEST
 
-    build:
-        if: github.ref != 'refs/heads/master' # see `build-and-deploy`
+    # the same as `install-build-test`, just with the additional `deploy` steps
+    install-build-test-deploy:
+        if: github.ref == 'refs/heads/master' # master-only
+
         runs-on: ubuntu-latest
-        needs: [install]
 
         steps:
             # BEGIN INSTALL
@@ -85,40 +70,15 @@ jobs:
               if: steps.yarn-cache.outputs.cache-hit != 'true'
             # END INSTALL
 
-            - run: yarn build:prod
-
-    build-and-deploy:
-        if: github.ref == 'refs/heads/master' # see `build`
-
-        runs-on: ubuntu-latest
-        needs: [install, test]
-
-        steps:
             # BEGIN BUILD
-
-            # BEGIN INSTALL
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v1
-
-            # https://github.com/actions/cache/blob/master/examples.md#node---yarn
-            - name: Get yarn cache
-              run: echo "::set-output name=dir::$(yarn cache dir)"
-              id: yarn-cache
-
-            - uses: actions/cache@v1
-              with:
-                  path: ${{ steps.yarn-cache.outputs.dir }}
-                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-yarn-
-
-            - run: yarn install --frozen-lockfile
-              if: steps.yarn-cache.outputs.cache-hit != 'true'
-            # END INSTALL
-
             - run: yarn build:prod
             # END BUILD
 
+            # BEGIN TEST
+            - run: yarn test
+            # END TEST
+
+            # BEGIN DEPLOY
             - run: yarn docker:deploy
               env:
                   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -138,9 +98,7 @@ jobs:
             - run: echo "$LATEST_TAG"
 
             - run: yarn docker:tag-version
-            #   env:
-            #       LATEST_TAG: ${{ LATEST_TAG }}
 
             - run: yarn docker:push-tagged-version
-            #   env:
-            #       LATEST_TAG: ${{ LATEST_TAG }}
+            #
+            # END DEPLOY
