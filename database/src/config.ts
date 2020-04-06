@@ -4,7 +4,11 @@ import low from "lowdb";
 import path from "path";
 
 export const defaultDatabaseDataDirPath: string =
-	process.env.NODE_ENV === "test" ? path.join(__dirname, "..", "data.test") : path.join(__dirname, "..", "data");
+	process.env.NODE_ENV === "production"
+		? path.join(__dirname, "data") // "database/dist/data/"
+		: process.env.NODE_ENV === "test"
+		? path.join(__dirname, "..", "data.test") // "database/data.test/"
+		: path.join(__dirname, "..", "data"); // "database/data/"
 
 export const databaseFileName: string = "latest.json";
 /**
