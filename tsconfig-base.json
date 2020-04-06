@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"composite": true,
+		"composite": true /** project references */,
 		"declaration": true,
 		"declarationMap": true,
 		"sourceMap": true,
@@ -14,7 +14,7 @@
 			"es2017",
 			"esnext.asynciterable"
 		],
-		"outDir": "./dist",
+		"outDir": "dist",
 		"moduleResolution": "node",
 		"removeComments": true,
 		"noImplicitAny": true,

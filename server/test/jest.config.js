@@ -14,4 +14,11 @@ module.exports = {
 	testEnvironment: "node",
 	globalSetup: "./setup.ts",
 	globalTeardown: "./teardown.ts",
+	/**
+	 * `jest-serial-runner` is exactly the same, just sets `isSerial: true` to make tests run one-by-one.
+	 * See https://stackoverflow.com/a/57609093/9285308
+	 *
+	 * (currently not needed)
+	 */
+	// runner: "jest-serial-runner",
 };

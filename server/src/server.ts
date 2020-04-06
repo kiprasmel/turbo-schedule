@@ -12,11 +12,15 @@
  *
  */
 
-import express from "express";
+import express, { Express } from "express";
+// import jsonServer from "json-server";
 import { handleResponses, handleRequests } from "express-oas-generator";
 import helmet from "helmet";
 import cors from "cors";
 import { Server } from "http";
+
+// import { mwReadOnly } from "./middleware/mwReadOnly";
+// import { mwPickFields } from "./middleware/mwPickFields";
 
 import { openAPIFilePath } from "./config";
 import { isProd } from "./util/isProd";
@@ -25,7 +29,7 @@ import { apiRouter } from "./route/apiRouter";
 import { serveStaticClientInProd } from "./util/serveStaticClientInProd";
 import { enableScraperCronjob } from "./util/enableScraperCronjob";
 
-const app = express();
+const app: Express = express();
 
 if (!isProd()) {
 	handleResponses(app, { specOutputPath: openAPIFilePath, writeIntervalMs: 0 });
@@ -48,6 +52,9 @@ setupLogger(app);
 
 /** routes */
 app.use("/api", apiRouter);
+
+// const jsonServerRouter = jsonServer.router(databaseFile, { foreignKeySuffix: "" });
+// app.use("/api/temp", [mwReadOnly, jsonServerRouter]); /** TODO RENAME */
 
 serveStaticClientInProd(app);
 

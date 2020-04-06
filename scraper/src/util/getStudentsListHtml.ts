@@ -1,13 +1,14 @@
 import fs, { pathExists } from "fs-extra";
 
+import { getHtml } from "@turbo-schedule/common";
+
 import { IScraperConfig } from "../config";
-import { getHtml } from "./getHtml";
 
 export const getStudentsListHtml = async (baseUrl: string): Promise<string> => {
 	try {
 		console.log("\n==> getStudentsListHtml:");
 
-		const todaysHtml: string = await getHtml(baseUrl);
+		const todaysHtml: string = await getHtml(baseUrl, "windows-1257");
 
 		return todaysHtml;
 	} catch (err) {

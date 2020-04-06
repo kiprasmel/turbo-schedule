@@ -13,7 +13,7 @@ const findLessonsForStudent = (studentId: Student["id"], uniqueLessons: Lesson[]
  * TODO - rename to `populateStudentsWithUniqueLessonIDs` & update the functionality to reflect it.
  * (will do once we're using a database)
  */
-export const populateStudentsWithUniqueLessons = (
+export const populateStudentsWithUniqueLessonsSync = (
 	studentsWithNonUniqueLessons: StudentWithNonUniqueLessons[],
 	uniqueLessonFileOutputPath?: string,
 	uniqueLessons: Lesson[] = extractUniqueLessonsSync(studentsWithNonUniqueLessons, uniqueLessonFileOutputPath)
@@ -35,7 +35,7 @@ export const populateStudentsWithUniqueLessons = (
 	);
 
 /** TODO experimenting with chaining `.then` */
-// export const populateStudentsWithUniqueLessons = async (
+// export const populateStudentsWithUniqueLessonsSync = async (
 // 	studentsWithNonUniqueLessons: StudentWithNonUniqueLessons[],
 // 	uniqueLessons: Lesson[]
 // ): Promise<Student[]> =>

@@ -1,3 +1,4 @@
+export * from "./util/getHtml";
 export * from "./util/getYYYYMMDD";
 export * from "./util/delay";
 export * from "./util/applyMixins";

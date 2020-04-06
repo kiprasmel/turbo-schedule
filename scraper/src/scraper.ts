@@ -1,13 +1,16 @@
-import path from "path";
-
-import { Student, StudentFromList, StudentWithNonUniqueLessons, writeToSingleFile } from "@turbo-schedule/common";
+import {
+	StudentFromList, //
+	StudentWithNonUniqueLessons,
+	Lesson,
+} from "@turbo-schedule/common";
+import { DbSchema, setNewDbState } from "@turbo-schedule/database";
 
 import { IScraperConfig } from "./config";
-import { updateLatestDir } from "./util/getStudentsListHtml";
 import { getStudentList } from "./util/scrapeStudents";
 import { getAllStudentsFromListInParallel } from "./getAllStudentsFromListInParallel";
 
-import { populateStudentsWithUniqueLessons } from "./populateStudentsWithUniqueLessons";
+import { extractUniqueLessonsSync } from "./extractUniqueLessons";
+
 // import { populateStudentsWithFriends } from "./populateStudentsWithFriends";
 
 export const scrape = async (config: IScraperConfig): Promise<void> => {
@@ -28,70 +31,56 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		 * at the end of the chain.
 		 */
 
-		// const finalStudents: Student[] =
-		await getStudentList()
-			.then(
-				async (studentList: StudentFromList[]) => await writeToSingleFile(studentList, config.studentsFilePath)
-			)
-			// .then((studentList) => studentList.splice(0, 10)) /** uncomment this to quickly test a limited about of students */
-			.then((studentList: StudentFromList[]) => getAllStudentsFromListInParallel(studentList))
-			.then((studentsWithNonUniqueLessons: StudentWithNonUniqueLessons[]) =>
-				// // memoizeSync(config.uniqueLessonsFilePath, () =>
-				// // 	extractUniqueLessons(studentsWithNonUniqueLessons)
-				// extractUniqueLessons(studentsWithNonUniqueLessons).then((uniqueLessons: Lesson[]) =>
-				// 	populateStudentsWithUniqueLessons(studentsWithNonUniqueLessons, uniqueLessons)
-				// )
-				populateStudentsWithUniqueLessons(
-					studentsWithNonUniqueLessons,
-					config.uniqueLessonsFilePath
-					// extractUniqueLessons(studentsWithNonUniqueLessons)
-				)
-			)
-			/** BEGIN SOON */
-			// .then((students) => populateStudentsWithFriends(students))
-			// .then((studentsWithFriends) => {
-			// 	fs.writeFileSync(
-			// 		path.join(config.latestScrapedDataDirPath, "temp-students-with-friends.json"),
-			// 		prettier.format(
-			// 			JSON.stringify(
-			// 				studentsWithFriends
-			// 					.flatMap((student) => student.friends)
-			// 					.sort(
-			// 						(left: Friend, right: Friend) =>
-			// 							right.totalEncounters - left.totalEncounters ||
-			// 							left.text.localeCompare(right.text)
-			// 					)
-			// 			),
-			// 			{
-			// 				parser: "json",
-			// 			}
-			// 		),
-			// 		{ encoding: "utf-8" }
-			// 	);
+		// eslint-disable-next-line prefer-const
+		let studentsFromList: StudentFromList[] = await getStudentList();
+		if (process.env.FAST) {
+			/** TODO document */
+			studentsFromList = studentsFromList.splice(0, 10);
+		}
 
-			// 	return studentsWithFriends;
-			// })
-			/** END SOON */
-			/**
-			 * if you're adding features - add them here --
-			 * before the outcome is finally writen to the files.
-			 */
-			.then(
-				async (finalStudents: Student[]) =>
-					await Promise.all(
-						finalStudents.map(async (student) => {
-							writeToSingleFile(student, path.join(config.studentsDirPath, `${student.text}.json`));
-							return student;
-						})
-					)
-				// await Student.writeManyToIndividualFiles(finalStudents, config.studentsDirPath)
-			);
+		const studentsWithNonUniqueLessons: StudentWithNonUniqueLessons[] = await getAllStudentsFromListInParallel(
+			studentsFromList
+		);
 
-		await updateLatestDir(config);
+		const uniqueLessons: Lesson[] = extractUniqueLessonsSync(studentsWithNonUniqueLessons, undefined);
+
+		/** BEGIN SOON */
+		// .then((students) => populateStudentsWithFriends(students))
+		// .then((studentsWithFriends) => {
+		// 	fs.writeFileSync(
+		// 		path.join(config.latestScrapedDataDirPath, "temp-students-with-friends.json"),
+		// 		prettier.format(
+		// 			JSON.stringify(
+		// 				studentsWithFriends
+		// 					.flatMap((student) => student.friends)
+		// 					.sort(
+		// 						(left: Friend, right: Friend) =>
+		// 							right.totalEncounters - left.totalEncounters ||
+		// 							left.text.localeCompare(right.text)
+		// 					)
+		// 			),
+		// 			{
+		// 				parser: "json",
+		// 			}
+		// 		),
+		// 		{ encoding: "utf-8" }
+		// 	);
+
+		// 	return studentsWithFriends;
+		// })
+
+		/** create a new database */
+		const newDbState: Partial<DbSchema> = {
+			students: studentsFromList,
+			lessons: uniqueLessons,
+		};
+
+		await setNewDbState(newDbState);
 
 		console.log("\n -> scraper finished \n\n");
 		return;
 	} catch (err) {
-		console.error("\nError! \n==> `@turbo-schedule/scraper`\n -> function `scrape`", err);
+		console.error("\nError! \n==> `@turbo-schedule/scraper`\n -> function `scrape`");
+		throw new Error(err);
 	}
 };

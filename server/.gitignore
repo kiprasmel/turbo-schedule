@@ -2,6 +2,7 @@
 
 saved-content*/ # old, will remove later
 database*/
+database*.json
 /dist/
 
 # Logs

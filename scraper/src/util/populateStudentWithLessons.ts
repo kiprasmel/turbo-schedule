@@ -1,8 +1,7 @@
 import cheerio from "cheerio";
 
-import { StudentFromList, StudentWithNonUniqueLessons, NonUniqueLesson } from "@turbo-schedule/common";
+import { StudentFromList, StudentWithNonUniqueLessons, NonUniqueLesson, getHtml } from "@turbo-schedule/common";
 
-import { getHtml } from "./getHtml";
 import { handleScheduleRowspans } from "./handleScheduleRowspans";
 import { removeUselessTdsFromSchedule } from "./removeUselessTdsFromSchedule";
 import { extractLessonsArray } from "./extractLessons";
@@ -88,7 +87,7 @@ export const populateStudentWithLessons = async (
 	// await memoize(cacheFilePath, async () => {
 	try {
 		// // console.log("populateStudentWithLessons", studentFromList.originalHref, studentFromList.originalScheduleURI);
-		const html: string = await getHtml(studentFromList.originalScheduleURI);
+		const html: string = await getHtml(studentFromList.originalScheduleURI, "windows-1257");
 
 		const lessonElements: CheerioElement[] = prepareScheduleItems(html);
 		const lessons: NonUniqueLesson[] = extractLessonsArray(lessonElements);

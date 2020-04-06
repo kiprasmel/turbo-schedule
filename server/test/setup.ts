@@ -1,10 +1,12 @@
 // setup.ts
 // import request, { SuperTest, Test } from "supertest";
 import { Server } from "http";
+import fs from "fs-extra";
 
 import { delay } from "@turbo-schedule/common";
+import { setNewDbState } from "@turbo-schedule/database";
+
 import { startServer } from "../src/server";
-import { startFakeDbSync } from "./fakeDb";
 
 /**
  * see https://stackoverflow.com/a/44387594
@@ -14,15 +16,20 @@ declare global {
 		interface Global {
 			// agent: SuperTest<Test>;
 			server: Server;
-			stopFakeDbSync: () => void;
+			stopFakeDb: () => Promise<void>;
 		}
 	}
 }
 
 const setup = async (_config: jest.GlobalConfig) => {
 	// global.agent = request(global.server);
+	const { dbStorageDirPath } = await setNewDbState({});
+
+	global.stopFakeDb = async () => {
+		await fs.remove(dbStorageDirPath);
+	};
+
 	global.server = startServer();
-	global.stopFakeDbSync = startFakeDbSync();
 
 	/**
 	 * TODO UPSTREAM

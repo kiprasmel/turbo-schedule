@@ -1,0 +1,14 @@
+diff --git a/node_modules/steno/index.js b/node_modules/steno/index.js
+index 925a2a4..80c6cfa 100644
+--- a/node_modules/steno/index.js
++++ b/node_modules/steno/index.js
+@@ -10,7 +10,8 @@ function getTempFile (file) {
+ }
+
+ function Writer (file) {
+-  this.file = file
++  this.file = fs.realpathSync(file)
++  /** this patch is needed until https://github.com/typicode/steno/pull/14 gets merged */
+   this.callbacks = []
+   this.nextData = null
+   this.nextCallbacks = []

@@ -1,16 +1,39 @@
-import fs from "fs-extra";
-import path from "path";
-import { StudentFromList, Student } from "@turbo-schedule/common";
+/**
+ * TODO FIXME WARN
+ *
+ * Aight, we've got a problem here:
+ *
+ * You cannot have more than 1 `initDb()` and/or `db.setState()` called,
+ * otherwise all test suites with it will fail.
+ *
+ * Somehow, using `overrideDbState` once & `db.setState` the other time DOES work,
+ * which is mind boggling and I'm completely lost as to why.
+ *
+ * I do not know what happens if we need more than 2 tests with database access.
+ *
+ * This has been a HUGE waste of time.
+ * I tried fixing it in various ways.
+ * I even tried running jest sequentially - see https://stackoverflow.com/a/57609093/9285308,
+ * but that just didn't work either.
+ *
+ * This might help, but not necessarily - https://github.com/facebook/jest/issues/6194#issuecomment-419837314
+ *
+ * Oh boy did I waste a lot of time with this. pls no.
+ *
+ * P.S. JEST ******* SUCKS
+ */
+
+import { StudentFromList } from "@turbo-schedule/common";
+import { defaultDbState, initDb, overrideDbState } from "@turbo-schedule/database";
 
 import { request, Response } from "./utils";
-import { latestScrapedDataDirPath, studentsFilePath, getStudentFilePath } from "../src/config";
 
 describe("/student API", () => {
 	it("should fail if the students array file does not exist", async () => {
 		try {
 			const res: Response = await request.get(`/api/v1/student`);
 
-			expect(res.status).toBe(500);
+			expect(res.status).toBe(404);
 			expect(res.body.students).toEqual([]);
 			expect(res.body).toHaveProperty("message");
 		} finally {
@@ -31,10 +54,10 @@ describe("/student API", () => {
 		];
 
 		try {
-			fs.ensureDirSync(latestScrapedDataDirPath);
-			fs.writeJSONSync(studentsFilePath, studentsFileContent, {
-				encoding: "utf-8",
-			});
+			// const db = await initDb();
+			// await db.setState({ ...defaultDbState, students: studentsFileContent });
+
+			await overrideDbState({ ...defaultDbState, students: studentsFileContent });
 
 			const res: Response = await request.get(`/api/v1/student`);
 
@@ -45,12 +68,11 @@ describe("/student API", () => {
 
 			expect(res.body.students).toEqual(studentsFileContent);
 		} finally {
-			fs.removeSync(latestScrapedDataDirPath);
-			fs.removeSync(studentsFilePath);
+			//
 		}
 	});
 
-	it("should return an empty schedule for a non-existant student", async () => {
+	it("should return an empty student if it does not exist", async () => {
 		const invalidStudentName: string = `ayyy lmao totally invalid student name XD ${new Date().getTime()}`;
 
 		const encodedInvalidStudentName: string = encodeURIComponent(invalidStudentName);
@@ -70,79 +92,30 @@ describe("/student API", () => {
 		}
 	});
 
-	/**
-	 * BEGIN HACK
-	 *
-	 * Alright, so currently there's an issue that we need to read
-	 * from 2 separate files
-	 * in order to get both the student's information
-	 * AND it's lessons array.
-	 *
-	 * This is a problem in the current way we save things
-	 * with out scraper, and we'll fix this sooner or later.
-	 *
-	 */
-	it("should return a specific student", async () => {
-		const studentFullNameAndClass: string = "Melnikovas Kipras IIIe";
-
-		const student: Student = new Student({
+	it("should return a student from list (without lessons) if it exists but does not have lessons", async () => {
+		const studentWithoutLessons: StudentFromList = new StudentFromList({
 			originalHref: "x300111e_melni_kip220.htm",
-			text: studentFullNameAndClass,
-			lessons: [
-				{
-					isEmpty: false,
-					dayIndex: 0,
-					timeIndex: 0,
-					id: "day:0/time:0/name:The angle ain't blunt - I'm blunt",
-					name: "The angle ain't blunt - I'm blunt",
-					teacher: "Snoop Dawg",
-					room: "The Chamber (36 - 9 = 25)",
-					students: ["Alice Wonderland IIIGe", "Bob Builder IIIa", "Charlie Angel IVGx"],
-				},
-			],
+			text: "Melnikovas Kipras IIIe",
 		});
 
-		const pathToLessonsDir: string = path.join(latestScrapedDataDirPath, "lessons");
-		const pathToLessonsFile: string = path.join(pathToLessonsDir, `${studentFullNameAndClass}.json`);
-
-		const pathToStudentFile: string = getStudentFilePath(studentFullNameAndClass);
-		const pathToStudentDir: string = path.parse(pathToStudentFile).dir;
+		const encodedStudentName: string = encodeURIComponent(studentWithoutLessons.text);
 
 		try {
-			fs.ensureDirSync(pathToLessonsDir);
-			fs.writeJSONSync(pathToLessonsFile, student.lessons, { encoding: "utf-8" });
+			const db = await initDb();
+			await db.setState({ ...defaultDbState, students: [studentWithoutLessons], lessons: [] });
 
-			fs.ensureDirSync(pathToStudentDir);
-			fs.writeJSONSync(pathToStudentFile, { ...student });
-
-			const encodedStudentName: string = encodeURIComponent(studentFullNameAndClass);
 			const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
 
-			expect(res.status).toBe(200);
+			expect(res.status).toBe(404);
 
+			expect(res.body).toHaveProperty("message");
 			expect(res.body).toHaveProperty("student");
-			expect(res.body.student).toHaveProperty("lessons");
-			expect(res.body.student).toMatchObject(student);
 
-			res.body.student.lessons.forEach((scheduleItem: any) => {
-				expect(scheduleItem).toHaveProperty("isEmpty");
-				expect(scheduleItem).toHaveProperty("dayIndex");
-				expect(scheduleItem).toHaveProperty("timeIndex");
-				expect(scheduleItem).toHaveProperty("id");
-				expect(scheduleItem).toHaveProperty("name");
-				expect(scheduleItem).toHaveProperty("teacher");
-				expect(scheduleItem).toHaveProperty("room");
-				expect(scheduleItem).toHaveProperty("students");
-			});
+			expect(res.body.student).toEqual(studentWithoutLessons);
 		} finally {
-			fs.removeSync(pathToLessonsFile);
-			fs.removeSync(pathToLessonsDir);
-
-			fs.removeSync(pathToStudentFile);
-			fs.removeSync(pathToStudentDir);
+			//
 		}
 	});
-	/** END HACK */
 
 	/**
 	 * wtf

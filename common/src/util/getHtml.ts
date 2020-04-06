@@ -4,7 +4,7 @@ import iconv from "iconv-lite";
 /**
  * https://stackoverflow.com/a/9049823
  */
-export const getHtml = async (url: string): Promise<string> => {
+export const getHtml = async (url: string, encoding: string = "utf-8"): Promise<string> => {
 	try {
 		// request(url, { encoding: "binary" }, (error, response, html) => {
 		// 	const parsed = iconv.decode(html, "windows-1257");
@@ -31,7 +31,7 @@ export const getHtml = async (url: string): Promise<string> => {
 
 		const dataBuffer: Buffer = await response.buffer();
 
-		const parsedHtml: string = iconv.decode(dataBuffer, "windows-1257");
+		const parsedHtml: string = iconv.decode(dataBuffer, encoding);
 
 		return parsedHtml;
 	} catch (err) {

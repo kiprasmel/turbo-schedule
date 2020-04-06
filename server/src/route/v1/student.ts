@@ -1,37 +1,30 @@
 import { Router } from "express";
-import fs from "fs-extra";
 
-import { Student } from "@turbo-schedule/common";
+import { initDb, Db } from "@turbo-schedule/database";
+import { Student, StudentFromList, Lesson } from "@turbo-schedule/common";
+
 import { isProd } from "../../util/isProd";
-import { studentsFilePath, getStudentFilePath } from "../../config";
 
 const router: Router = Router();
 
 /**
- * get an array of students
+ * get an array of students (WITHOUT lessons)
  */
 router.get("/", async (_req, res, next) => {
 	try {
-		const fileExists: boolean = await fs.pathExists(studentsFilePath);
+		const db: Db = await initDb();
 
-		if (!fileExists) {
-			/**
-			 * this is bad because this is not dependant on any inputs -
-			 * this only happens if we failed setting up something ourselves.
-			 */
-			const message: string = `Students array file not found (server error)!\nWas \`${studentsFilePath}\``;
+		const students: StudentFromList[] = await db.get("students").value();
 
-			console.error(message);
-			res.status(500).json({ students: [], message });
+		if (!students?.length) {
+			const msg: string = `Students not found (were \`${students}\`)`;
 
-			return !isProd() ? next(message) : res.end();
+			console.error(msg);
+			return res.status(404).json({ students: [], message: msg });
 		}
 
-		const students: Student[] = await fs.readJSON(studentsFilePath, {
-			encoding: "utf-8",
-		});
-
 		res.json({ students });
+
 		return !isProd() ? next() : res.end();
 	} catch (err) {
 		console.error(err);
@@ -48,29 +41,44 @@ router.get("/", async (_req, res, next) => {
  * TODO - this needs to return the WHOLE student + it's lessons array!
  */
 router.get("/:studentName", async (req, res, next) => {
-	let student: Student = new Student();
-
 	try {
+		const db: Db = await initDb();
+
 		const studentName: string = decodeURIComponent(req.params.studentName);
-		const studentFilePath: string = getStudentFilePath(studentName);
-		const fileExists: boolean = await fs.pathExists(studentFilePath);
 
-		if (!fileExists) {
-			const message: string = `Student not found (${studentName}) (${studentFilePath})`;
+		const studentFromList: StudentFromList = db
+			.get("students")
+			.find({ text: studentName })
+			.value();
 
-			console.warn(message);
-			res.status(404).json({ student, message });
+		if (!studentFromList) {
+			const msg: string = `Student not found (was \`${studentFromList}\`)`;
 
-			return !isProd() ? next(message) : res.end();
+			console.error(msg);
+			return res.status(404).json({ student: new Student(), message: msg });
 		}
 
-		student = { ...student, ...(await fs.readJSON(studentFilePath, { encoding: "utf-8" })) };
+		const lessons: Lesson[] = db
+			.get("lessons")
+			.filter((lesson) => lesson.students.includes(studentFromList.text))
+			.value();
+
+		if (!lessons?.length) {
+			const msg: string = `Lessons for student not found (were \`${lessons}\`)`;
+
+			console.error(msg);
+			return res.status(404).json({ student: studentFromList, message: msg });
+		}
+
+		const student: Student = new Student({ ...studentFromList, lessons: lessons });
 
 		res.json({ student });
+
 		return !isProd() ? next() : res.end();
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ student, message: err });
+		res.status(500).json({ student: new Student(), message: err });
+
 		return !isProd() ? next(err) : res.end();
 	}
 });
