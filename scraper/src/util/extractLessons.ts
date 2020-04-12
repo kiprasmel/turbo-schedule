@@ -1,4 +1,5 @@
-import { NonUniqueLesson } from "@turbo-schedule/common";
+import { NonUniqueLesson, StudentFromList, getHtml, Lesson } from "@turbo-schedule/common";
+import { prepareScheduleItems } from "./prepareScheduleItems";
 
 const removeNewlineAndTrim = (content: string) => content.replace("\n", "").trim();
 
@@ -63,9 +64,13 @@ const extractLesson = (
 	return lesson;
 };
 
-export const extractLessonsArray = (scheduleItemsArray: Array<CheerioElement>): NonUniqueLesson[] => {
+export const extractLessons = async (studentFromList: StudentFromList): Promise<Lesson[]> => {
 	// scheduleItemsArray = scheduleItemsArray.splice(0, 15);
 	// const lessonsArray: Array<any> = scheduleItemsArray.map((scheduleItem, index) => extractLesson(scheduleItem, index));
+
+	const html: string = await getHtml(studentFromList.originalScheduleURI, "windows-1257");
+
+	const scheduleItemsArray: CheerioElement[] = prepareScheduleItems(html);
 
 	// const lessonTimesArray: Array<string> = [
 	// 	"08:00",
@@ -88,7 +93,7 @@ export const extractLessonsArray = (scheduleItemsArray: Array<CheerioElement>): 
 	const howManyWorkdays: number = 5;
 	const howManyLessonsMax: number = 9; /** todo automatic */
 
-	const extractedLessonsArray: Array<NonUniqueLesson> = [];
+	const extractedLessonsArray: Array<Lesson> = [];
 
 	/** go NOT from left to right & down, but from TOP to bottom & left */
 	for (let workDay = 0; workDay < howManyWorkdays; ++workDay) {
@@ -105,7 +110,12 @@ export const extractLessonsArray = (scheduleItemsArray: Array<CheerioElement>): 
 				continue;
 			}
 
-			extractedLessonsArray.push(extractedLesson);
+			const lessonWithStudent: Lesson = {
+				...extractedLesson,
+				students: [studentFromList.id],
+			};
+
+			extractedLessonsArray.push(lessonWithStudent);
 		}
 	}
 
