@@ -16,6 +16,9 @@
 !server/dist
 !client/build
 
+!database/data/
+database/data/emails.json
+
 #### this sucks
 ###!server/postinstall.ts
 ###!server/src/config.ts

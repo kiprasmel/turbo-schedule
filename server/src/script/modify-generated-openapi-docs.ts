@@ -1,17 +1,17 @@
 #!/usr/bin/env ts-node-dev
-// generateOpenAPIDocs.ts
+// modifyGeneratedAPIDocs.ts
 
 /**
  * @usage
- * `./generateOpenAPIDocs ./path/to/openAPI.json`
+ * `./modifyGeneratedAPIDocs [./path/to/docs.json]`
  *
  * @note
  * when          in typescript, run with `ts-node-dev` or simply `./`;
  * when compiled to javascript, run with `node`;
  */
 
-import { generateOpenAPIDocs } from "./module/generateOpenAPIDocs";
-import { openAPIFilePath } from "../src/config";
+import { modifyGeneratedAPIDocs } from "./module/modifyGeneratedAPIDocs";
+import { openAPIFilePath } from "../config";
 
 const argv: string[] = process.argv.splice(2);
 let savePathAndFilename: string;
@@ -22,7 +22,4 @@ if (argv.length) {
 	savePathAndFilename = openAPIFilePath;
 }
 
-(async () => {
-	await generateOpenAPIDocs(savePathAndFilename);
-	process.exit();
-})();
+modifyGeneratedAPIDocs(savePathAndFilename);

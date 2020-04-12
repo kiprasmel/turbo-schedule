@@ -7,7 +7,7 @@
  * when compiled to javascript, run with `node`;
  */
 
-import { startServer } from "../src/server";
+import { startServer } from "../server";
 
 process.on("SIGINT", () => {
 	console.log("~ bye bye!");

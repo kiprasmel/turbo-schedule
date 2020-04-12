@@ -6,7 +6,7 @@ import fs from "fs-extra";
 import { delay } from "@turbo-schedule/common";
 import { setNewDbState } from "@turbo-schedule/database";
 
-import { startServer } from "../src/server";
+import { startServer } from "../server";
 
 /**
  * see https://stackoverflow.com/a/44387594
