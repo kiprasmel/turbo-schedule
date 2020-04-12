@@ -79,10 +79,6 @@ jobs:
             # END TEST
 
             # BEGIN DEPLOY
-            - run: yarn docker:deploy
-              env:
-                  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-                  DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
 
             - run: git config --global user.email ${{ secrets.GIT_USER_EMAIL }}
             - run: git config --global user.name ${{ secrets.GIT_USER_NAME }}
@@ -99,6 +95,11 @@ jobs:
 
             # print for debugging
             - run: echo "$LATEST_TAG"
+
+            - run: yarn docker:deploy
+              env:
+                  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+                  DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
 
             - run: yarn docker:tag-version
 
