@@ -28,6 +28,6 @@
  */
 
 import scraper from "@turbo-schedule/scraper";
-import { scrapedDataDirPath } from "../src/config";
+import { scrapedDataDirPath } from "../config";
 
 scraper(scrapedDataDirPath);
