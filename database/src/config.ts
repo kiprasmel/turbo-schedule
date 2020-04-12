@@ -1,4 +1,4 @@
-import { Lesson, StudentFromList /**, Change */ } from "@turbo-schedule/common";
+import { Class, Lesson, StudentFromList /** , Change */ } from "@turbo-schedule/common";
 
 import low from "lowdb";
 import path from "path";
@@ -16,11 +16,12 @@ export const databaseFileName: string = "latest.json";
 export const databaseFile: string = path.join(defaultDatabaseDataDirPath, databaseFileName);
 
 export interface DbSchema {
+	classes: Class[];
 	students: StudentFromList[];
 	lessons: Lesson[];
 	/** changes: Change[]; */
 }
 
-export const defaultDbState: DbSchema = { students: [], lessons: [] /** , changes: [] */ };
+export const defaultDbState: DbSchema = { classes: [], students: [], lessons: [] /** , changes: [] */ };
 
 export type Db = low.LowdbAsync<DbSchema>;
