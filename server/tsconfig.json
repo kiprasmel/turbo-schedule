@@ -12,7 +12,7 @@
 		}
 	],
 	"compilerOptions": {
-		/** we currently do NOT use neither `rootDir` nor `rootDirs` here */
+		"rootDir": "./src",
 		"outDir": "dist"
 	},
 	"exclude": [
