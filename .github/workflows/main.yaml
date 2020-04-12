@@ -91,7 +91,7 @@ jobs:
             - run: ./node_modules/.bin/lerna changed
 
             # create new version (& push to github) (skips ci to avoid an infinite loop)
-            - run: yarn lerna version
+            - run: ./node_modules/.bin/lerna version
 
             # get the latest tag
             # see https://github.com/actions/starter-workflows/issues/68#issuecomment-552074596
