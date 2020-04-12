@@ -10,7 +10,7 @@
 		"start": "yarn dev",
 		"test": "yarn test:api --forceExit",
 		"build": "     yarn build:ts && yarn build:content      && yarn build:docs",
-		"build:prod": "yarn build:ts && yarn build:content:prod && yarn build:docs:prod",
+		"build:prod": "cross-env NODE_ENV=production yarn build:ts && yarn build:content:prod && yarn build:docs:prod",
 		"serve": "cross-env NODE_ENV=production node dist/script/start-server.js",
 		"-----": "-----",
 		"watch:ts": "tsc -b -w",
@@ -19,9 +19,9 @@
 		"test:api": "mkdir -p ../database/data.test/ && cross-env NODE_ENV=test PORT=5069  jest --config ./test/jest.config.js",
 		"build:ts": "          yarn tsc -b                                                                      ",
 		"build:content": "     yarn ts-node-dev      ./script/scrape-content.ts                                 ",
-		"build:content:prod": "     node        ./dist/script/scrape-content.js          # depends on `build:ts`",
+		"build:content:prod": "cross-env NODE_ENV=production     node        ./dist/script/scrape-content.js          # depends on `build:ts`",
 		"build:docs": "        yarn ts-node-dev      ./script/generate-openapi-docs.ts                          ",
-		"build:docs:prod": "        node        ./dist/script/generate-openapi-docs.js   # depends on `build:ts`"
+		"build:docs:prod": "cross-env NODE_ENV=production        node        ./dist/script/generate-openapi-docs.js   # depends on `build:ts`"
 	},
 	"dependencies": {
 		"@turbo-schedule/common": "^2.1.2",
