@@ -17,5 +17,10 @@
 	},
 	"devDependencies": {
 		"typescript": "^3.8.2"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/facebook/react.git",
+		"directory": "database/"
 	}
 }

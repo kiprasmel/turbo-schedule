@@ -66,5 +66,10 @@
 	"resolutions": {
 		"express-oas-generator/swagger-ui-express": "^4.1.2"
 	},
-	"keywords": []
+	"keywords": [],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/facebook/react.git",
+		"directory": "server/"
+	}
 }

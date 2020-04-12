@@ -41,5 +41,10 @@
 		"scraper",
 		"sarpik",
 		"kpg"
-	]
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/facebook/react.git",
+		"directory": "scraper/"
+	}
 }
