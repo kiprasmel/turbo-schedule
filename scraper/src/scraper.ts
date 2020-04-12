@@ -1,4 +1,5 @@
 import {
+	Class,
 	StudentFromList, //
 	StudentWithNonUniqueLessons,
 	Lesson,
@@ -9,6 +10,7 @@ import { DbSchema, setNewDbState } from "@turbo-schedule/database";
 
 import { IScraperConfig } from "./config";
 import { scrapeStudentList } from "./util/scrapeStudentList";
+import { scrapeClassList } from "./util/scrapeClassList";
 import { getAllStudentsFromListInParallel } from "./getAllStudentsFromListInParallel";
 
 import { extractUniqueLessonsSync } from "./extractUniqueLessons";
@@ -37,9 +39,14 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 
 		// eslint-disable-next-line prefer-const
 		let studentsFromList: StudentFromList[] = await scrapeStudentList(frontPageHtml);
+
+		// eslint-disable-next-line prefer-const
+		let classesFromList: Class[] = scrapeClassList(frontPageHtml);
+
 		if (process.env.FAST) {
 			/** TODO document */
 			studentsFromList = studentsFromList.splice(0, 10);
+			classesFromList = classesFromList.splice(0, 10);
 		}
 
 		const studentsWithNonUniqueLessons: StudentWithNonUniqueLessons[] = await getAllStudentsFromListInParallel(
@@ -74,9 +81,10 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		// })
 
 		/** create a new database */
-		const newDbState: Partial<DbSchema> = {
+		const newDbState: Omit<DbSchema, "Changes"> = {
 			students: studentsFromList,
 			lessons: uniqueLessons,
+			classes: classesFromList,
 		};
 
 		await setNewDbState(newDbState);
