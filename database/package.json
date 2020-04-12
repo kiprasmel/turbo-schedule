@@ -1,12 +1,12 @@
 {
 	"name": "@turbo-schedule/database",
-	"version": "2.1.2",
+	"version": "2.1.3",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
 	"author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
 	"license": "UNLICENSED",
 	"dependencies": {
-		"@turbo-schedule/common": "^2.1.2",
+		"@turbo-schedule/common": "^2.1.3",
 		"@types/debug": "^4.1.5",
 		"@types/lowdb": "^1.0.9",
 		"@types/uuid": "^7.0.2",
