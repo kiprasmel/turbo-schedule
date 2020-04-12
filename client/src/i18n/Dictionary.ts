@@ -1,5 +1,7 @@
 export interface Dictionary {
 	Language: string;
+	englishLang: string;
+	lithuanianLang: string;
 	en: string;
 	lt: string;
 	weekday: (index: number) => string;

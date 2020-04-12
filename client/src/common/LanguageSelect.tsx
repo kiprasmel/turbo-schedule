@@ -1,5 +1,7 @@
 import React, { FC, useState, useContext } from "react";
 
+import "./LanguageSelect.scss";
+
 import { CurrentLangContext, ICurrentLangContextValue } from "../components/currentLangContext/currentLangContext";
 import { ILang } from "../i18n/i18n";
 import { useTranslation } from "../i18n/useTranslation";
@@ -10,7 +12,7 @@ interface ILanguageSelectProps {
 
 const LanguageSelect: FC<ILanguageSelectProps> = () => {
 	const langContext: ICurrentLangContextValue = useContext(CurrentLangContext);
-	const { availableLangs, setLang } = langContext;
+	const { availableLangs, setLang, currentLang } = langContext;
 
 	const t = useTranslation();
 
@@ -24,23 +26,20 @@ const LanguageSelect: FC<ILanguageSelectProps> = () => {
 	return (
 		<>
 			<div style={{ position: "relative" }}>
-				<div style={{ position: "absolute", top: 0, right: "20px", margin: 0, padding: 0, zIndex: 10 }}>
-					{/* <Dropdown options={availableLangs} value={t("Language")} /> */}
+				<div style={{ position: "absolute", top: "1ch", right: "2ch", margin: 0, padding: 0, zIndex: 10 }}>
 					<button
-						className="btn"
-						style={{ marginRight: 0 }}
-						onClick={(_e) => setShowLangs((_showLangs) => !showLangs)}
+						type="button"
+						className=""
+						style={{ textTransform: "uppercase" }}
+						onClick={(_e) => setShowLangs((_showLangs) => !_showLangs)}
 					>
-						<div style={{ fontSize: "18px" }}>
-							<i style={{ verticalAlign: "middle" }} className="material-icons md-18">
-								translate
-							</i>
-							<span style={{ verticalAlign: "middle", marginLeft: "4px" }}>{t("Language")}</span>
-						</div>
+						<span>{currentLang} </span>
+						<span className="material-icons md-18" style={{ verticalAlign: "middle" }}>
+							expand_more
+						</span>
 					</button>
 
 					{showLangs && (
-						// <ul style={{ position: "absolute", margin: 0, padding: 0 }}>
 						<ul
 							style={{
 								margin: 0,
@@ -48,11 +47,13 @@ const LanguageSelect: FC<ILanguageSelectProps> = () => {
 								marginTop: "6px",
 								background: "#fff",
 							}}
+							className="language-list"
 						>
 							{availableLangs.map((lang, index) => (
 								<li key={lang}>
 									<button
-										className="btn"
+										type="button"
+										// className="btn"
 										style={{
 											width: "100%",
 											borderTop: index === 0 ? "" : "none",

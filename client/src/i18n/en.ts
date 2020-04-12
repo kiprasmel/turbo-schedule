@@ -12,8 +12,10 @@ const weekdays: Array<string> = [
 
 export const en: Dictionary = {
 	Language: "Language",
-	en: "English (Anglų)",
-	lt: "Lithuanian (Lietuvių)",
+	englishLang: "English",
+	lithuanianLang: "Lithuanian",
+	en: "EN",
+	lt: "LT",
 	weekday: (index: number) => weekdays[index],
 	"I am": "I am",
 	"Student not found": (name: string) => `Student "${name}" not found...`,

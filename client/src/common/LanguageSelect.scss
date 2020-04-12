@@ -1,0 +1,9 @@
+.language-list {
+	& > * + * {
+		margin-top: 0.5rem;
+	}
+
+	li {
+		padding: 0.25rem 0.5rem;
+	}
+}

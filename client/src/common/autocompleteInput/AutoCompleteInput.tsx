@@ -73,6 +73,7 @@ const AutoCompleteInput = ({
 		/** TODO `key` */
 		<li key={index} style={{ marginBottom: "0.25em" }}>
 			<button
+				type="button"
 				onClick={(_e) => handleAutoCompletionSelection(autoCompletion.text)}
 				onKeyDown={(e) => handleOnKeyDown(e, index)}
 				style={{
