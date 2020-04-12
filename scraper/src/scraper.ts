@@ -2,11 +2,13 @@ import {
 	StudentFromList, //
 	StudentWithNonUniqueLessons,
 	Lesson,
+	getHtml,
+	frontPageScheduleURI,
 } from "@turbo-schedule/common";
 import { DbSchema, setNewDbState } from "@turbo-schedule/database";
 
 import { IScraperConfig } from "./config";
-import { getStudentList } from "./util/scrapeStudents";
+import { scrapeStudentList } from "./util/scrapeStudentList";
 import { getAllStudentsFromListInParallel } from "./getAllStudentsFromListInParallel";
 
 import { extractUniqueLessonsSync } from "./extractUniqueLessons";
@@ -31,8 +33,10 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		 * at the end of the chain.
 		 */
 
+		const frontPageHtml: string = await getHtml(frontPageScheduleURI, "windows-1257");
+
 		// eslint-disable-next-line prefer-const
-		let studentsFromList: StudentFromList[] = await getStudentList();
+		let studentsFromList: StudentFromList[] = await scrapeStudentList(frontPageHtml);
 		if (process.env.FAST) {
 			/** TODO document */
 			studentsFromList = studentsFromList.splice(0, 10);
