@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+/* eslint-disable lines-between-class-members */
 /**
  * NOTE - the dynamic imports inside functions:
  *
@@ -18,6 +20,7 @@
 
 /* eslint-disable import/no-cycle */
 import { Lesson, NonUniqueLesson } from "./Lesson";
+import { getSpecificScheduleURI } from "./Schedule";
 // import { Friend } from "./Friend";
 
 /**
@@ -35,39 +38,7 @@ import { Lesson, NonUniqueLesson } from "./Lesson";
  * which results in the whole thing becoming pointless.
  */
 
-/** these are non-configurable, they just stay the same */
-export const studentsPageURI: string = `http://kpg.lt/Tvarkarastis/Index.htm`; /** TODO RENAME to `scheduleListURI` */
-const getSingleStudentScheduleURI = (studentHref: string): string => `http://kpg.lt/Tvarkarastis/${studentHref}`;
-
-export const classNumMin = 0;
-export const classNumMax = 12;
-
-/** Use `0` ONLY FOR FAILED CASES */
-export type TClassNum = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-
-// export const classNumToRetardedClassNumDict = {
-// 	// // 1: "I",
-// 	// // 2: "II",
-// 	// // 3: "III",
-// 	// // 4: "IV",
-// 	// // 5: "V",
-// 	// // 6: "VI",
-// 	// // 7: "VII",
-// 	// // 8: "VIII",
-// 	0: "0",
-// 	1: "1",
-// 	2: "2",
-// 	3: "3",
-// 	4: "4",
-// 	5: "5",
-// 	6: "6",
-// 	7: "7",
-// 	8: "8",
-// 	9: "IG",
-// 	10: "IIG",
-// 	11: "IIIG",
-// 	12: "IVG",
-// };
+import { TClassNum, classNumMin, classNumMax } from "./Class";
 
 /**
  * only `originalHref` & `text` are mandatory;
@@ -91,13 +62,15 @@ export class StudentFromList {
 	readonly lastName: string;
 	readonly fullName: string;
 
+	/** BEGIN Class */
 	readonly classNum: TClassNum;
 	readonly classChar: string;
-	readonly fullClass: string;
+	readonly fullClass: string; /** TODO `className` */
 
 	readonly classNumOrig: string;
 	readonly classCharOrig: string;
-	readonly fullClassOrig: string;
+	readonly fullClassOrig: string; /** TODO `classNameOrig` */
+	/** END Class */
 
 	constructor(data?: StudentFromListInitData) {
 		/**
@@ -182,12 +155,12 @@ export class StudentFromList {
 	// 	return this.text;
 	// }
 
-	// get baseScheduleURI(): string {
-	// 	return baseScheduleURI;
+	// get frontPageScheduleURI(): string {
+	// 	return frontPageScheduleURI;
 	// }
 
 	// get originalScheduleURI(): string {
-	// 	return this.baseScheduleURI + "/" + this.originalHref;
+	// 	return this.frontPageScheduleURI + "/" + this.originalHref;
 	// }
 
 	parseOriginalScheduleURI(): string {
@@ -195,7 +168,7 @@ export class StudentFromList {
 			return "";
 		}
 
-		return getSingleStudentScheduleURI(this.originalHref);
+		return getSpecificScheduleURI(this.originalHref);
 	}
 
 	// get firstName(): string {
