@@ -2,7 +2,7 @@ import { Lesson } from "@turbo-schedule/common";
 
 /**
  * loop through all lessons,
- * (each containing only one student)
+ * (each containing only one student (or more, if you're merging more than once))
  * store the lessons in a map by their non-unique `id`,
  * making it unique,
  * and add students' `id`s to the unique lessons
@@ -42,14 +42,7 @@ export const mergeStudentsOfDuplicateLessons = (duplicateLessonsEachWithSingleSt
 		if (!uniqueLesson) {
 			uniqueLesson = nonUniqueLesson;
 		} else {
-			/**
-			 * each non-unique lesson has only a single student,
-			 * so this works just fine.
-			 */
-			uniqueLesson.students.push(nonUniqueLesson.students[0]);
-
-			/** you could also do this: */
-			// uniqueLesson.students = [...uniqueLesson.students, ...nonUniqueLesson.students];
+			uniqueLesson.students = [...uniqueLesson.students, ...nonUniqueLesson.students];
 		}
 
 		uniqueLessonsMap.set(uniqueLesson.id, uniqueLesson);
