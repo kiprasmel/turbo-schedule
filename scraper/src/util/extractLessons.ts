@@ -1,4 +1,4 @@
-import { NonUniqueLesson, StudentFromList, getHtml, Lesson } from "@turbo-schedule/common";
+import { NonUniqueLesson, getHtml, Lesson } from "@turbo-schedule/common";
 import { prepareScheduleItems } from "./prepareScheduleItems";
 
 const removeNewlineAndTrim = (content: string) => content.replace("\n", "").trim();
@@ -64,11 +64,11 @@ const extractLesson = (
 	return lesson;
 };
 
-export const extractLessons = async (studentFromList: StudentFromList): Promise<Lesson[]> => {
+export const extractLessons = async (originalScheduleURI: string, scheduleEntityID: string): Promise<Lesson[]> => {
 	// scheduleItemsArray = scheduleItemsArray.splice(0, 15);
 	// const lessonsArray: Array<any> = scheduleItemsArray.map((scheduleItem, index) => extractLesson(scheduleItem, index));
 
-	const html: string = await getHtml(studentFromList.originalScheduleURI, "windows-1257");
+	const html: string = await getHtml(originalScheduleURI, "windows-1257");
 
 	const scheduleItemsArray: CheerioElement[] = prepareScheduleItems(html);
 
@@ -112,7 +112,7 @@ export const extractLessons = async (studentFromList: StudentFromList): Promise<
 
 			const lessonWithStudent: Lesson = {
 				...extractedLesson,
-				students: [studentFromList.id],
+				students: [scheduleEntityID],
 			};
 
 			extractedLessonsArray.push(lessonWithStudent);
