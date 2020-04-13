@@ -1,7 +1,6 @@
 import {
 	Class,
 	StudentFromList, //
-	StudentWithNonUniqueLessons,
 	Lesson,
 	getHtml,
 	frontPageScheduleURI,
@@ -11,9 +10,9 @@ import { DbSchema, setNewDbState } from "@turbo-schedule/database";
 import { IScraperConfig } from "./config";
 import { scrapeStudentList } from "./util/scrapeStudentList";
 import { scrapeClassList } from "./util/scrapeClassList";
-import { getAllStudentsFromListInParallel } from "./getAllStudentsFromListInParallel";
 
-import { extractUniqueLessonsSync } from "./extractUniqueLessons";
+import { mergeStudentsOfDuplicateLessons } from "./mergeStudentsOfDuplicateLessons";
+import { extractLessons } from "./util/extractLessons";
 
 // import { populateStudentsWithFriends } from "./populateStudentsWithFriends";
 
@@ -49,11 +48,11 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			classesFromList = classesFromList.splice(0, 10);
 		}
 
-		const studentsWithNonUniqueLessons: StudentWithNonUniqueLessons[] = await getAllStudentsFromListInParallel(
-			studentsFromList
-		);
+		const nonUniqueLessonsEachWithSingleStudent: Lesson[] = await (
+			await Promise.all(studentsFromList.map((student) => extractLessons(student)))
+		).flat();
 
-		const uniqueLessons: Lesson[] = extractUniqueLessonsSync(studentsWithNonUniqueLessons, undefined);
+		const uniqueLessons: Lesson[] = mergeStudentsOfDuplicateLessons(nonUniqueLessonsEachWithSingleStudent);
 
 		/** BEGIN SOON */
 		// .then((students) => populateStudentsWithFriends(students))
