@@ -49,10 +49,33 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		}
 
 		const nonUniqueLessonsEachWithSingleStudent: Lesson[] = await (
-			await Promise.all(studentsFromList.map((student) => extractLessons(student)))
+			await Promise.all(
+				studentsFromList.map((student) => extractLessons(student.originalScheduleURI, student.id))
+			)
 		).flat();
 
-		const uniqueLessons: Lesson[] = mergeStudentsOfDuplicateLessons(nonUniqueLessonsEachWithSingleStudent);
+		const nonUniqueLessonsEachWithSingleClass: Lesson[] = await (
+			await Promise.all(
+				classesFromList.map((theClass) => extractLessons(theClass.originalScheduleURI, theClass.text))
+			)
+		).flat();
+
+		const uniqueLessonsFromStudents: Lesson[] = mergeStudentsOfDuplicateLessons(
+			nonUniqueLessonsEachWithSingleStudent
+		);
+
+		/**
+		 * TODO - `classes` will be placed inside `lesson.students` - is this what we want?
+		 */
+		const uniqueLessonsFromClasses: Lesson[] = mergeStudentsOfDuplicateLessons(nonUniqueLessonsEachWithSingleClass);
+
+		/**
+		 * merge once again!
+		 */
+		const allUniqueLessons: Lesson[] = mergeStudentsOfDuplicateLessons([
+			...uniqueLessonsFromClasses,
+			...uniqueLessonsFromStudents,
+		]);
 
 		/** BEGIN SOON */
 		// .then((students) => populateStudentsWithFriends(students))
@@ -82,7 +105,7 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		/** create a new database */
 		const newDbState: Omit<DbSchema, "Changes"> = {
 			students: studentsFromList,
-			lessons: uniqueLessons,
+			lessons: allUniqueLessons,
 			classes: classesFromList,
 		};
 
