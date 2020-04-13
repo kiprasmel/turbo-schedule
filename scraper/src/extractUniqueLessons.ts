@@ -4,6 +4,15 @@ import fs from "fs-extra";
 import path from "path";
 
 /**
+ * @deprecated - see `mergeStudentsOfDuplicateLessons` instead!
+ *
+ * (
+ * this still works fine - we just use a slightly different approach now,
+ * making things more re-usable
+ * )
+ *
+ * ---
+ *
  * loop through all students & all their lessons (O(n*m)),
  * store the lessons in a map by their non-unique `id`,
  * making it unique,
