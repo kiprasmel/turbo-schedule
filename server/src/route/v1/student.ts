@@ -35,10 +35,6 @@ router.get("/", async (_req, res, next) => {
 
 /**
  * get full schedule of single student by it's name
- *
- * @note make sure to encode the URI component (`studentName`)! (TODO)
- *
- * TODO - this needs to return the WHOLE student + it's lessons array!
  */
 router.get("/:studentName", async (req, res, next) => {
 	try {
@@ -46,7 +42,7 @@ router.get("/:studentName", async (req, res, next) => {
 
 		const studentName: string = decodeURIComponent(req.params.studentName);
 
-		const studentFromList: StudentFromList = db
+		const studentFromList: StudentFromList = await db
 			.get("students")
 			.find({ text: studentName })
 			.value();
@@ -58,7 +54,7 @@ router.get("/:studentName", async (req, res, next) => {
 			return res.status(404).json({ student: new Student(), message: msg });
 		}
 
-		const lessons: Lesson[] = db
+		const lessons: Lesson[] = await db
 			.get("lessons")
 			.filter((lesson) => lesson.students.includes(studentFromList.text))
 			.value();

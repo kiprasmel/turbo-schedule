@@ -6,7 +6,10 @@
 	],
 	"compilerOptions": {
 		"rootDir": "./src",
-		"outDir": "dist"
+		"outDir": "dist",
+		"lib": [
+			"es2020" /** [].flatMap() */ //
+		]
 	},
 	"exclude": [
 		"node_modules", //

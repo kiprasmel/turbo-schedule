@@ -1,15 +1,18 @@
 import {
+	Class,
 	StudentFromList, //
-	StudentWithNonUniqueLessons,
 	Lesson,
+	getHtml,
+	frontPageScheduleURI,
 } from "@turbo-schedule/common";
 import { DbSchema, setNewDbState } from "@turbo-schedule/database";
 
 import { IScraperConfig } from "./config";
-import { getStudentList } from "./util/scrapeStudents";
-import { getAllStudentsFromListInParallel } from "./getAllStudentsFromListInParallel";
+import { scrapeStudentList } from "./util/scrapeStudentList";
+import { scrapeClassList } from "./util/scrapeClassList";
 
-import { extractUniqueLessonsSync } from "./extractUniqueLessons";
+import { mergeStudentsOfDuplicateLessons } from "./mergeStudentsOfDuplicateLessons";
+import { extractLessonFromClass, extractLessonFromStudent } from "./util/extractLessons";
 
 // import { populateStudentsWithFriends } from "./populateStudentsWithFriends";
 
@@ -31,18 +34,48 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		 * at the end of the chain.
 		 */
 
+		const frontPageHtml: string = await getHtml(frontPageScheduleURI, "windows-1257");
+
 		// eslint-disable-next-line prefer-const
-		let studentsFromList: StudentFromList[] = await getStudentList();
+		let studentsFromList: StudentFromList[] = await scrapeStudentList(frontPageHtml);
+
+		// eslint-disable-next-line prefer-const
+		let classesFromList: Class[] = scrapeClassList(frontPageHtml);
+
 		if (process.env.FAST) {
 			/** TODO document */
 			studentsFromList = studentsFromList.splice(0, 10);
+			classesFromList = classesFromList.splice(0, 10);
 		}
 
-		const studentsWithNonUniqueLessons: StudentWithNonUniqueLessons[] = await getAllStudentsFromListInParallel(
-			studentsFromList
+		const nonUniqueLessonsEachWithSingleStudent: Lesson[] = await (
+			await Promise.all(
+				studentsFromList.map((student) => extractLessonFromStudent(student.originalScheduleURI, student.id))
+			)
+		).flat();
+
+		const nonUniqueLessonsEachWithSingleClass: Lesson[] = await (
+			await Promise.all(
+				classesFromList.map((theClass) => extractLessonFromClass(theClass.originalScheduleURI, theClass.text))
+			)
+		).flat();
+
+		const uniqueLessonsFromStudents: Lesson[] = mergeStudentsOfDuplicateLessons(
+			nonUniqueLessonsEachWithSingleStudent
 		);
 
-		const uniqueLessons: Lesson[] = extractUniqueLessonsSync(studentsWithNonUniqueLessons, undefined);
+		/**
+		 * TODO - `classes` will be placed inside `lesson.students` - is this what we want?
+		 */
+		const uniqueLessonsFromClasses: Lesson[] = mergeStudentsOfDuplicateLessons(nonUniqueLessonsEachWithSingleClass);
+
+		/**
+		 * merge once again!
+		 */
+		const allUniqueLessons: Lesson[] = mergeStudentsOfDuplicateLessons([
+			...uniqueLessonsFromClasses,
+			...uniqueLessonsFromStudents,
+		]);
 
 		/** BEGIN SOON */
 		// .then((students) => populateStudentsWithFriends(students))
@@ -70,9 +103,10 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		// })
 
 		/** create a new database */
-		const newDbState: Partial<DbSchema> = {
+		const newDbState: Omit<DbSchema, "Changes"> = {
 			students: studentsFromList,
-			lessons: uniqueLessons,
+			lessons: allUniqueLessons,
+			classes: classesFromList,
 		};
 
 		await setNewDbState(newDbState);

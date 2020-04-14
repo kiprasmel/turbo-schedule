@@ -9,7 +9,7 @@
 	"scripts": {
 		"watch:ts": "tsc -b -w",
 		"test": "echo \"TODO: no test specified\" && exit 0",
-		"build": "tsc -b"
+		"build": "tsc -b -v"
 	},
 	"dependencies": {
 		"@types/debug": "^4.1.5",

@@ -1,10 +1,9 @@
 import cheerio from "cheerio";
 
-import { studentsPageURI, StudentFromList } from "@turbo-schedule/common";
-import { getStudentsListHtml } from "./getStudentsListHtml";
+import { StudentFromList } from "@turbo-schedule/common";
 
-const scrapeStudentList = (studentsListHtml: string): StudentFromList[] => {
-	const $ = cheerio.load(studentsListHtml);
+export const scrapeStudentList = (html: string): StudentFromList[] => {
+	const $ = cheerio.load(html);
 
 	// const student = $("font a")[300];
 
@@ -63,15 +62,4 @@ const scrapeStudentList = (studentsListHtml: string): StudentFromList[] => {
 
 	// console.log("studentsDataArray", studentsDataArray);
 	return studentsDataArray;
-};
-
-/**
- * studentsWithoutLessons
- */
-export const getStudentList = async (): Promise<StudentFromList[]> => {
-	const studentsListHtml: string = await getStudentsListHtml(studentsPageURI);
-
-	const studentList: StudentFromList[] = scrapeStudentList(studentsListHtml);
-
-	return studentList;
 };
