@@ -42,7 +42,9 @@ export interface Class {
 	/** END Class */
 }
 
-export function createClass({ fullClassOrig, originalHref }: ClassInitData): Class {
+export function createClass(data: ClassInitData = { fullClassOrig: "", originalHref: "" }): Class {
+	const { fullClassOrig, originalHref } = data;
+
 	const text = fullClassOrig;
 	const originalScheduleURI = getSpecificScheduleURI(originalHref);
 
