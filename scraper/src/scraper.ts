@@ -12,7 +12,7 @@ import { scrapeStudentList } from "./util/scrapeStudentList";
 import { scrapeClassList } from "./util/scrapeClassList";
 
 import { mergeStudentsOfDuplicateLessons } from "./mergeStudentsOfDuplicateLessons";
-import { extractLessons } from "./util/extractLessons";
+import { extractLessonFromClass, extractLessonFromStudent } from "./util/extractLessons";
 
 // import { populateStudentsWithFriends } from "./populateStudentsWithFriends";
 
@@ -50,13 +50,13 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 
 		const nonUniqueLessonsEachWithSingleStudent: Lesson[] = await (
 			await Promise.all(
-				studentsFromList.map((student) => extractLessons(student.originalScheduleURI, student.id))
+				studentsFromList.map((student) => extractLessonFromStudent(student.originalScheduleURI, student.id))
 			)
 		).flat();
 
 		const nonUniqueLessonsEachWithSingleClass: Lesson[] = await (
 			await Promise.all(
-				classesFromList.map((theClass) => extractLessons(theClass.originalScheduleURI, theClass.text))
+				classesFromList.map((theClass) => extractLessonFromClass(theClass.originalScheduleURI, theClass.text))
 			)
 		).flat();
 
