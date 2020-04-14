@@ -4,15 +4,6 @@
 
 ## Development notes
 
-### Why does `build:ts` first remove `tsconfig.tsbuildinfo`?
-
-Because typescript would be built before-hand from the top-level package.json's script.
-The issue is that some scripts are not included in the final bundle, thus they're not built at all.
-Thus, we need to re-build typescript here, in this package.
-But that wouldn't happen since `tsconfig.tsbuildinfo` would prevent it,
-since it'd say that the build is up-to-date and would skip it.
-So we remove it & get our scripts built.
-
 ### Why is the `database/` folder not inside `generated/`?
 
 I've had them separated, then I tried to put `database/` into `generated/`, but there's a flaw with docker volumes that limits us from doing this:
