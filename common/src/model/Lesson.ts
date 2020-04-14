@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+/* eslint-disable lines-between-class-members */
 /* eslint-disable import/no-cycle */
 import { Student } from "./Student";
 
