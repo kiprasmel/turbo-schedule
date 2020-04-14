@@ -3,6 +3,8 @@
 /* eslint-disable lines-between-class-members */
 
 import { getSpecificScheduleURI } from "./Schedule";
+// eslint-disable-next-line import/no-cycle
+import { Lesson } from "./Lesson";
 
 export const classNumMin = 0;
 export const classNumMax = 12;
@@ -35,6 +37,8 @@ export interface Class {
 	readonly fullClass: string;
 	readonly classNum: TClassNum;
 	readonly classChar: string;
+
+	readonly lessons?: Lesson[] /** available only once populated from the database (we don't inline) */;
 	/** END Class */
 }
 
