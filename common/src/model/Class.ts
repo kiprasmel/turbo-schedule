@@ -20,6 +20,10 @@ interface ClassInitData extends Partial<Class> {
 /**
  * A `class` describes all students within a particular class / grade,
  * for example the 6th grade students, the 11th grade students etc.
+ *
+ * TODO: https://github.com/sarpik/turbo-schedule/issues/34
+ * TODO: https://github.com/sarpik/turbo-schedule/issues/36
+ *
  */
 export interface Class {
 	// 	/** BEGIN Scrapable */
