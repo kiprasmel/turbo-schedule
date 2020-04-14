@@ -9,7 +9,7 @@
 	"scripts": {
 		"start": "yarn dev",
 		"test": "echo \"TODO: no test specified\" && exit 0",
-		"build": "tsc",
+		"build": "tsc -b -v",
 		"serve": "node dist/index.js",
 		"-----": "-----",
 		"watch:ts": "tsc -b -w",
