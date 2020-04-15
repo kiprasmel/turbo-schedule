@@ -115,11 +115,9 @@ This's one worth a read:D https://github.com/actions/checkout/issues/217
 
 the list is not exhaustive. I appreciate open source & try to contribute if possible - I encourage you too!
 
-## [License](./LICENSE)
+## License
 
-> [AGPL-3.0-only](./LICENSE)
-
-Copyright (C) 2019 [Kipras Melnikovas](https://github.com/sarpik)
+[AGPL-3.0-only](./LICENSE) © 2019-present [Kipras Melnikovas](https://github.com/sarpik)
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as published by
