@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/facebook/react/compare/v2.1.5...v2.2.0) (2020-04-15)
+
+
+### Features
+
+* **db:** Extend the schema with `classes` ([5c5af7d](https://github.com/facebook/react/commit/5c5af7dd221bab6b166daeae62d8c1f6f79ced86))
+
+
+
+
+
 ## 2.1.5 (2020-04-12)
 
 **Note:** Version bump only for package @turbo-schedule/database

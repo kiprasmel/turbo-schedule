@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/facebook/react/compare/v2.1.5...v2.2.0) (2020-04-15)
+
+
+### Bug Fixes
+
+* **server:** Make sure we're using `await` with the database ([e0dd189](https://github.com/facebook/react/commit/e0dd189abe0e074ddea1085348a85985a598b116))
+* **server:** Remove `script` symlink - typescript ignores src/script too! ([f55b8df](https://github.com/facebook/react/commit/f55b8df23b101363267dd55c3b75fb88a6a8fa89))
+* **server:** Remove `tsconfig.tsbuildinfo` before building typescript ([4265026](https://github.com/facebook/react/commit/4265026bd224a3a5d56a1e02864a74bb1ddbee96))
+
+
+### Features
+
+* **server:** Create API endpoint for `class` 🚀 ([e5994e4](https://github.com/facebook/react/commit/e5994e4e6f664173dd15e1ad43cc2dd689b9444a))
+* **server:** Create API endpoint for `schedule-item` 🚀 ([3c73488](https://github.com/facebook/react/commit/3c734887609673b638218b2399d63b3fd478dbe0))
+
+
+### Reverts
+
+* Revert "fix(server): Remove `tsconfig.tsbuildinfo` before building typescript" ([0a0a683](https://github.com/facebook/react/commit/0a0a68373daacd192e491d6a365637539c1e39df))
+
+
+
+
+
 ## 2.1.5 (2020-04-12)
 
 **Note:** Version bump only for package @turbo-schedule/server

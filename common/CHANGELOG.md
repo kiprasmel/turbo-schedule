@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/facebook/react/compare/v2.1.5...v2.2.0) (2020-04-15)
+
+
+### Bug Fixes
+
+* **common:** Add default param values for `createClass` ([8d2256e](https://github.com/facebook/react/commit/8d2256e9e9039a0addfa6a769c6e4f9d50191294))
+* **common:** Allow `Class` to have `lessons` field ([da18a2b](https://github.com/facebook/react/commit/da18a2bab65ee6151c0afa0196ec83c059b98605))
+
+
+### Features
+
+* **common:** Create `Schedule` model ([af888e3](https://github.com/facebook/react/commit/af888e3ef4f928e7018391160c97961db406d69d))
+* **common:** Create the `Class` model ([8674e25](https://github.com/facebook/react/commit/8674e258c0617ba1ba640bee5558e6dd70bc3859))
+* **common:** Export the `Schedule` & `Class` models ([ad28fad](https://github.com/facebook/react/commit/ad28fad82f20f2996c2b8ce00a7af9de47ca3eca))
+
+
+
+
+
 ## 2.1.5 (2020-04-12)
 
 **Note:** Version bump only for package @turbo-schedule/common

@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/sarpik/turbo-schedule/compare/v2.1.5...v2.2.0) (2020-04-15)
+
+
+### Bug Fixes
+
+* **ci:** Pull all git history + all tags for lerna versioning ([e465024](https://github.com/sarpik/turbo-schedule/commit/e465024e045bf331ba6e9817f202afccd53f03f9))
+* **common:** Add default param values for `createClass` ([8d2256e](https://github.com/sarpik/turbo-schedule/commit/8d2256e9e9039a0addfa6a769c6e4f9d50191294))
+* **common:** Allow `Class` to have `lessons` field ([da18a2b](https://github.com/sarpik/turbo-schedule/commit/da18a2bab65ee6151c0afa0196ec83c059b98605))
+* **scraper:** Make `mergeStudentsOfDuplicateLessons` concat full arrays ([1ddcd8f](https://github.com/sarpik/turbo-schedule/commit/1ddcd8f35adba3598b0a11901cedddfad8004fdd))
+* **server:** Make sure we're using `await` with the database ([e0dd189](https://github.com/sarpik/turbo-schedule/commit/e0dd189abe0e074ddea1085348a85985a598b116))
+* **server:** Remove `script` symlink - typescript ignores src/script too! ([f55b8df](https://github.com/sarpik/turbo-schedule/commit/f55b8df23b101363267dd55c3b75fb88a6a8fa89))
+* **server:** Remove `tsconfig.tsbuildinfo` before building typescript ([4265026](https://github.com/sarpik/turbo-schedule/commit/4265026bd224a3a5d56a1e02864a74bb1ddbee96))
+
+
+### Features
+
+* **common:** Create `Schedule` model ([af888e3](https://github.com/sarpik/turbo-schedule/commit/af888e3ef4f928e7018391160c97961db406d69d))
+* **common:** Create the `Class` model ([8674e25](https://github.com/sarpik/turbo-schedule/commit/8674e258c0617ba1ba640bee5558e6dd70bc3859))
+* **common:** Export the `Schedule` & `Class` models ([ad28fad](https://github.com/sarpik/turbo-schedule/commit/ad28fad82f20f2996c2b8ce00a7af9de47ca3eca))
+* **db:** Extend the schema with `classes` ([5c5af7d](https://github.com/sarpik/turbo-schedule/commit/5c5af7dd221bab6b166daeae62d8c1f6f79ced86))
+* **scraper:** Collect unique lessons from classes too!! 🚀 ([21c1f34](https://github.com/sarpik/turbo-schedule/commit/21c1f349b914d91b05275574c15ca14e06bb1b89)), closes [/github.com/sarpik/turbo-schedule/issues/31#issuecomment-612705409](https://github.com//github.com/sarpik/turbo-schedule/issues/31/issues/issuecomment-612705409)
+* **scraper:** Create `mergeStudentsOfDuplicateLessons` ([e913e59](https://github.com/sarpik/turbo-schedule/commit/e913e59d8e8b57f8439cbbe339046aa607f554c6))
+* **scraper:** Create `scrapeClassList` util ([45ea373](https://github.com/sarpik/turbo-schedule/commit/45ea373da0b05ace22752e06d33b57af537c5eab))
+* **scraper:** Rewrite `extractLessons` to allow individual parsers ([15e49a3](https://github.com/sarpik/turbo-schedule/commit/15e49a394c4e5625f43c9539d1e4b479c1952efd))
+* **scraper:** Scrape the class list! ([043613f](https://github.com/sarpik/turbo-schedule/commit/043613fab0ef40a20d4d5fbf9dff57a31d3f4071))
+* **scraper:** Use the new `mergeStudentsOfDuplicateLessons` 🚀 ([9eca8dd](https://github.com/sarpik/turbo-schedule/commit/9eca8dd0bef0e1d87929e94359051cd14d0464e3))
+* **server:** Create API endpoint for `class` 🚀 ([e5994e4](https://github.com/sarpik/turbo-schedule/commit/e5994e4e6f664173dd15e1ad43cc2dd689b9444a))
+* **server:** Create API endpoint for `schedule-item` 🚀 ([3c73488](https://github.com/sarpik/turbo-schedule/commit/3c734887609673b638218b2399d63b3fd478dbe0))
+
+
+### Reverts
+
+* Revert "fix(server): Remove `tsconfig.tsbuildinfo` before building typescript" ([0a0a683](https://github.com/sarpik/turbo-schedule/commit/0a0a68373daacd192e491d6a365637539c1e39df))
+
+
+
+
+
 ## 2.1.5 (2020-04-12)
 
 **Note:** Version bump only for package turbo-schedule

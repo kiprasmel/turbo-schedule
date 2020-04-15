@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/facebook/react/compare/v2.1.5...v2.2.0) (2020-04-15)
+
+
+### Bug Fixes
+
+* **scraper:** Make `mergeStudentsOfDuplicateLessons` concat full arrays ([1ddcd8f](https://github.com/facebook/react/commit/1ddcd8f35adba3598b0a11901cedddfad8004fdd))
+
+
+### Features
+
+* **scraper:** Collect unique lessons from classes too!! 🚀 ([21c1f34](https://github.com/facebook/react/commit/21c1f349b914d91b05275574c15ca14e06bb1b89)), closes [/github.com/sarpik/turbo-schedule/issues/31#issuecomment-612705409](https://github.com//github.com/sarpik/turbo-schedule/issues/31/issues/issuecomment-612705409)
+* **scraper:** Create `mergeStudentsOfDuplicateLessons` ([e913e59](https://github.com/facebook/react/commit/e913e59d8e8b57f8439cbbe339046aa607f554c6))
+* **scraper:** Create `scrapeClassList` util ([45ea373](https://github.com/facebook/react/commit/45ea373da0b05ace22752e06d33b57af537c5eab))
+* **scraper:** Rewrite `extractLessons` to allow individual parsers ([15e49a3](https://github.com/facebook/react/commit/15e49a394c4e5625f43c9539d1e4b479c1952efd))
+* **scraper:** Scrape the class list! ([043613f](https://github.com/facebook/react/commit/043613fab0ef40a20d4d5fbf9dff57a31d3f4071))
+* **scraper:** Use the new `mergeStudentsOfDuplicateLessons` 🚀 ([9eca8dd](https://github.com/facebook/react/commit/9eca8dd0bef0e1d87929e94359051cd14d0464e3))
+
+
+
+
+
 ## 2.1.5 (2020-04-12)
 
 **Note:** Version bump only for package @turbo-schedule/scraper
