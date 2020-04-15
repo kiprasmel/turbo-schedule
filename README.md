@@ -84,7 +84,7 @@ yarn dev
 
 * A mobile app with a very similar use case is being worked on by my friend - don't make a duplicate:D (more info soon, hopefully!)
 
-## [Contributing](https://github.com/sarpik/turbo-schedule/issues/1)
+## Contributing
 
 Contributions are welcome! If you're having problems - feel free to [open an issue](https://github.com/sarpik/turbo-schedule/issues/new) - we're happy to help:)
 
@@ -98,6 +98,8 @@ TL;DR:
 * commit your changes & [create a pull request](https://github.com/sarpik/turbo-schedule/compare)
 
 That's it!
+
+> See also [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ## Other accomplishments alongside this project
 
