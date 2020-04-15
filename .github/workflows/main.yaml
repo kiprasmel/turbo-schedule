@@ -52,6 +52,13 @@ jobs:
         steps:
             # BEGIN INSTALL
             - uses: actions/checkout@v2
+              with:
+                  # pulls all commits (needed for lerna to correctly version)
+                  # see https://stackoverflow.com/a/60184319/9285308 & https://github.com/actions/checkout
+                  fetch-depth: "0"
+
+            # pulls all tags (needed for lerna to correctly version)
+            - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/* # see https://stackoverflow.com/a/60184319/9285308
             # - uses: actions/setup-node@v1
 
             # https://github.com/actions/cache/blob/master/examples.md#node---yarn
