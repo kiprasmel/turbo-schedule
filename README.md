@@ -111,7 +111,7 @@ I found a tool that could generate API documentation automatically for my `expre
 
 ### Using github actions (CI) with `semantic-release` & `lerna` and finding the deeply hidden bug
 
-This's one worth a read:D https://github.com/actions/checkout/issues/217
+This one's worth a read:D https://github.com/actions/checkout/issues/217
 
 ### & other goodies
 
