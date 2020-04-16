@@ -2,8 +2,8 @@
 
 <p align="left">
 
-  <a href="https://circleci.com/gh/sarpik/turbo-schedule">
-	<img alt="Circle CI" src="https://circleci.com/gh/sarpik/turbo-schedule.svg?style=shield" />
+  <a href="https://github.com/sarpik/turbo-schedule/actions">
+	<img alt="GitHub Actions CI" src="https://github.com/sarpik/turbo-schedule/workflows/install-build-test-deploy/badge.svg" />
   </a>
 
   <a href="https://hub.docker.com/r/kipras/turbo-schedule">
