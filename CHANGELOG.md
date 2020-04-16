@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.1](https://github.com/sarpik/turbo-schedule/compare/v2.2.0...v2.2.1) (2020-04-16)
+
+
+### Bug Fixes
+
+* **ci:** Do not run if a commit contains `[skip ci]` ([d193b2c](https://github.com/sarpik/turbo-schedule/commit/d193b2c83d30f4809b93aa6eabbbcc26745e23f4))
+* **common:** Parse `Student`'s `fullClassOrig` properly ([561ef0a](https://github.com/sarpik/turbo-schedule/commit/561ef0ab98fda0c9d29da339ee7d8cd58442db69))
+
+
+
+
+
 # [2.2.0](https://github.com/sarpik/turbo-schedule/compare/v2.1.5...v2.2.0) (2020-04-15)
 
 
