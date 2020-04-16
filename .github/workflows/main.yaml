@@ -11,7 +11,8 @@ env:
 
 jobs:
     install-build-test:
-        if: github.ref != 'refs/heads/master' # public
+        if: ${{ github.ref != 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip ci]') }} # public; ignore commits with `[skip ci]`
+
         runs-on: ubuntu-latest
 
         steps:
@@ -45,7 +46,7 @@ jobs:
 
     # the same as `install-build-test`, just with the additional `deploy` steps
     install-build-test-deploy:
-        if: github.ref == 'refs/heads/master' # master-only
+        if: ${{ github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip ci]') }} # master-only. ignore commits with `[skip ci]`
 
         runs-on: ubuntu-latest
 
