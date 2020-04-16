@@ -249,7 +249,9 @@ export class StudentFromList {
 				`\
 \`classNum\` is NOT an integer!
 
-provided = \`${classNumDangerous}\`,
+
+provided = \`${this.originalHref}\`
+parsed & invalid = \`${classNumDangerous}\`,
 typeof = \`${typeof classNumDangerous}\``
 			);
 		}
@@ -340,11 +342,16 @@ provided = \`${classNumDangerous}\``
 		 * * NOT have the `G` between them,
 		 * * have the `G` or `g` as either upper or lower case
 		 *
+		 * The `text` might contain more than two words:
+		 * someone might have two first names or two last names,
+		 * and only now I have noticed it:D
+		 *
 		 * and other bs, because as far as we understand,
 		 * it's typed in manually, without selection or assertion.
 		 *
 		 */
-		const fullClassOrig: string = this.text.split(" ")[2];
+		const splitText: string[] = this.text.split(" ");
+		const fullClassOrig: string = splitText[splitText.length - 1];
 		/**       "Melnikovas Kipras IIIGe"  */
 		/* ["Melnikovas", "Kipras", "IIIGe"] */
 		/**                         "IIIGe" */
