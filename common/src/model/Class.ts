@@ -152,7 +152,8 @@ function parseClassNum(fullClassOrig: string): TClassNum {
 			`\
 \`classNum\` is NOT an integer!
 
-provided = \`${classNumDangerous}\`,
+provided = \`${fullClassOrig}\`
+parsed & invalid = \`${classNumDangerous}\`,
 typeof = \`${typeof classNumDangerous}\``
 		);
 	}

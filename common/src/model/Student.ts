@@ -249,7 +249,9 @@ export class StudentFromList {
 				`\
 \`classNum\` is NOT an integer!
 
-provided = \`${classNumDangerous}\`,
+
+provided = \`${this.originalHref}\`
+parsed & invalid = \`${classNumDangerous}\`,
 typeof = \`${typeof classNumDangerous}\``
 			);
 		}
