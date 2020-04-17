@@ -2,6 +2,8 @@ import {
 	Class,
 	StudentFromList, //
 	Lesson,
+	ScrapeInfo,
+	timeElapsedMs,
 } from "@turbo-schedule/common";
 import { DbSchema, setNewDbState } from "@turbo-schedule/database";
 
@@ -12,11 +14,14 @@ import { scrapeClassList } from "./util/scrapeClassList";
 
 import { mergeStudentsOfDuplicateLessons } from "./mergeStudentsOfDuplicateLessons";
 import { extractLessonFromClass, extractLessonFromStudent } from "./util/extractLessons";
+import { createPageVersionIdentifier } from "./util/createPageVersionIdentifier";
 
 // import { populateStudentsWithFriends } from "./populateStudentsWithFriends";
 
 export const scrape = async (config: IScraperConfig): Promise<void> => {
 	try {
+		const startTime: Date = new Date();
+
 		console.log("\n==> scraper\n");
 		console.table(config);
 
@@ -101,8 +106,18 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		// 	return studentsWithFriends;
 		// })
 
+		const endTime: Date = new Date();
+
+		const scrapeInfo: ScrapeInfo = {
+			timeStartISO: startTime.toISOString(),
+			timeEndISO: endTime.toISOString(),
+			timeElapsedInSeconds: timeElapsedMs(startTime, endTime) / 1000,
+			pageVersionIdentifier: createPageVersionIdentifier(frontPageHtml),
+		};
+
 		/** create a new database */
 		const newDbState: Omit<DbSchema, "Changes"> = {
+			scrapeInfo,
 			students: studentsFromList,
 			lessons: allUniqueLessons,
 			classes: classesFromList,
@@ -111,6 +126,7 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		await setNewDbState(newDbState);
 
 		console.log("\n -> scraper finished \n\n");
+		console.table(scrapeInfo);
 		return;
 	} catch (err) {
 		console.error("\nError! \n==> `@turbo-schedule/scraper`\n -> function `scrape`");
