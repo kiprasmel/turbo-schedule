@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.2](https://github.com/facebook/react/compare/v2.2.1...v2.2.2) (2020-04-17)
+
+
+### Bug Fixes
+
+* **server:** Make `eoas-gen` re-use pre-built spec, if it's available ([f8c7eff](https://github.com/facebook/react/commit/f8c7eff710b987bee1d56029e0dd7601176f11ef))
+* **server:** Remove hacks in `generateOpenAPIDocs` related to multiple rootDirs ([1c863d5](https://github.com/facebook/react/commit/1c863d5e4505f0bc322fd491f38d31f3ef040f30))
+
+
+
+
+
 ## [2.2.1](https://github.com/facebook/react/compare/v2.2.0...v2.2.1) (2020-04-16)
 
 **Note:** Version bump only for package @turbo-schedule/server
