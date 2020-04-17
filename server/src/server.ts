@@ -14,7 +14,8 @@
 
 import express, { Express } from "express";
 // import jsonServer from "json-server";
-import { handleResponses, handleRequests } from "express-oas-generator";
+import fs from "fs-extra";
+import { handleResponses, handleRequests, OpenAPIV2 } from "express-oas-generator";
 import helmet from "helmet";
 import cors from "cors";
 import { Server } from "http";
@@ -32,7 +33,26 @@ import { enableScraperCronjob } from "./util/enableScraperCronjob";
 const app: Express = express();
 
 if (!isProd()) {
-	handleResponses(app, { specOutputPath: openAPIFilePath, writeIntervalMs: 0 });
+	/**
+	 * Re-use the pre-built specification if it exists
+	 * (we generate it using `yarn build:docs`)
+	 *
+	 * See https://github.com/sarpik/turbo-schedule/issues/45
+	 */
+	let predefinedSpec: OpenAPIV2.Document | undefined;
+	try {
+		predefinedSpec = (JSON.parse(
+			fs.readFileSync(openAPIFilePath, { encoding: "utf-8" })
+		) as unknown) as OpenAPIV2.Document;
+	} catch (e) {
+		//
+	}
+
+	handleResponses(app, {
+		specOutputPath: openAPIFilePath,
+		writeIntervalMs: 0,
+		predefinedSpec: predefinedSpec ? () => predefinedSpec : undefined,
+	});
 }
 
 /** config */
