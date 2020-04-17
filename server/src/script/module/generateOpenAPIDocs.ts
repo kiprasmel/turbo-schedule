@@ -15,7 +15,7 @@ import { OpenAPIV3 } from "openapi-types";
 import fs from "fs-extra";
 import { execSync } from "child_process";
 
-import { join, parse } from "path";
+import { parse } from "path";
 import { modifyGeneratedAPIDocs } from "./modifyGeneratedAPIDocs";
 
 // export function generateOpenAPIDocs(saveDirPath: string, saveFilename: string): OpenAPISpec | undefined {
@@ -46,31 +46,18 @@ export async function generateOpenAPIDocs(savePathAndFilename: string): Promise<
 
 		console.log("  -> Running tests to generate API docs (stdout will be printed on finish):");
 
+		/**
+		 * @NOTE
+		 *
+		 * `yarn test` will spin up the server itselt & run the tests,
+		 * thus automatically generating the openAPI docs.
+		 */
 		try {
 			execSync("yarn test --forceExit --color=always");
 			console.log("");
 		} catch (err) {
 			throw err;
 		}
-
-		/**
-		 * TODO HACK BEGIN
-		 *
-		 * the openAPI.json file does not get copied in the proper place in production
-		 * We'll solve this once we'll have only a single `rootDir` in `tsconfig`.
-		 */
-		if (!fs.pathExistsSync(savePathAndFilename)) {
-			const from: string = join(
-				parse(savePathAndFilename).dir,
-				"..",
-				"..",
-				"generated",
-				parse(savePathAndFilename).base
-			);
-			// throw new Error("from " + from);
-			fs.copyFileSync(from, savePathAndFilename);
-		}
-		/** TODO HACK END */
 
 		const generatedDocsUnmodified: string = fs.readFileSync(savePathAndFilename, { encoding: "utf-8" });
 
