@@ -1,4 +1,4 @@
-import scraper from "@turbo-schedule/scraper";
+import scraper, { wasScheduleUpdated } from "@turbo-schedule/scraper";
 import { scrapedDataDirPath } from "../config";
 
 export const runScraper = async (): Promise<void> => {
@@ -28,4 +28,13 @@ export const runScraper = async (): Promise<void> => {
 	 * 		if no, then get the old stuff
 	 *
 	 */
+};
+
+export const runScraperIfUpdatesAvailable = async (): Promise<void> => {
+	const updatesAvailable: boolean = await wasScheduleUpdated();
+
+	if (updatesAvailable) {
+		/** TODO lockfile for scraper - see https://github.com/sarpik/turbo-schedule/issues/44 */
+		await runScraper();
+	}
 };
