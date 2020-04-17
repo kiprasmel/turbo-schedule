@@ -1,8 +1,6 @@
-/** TODO - select file save path */
-/** TODO - rename to `enableScraperCronJob` */
-import scraper from "@turbo-schedule/scraper";
 import { CronJob } from "cron";
-import { scrapedDataDirPath } from "../config";
+
+import { runScraper } from "./runScraper";
 
 export const enableScraperCronjob = (): void => {
 	const runImmediately: boolean = !!process.env.START_SCRAPER_NOW;
@@ -20,34 +18,7 @@ export const enableScraperCronjob = (): void => {
 		 *
 		 */
 		"00 05 00 * * *",
-		async function() {
-			const startDate: Date = new Date();
-
-			console.log("\n~ Starting scraper:", startDate, "\n");
-
-			await scraper(scrapedDataDirPath);
-
-			const endDate: Date = new Date();
-
-			const msDifference: number = endDate.getTime() - startDate.getTime();
-			const secDifference: number = msDifference / 1000;
-
-			console.log("\n~ Finished scraper.", endDate, "\n difference in secs: ", secDifference, "\n");
-
-			/**
-			 * TODO
-			 *
-			 * Implement @ scraper?
-			 *
-			 * * check X oftenly if new stuff is available
-			 * 		if yes,
-			 * 			then get the new stuff,
-			 * 			inform the client through sockets probably that we're updating (preferably),
-			 * 			& return the new stuff
-			 * 		if no, then get the old stuff
-			 *
-			 */
-		},
+		runScraper,
 		undefined,
 		runImmediately
 	);
