@@ -4,6 +4,7 @@ export * from "./util/delay";
 export * from "./util/applyMixins";
 export * from "./util/toJson";
 export * from "./util/writeToSingleFile";
+export * from "./util/timeElapsed";
 
 export * from "./model/Schedule";
 export * from "./model/Class";
