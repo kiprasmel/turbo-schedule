@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.3.0](https://github.com/facebook/react/compare/v2.2.2...v2.3.0) (2020-04-18)
+
+
+### Features
+
+* **common:** Create `ScrapeInfo` model ([6df5f66](https://github.com/facebook/react/commit/6df5f66b6e4725fdde42e9c8f5d14a832e73c8bb))
+* **common:** Create `timeElapsed` util ([c6e6aac](https://github.com/facebook/react/commit/c6e6aac4f5119d85272de0c95a65becc344c6671))
+
+
+
+## 2.2.1 (2020-04-16)
+
+
+
+
+
 ## [2.2.1](https://github.com/facebook/react/compare/v2.2.0...v2.2.1) (2020-04-16)
 
 

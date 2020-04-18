@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.3.0](https://github.com/facebook/react/compare/v2.2.2...v2.3.0) (2020-04-18)
+
+
+### Features
+
+* **scraper:** Create & write `scrapeInfo` into the database! 🚀 ([75dd6c6](https://github.com/facebook/react/commit/75dd6c6729e404e2d21bff77b5d3da83c32bcaad))
+* **scraper:** Create `createPageVersionIdentifier` util ([b85f2c2](https://github.com/facebook/react/commit/b85f2c213080d9ccfb7519d24c08b5bf34cdde2f))
+* **scraper:** Create `wasScheduleUpdated` util ([e973eab](https://github.com/facebook/react/commit/e973eab65da57c8c5da8db076bc1445667926f19))
+
+
+
+## 2.2.1 (2020-04-16)
+
+
+
+
+
 ## [2.2.1](https://github.com/facebook/react/compare/v2.2.0...v2.2.1) (2020-04-16)
 
 **Note:** Version bump only for package @turbo-schedule/scraper
