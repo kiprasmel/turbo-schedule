@@ -3,14 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+
 ## [2.3.1](https://github.com/sarpik/turbo-schedule/compare/v2.3.0...v2.3.1) (2020-04-18)
 
 
 ### Bug Fixes
 
 * **test:** Use `.write()` on top of `lowDb.setState()` ([e7d9aa2](https://github.com/sarpik/turbo-schedule/commit/e7d9aa268d372e7ccd98c948b21fad42607d23d5))
-
-
 
 
 
@@ -31,12 +31,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## 2.2.1 (2020-04-16)
-
-
-
-
-
 ## [2.2.2](https://github.com/sarpik/turbo-schedule/compare/v2.2.1...v2.2.2) (2020-04-17)
 
 
@@ -47,28 +41,16 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
-## [2.2.1](https://github.com/sarpik/turbo-schedule/compare/v2.2.0...v2.2.1) (2020-04-16)
+## [2.2.1](https://github.com/sarpik/turbo-schedule/compare/v2.1.5...v2.2.1) (2020-04-16)
 
 
 ### Bug Fixes
 
 * **ci:** Do not run if a commit contains `[skip ci]` ([d193b2c](https://github.com/sarpik/turbo-schedule/commit/d193b2c83d30f4809b93aa6eabbbcc26745e23f4))
-* **common:** Parse `Student`'s `fullClassOrig` properly ([561ef0a](https://github.com/sarpik/turbo-schedule/commit/561ef0ab98fda0c9d29da339ee7d8cd58442db69))
-
-
-
-
-
-# [2.2.0](https://github.com/sarpik/turbo-schedule/compare/v2.1.5...v2.2.0) (2020-04-15)
-
-
-### Bug Fixes
-
 * **ci:** Pull all git history + all tags for lerna versioning ([e465024](https://github.com/sarpik/turbo-schedule/commit/e465024e045bf331ba6e9817f202afccd53f03f9))
 * **common:** Add default param values for `createClass` ([8d2256e](https://github.com/sarpik/turbo-schedule/commit/8d2256e9e9039a0addfa6a769c6e4f9d50191294))
 * **common:** Allow `Class` to have `lessons` field ([da18a2b](https://github.com/sarpik/turbo-schedule/commit/da18a2bab65ee6151c0afa0196ec83c059b98605))
+* **common:** Parse `Student`'s `fullClassOrig` properly ([561ef0a](https://github.com/sarpik/turbo-schedule/commit/561ef0ab98fda0c9d29da339ee7d8cd58442db69))
 * **scraper:** Make `mergeStudentsOfDuplicateLessons` concat full arrays ([1ddcd8f](https://github.com/sarpik/turbo-schedule/commit/1ddcd8f35adba3598b0a11901cedddfad8004fdd))
 * **server:** Make sure we're using `await` with the database ([e0dd189](https://github.com/sarpik/turbo-schedule/commit/e0dd189abe0e074ddea1085348a85985a598b116))
 * **server:** Remove `script` symlink - typescript ignores src/script too! ([f55b8df](https://github.com/sarpik/turbo-schedule/commit/f55b8df23b101363267dd55c3b75fb88a6a8fa89))
@@ -97,33 +79,39 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+## [2.1.5](https://github.com/sarpik/turbo-schedule/compare/v2.1.4...v2.1.5) (2020-04-12)
 
 
-## 2.1.5 (2020-04-12)
+### Bug Fixes
 
-**Note:** Version bump only for package turbo-schedule
-
-
-
-
-
-## 2.1.4 (2020-04-12)
-
-**Note:** Version bump only for package turbo-schedule
+* Add `repository` field to all `package.json`s ([7803f4d](https://github.com/sarpik/turbo-schedule/commit/7803f4d58156524ff2239cae146c7e1c8fdbfcf0))
 
 
 
+## [2.1.4](https://github.com/sarpik/turbo-schedule/compare/v2.1.3...v2.1.4) (2020-04-12)
 
 
-## 2.1.3 (2020-04-12)
+### Bug Fixes
 
-**Note:** Version bump only for package turbo-schedule
+* Do not ignore `database/data/` @ `.dockerignore` & copy it @ `Dockerfile` ([7d85b76](https://github.com/sarpik/turbo-schedule/commit/7d85b7631ef97501484e707008752ead74816e35))
+* **database:** Get rid of the "smart" dynamic paths based on production ([179f01e](https://github.com/sarpik/turbo-schedule/commit/179f01e34678b4ed9cc4b4a56cc11fc0a18374f0))
+* **server:** Fix `package.json` `script` paths ([ca8777e](https://github.com/sarpik/turbo-schedule/commit/ca8777ef3ffc6acd091e838ba46163dae98b03c7))
+* **server:** Move `server/script/` -> `server/src/script/` ([0bbce00](https://github.com/sarpik/turbo-schedule/commit/0bbce000552e593d4b7890e48e6a10b1472798c4))
+* **server:** Move `server/test/` -> `server/src/test/` ([dc5d589](https://github.com/sarpik/turbo-schedule/commit/dc5d58920bee524cfbe322c2773a536fb06ddd44))
+* **server:** Provide a `rootDir` instead of having multiple ones ([d903f08](https://github.com/sarpik/turbo-schedule/commit/d903f08af205daccbe2098e2fe7014c081744b55))
 
 
 
+## [2.1.3](https://github.com/sarpik/turbo-schedule/compare/v2.1.2...v2.1.3) (2020-04-12)
 
 
-## 2.1.2 (2020-04-06)
+### Bug Fixes
+
+* Use `cross-env NODE_ENV=production` in ALL build scripts ([08e9dc5](https://github.com/sarpik/turbo-schedule/commit/08e9dc538e6d0cdc57dad60e6643e54e0c363115))
+
+
+
+## [2.1.2](https://github.com/sarpik/turbo-schedule/compare/v2.1.1...v2.1.2) (2020-04-06)
 
 
 ### Bug Fixes
@@ -132,16 +120,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
-## 2.1.1 (2020-04-06)
+## [2.1.1](https://github.com/sarpik/turbo-schedule/compare/v2.1.0...v2.1.1) (2020-04-06)
 
 
 ### Bug Fixes
 
 * Include `database` inside `Dockerfile` & `.dockerignore` ([6d4b0ad](https://github.com/sarpik/turbo-schedule/commit/6d4b0ad9828e753afd12b2fbe7d0d365a00f5da4))
-
-
 
 
 
@@ -214,24 +198,37 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
-## 2.0.3 (2020-02-06)
+## [2.0.3](https://github.com/sarpik/turbo-schedule/compare/v2.0.2...v2.0.3) (2020-02-06)
 
 
 ### Bug Fixes
 
+* **ci:** Apparently, you cannot re-use jobs:/ Inline instead ([479c4a1](https://github.com/sarpik/turbo-schedule/commit/479c4a1f01782bc8f0833f306d51160ffc6f23ba))
+* **ci:** Create secrets & pass in env vars for `yarn docker:deploy` step ([26449ad](https://github.com/sarpik/turbo-schedule/commit/26449ad60c9fb7e53ef78272fedd4113a1e4a446))
+* **ci:** Pass in `LATEST_TAG` env var into docker's version tag & push steps ([d2c3bab](https://github.com/sarpik/turbo-schedule/commit/d2c3babfb7dc14c0cee4ed6c50e044a6348e27e3))
+* **ci:** Properly (re)store node_modules cache ([e1fd6f0](https://github.com/sarpik/turbo-schedule/commit/e1fd6f01dddd8473a0af5809761b42cd99acde8b))
+* **ci:** Properly check if current branch is/is not `master` ([cb26351](https://github.com/sarpik/turbo-schedule/commit/cb26351a584e5abce652c8d773d3a24d4d461618))
 * **ci:** Set git's user `name` & `email` ([9c86fb5](https://github.com/sarpik/turbo-schedule/commit/9c86fb59c4b405bfe36328ab63e16b37495ad64e))
+* **server:** Make `fakeDb` `stopFakeDbSync` not fail on error ([3569dad](https://github.com/sarpik/turbo-schedule/commit/3569dadb48eea4c15f98f9045c0fbb5b70803d51))
 
 
+### Features
+
+* **ci:** Create `deploy` job (`master` only) ([5222d8a](https://github.com/sarpik/turbo-schedule/commit/5222d8ae889886a2034a50c9706cce46f5490c5d))
+* **ci:** Create `install` job ([0944160](https://github.com/sarpik/turbo-schedule/commit/09441601531ccc3114bce8eea7ce4c2693334834))
+* **ci:** Create `test` job ([fa88d07](https://github.com/sarpik/turbo-schedule/commit/fa88d07adf9f8d8f55811cc2b88366f28a550188))
+* **ci:** Create github workflow `main.yaml` 🚀 ([81bf575](https://github.com/sarpik/turbo-schedule/commit/81bf575db92293041b1d469c7f7f9111252c955b))
+* **ci:** Enable `install` job & run `test` + `build` in parallel ([9f297a1](https://github.com/sarpik/turbo-schedule/commit/9f297a12142bc8c78092f5559fb1217c546204d3))
+* **ci:** Use *artifacts* to persist data between jobs ([9cfde35](https://github.com/sarpik/turbo-schedule/commit/9cfde354fabb44c077bd32631c1429f3d55c2508))
+
+
+### Reverts
+
+* Revert "feat(ci): Use *artifacts* to persist data between jobs" ([38b1364](https://github.com/sarpik/turbo-schedule/commit/38b136441f8dd42163239282cb2eeec7d9210029))
 
 
 
 ## [2.0.2](https://github.com/sarpik/turbo-schedule/compare/v2.0.1...v2.0.2) (2020-02-05)
-
-**Note:** Version bump only for package turbo-schedule
-
-
 
 
 
@@ -251,8 +248,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **lint:** Create `.eslintignore` ([8ab1e94](https://github.com/sarpik/turbo-schedule/commit/8ab1e9450d4296e6728e8f5e934487572f946af7))
 * **lint:** Create `.eslintrc.js` 🚀 ([114c4cc](https://github.com/sarpik/turbo-schedule/commit/114c4cc209bee1519a0ec17bb8a3b930821e87c5))
 * **root:** Create npm scripts for linting & fixing ([db33244](https://github.com/sarpik/turbo-schedule/commit/db33244ead6dc41e67658881c7c108b60db19d23))
-
-
 
 
 
@@ -295,16 +290,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 ## [1.7.3](https://github.com/sarpik/turbo-schedule/compare/v1.7.2...v1.7.3) (2019-12-27)
 
 
 ### Bug Fixes
 
 * **server:** Remove wrong params from `handleRequests` ([1da8613](https://github.com/sarpik/turbo-schedule/commit/1da8613c17056d0b347cd78033d1774c6e997166))
-
-
 
 
 
@@ -317,16 +308,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 ## [1.7.1](https://github.com/sarpik/turbo-schedule/compare/v1.7.0...v1.7.1) (2019-11-21)
 
 
 ### Reverts
 
 * Revert "refactor(server): Move `scrapedDataDirPath` into `generated/`" ([cf247f7](https://github.com/sarpik/turbo-schedule/commit/cf247f747fd72ed78b43538c41250240c33c93ff))
-
-
 
 
 
@@ -347,8 +334,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 ## [1.6.6](https://github.com/sarpik/turbo-schedule/compare/v1.6.5...v1.6.6) (2019-11-18)
 
 
@@ -356,8 +341,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * **scraper:** Return empty strings instead of `null` for `lessons` ([d43c3db](https://github.com/sarpik/turbo-schedule/commit/d43c3db10249df7be11dc9149b65afd6fe8dc458))
 * **server:** Set app to trust proxy ([c600edc](https://github.com/sarpik/turbo-schedule/commit/c600edc6444c74c0eb318357ca92c8cc78be080e)), closes [/github.com/expressjs/morgan/issues/214#issuecomment-555068350](https://github.com//github.com/expressjs/morgan/issues/214/issues/issuecomment-555068350)
-
-
 
 
 
@@ -371,16 +354,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 ## [1.6.4](https://github.com/sarpik/turbo-schedule/compare/v1.6.3...v1.6.4) (2019-11-14)
 
 
 ### Bug Fixes
 
 * Remove `eoas-gen` patch ([1981ab8](https://github.com/sarpik/turbo-schedule/commit/1981ab81902f069d8c7c2b0f9e19fdc0f9f3757c))
-
-
 
 
 
@@ -394,8 +373,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 ## [1.6.2](https://github.com/sarpik/turbo-schedule/compare/v1.6.1...v1.6.2) (2019-11-13)
 
 
@@ -403,8 +380,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * **server:** Bring back & fix the tests for `/student/:studentName` ([2d58ac0](https://github.com/sarpik/turbo-schedule/commit/2d58ac04c404f8cf9b2b8e0ecfae2fac14ca8705))
 * **server:** Return consistent `emailEntry` fields ([0ac1324](https://github.com/sarpik/turbo-schedule/commit/0ac1324e331e3eb0bb30c7dbfe7031ec106be36d))
-
-
 
 
 
@@ -417,8 +392,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * Move `Student` model from `scraper` to `common` ([cc42181](https://github.com/sarpik/turbo-schedule/commit/cc42181a561dc58e032b57b911332b8d2ce26351))
 * **server:** Rename API field `studentSchedule` to `lessons` ([6bd9eda](https://github.com/sarpik/turbo-schedule/commit/6bd9eda1856cce1e3fd12e2172a94de25d4a5126))
 * **server:** Rename API filed `studentsList` to `students` ([65f4d28](https://github.com/sarpik/turbo-schedule/commit/65f4d287ec49141fcd7b404db6f3ce542d484938))
-
-
 
 
 
@@ -448,6 +421,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * Create a different patch to allow onWriteCallback ([6debdab](https://github.com/sarpik/turbo-schedule/commit/6debdabbb173a08e0e8e14ae0b50c5b14144227f))
 
 
+### Reverts
+
+* Revert "test: Add everything that did NOT work for future reference" ([d144fc6](https://github.com/sarpik/turbo-schedule/commit/d144fc619cc67546f30e30d564cf409f5de4c21f))
 
 
 
@@ -472,8 +448,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 # [1.4.0](https://github.com/sarpik/turbo-schedule/compare/v1.3.0...v1.4.0) (2019-10-23)
 
 
@@ -482,8 +456,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **server:** Create `setupLogger` util ([bbb42cc](https://github.com/sarpik/turbo-schedule/commit/bbb42ccd8a31eba85c2f8882889534d3069ec287))
 * **server:** Install `morgan` & `rotating-file-stream` ([ecf9745](https://github.com/sarpik/turbo-schedule/commit/ecf974576dbac5e41385674abc18e5c4d81ccfd9))
 * **server:** Use `setupLogger` util ([09850d1](https://github.com/sarpik/turbo-schedule/commit/09850d19ac93e439a4496aa158ec2bd35919856f))
-
-
 
 
 
@@ -503,16 +475,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 ## [1.2.1](https://github.com/sarpik/turbo-schedule/compare/v1.2.0...v1.2.1) (2019-10-23)
 
 
 ### Bug Fixes
 
 * **server:** Get rid of `.env` & relatives ([d80be08](https://github.com/sarpik/turbo-schedule/commit/d80be08088cc94e06b0775ba061b268d5c7f44b4))
-
-
 
 
 
@@ -539,8 +507,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 # [1.1.0](https://github.com/sarpik/turbo-schedule/compare/v1.0.0...v1.1.0) (2019-10-23)
 
 
@@ -559,9 +525,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
-# 1.0.0 (2019-10-22)
+# [1.0.0](https://github.com/sarpik/turbo-schedule/compare/1ff81bdba6fb25786e7a72f7f4e7ae6a9eadfb4f...v1.0.0) (2019-10-22)
 
 
 ### Bug Fixes
@@ -635,3 +599,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * Serve *auto-generated* API docs! ([d339254](https://github.com/sarpik/turbo-schedule/commit/d3392545c2f176e8ed290adecadf8b57db3260fc))
 * Start versioning API endpoints (now @ `v1`) ([55b20db](https://github.com/sarpik/turbo-schedule/commit/55b20dbb7d10662e8c5fce1630f1e53f2ba58d2b))
 * Turn `server.ts` into a module ([727f543](https://github.com/sarpik/turbo-schedule/commit/727f543a78e9bad2fa3e6473b154d77214e62d24))
+
+
+### Reverts
+
+* Revert "docs: Attempt *manually* documenting endpoints lmao" ([2757046](https://github.com/sarpik/turbo-schedule/commit/2757046b74c86941e5bf46083776443fd1859b86))

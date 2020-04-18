@@ -3,65 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [2.3.0](https://github.com/facebook/react/compare/v2.2.2...v2.3.0) (2020-04-18)
+
+
+# [2.3.0](https://github.com/sarpik/turbo-schedule/compare/v2.2.2...v2.3.0) (2020-04-18)
 
 
 ### Features
 
-* **db:** Extend the schema with `scrapeInfo` ([cbc0253](https://github.com/facebook/react/commit/cbc0253b8307f1852fc272209d24ed3eb5f203a8))
+* **db:** Extend the schema with `scrapeInfo` ([cbc0253](https://github.com/sarpik/turbo-schedule/commit/cbc0253b8307f1852fc272209d24ed3eb5f203a8))
 
 
 
-## 2.2.1 (2020-04-16)
-
-
-
-
-
-## [2.2.1](https://github.com/facebook/react/compare/v2.2.0...v2.2.1) (2020-04-16)
-
-**Note:** Version bump only for package @turbo-schedule/database
-
-
-
-
-
-# [2.2.0](https://github.com/facebook/react/compare/v2.1.5...v2.2.0) (2020-04-15)
+## [2.2.1](https://github.com/sarpik/turbo-schedule/compare/v2.1.5...v2.2.1) (2020-04-16)
 
 
 ### Features
 
-* **db:** Extend the schema with `classes` ([5c5af7d](https://github.com/facebook/react/commit/5c5af7dd221bab6b166daeae62d8c1f6f79ced86))
+* **db:** Extend the schema with `classes` ([5c5af7d](https://github.com/sarpik/turbo-schedule/commit/5c5af7dd221bab6b166daeae62d8c1f6f79ced86))
 
 
 
+## [2.1.5](https://github.com/sarpik/turbo-schedule/compare/v2.1.4...v2.1.5) (2020-04-12)
 
 
-## 2.1.5 (2020-04-12)
+### Bug Fixes
 
-**Note:** Version bump only for package @turbo-schedule/database
-
-
-
-
-
-## 2.1.4 (2020-04-12)
-
-**Note:** Version bump only for package @turbo-schedule/database
+* Add `repository` field to all `package.json`s ([7803f4d](https://github.com/sarpik/turbo-schedule/commit/7803f4d58156524ff2239cae146c7e1c8fdbfcf0))
 
 
 
+## [2.1.4](https://github.com/sarpik/turbo-schedule/compare/v2.1.3...v2.1.4) (2020-04-12)
 
 
-## 2.1.3 (2020-04-12)
+### Bug Fixes
 
-**Note:** Version bump only for package @turbo-schedule/database
-
-
+* **database:** Get rid of the "smart" dynamic paths based on production ([179f01e](https://github.com/sarpik/turbo-schedule/commit/179f01e34678b4ed9cc4b4a56cc11fc0a18374f0))
 
 
 
-## 2.1.2 (2020-04-06)
+## [2.1.3](https://github.com/sarpik/turbo-schedule/compare/v2.1.2...v2.1.3) (2020-04-12)
+
+
+
+## [2.1.2](https://github.com/sarpik/turbo-schedule/compare/v2.1.1...v2.1.2) (2020-04-06)
 
 
 ### Bug Fixes
@@ -70,16 +54,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
-## 2.1.1 (2020-04-06)
-
-
-### Bug Fixes
-
-* Include `database` inside `Dockerfile` & `.dockerignore` ([6d4b0ad](https://github.com/sarpik/turbo-schedule/commit/6d4b0ad9828e753afd12b2fbe7d0d365a00f5da4))
-
-
+## [2.1.1](https://github.com/sarpik/turbo-schedule/compare/v2.1.0...v2.1.1) (2020-04-06)
 
 
 

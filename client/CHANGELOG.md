@@ -3,49 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## 2.1.5 (2020-04-12)
-
-**Note:** Version bump only for package @turbo-schedule/client
 
 
-
-
-
-## 2.1.4 (2020-04-12)
-
-**Note:** Version bump only for package @turbo-schedule/client
-
-
-
-
-
-## 2.1.3 (2020-04-12)
-
-**Note:** Version bump only for package @turbo-schedule/client
-
-
-
-
-
-## 2.1.2 (2020-04-06)
+## [2.1.5](https://github.com/sarpik/turbo-schedule/compare/v2.1.4...v2.1.5) (2020-04-12)
 
 
 ### Bug Fixes
 
-* **db:** Use correct path to `data` when in production ([f04f848](https://github.com/sarpik/turbo-schedule/commit/f04f848c27a4ac1271762ea0da9276895be3850f))
+* Add `repository` field to all `package.json`s ([7803f4d](https://github.com/sarpik/turbo-schedule/commit/7803f4d58156524ff2239cae146c7e1c8fdbfcf0))
 
 
 
+## [2.1.4](https://github.com/sarpik/turbo-schedule/compare/v2.1.3...v2.1.4) (2020-04-12)
 
 
-## 2.1.1 (2020-04-06)
+
+## [2.1.3](https://github.com/sarpik/turbo-schedule/compare/v2.1.2...v2.1.3) (2020-04-12)
 
 
-### Bug Fixes
 
-* Include `database` inside `Dockerfile` & `.dockerignore` ([6d4b0ad](https://github.com/sarpik/turbo-schedule/commit/6d4b0ad9828e753afd12b2fbe7d0d365a00f5da4))
+## [2.1.2](https://github.com/sarpik/turbo-schedule/compare/v2.1.1...v2.1.2) (2020-04-06)
 
 
+
+## [2.1.1](https://github.com/sarpik/turbo-schedule/compare/v2.1.0...v2.1.1) (2020-04-06)
 
 
 
@@ -63,24 +44,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
-## 2.0.3 (2020-02-06)
-
-
-### Bug Fixes
-
-* **ci:** Set git's user `name` & `email` ([9c86fb5](https://github.com/sarpik/turbo-schedule/commit/9c86fb59c4b405bfe36328ab63e16b37495ad64e))
-
-
+## [2.0.3](https://github.com/sarpik/turbo-schedule/compare/v2.0.2...v2.0.3) (2020-02-06)
 
 
 
 ## [2.0.2](https://github.com/sarpik/turbo-schedule/compare/v2.0.1...v2.0.2) (2020-02-05)
-
-**Note:** Version bump only for package @turbo-schedule/client
-
-
 
 
 
@@ -90,8 +58,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * **client:** Extend from the correct eslint config (`sarpik`) ([4b34e43](https://github.com/sarpik/turbo-schedule/commit/4b34e433d69450c0bb0b92d639d8da16b59ae073))
-
-
 
 
 
@@ -106,13 +72,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 ## [1.6.4](https://github.com/sarpik/turbo-schedule/compare/v1.6.3...v1.6.4) (2019-11-14)
-
-**Note:** Version bump only for package @turbo-schedule/client
-
-
 
 
 
@@ -122,8 +82,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * Rename `cabinet` to `room` ([0537fba](https://github.com/sarpik/turbo-schedule/commit/0537fba190343d79ea039fd29ff52025cd6eec94))
-
-
 
 
 
@@ -139,21 +97,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 # [1.6.0](https://github.com/sarpik/turbo-schedule/compare/v1.5.0...v1.6.0) (2019-10-31)
-
-**Note:** Version bump only for package @turbo-schedule/client
-
-
 
 
 
 # [1.5.0](https://github.com/sarpik/turbo-schedule/compare/v1.4.0...v1.5.0) (2019-10-24)
-
-**Note:** Version bump only for package @turbo-schedule/client
-
-
 
 
 
@@ -172,9 +120,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
-# 1.0.0 (2019-10-22)
+# [1.0.0](https://github.com/sarpik/turbo-schedule/compare/27cfb282b9bec218bd8392a86cec25d50bf8cf71...v1.0.0) (2019-10-22)
 
 
 ### Bug Fixes
