@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.2](https://github.com/sarpik/turbo-schedule/compare/v2.3.1...v2.3.2) (2020-04-18)
+
+
+### Bug Fixes
+
+* Auto re-generate the `CHANGELOG`s 🔥 ([772f0c4](https://github.com/sarpik/turbo-schedule/commit/772f0c44481d67acd55250478e4beafe1a8ca801))
+* Change the repository links in package.json lol ([537e765](https://github.com/sarpik/turbo-schedule/commit/537e765de4facc6e96c9975de218618cb05f3391))
+
+
+
+
+
 
 
 # [2.3.0](https://github.com/sarpik/turbo-schedule/compare/v2.2.2...v2.3.0) (2020-04-18)
