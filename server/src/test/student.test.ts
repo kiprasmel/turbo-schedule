@@ -1,36 +1,14 @@
-/**
- * TODO FIXME WARN
- *
- * Aight, we've got a problem here:
- *
- * You cannot have more than 1 `initDb()` and/or `db.setState()` called,
- * otherwise all test suites with it will fail.
- *
- * Somehow, using `overrideDbState` once & `db.setState` the other time DOES work,
- * which is mind boggling and I'm completely lost as to why.
- *
- * I do not know what happens if we need more than 2 tests with database access.
- *
- * This has been a HUGE waste of time.
- * I tried fixing it in various ways.
- * I even tried running jest sequentially - see https://stackoverflow.com/a/57609093/9285308,
- * but that just didn't work either.
- *
- * This might help, but not necessarily - https://github.com/facebook/jest/issues/6194#issuecomment-419837314
- *
- * Oh boy did I waste a lot of time with this. pls no.
- *
- * P.S. JEST ******* SUCKS
- */
-
-import { StudentFromList } from "@turbo-schedule/common";
-import { defaultDbState, initDb, overrideDbState } from "@turbo-schedule/database";
+import { StudentFromList, Lesson, Student } from "@turbo-schedule/common";
+import { defaultDbState, initDb, Db } from "@turbo-schedule/database";
 
 import { request, Response } from "./utils";
 
 describe("/student API", () => {
 	it("should fail if the students array file does not exist", async () => {
 		try {
+			const db: Db = await initDb();
+			await db.setState({ ...defaultDbState, students: [] }).write();
+
 			const res: Response = await request.get(`/api/v1/student`);
 
 			expect(res.status).toBe(404);
@@ -54,10 +32,8 @@ describe("/student API", () => {
 		];
 
 		try {
-			// const db = await initDb();
-			// await db.setState({ ...defaultDbState, students: studentsFileContent });
-
-			await overrideDbState({ ...defaultDbState, students: studentsFileContent });
+			const db = await initDb();
+			await db.setState({ ...defaultDbState, students: studentsFileContent }).write();
 
 			const res: Response = await request.get(`/api/v1/student`);
 
@@ -78,6 +54,9 @@ describe("/student API", () => {
 		const encodedInvalidStudentName: string = encodeURIComponent(invalidStudentName);
 
 		try {
+			const db: Db = await initDb();
+			await db.setState({ ...defaultDbState, students: [] }).write();
+
 			const res: Response = await request.get(`/api/v1/student/${encodedInvalidStudentName}`);
 
 			expect(res.status).toBe(404);
@@ -102,7 +81,7 @@ describe("/student API", () => {
 
 		try {
 			const db = await initDb();
-			await db.setState({ ...defaultDbState, students: [studentWithoutLessons], lessons: [] });
+			await db.setState({ ...defaultDbState, students: [studentWithoutLessons], lessons: [] }).write();
 
 			const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
 
@@ -112,6 +91,51 @@ describe("/student API", () => {
 			expect(res.body).toHaveProperty("student");
 
 			expect(res.body.student).toEqual(studentWithoutLessons);
+		} finally {
+			//
+		}
+	});
+
+	it("should return a specific student with lessons", async () => {
+		const studentWITHOUTLessons: StudentFromList = new StudentFromList({
+			originalHref: "x300111e_melni_kip220.htm",
+			text: "Melnikovas Kipras IIIe",
+		});
+
+		const lessons: Lesson[] = [
+			new Lesson({
+				isEmpty: false,
+				dayIndex: 0,
+				timeIndex: 0,
+				id: "day:0/time:0/name:The angle ain't blunt - I'm blunt",
+				name: "The angle ain't blunt - I'm blunt",
+				teacher: "Snoop Dawg",
+				room: "The Chamber (36 - 9 = 25)",
+				students: [
+					studentWITHOUTLessons.text /** the student must exist in the lesson's students' list to get the lesson populated */,
+					"Alice Wonderland IIIGe",
+					"Bob Builder IIIa",
+					"Charlie Angel IVGx",
+				],
+			}),
+		];
+
+		const encodedStudentName: string = encodeURIComponent(studentWITHOUTLessons.text);
+
+		try {
+			const db = await initDb();
+			await db.setState({ ...defaultDbState, students: [studentWITHOUTLessons], lessons }).write();
+
+			const res: Response = await request.get(`/api/v1/student/${encodedStudentName}`);
+
+			expect(res.status).toBe(200);
+
+			expect(res.body).toHaveProperty("student");
+			expect(res.body.student).toHaveProperty("lessons");
+
+			const studentWITHLessons: Student = new Student({ ...studentWITHOUTLessons, lessons });
+
+			expect(res.body.student).toEqual(studentWITHLessons);
 		} finally {
 			//
 		}
