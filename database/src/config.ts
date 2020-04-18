@@ -1,4 +1,11 @@
-import { Class, Lesson, StudentFromList /** , Change */ } from "@turbo-schedule/common";
+import {
+	Class,
+	Lesson,
+	StudentFromList,
+	/** , Change */
+	ScrapeInfo,
+	getDefaultScrapeInfo,
+} from "@turbo-schedule/common";
 
 import low from "lowdb";
 import path from "path";
@@ -20,8 +27,15 @@ export interface DbSchema {
 	students: StudentFromList[];
 	lessons: Lesson[];
 	/** changes: Change[]; */
+	scrapeInfo: ScrapeInfo;
 }
 
-export const defaultDbState: DbSchema = { classes: [], students: [], lessons: [] /** , changes: [] */ };
+export const defaultDbState: DbSchema = {
+	classes: [], //
+	students: [],
+	lessons: [],
+	/** , changes: [] */
+	scrapeInfo: getDefaultScrapeInfo(),
+};
 
 export type Db = low.LowdbAsync<DbSchema>;

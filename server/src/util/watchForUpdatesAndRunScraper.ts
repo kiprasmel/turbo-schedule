@@ -1,11 +1,11 @@
 import { CronJob } from "cron";
 
-import { runScraper } from "./runScraper";
+import { runScraperIfUpdatesAvailable } from "./runScraper";
 
-export const enableScraperCronjob = (): void => {
+export const watchForUpdatesAndRunScraper = (): void => {
 	const runImmediately: boolean = !!process.env.START_SCRAPER_NOW;
 
-	const scraperCronJob: CronJob = new CronJob(
+	const updateCheckAndScraperCronjob: CronJob = new CronJob(
 		/**
 		 * cron ranges (@ https://www.npmjs.com/package/cron#cron-ranges):
 		 *
@@ -17,8 +17,8 @@ export const enableScraperCronjob = (): void => {
 		 * Day of Week: 0-6 (Sun-Sat)
 		 *
 		 */
-		"00 05 00 * * *",
-		runScraper,
+		"00 * * * * *",
+		runScraperIfUpdatesAvailable,
 		undefined,
 		runImmediately
 	);
@@ -26,5 +26,5 @@ export const enableScraperCronjob = (): void => {
 	/**
 	 * does not actually start the cronjob - just enables it
 	 */
-	scraperCronJob.start();
+	updateCheckAndScraperCronjob.start();
 };
