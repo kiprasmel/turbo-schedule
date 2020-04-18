@@ -3,95 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [2.3.0](https://github.com/facebook/react/compare/v2.2.2...v2.3.0) (2020-04-18)
+
+
+# [2.3.0](https://github.com/sarpik/turbo-schedule/compare/v2.2.2...v2.3.0) (2020-04-18)
 
 
 ### Features
 
-* **common:** Create `ScrapeInfo` model ([6df5f66](https://github.com/facebook/react/commit/6df5f66b6e4725fdde42e9c8f5d14a832e73c8bb))
-* **common:** Create `timeElapsed` util ([c6e6aac](https://github.com/facebook/react/commit/c6e6aac4f5119d85272de0c95a65becc344c6671))
+* **common:** Create `ScrapeInfo` model ([6df5f66](https://github.com/sarpik/turbo-schedule/commit/6df5f66b6e4725fdde42e9c8f5d14a832e73c8bb))
+* **common:** Create `timeElapsed` util ([c6e6aac](https://github.com/sarpik/turbo-schedule/commit/c6e6aac4f5119d85272de0c95a65becc344c6671))
 
 
 
-## 2.2.1 (2020-04-16)
-
-
-
-
-
-## [2.2.1](https://github.com/facebook/react/compare/v2.2.0...v2.2.1) (2020-04-16)
+## [2.2.1](https://github.com/sarpik/turbo-schedule/compare/v2.1.5...v2.2.1) (2020-04-16)
 
 
 ### Bug Fixes
 
-* **common:** Parse `Student`'s `fullClassOrig` properly ([561ef0a](https://github.com/facebook/react/commit/561ef0ab98fda0c9d29da339ee7d8cd58442db69))
-
-
-
-
-
-# [2.2.0](https://github.com/facebook/react/compare/v2.1.5...v2.2.0) (2020-04-15)
-
-
-### Bug Fixes
-
-* **common:** Add default param values for `createClass` ([8d2256e](https://github.com/facebook/react/commit/8d2256e9e9039a0addfa6a769c6e4f9d50191294))
-* **common:** Allow `Class` to have `lessons` field ([da18a2b](https://github.com/facebook/react/commit/da18a2bab65ee6151c0afa0196ec83c059b98605))
+* **common:** Add default param values for `createClass` ([8d2256e](https://github.com/sarpik/turbo-schedule/commit/8d2256e9e9039a0addfa6a769c6e4f9d50191294))
+* **common:** Allow `Class` to have `lessons` field ([da18a2b](https://github.com/sarpik/turbo-schedule/commit/da18a2bab65ee6151c0afa0196ec83c059b98605))
+* **common:** Parse `Student`'s `fullClassOrig` properly ([561ef0a](https://github.com/sarpik/turbo-schedule/commit/561ef0ab98fda0c9d29da339ee7d8cd58442db69))
 
 
 ### Features
 
-* **common:** Create `Schedule` model ([af888e3](https://github.com/facebook/react/commit/af888e3ef4f928e7018391160c97961db406d69d))
-* **common:** Create the `Class` model ([8674e25](https://github.com/facebook/react/commit/8674e258c0617ba1ba640bee5558e6dd70bc3859))
-* **common:** Export the `Schedule` & `Class` models ([ad28fad](https://github.com/facebook/react/commit/ad28fad82f20f2996c2b8ce00a7af9de47ca3eca))
+* **common:** Create `Schedule` model ([af888e3](https://github.com/sarpik/turbo-schedule/commit/af888e3ef4f928e7018391160c97961db406d69d))
+* **common:** Create the `Class` model ([8674e25](https://github.com/sarpik/turbo-schedule/commit/8674e258c0617ba1ba640bee5558e6dd70bc3859))
+* **common:** Export the `Schedule` & `Class` models ([ad28fad](https://github.com/sarpik/turbo-schedule/commit/ad28fad82f20f2996c2b8ce00a7af9de47ca3eca))
 
 
 
-
-
-## 2.1.5 (2020-04-12)
-
-**Note:** Version bump only for package @turbo-schedule/common
-
-
-
-
-
-## 2.1.4 (2020-04-12)
-
-**Note:** Version bump only for package @turbo-schedule/common
-
-
-
-
-
-## 2.1.3 (2020-04-12)
-
-**Note:** Version bump only for package @turbo-schedule/common
-
-
-
-
-
-## 2.1.2 (2020-04-06)
+## [2.1.5](https://github.com/sarpik/turbo-schedule/compare/v2.1.4...v2.1.5) (2020-04-12)
 
 
 ### Bug Fixes
 
-* **db:** Use correct path to `data` when in production ([f04f848](https://github.com/sarpik/turbo-schedule/commit/f04f848c27a4ac1271762ea0da9276895be3850f))
+* Add `repository` field to all `package.json`s ([7803f4d](https://github.com/sarpik/turbo-schedule/commit/7803f4d58156524ff2239cae146c7e1c8fdbfcf0))
 
 
 
+## [2.1.4](https://github.com/sarpik/turbo-schedule/compare/v2.1.3...v2.1.4) (2020-04-12)
 
 
-## 2.1.1 (2020-04-06)
+
+## [2.1.3](https://github.com/sarpik/turbo-schedule/compare/v2.1.2...v2.1.3) (2020-04-12)
 
 
-### Bug Fixes
 
-* Include `database` inside `Dockerfile` & `.dockerignore` ([6d4b0ad](https://github.com/sarpik/turbo-schedule/commit/6d4b0ad9828e753afd12b2fbe7d0d365a00f5da4))
+## [2.1.2](https://github.com/sarpik/turbo-schedule/compare/v2.1.1...v2.1.2) (2020-04-06)
 
 
+
+## [2.1.1](https://github.com/sarpik/turbo-schedule/compare/v2.1.0...v2.1.1) (2020-04-06)
 
 
 
@@ -109,24 +72,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
-## 2.0.3 (2020-02-06)
-
-
-### Bug Fixes
-
-* **ci:** Set git's user `name` & `email` ([9c86fb5](https://github.com/sarpik/turbo-schedule/commit/9c86fb59c4b405bfe36328ab63e16b37495ad64e))
-
-
+## [2.0.3](https://github.com/sarpik/turbo-schedule/compare/v2.0.2...v2.0.3) (2020-02-06)
 
 
 
 ## [2.0.2](https://github.com/sarpik/turbo-schedule/compare/v2.0.1...v2.0.2) (2020-02-05)
-
-**Note:** Version bump only for package @turbo-schedule/common
-
-
 
 
 
@@ -156,21 +106,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 ## [1.6.4](https://github.com/sarpik/turbo-schedule/compare/v1.6.3...v1.6.4) (2019-11-14)
-
-**Note:** Version bump only for package @turbo-schedule/common
-
-
 
 
 
 ## [1.6.2](https://github.com/sarpik/turbo-schedule/compare/v1.6.1...v1.6.2) (2019-11-13)
-
-**Note:** Version bump only for package @turbo-schedule/common
-
-
 
 
 
@@ -183,8 +123,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 # [1.6.0](https://github.com/sarpik/turbo-schedule/compare/v1.5.0...v1.6.0) (2019-10-31)
 
 
@@ -194,17 +132,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 # [1.5.0](https://github.com/sarpik/turbo-schedule/compare/v1.4.0...v1.5.0) (2019-10-24)
 
-**Note:** Version bump only for package @turbo-schedule/common
 
 
-
-
-
-# 1.0.0 (2019-10-22)
+# [1.0.0](https://github.com/sarpik/turbo-schedule/compare/c65de29dca99d228749e6bc0ea76ee4f5af07f0b...v1.0.0) (2019-10-22)
 
 
 ### Bug Fixes

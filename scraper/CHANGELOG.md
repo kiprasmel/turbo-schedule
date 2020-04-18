@@ -3,95 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [2.3.0](https://github.com/facebook/react/compare/v2.2.2...v2.3.0) (2020-04-18)
+
+
+# [2.3.0](https://github.com/sarpik/turbo-schedule/compare/v2.2.2...v2.3.0) (2020-04-18)
 
 
 ### Features
 
-* **scraper:** Create & write `scrapeInfo` into the database! 🚀 ([75dd6c6](https://github.com/facebook/react/commit/75dd6c6729e404e2d21bff77b5d3da83c32bcaad))
-* **scraper:** Create `createPageVersionIdentifier` util ([b85f2c2](https://github.com/facebook/react/commit/b85f2c213080d9ccfb7519d24c08b5bf34cdde2f))
-* **scraper:** Create `wasScheduleUpdated` util ([e973eab](https://github.com/facebook/react/commit/e973eab65da57c8c5da8db076bc1445667926f19))
+* **scraper:** Create & write `scrapeInfo` into the database! 🚀 ([75dd6c6](https://github.com/sarpik/turbo-schedule/commit/75dd6c6729e404e2d21bff77b5d3da83c32bcaad))
+* **scraper:** Create `createPageVersionIdentifier` util ([b85f2c2](https://github.com/sarpik/turbo-schedule/commit/b85f2c213080d9ccfb7519d24c08b5bf34cdde2f))
+* **scraper:** Create `wasScheduleUpdated` util ([e973eab](https://github.com/sarpik/turbo-schedule/commit/e973eab65da57c8c5da8db076bc1445667926f19))
 
 
 
-## 2.2.1 (2020-04-16)
-
-
-
-
-
-## [2.2.1](https://github.com/facebook/react/compare/v2.2.0...v2.2.1) (2020-04-16)
-
-**Note:** Version bump only for package @turbo-schedule/scraper
-
-
-
-
-
-# [2.2.0](https://github.com/facebook/react/compare/v2.1.5...v2.2.0) (2020-04-15)
+## [2.2.1](https://github.com/sarpik/turbo-schedule/compare/v2.1.5...v2.2.1) (2020-04-16)
 
 
 ### Bug Fixes
 
-* **scraper:** Make `mergeStudentsOfDuplicateLessons` concat full arrays ([1ddcd8f](https://github.com/facebook/react/commit/1ddcd8f35adba3598b0a11901cedddfad8004fdd))
+* **scraper:** Make `mergeStudentsOfDuplicateLessons` concat full arrays ([1ddcd8f](https://github.com/sarpik/turbo-schedule/commit/1ddcd8f35adba3598b0a11901cedddfad8004fdd))
 
 
 ### Features
 
-* **scraper:** Collect unique lessons from classes too!! 🚀 ([21c1f34](https://github.com/facebook/react/commit/21c1f349b914d91b05275574c15ca14e06bb1b89)), closes [/github.com/sarpik/turbo-schedule/issues/31#issuecomment-612705409](https://github.com//github.com/sarpik/turbo-schedule/issues/31/issues/issuecomment-612705409)
-* **scraper:** Create `mergeStudentsOfDuplicateLessons` ([e913e59](https://github.com/facebook/react/commit/e913e59d8e8b57f8439cbbe339046aa607f554c6))
-* **scraper:** Create `scrapeClassList` util ([45ea373](https://github.com/facebook/react/commit/45ea373da0b05ace22752e06d33b57af537c5eab))
-* **scraper:** Rewrite `extractLessons` to allow individual parsers ([15e49a3](https://github.com/facebook/react/commit/15e49a394c4e5625f43c9539d1e4b479c1952efd))
-* **scraper:** Scrape the class list! ([043613f](https://github.com/facebook/react/commit/043613fab0ef40a20d4d5fbf9dff57a31d3f4071))
-* **scraper:** Use the new `mergeStudentsOfDuplicateLessons` 🚀 ([9eca8dd](https://github.com/facebook/react/commit/9eca8dd0bef0e1d87929e94359051cd14d0464e3))
+* **scraper:** Collect unique lessons from classes too!! 🚀 ([21c1f34](https://github.com/sarpik/turbo-schedule/commit/21c1f349b914d91b05275574c15ca14e06bb1b89)), closes [/github.com/sarpik/turbo-schedule/issues/31#issuecomment-612705409](https://github.com//github.com/sarpik/turbo-schedule/issues/31/issues/issuecomment-612705409)
+* **scraper:** Create `mergeStudentsOfDuplicateLessons` ([e913e59](https://github.com/sarpik/turbo-schedule/commit/e913e59d8e8b57f8439cbbe339046aa607f554c6))
+* **scraper:** Create `scrapeClassList` util ([45ea373](https://github.com/sarpik/turbo-schedule/commit/45ea373da0b05ace22752e06d33b57af537c5eab))
+* **scraper:** Rewrite `extractLessons` to allow individual parsers ([15e49a3](https://github.com/sarpik/turbo-schedule/commit/15e49a394c4e5625f43c9539d1e4b479c1952efd))
+* **scraper:** Scrape the class list! ([043613f](https://github.com/sarpik/turbo-schedule/commit/043613fab0ef40a20d4d5fbf9dff57a31d3f4071))
+* **scraper:** Use the new `mergeStudentsOfDuplicateLessons` 🚀 ([9eca8dd](https://github.com/sarpik/turbo-schedule/commit/9eca8dd0bef0e1d87929e94359051cd14d0464e3))
 
 
 
-
-
-## 2.1.5 (2020-04-12)
-
-**Note:** Version bump only for package @turbo-schedule/scraper
-
-
-
-
-
-## 2.1.4 (2020-04-12)
-
-**Note:** Version bump only for package @turbo-schedule/scraper
-
-
-
-
-
-## 2.1.3 (2020-04-12)
-
-**Note:** Version bump only for package @turbo-schedule/scraper
-
-
-
-
-
-## 2.1.2 (2020-04-06)
+## [2.1.5](https://github.com/sarpik/turbo-schedule/compare/v2.1.4...v2.1.5) (2020-04-12)
 
 
 ### Bug Fixes
 
-* **db:** Use correct path to `data` when in production ([f04f848](https://github.com/sarpik/turbo-schedule/commit/f04f848c27a4ac1271762ea0da9276895be3850f))
+* Add `repository` field to all `package.json`s ([7803f4d](https://github.com/sarpik/turbo-schedule/commit/7803f4d58156524ff2239cae146c7e1c8fdbfcf0))
 
 
 
+## [2.1.4](https://github.com/sarpik/turbo-schedule/compare/v2.1.3...v2.1.4) (2020-04-12)
 
 
-## 2.1.1 (2020-04-06)
+
+## [2.1.3](https://github.com/sarpik/turbo-schedule/compare/v2.1.2...v2.1.3) (2020-04-12)
 
 
-### Bug Fixes
 
-* Include `database` inside `Dockerfile` & `.dockerignore` ([6d4b0ad](https://github.com/sarpik/turbo-schedule/commit/6d4b0ad9828e753afd12b2fbe7d0d365a00f5da4))
+## [2.1.2](https://github.com/sarpik/turbo-schedule/compare/v2.1.1...v2.1.2) (2020-04-06)
 
 
+
+## [2.1.1](https://github.com/sarpik/turbo-schedule/compare/v2.1.0...v2.1.1) (2020-04-06)
 
 
 
@@ -121,24 +86,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
-## 2.0.3 (2020-02-06)
-
-
-### Bug Fixes
-
-* **ci:** Set git's user `name` & `email` ([9c86fb5](https://github.com/sarpik/turbo-schedule/commit/9c86fb59c4b405bfe36328ab63e16b37495ad64e))
-
-
+## [2.0.3](https://github.com/sarpik/turbo-schedule/compare/v2.0.2...v2.0.3) (2020-02-06)
 
 
 
 ## [2.0.2](https://github.com/sarpik/turbo-schedule/compare/v2.0.1...v2.0.2) (2020-02-05)
-
-**Note:** Version bump only for package @turbo-schedule/scraper
-
-
 
 
 
@@ -158,16 +110,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 ## [1.7.2](https://github.com/sarpik/turbo-schedule/compare/v1.7.1...v1.7.2) (2019-11-21)
 
 
 ### Bug Fixes
 
 * **scraper:** Stop saving bs & make scraper 4X FASTER!! 🌠🚀 ([13f765c](https://github.com/sarpik/turbo-schedule/commit/13f765cea3a7acbaad002acffdfd5ffdb94f7973))
-
-
 
 
 
@@ -187,8 +135,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 ## [1.6.6](https://github.com/sarpik/turbo-schedule/compare/v1.6.5...v1.6.6) (2019-11-18)
 
 
@@ -198,13 +144,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 ## [1.6.4](https://github.com/sarpik/turbo-schedule/compare/v1.6.3...v1.6.4) (2019-11-14)
-
-**Note:** Version bump only for package @turbo-schedule/scraper
-
-
 
 
 
@@ -218,13 +158,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 ## [1.6.2](https://github.com/sarpik/turbo-schedule/compare/v1.6.1...v1.6.2) (2019-11-13)
-
-**Note:** Version bump only for package @turbo-schedule/scraper
-
-
 
 
 
@@ -238,25 +172,15 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
-
 # [1.6.0](https://github.com/sarpik/turbo-schedule/compare/v1.5.0...v1.6.0) (2019-10-31)
-
-**Note:** Version bump only for package @turbo-schedule/scraper
-
-
 
 
 
 # [1.5.0](https://github.com/sarpik/turbo-schedule/compare/v1.4.0...v1.5.0) (2019-10-24)
 
-**Note:** Version bump only for package @turbo-schedule/scraper
 
 
-
-
-
-# 1.0.0 (2019-10-22)
+# [1.0.0](https://github.com/sarpik/turbo-schedule/compare/c67721126a59233c5405a23e8257c6a9bb88585d...v1.0.0) (2019-10-22)
 
 
 ### Bug Fixes
