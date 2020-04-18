@@ -28,6 +28,7 @@ import { setupLogger } from "./util/setupLogger";
 import { apiRouter } from "./route/apiRouter";
 import { serveStaticClientInProd } from "./util/serveStaticClientInProd";
 import { enableScraperCronjob } from "./util/enableScraperCronjob";
+import { watchForUpdatesAndRunScraper } from "./util/watchForUpdatesAndRunScraper";
 
 const app: Express = express();
 
@@ -82,7 +83,10 @@ export function startServer({
 	const server: Server = app.listen(PORT, () => {
 		console.log(`~ Server listening on PORT \`${PORT}\` @ NODE_ENV \`${process.env.NODE_ENV}\``);
 
-		/** TODO - figure out where to place this */
+		/** checks for updates every minute & runs the scraper if updates available */
+		watchForUpdatesAndRunScraper();
+
+		/** runs the scraper once a day just in case */
 		enableScraperCronjob();
 	});
 
