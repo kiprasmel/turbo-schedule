@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.4.0](https://github.com/sarpik/turbo-schedule/compare/v2.3.2...v2.4.0) (2020-04-21)
+
+
+### Bug Fixes
+
+* **scraper:** Use the new `setDbStateAndBackupCurrentOne` to avoid nasty errors! 🚀 ([5d093c6](https://github.com/sarpik/turbo-schedule/commit/5d093c6d281b92dbe2f4e59f4defc853dd39a120))
+
+
+
+
+
 ## [2.3.2](https://github.com/sarpik/turbo-schedule/compare/v2.3.1...v2.3.2) (2020-04-18)
 
 

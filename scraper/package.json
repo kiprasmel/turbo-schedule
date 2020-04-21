@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/scraper",
-	"version": "2.3.2",
+	"version": "2.4.0",
 	"description": "",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
@@ -18,7 +18,7 @@
 	},
 	"dependencies": {
 		"@turbo-schedule/common": "^2.3.2",
-		"@turbo-schedule/database": "^2.3.2",
+		"@turbo-schedule/database": "^2.4.0",
 		"@types/cheerio": "^0.22.14",
 		"@types/fs-extra": "^8.0.0",
 		"@types/node-fetch": "^2.5.3",
