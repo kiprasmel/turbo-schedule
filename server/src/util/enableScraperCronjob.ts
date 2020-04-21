@@ -17,7 +17,8 @@ export const enableScraperCronjob = (): void => {
 		 * Day of Week: 0-6 (Sun-Sat)
 		 *
 		 */
-		"00 05 00 * * *",
+		// "00 05 00 * * *",
+		"00 * * * * *",
 		runScraper,
 		undefined,
 		runImmediately

@@ -11,7 +11,7 @@ import fs from "fs-extra";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 
-import { defaultDatabaseDataDirPath, databaseFile, DbSchema, defaultDbState, Db } from "./config";
+import { defaultDatabaseDataDirPath, databaseFile, DbSchema, Db, defaultDbState } from "./config";
 import { initDb } from "./initDb";
 
 const debug = require("debug")("turbo-schedule:database:setNewDbState");
@@ -73,7 +73,7 @@ export async function setNewDbState(
 			...newStateOpts,
 		};
 
-		dbStorageFilePath = createNewDatabaseFilePathSync(
+		dbStorageFilePath = createNewDatabaseFilePathSyncOld(
 			!options.shouldUseCurrentDatabaseFile,
 			!options.shouldHashDataDirPath ? undefined : uuidv4()
 		);
@@ -92,7 +92,10 @@ export async function setNewDbState(
 	 * otherwise - keep it as-is.
 	 */
 	if (!options.shouldUseCurrentDatabaseFile) {
+		debug("Setting new db state.");
 		await db.setState(fullNewDbState).write();
+	} else {
+		debug("NOT Setting new db state.");
 	}
 
 	return {
@@ -111,7 +114,7 @@ export async function setNewDbState(
  *
  * @returns `newFilePath`
  */
-export function createNewDatabaseFilePathSync(
+export function createNewDatabaseFilePathSyncOld(
 	shouldPutTheNewDatabaseFileToAction: boolean,
 	uniqueDataDirHash: string = "",
 	newFileName: string = `${new Date().toISOString()}.json`,
@@ -121,35 +124,94 @@ export function createNewDatabaseFilePathSync(
 		newFileName
 	)
 ): string {
-	debug(
-		"shouldPutTheNewDatabaseFileToAction",
-		shouldPutTheNewDatabaseFileToAction,
-		"uniqueDataDirHash",
-		uniqueDataDirHash,
-		"newFileName",
-		newFileName,
-		"newFilePath",
-		newFilePath
-	);
+	// debug(
+	// 	"shouldPutTheNewDatabaseFileToAction",
+	// 	shouldPutTheNewDatabaseFileToAction,
+	// 	"uniqueDataDirHash",
+	// 	uniqueDataDirHash,
+	// 	"newFileName",
+	// 	newFileName,
+	// 	"newFilePath",
+	// 	newFilePath
+	// );
+	debug("uniqueDataDirHash", uniqueDataDirHash);
+	debug("newFileName", newFileName);
+	debug("newFilePath", newFilePath);
+
+	/**
+	 * `databaseDataDirPath` will differ from the `defaultDatabaseDataDirPath`
+	 * if the `uniqueHash` is not an empty string
+	 */
+	// const databaseDataDirPath: string = path.parse(newFilePath).dir;
+	// debug("parsed dir");
+	// fs.ensureDirSync(databaseDataDirPath);
+	// debug("ensured dir");
+
+	if (shouldPutTheNewDatabaseFileToAction) {
+		debug("creating file");
+		try {
+			fs.ensureFileSync(newFilePath);
+			// fs.writeFileSync(newFilePath, "");
+		} catch (e) {
+			//
+		}
+		debug("Created file");
+
+		try {
+			fs.unlinkSync(databaseFile);
+			fs.removeSync(databaseFile);
+			debug("unlinked symlink");
+		} catch (err) {
+			debug("symlink didn't exist");
+			/** ignore - the symlink just didn't exist previously */
+		}
+
+		fs.symlinkSync(newFilePath, databaseFile);
+		debug("created symlink");
+	}
+
+	debug("done with my stuff");
+
+	return newFilePath;
+}
+
+export function createNewDatabaseFilePathSync(
+	uniqueDataDirHash: string = "",
+	newFileName: string = `${new Date().toISOString()}.json`,
+	newFilePath: string = path.join(
+		path.resolve(defaultDatabaseDataDirPath) /** make sure no trailing slashes etc. for safe concatenation */ +
+			uniqueDataDirHash,
+		newFileName
+	)
+): string {
+	debug("uniqueDataDirHash", uniqueDataDirHash);
+	debug("newFileName", newFileName);
+	debug("newFilePath", newFilePath);
 	/**
 	 * `databaseDataDirPath` will differ from the `defaultDatabaseDataDirPath`
 	 * if the `uniqueHash` is not an empty string
 	 */
 	const databaseDataDirPath: string = path.parse(newFilePath).dir;
+	debug("parsed dir");
 	fs.ensureDirSync(databaseDataDirPath);
+	debug("ensured dir");
 
-	if (shouldPutTheNewDatabaseFileToAction) {
-		fs.createFileSync(newFilePath);
+	fs.createFileSync(newFilePath);
+	debug("Created file");
 
-		try {
-			fs.unlinkSync(databaseFile);
-			fs.removeSync(databaseFile);
-		} catch (err) {
-			/** ignore - the symlink just didn't exist previously */
-		}
-
-		fs.symlinkSync(newFilePath, databaseFile);
+	try {
+		fs.unlinkSync(databaseFile);
+		fs.removeSync(databaseFile);
+		debug("unlinked symlink");
+	} catch (err) {
+		debug("symlink didn't exist");
+		/** ignore - the symlink just didn't exist previously */
 	}
+
+	fs.symlinkSync(newFilePath, databaseFile);
+	debug("created symlink");
+
+	debug("done with my stuff");
 
 	return newFilePath;
 }

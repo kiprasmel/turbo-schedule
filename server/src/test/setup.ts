@@ -4,7 +4,7 @@ import { Server } from "http";
 import fs from "fs-extra";
 
 import { delay } from "@turbo-schedule/common";
-import { setNewDbState } from "@turbo-schedule/database";
+import { Db, initDb, defaultDatabaseDataDirPath, defaultDbState } from "@turbo-schedule/database";
 
 import { startServer } from "../server";
 
@@ -23,10 +23,12 @@ declare global {
 
 const setup = async (_config: jest.GlobalConfig) => {
 	// global.agent = request(global.server);
-	const { dbStorageDirPath } = await setNewDbState({});
+	// const { dbStorageDirPath } = await setNewDbState({});
+	const db: Db = await initDb();
+	await db.setState({ ...defaultDbState });
 
 	global.stopFakeDb = async () => {
-		await fs.remove(dbStorageDirPath);
+		await fs.remove(defaultDatabaseDataDirPath);
 	};
 
 	global.server = startServer();

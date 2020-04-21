@@ -5,7 +5,10 @@ import {
 	ScrapeInfo,
 	timeElapsedMs,
 } from "@turbo-schedule/common";
-import { DbSchema, setNewDbState } from "@turbo-schedule/database";
+import {
+	DbSchema,
+	/** Db, initDb, defaultDbState, createNewDatabaseFilePathSync, */ setNewDbState,
+} from "@turbo-schedule/database";
 
 import { IScraperConfig } from "./config";
 import { getFrontPageHtml } from "./util/getFrontPageHtml";
@@ -124,6 +127,15 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		};
 
 		await setNewDbState(newDbState);
+
+		// const newDbFilePath: string = createNewDatabaseFilePathSync();
+		// try {
+		// 	const db: Db = await initDb(newDbFilePath);
+		// 	await db.setState({ ...defaultDbState, ...newDbState }).write();
+		// } catch (e) {
+		// 	console.error("failed setting db state", e);
+		// 	throw e;
+		// }
 
 		console.log("\n -> scraper finished \n\n");
 		console.table(scrapeInfo);
