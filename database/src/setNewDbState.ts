@@ -3,6 +3,8 @@
  * sidenote:
  * jest, i fucking hate you
  *
+ * TODO - get the absolute rid of this ASAP!!! Use `setDbState` instead 🚀
+ *
  */
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -17,10 +19,10 @@ import { initDb } from "./initDb";
 const debug = require("debug")("turbo-schedule:database:setNewDbState");
 
 export interface DbStateReturn {
-	state: DbSchema;
-	dbStorageDirPath: string;
-	dbStorageFilePath: string;
 	db: Db;
+	state: DbSchema;
+	databaseFilePath: string;
+	databaseDirPath: string;
 }
 
 export async function overrideDbState(
@@ -97,8 +99,8 @@ export async function setNewDbState(
 
 	return {
 		state: fullNewDbState,
-		dbStorageDirPath: path.parse(dbStorageFilePath).dir,
-		dbStorageFilePath,
+		databaseDirPath: path.parse(dbStorageFilePath).dir,
+		databaseFilePath: dbStorageFilePath,
 		db,
 	};
 }
