@@ -23,10 +23,10 @@ declare global {
 
 const setup = async (_config: jest.GlobalConfig) => {
 	// global.agent = request(global.server);
-	const { dbStorageDirPath } = await setNewDbState({});
+	const { databaseDirPath } = await setNewDbState({});
 
 	global.stopFakeDb = async () => {
-		await fs.remove(dbStorageDirPath);
+		await fs.remove(databaseDirPath);
 	};
 
 	global.server = startServer();

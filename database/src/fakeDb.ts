@@ -13,11 +13,11 @@ export interface InitFakeDbRet {
  * back to square one...
  */
 export const initFakeDb = async (newDbState: Partial<DbSchema> = {}): Promise<InitFakeDbRet> => {
-	const { db, dbStorageDirPath } = await setNewDbState(newDbState, { shouldHashDataDirPath: true });
+	const { db, databaseDirPath } = await setNewDbState(newDbState, { shouldHashDataDirPath: true });
 
 	const cleanupFakeDb = async (): Promise<void> => {
-		await fs.remove(dbStorageDirPath);
+		await fs.remove(databaseDirPath);
 	};
 
-	return { cleanupDb: cleanupFakeDb, db: db };
+	return { cleanupDb: cleanupFakeDb, db };
 };

@@ -5,7 +5,7 @@ import {
 	ScrapeInfo,
 	timeElapsedMs,
 } from "@turbo-schedule/common";
-import { DbSchema, setNewDbState } from "@turbo-schedule/database";
+import { DbSchema, setDbStateAndBackupCurrentOne } from "@turbo-schedule/database";
 
 import { IScraperConfig } from "./config";
 import { getFrontPageHtml } from "./util/getFrontPageHtml";
@@ -123,7 +123,7 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			classes: classesFromList,
 		};
 
-		await setNewDbState(newDbState);
+		await setDbStateAndBackupCurrentOne(newDbState);
 
 		console.log("\n -> scraper finished \n\n");
 		console.table(scrapeInfo);
