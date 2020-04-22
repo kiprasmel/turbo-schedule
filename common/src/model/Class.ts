@@ -2,9 +2,10 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable lines-between-class-members */
 
-import { getSpecificScheduleURI } from "./Schedule";
+import { getSpecificScheduleURI } from "./behaviors/appearsInScheduleFrontPage";
 // eslint-disable-next-line import/no-cycle
 import { Lesson } from "./Lesson";
+import { Constructor } from "../Constructor";
 
 export const classNumMin = 0;
 export const classNumMax = 12;
@@ -27,22 +28,22 @@ interface ClassInitData extends Partial<Class> {
  */
 export interface Class {
 	// 	/** BEGIN Scrapable */
-	// readonly id: string; /** TODO */
-	readonly text: string;
-	readonly originalHref: string;
-	readonly originalScheduleURI: string;
+	// readonly id: string /** TODO */;
+	text: string;
+	originalHref: string;
+	originalScheduleURI: string;
 	/** END Scrapable */
 
 	/** BEGIN Class */
-	readonly fullClassOrig: string;
-	readonly classNumOrig: string;
-	readonly classCharOrig: string;
+	fullClassOrig: string;
+	classNumOrig: string;
+	classCharOrig: string;
 
-	readonly fullClass: string;
-	readonly classNum: TClassNum;
-	readonly classChar: string;
+	fullClass: string;
+	classNum: TClassNum;
+	classChar: string;
 
-	readonly lessons?: Lesson[] /** available only once populated from the database (we don't inline) */;
+	lessons?: Lesson[] /** available only once populated from the database (we don't inline) */;
 	/** END Class */
 }
 
@@ -177,3 +178,9 @@ provided = \`${classNumDangerous}\``
 function parseFullClass(fullClassOrig: string): string {
 	return parseClassNum(fullClassOrig) + parseClassChar(fullClassOrig);
 }
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export const HasClassMixin = <TBaseClass extends Constructor>(BaseClass: TBaseClass = class {} as TBaseClass) =>
+	class extends BaseClass {
+		class: Class = createClass();
+	};

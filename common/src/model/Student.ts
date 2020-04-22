@@ -20,7 +20,7 @@
 
 /* eslint-disable import/no-cycle */
 import { Lesson, NonUniqueLesson } from "./Lesson";
-import { getSpecificScheduleURI } from "./Schedule";
+import { getSpecificScheduleURI, AppearsInScheduleFrontPageMixin } from "./behaviors/appearsInScheduleFrontPage";
 // import { Friend } from "./Friend";
 
 /**
@@ -38,7 +38,9 @@ import { getSpecificScheduleURI } from "./Schedule";
  * which results in the whole thing becoming pointless.
  */
 
-import { TClassNum, classNumMin, classNumMax } from "./Class";
+import { TClassNum, classNumMin, classNumMax, HasClassMixin, createClass } from "./Class";
+
+import { HasFullNameMixin } from "./behaviors/hasFullName";
 
 /**
  * only `originalHref` & `text` are mandatory;
@@ -50,29 +52,31 @@ export interface StudentFromListInitData extends Partial<StudentFromList> {
 	text: string;
 }
 
-export class StudentFromList {
+// export class StudentFromList {
+export class StudentFromList extends AppearsInScheduleFrontPageMixin(HasFullNameMixin(HasClassMixin())) {
 	readonly id: string;
 
-	readonly text: string;
-	readonly originalHref: string;
+	// readonly text: string;
+	// readonly originalHref: string;
 
-	readonly originalScheduleURI: string;
+	// readonly originalScheduleURI: string;
 
-	readonly firstName: string;
-	readonly lastName: string;
-	readonly fullName: string;
+	// readonly firstName: string;
+	// readonly lastName: string;
+	// readonly fullName: string;
 
 	/** BEGIN Class */
-	readonly classNum: TClassNum;
-	readonly classChar: string;
-	readonly fullClass: string; /** TODO `className` */
+	// // readonly classNum: TClassNum;
+	// // readonly classChar: string;
+	// // readonly fullClass: string; /** TODO `className` */
 
-	readonly classNumOrig: string;
-	readonly classCharOrig: string;
-	readonly fullClassOrig: string; /** TODO `classNameOrig` */
+	// // readonly classNumOrig: string;
+	// // readonly classCharOrig: string;
+	// // readonly fullClassOrig: string; /** TODO `classNameOrig` */
 	/** END Class */
 
 	constructor(data?: StudentFromListInitData) {
+		super(data);
 		/**
 		 * if data is NOT provided - we provide default values.
 		 */
@@ -105,13 +109,18 @@ export class StudentFromList {
 		this.lastName = data?.lastName ?? this.parseLastName();
 		this.fullName = data?.fullName ?? this.parseFullName();
 
-		this.classNum = data?.classNum ?? this.parseClassNum();
-		this.classChar = data?.classChar ?? this.parseClassChar();
-		this.fullClass = data?.fullClass ?? this.parseFullClass();
+		// this.class.classNum = data?.class?.classNum || this.parseClassNum();
+		// this.class.classChar = data?.class?.classChar || this.parseClassChar();
+		// this.class.fullClass = data?.class?.fullClass || this.parseFullClass();
 
-		this.classNumOrig = data?.classNumOrig ?? this.parseClassNumOrig();
-		this.classCharOrig = data?.classCharOrig ?? this.parseClassCharOrig();
-		this.fullClassOrig = data?.fullClassOrig ?? this.parseFullClassOrig();
+		// this.class.classNumOrig = data?.class?.classNumOrig || this.parseClassNumOrig();
+		// this.class.classCharOrig = data?.class?.classCharOrig || this.parseClassCharOrig();
+		this.class.fullClassOrig = data?.class?.fullClassOrig || this.parseFullClassOrig();
+
+		this.class = createClass({ fullClassOrig: this.class.fullClassOrig, originalHref: "" });
+
+		// this.class.text = data?.class?.text || this.class.fullClassOrig;
+		// this.class.original
 	}
 
 	public static async writeManyToIndividualFiles(
@@ -299,11 +308,11 @@ provided = \`${classNumDangerous}\``
 	// 	return this.classNum + this.classChar;
 	// }
 	parseFullClass(): string {
-		if (!Number.isInteger(this.classNum) || !this.classChar) {
+		if (!Number.isInteger(this.class.classNum) || !this.class.classChar) {
 			return "";
 		}
 
-		return this.classNum.toString() + this.classChar;
+		return this.class.classNum.toString() + this.class.classChar;
 	}
 
 	/**
@@ -311,7 +320,7 @@ provided = \`${classNumDangerous}\``
 	 * because the chars we're looking for are always the first ones up until the last one, not including it.
 	 */
 	parseClassNumOrig(): string {
-		const classNumOrig: string = (this.fullClassOrig ?? this.parseFullClassOrig()).slice(0, -1);
+		const classNumOrig: string = (this.class.fullClassOrig ?? this.parseFullClassOrig()).slice(0, -1);
 		/** "IIIGe" */
 		/** "IIIG" */
 
@@ -323,7 +332,7 @@ provided = \`${classNumDangerous}\``
 	 * because the char we're looking for is always the last one.
 	 */
 	parseClassCharOrig(): string {
-		const classNumOrig: string = (this.fullClassOrig ?? this.parseFullClassOrig()).slice(-1);
+		const classNumOrig: string = (this.class.fullClassOrig ?? this.parseFullClassOrig()).slice(-1);
 		/** "IIIGe" */
 		/**     "e" */
 

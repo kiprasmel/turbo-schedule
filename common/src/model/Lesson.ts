@@ -1,7 +1,10 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable lines-between-class-members */
 /* eslint-disable import/no-cycle */
+// import { Db } from "@turbo-schedule/database";
+
 import { Student } from "./Student";
+import { Constructor } from "../Constructor";
 
 export class NonUniqueLesson {
 	readonly id: string = "";
@@ -95,3 +98,9 @@ export class Lesson extends NonUniqueLesson implements Omit<NonUniqueLesson, "no
 		return uniqueId;
 	}
 }
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export const HasLessonsMixin = <TBaseClass extends Constructor>(BaseClass: TBaseClass) =>
+	class extends BaseClass {
+		lessons: Lesson[] = [];
+	};
