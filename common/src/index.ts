@@ -6,6 +6,7 @@ export * from "./util/toJson";
 export * from "./util/writeToSingleFile";
 export * from "./util/timeElapsed";
 
+export * from "./model/Scrapable";
 export * from "./model/Schedule";
 export * from "./model/Class";
 export * from "./model/Student";
