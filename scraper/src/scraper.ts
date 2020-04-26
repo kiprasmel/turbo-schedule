@@ -4,17 +4,18 @@ import {
 	Lesson,
 	ScrapeInfo,
 	timeElapsedMs,
+	Teacher,
+	Room,
 } from "@turbo-schedule/common";
 import { DbSchema, setDbStateAndBackupCurrentOne } from "@turbo-schedule/database";
 
 import { IScraperConfig } from "./config";
 import { getFrontPageHtml } from "./util/getFrontPageHtml";
-import { scrapeStudentList } from "./util/scrapeStudentList";
-import { scrapeClassList } from "./util/scrapeClassList";
 
 import { mergeStudentsOfDuplicateLessons } from "./mergeStudentsOfDuplicateLessons";
-import { extractLessonFromClass, extractLessonFromStudent } from "./util/extractLessons";
+import { extractLessonFromClass, extractLessonFromStudent, extractLessonFromTeacher } from "./util/extractLessons";
 import { createPageVersionIdentifier } from "./util/createPageVersionIdentifier";
+import { scrapeStudentList, scrapeClassList, scrapeTeacherList, scrapeRoomList } from "./util/scrapeScheduleItemList";
 
 // import { populateStudentsWithFriends } from "./populateStudentsWithFriends";
 
@@ -41,15 +42,23 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		const frontPageHtml: string = await getFrontPageHtml();
 
 		// eslint-disable-next-line prefer-const
-		let studentsFromList: StudentFromList[] = await scrapeStudentList(frontPageHtml);
+		let studentsFromList: StudentFromList[] = scrapeStudentList(frontPageHtml);
 
 		// eslint-disable-next-line prefer-const
 		let classesFromList: Class[] = scrapeClassList(frontPageHtml);
+
+		// eslint-disable-next-line prefer-const
+		let teachersFromList: Teacher[] = scrapeTeacherList(frontPageHtml);
+
+		// eslint-disable-next-line prefer-const
+		let roomsFromList: Room[] = scrapeRoomList(frontPageHtml);
 
 		if (process.env.FAST) {
 			/** TODO document */
 			studentsFromList = studentsFromList.splice(0, 10);
 			classesFromList = classesFromList.splice(0, 10);
+			teachersFromList = teachersFromList.splice(0, 10);
+			roomsFromList = roomsFromList.splice(0, 10);
 		}
 
 		const nonUniqueLessonsEachWithSingleStudent: Lesson[] = await (
@@ -64,6 +73,26 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			)
 		).flat();
 
+		const nonUniqueLessonsEachWithSingleTeacher: Lesson[] = await (
+			await Promise.all(
+				// teachersFromList.map((teacher) => extractLessonFromTeacher(teacher.originalScheduleURI, undefined))
+				teachersFromList.map((teacher) =>
+					extractLessonFromTeacher(teacher.originalScheduleURI, teacher.text /** TODO FIXME */)
+				)
+			)
+		).flat();
+
+		const nonUniqueLessonsEachWithSingleRoom: Lesson[] = await (
+			await Promise.all(
+				// roomsFromList.map((room) => extractLessonFromTeacher(room.originalScheduleURI, undefined))
+				roomsFromList.map((room) =>
+					extractLessonFromTeacher(room.originalScheduleURI, room.text /** TODO FIXME */)
+				)
+			)
+		).flat();
+
+		/** */
+
 		const uniqueLessonsFromStudents: Lesson[] = mergeStudentsOfDuplicateLessons(
 			nonUniqueLessonsEachWithSingleStudent
 		);
@@ -73,12 +102,20 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		 */
 		const uniqueLessonsFromClasses: Lesson[] = mergeStudentsOfDuplicateLessons(nonUniqueLessonsEachWithSingleClass);
 
+		const uniqueLessonsFromTeachers: Lesson[] = mergeStudentsOfDuplicateLessons(
+			nonUniqueLessonsEachWithSingleTeacher
+		);
+
+		const uniqueLessonsFromRooms: Lesson[] = mergeStudentsOfDuplicateLessons(nonUniqueLessonsEachWithSingleRoom);
+
 		/**
 		 * merge once again!
 		 */
 		const allUniqueLessons: Lesson[] = mergeStudentsOfDuplicateLessons([
 			...uniqueLessonsFromClasses,
 			...uniqueLessonsFromStudents,
+			...uniqueLessonsFromTeachers,
+			...uniqueLessonsFromRooms,
 		]);
 
 		/** BEGIN SOON */
@@ -121,6 +158,8 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			students: studentsFromList,
 			lessons: allUniqueLessons,
 			classes: classesFromList,
+			teachers: teachersFromList,
+			rooms: roomsFromList,
 		};
 
 		await setDbStateAndBackupCurrentOne(newDbState);
