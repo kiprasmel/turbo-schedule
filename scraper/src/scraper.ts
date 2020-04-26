@@ -17,27 +17,12 @@ import { extractLessonFromClass, extractLessonFromStudent, extractLessonFromTeac
 import { createPageVersionIdentifier } from "./util/createPageVersionIdentifier";
 import { scrapeStudentList, scrapeClassList, scrapeTeacherList, scrapeRoomList } from "./util/scrapeScheduleItemList";
 
-// import { populateStudentsWithFriends } from "./populateStudentsWithFriends";
-
 export const scrape = async (config: IScraperConfig): Promise<void> => {
 	try {
 		const startTime: Date = new Date();
 
 		console.log("\n==> scraper\n");
 		console.table(config);
-
-		/**
-		 * TODO use functional programming and chain everything with `.map` yooo
-		 * umm actually, it's `.then`,
-		 * since we sometimes need the whole array instead of a single value,
-		 * iterated N times.
-		 */
-
-		/**
-		 * TODO stop this pretty meh `memoize` logic
-		 * & only save the final students
-		 * at the end of the chain.
-		 */
 
 		const frontPageHtml: string = await getFrontPageHtml();
 
@@ -117,31 +102,6 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			...uniqueLessonsFromTeachers,
 			...uniqueLessonsFromRooms,
 		]);
-
-		/** BEGIN SOON */
-		// .then((students) => populateStudentsWithFriends(students))
-		// .then((studentsWithFriends) => {
-		// 	fs.writeFileSync(
-		// 		path.join(config.latestScrapedDataDirPath, "temp-students-with-friends.json"),
-		// 		prettier.format(
-		// 			JSON.stringify(
-		// 				studentsWithFriends
-		// 					.flatMap((student) => student.friends)
-		// 					.sort(
-		// 						(left: Friend, right: Friend) =>
-		// 							right.totalEncounters - left.totalEncounters ||
-		// 							left.text.localeCompare(right.text)
-		// 					)
-		// 			),
-		// 			{
-		// 				parser: "json",
-		// 			}
-		// 		),
-		// 		{ encoding: "utf-8" }
-		// 	);
-
-		// 	return studentsWithFriends;
-		// })
 
 		const endTime: Date = new Date();
 
