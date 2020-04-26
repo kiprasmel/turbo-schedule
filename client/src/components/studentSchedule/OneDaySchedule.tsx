@@ -17,10 +17,10 @@ const OneDaySchedule: FC<IOneDayScheduleProps> = ({
 	handleLessonKeyboardClick = () => null,
 }) => (
 	<ul>
-		{lessonsArray.map((lesson, index) => (
+		{lessonsArray.map((lesson) => (
 			<LessonItem
 				key={lesson.id}
-				lessonIndex={index}
+				lessonIndex={lesson.timeIndex}
 				lesson={lesson}
 				handleLessonMouseClick={handleLessonMouseClick}
 				handleLessonKeyboardClick={handleLessonKeyboardClick}
