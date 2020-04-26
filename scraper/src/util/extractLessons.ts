@@ -7,13 +7,15 @@ export const extractLessonFromClass: LessonExtractor = extractLessonsFactory(ext
 
 export type LessonExtractor = (
 	originalScheduleURI: string, //
-	scheduleEntityID: string
+	scheduleEntityID:
+		| string
+		| undefined /** `undefined` if the participant is not a student (temp hack (might not even be used), will be fixed with https://github.com/sarpik/turbo-schedule/issues/57) */
 ) => Promise<Lesson[]>;
 
 function extractLessonsFactory(parser: LessonParser): LessonExtractor {
 	return async (
 		originalScheduleURI: string, //
-		scheduleEntityID: string
+		scheduleEntityID: string | undefined
 	): Promise<Lesson[]> => {
 		// scheduleItemsArray = scheduleItemsArray.splice(0, 15);
 		// const lessonsArray: Array<any> = scheduleItemsArray.map((scheduleItem, index) => extractLesson(scheduleItem, index));
@@ -47,7 +49,7 @@ function extractLessonsFactory(parser: LessonParser): LessonExtractor {
 
 				const extractedLessonsWithStudent: Lesson[] = extractedLessons.map((lesson) => ({
 					...lesson,
-					students: [scheduleEntityID],
+					students: [...(lesson.students ?? []), ...(scheduleEntityID ? [scheduleEntityID] : [])],
 				}));
 
 				extractedLessonsArray = [...extractedLessonsArray, ...extractedLessonsWithStudent];
@@ -102,6 +104,11 @@ function extractLessonFromClassParser(
 	const room: string = removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[6]?.data ?? "");
 	const teacher: string = removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[4]?.data ?? "");
 
+	const students: string[] = (removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[2]?.data ?? "") ?? [])
+		.split(" ")
+		.map((stud) => stud.trim())
+		.filter((stud) => !!stud);
+
 	const isEmpty: boolean = !name || !teacher || !room;
 
 	/**
@@ -125,6 +132,7 @@ function extractLessonFromClassParser(
 			name,
 			teacher,
 			room,
+			students,
 		});
 
 		return [lesson];
@@ -194,6 +202,7 @@ function extractLessonFromClassParser(
 		teacher: teachers.join(", ").trim(),
 		room: rooms.join(", ").trim(),
 		/** END HACK */
+		students,
 	});
 
 	return [lesson];
