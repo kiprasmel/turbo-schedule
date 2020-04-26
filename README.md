@@ -51,6 +51,7 @@ git clone https://github.com/sarpik/turbo-schedule.git
 
 cd turbo-schedule
 
+# note: you must not have `--ignore-scripts` enabled (default)
 yarn setup:prod
 yarn serve
 ```
@@ -65,6 +66,7 @@ git clone https://github.com/sarpik/turbo-schedule.git
 
 cd turbo-schedule
 
+# note: you must not have `--ignore-scripts` enabled (default)
 yarn setup
 yarn dev
 ```
