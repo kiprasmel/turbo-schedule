@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/sarpik/turbo-schedule/compare/v2.4.0...v2.5.0) (2020-04-26)
+
+
+### Features
+
+* **server:** Create the `/v1/room` api endpoint ([11f6b7a](https://github.com/sarpik/turbo-schedule/commit/11f6b7af3bf37f7b669c8b8dd1429d324e127038))
+* **server:** Create the `/v1/teacher` api endpoint ([0a435a8](https://github.com/sarpik/turbo-schedule/commit/0a435a8678313868e76f5c8d14b4d630b43a0abb))
+* **server:** Extend the `schedule-item` endpoint - include `teachers` & `rooms` too! ([520a914](https://github.com/sarpik/turbo-schedule/commit/520a9140541c0a9f3ae9e107b55e7569f99ec59e))
+
+
+
+
+
 # [2.4.0](https://github.com/sarpik/turbo-schedule/compare/v2.3.2...v2.4.0) (2020-04-21)
 
 

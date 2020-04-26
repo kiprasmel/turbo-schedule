@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/sarpik/turbo-schedule/compare/v2.4.0...v2.5.0) (2020-04-26)
+
+
+### Bug Fixes
+
+* **client:** Pass in the correct index to `LessonItem` ([74b8b8a](https://github.com/sarpik/turbo-schedule/commit/74b8b8a8d434c97414df34290760eb7b89249cb1))
+* **common:** Allow having `students` in `NonUniqueLesson` ([352ee96](https://github.com/sarpik/turbo-schedule/commit/352ee96221e4242c6e536c6f32fd502f9d77027f))
+* **common:** Remove `readonly` types from `Lesson` model's fields ([306b455](https://github.com/sarpik/turbo-schedule/commit/306b45524344074b43e4332d670fbe4bcf4edd95))
+* **common:** Use `text` field for initializing `Class` ([bf8f0d4](https://github.com/sarpik/turbo-schedule/commit/bf8f0d40b1518083df3d1ad1c959aafab3515006))
+* **scraper:** Merge all needed fields when merging lessons ([7244bc9](https://github.com/sarpik/turbo-schedule/commit/7244bc92f269ed39863287a059055560b4947cb1))
+
+
+### Features
+
+* **client:** Fetch from `schedule-item` to include all participants! ([ffd0127](https://github.com/sarpik/turbo-schedule/commit/ffd0127eaa7ce5dd6892abc4c4d2f11d05e636b0))
+* **common:** Create `Room` model 🚀 ([38d6f93](https://github.com/sarpik/turbo-schedule/commit/38d6f931f22a5879b5a2418ac5469a8c48f6d533))
+* **common:** Create `Scrapable` model ([b5f54ca](https://github.com/sarpik/turbo-schedule/commit/b5f54ca419bd53e6fc5689070dbb2627713816db))
+* **common:** Create `Teacher` model 🚀 ([8ee4fa4](https://github.com/sarpik/turbo-schedule/commit/8ee4fa4573f697fb764c53f309016349f60571f5))
+* **db:** Extend schema with `teachers` & `rooms`! ([0e3d0d9](https://github.com/sarpik/turbo-schedule/commit/0e3d0d917eeaaa751cc564ea4e73b45a2c7c2f37))
+* **scraper:** Allow NOT passing in `scheduleEntityID` into `extractLessonsFactory` ([87a2468](https://github.com/sarpik/turbo-schedule/commit/87a24687de9c7b8fd1166a4669707fa05b66aacb))
+* **scraper:** Create `extractLessonFromTeacherParser`! ([2ee1e2f](https://github.com/sarpik/turbo-schedule/commit/2ee1e2f783e7728157b4188426a1e19ca6033836))
+* **scraper:** Create `findElementIndex` util! ([04d72d6](https://github.com/sarpik/turbo-schedule/commit/04d72d6bcf307e5ee6923b9c23ef84f5b6aee9d1))
+* **scraper:** Create `scrapeScheduleItemList` to scrape any time of participant's schedule! 🔥 ([6f235a7](https://github.com/sarpik/turbo-schedule/commit/6f235a78bc44c9605bdc38c095fcc444f806af64))
+* **scraper:** Use the new stuff to scrape `teachers` & `rooms`! 🚀 ([2df8f43](https://github.com/sarpik/turbo-schedule/commit/2df8f43c14c7a40b361f10673130562b02ba6300))
+* **server:** Create the `/v1/room` api endpoint ([11f6b7a](https://github.com/sarpik/turbo-schedule/commit/11f6b7af3bf37f7b669c8b8dd1429d324e127038))
+* **server:** Create the `/v1/teacher` api endpoint ([0a435a8](https://github.com/sarpik/turbo-schedule/commit/0a435a8678313868e76f5c8d14b4d630b43a0abb))
+* **server:** Extend the `schedule-item` endpoint - include `teachers` & `rooms` too! ([520a914](https://github.com/sarpik/turbo-schedule/commit/520a9140541c0a9f3ae9e107b55e7569f99ec59e))
+
+
+
+
+
 # [2.4.0](https://github.com/sarpik/turbo-schedule/compare/v2.3.2...v2.4.0) (2020-04-21)
 
 

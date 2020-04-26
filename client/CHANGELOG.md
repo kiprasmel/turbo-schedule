@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/sarpik/turbo-schedule/compare/v2.4.0...v2.5.0) (2020-04-26)
+
+
+### Bug Fixes
+
+* **client:** Pass in the correct index to `LessonItem` ([74b8b8a](https://github.com/sarpik/turbo-schedule/commit/74b8b8a8d434c97414df34290760eb7b89249cb1))
+
+
+### Features
+
+* **client:** Fetch from `schedule-item` to include all participants! ([ffd0127](https://github.com/sarpik/turbo-schedule/commit/ffd0127eaa7ce5dd6892abc4c4d2f11d05e636b0))
+
+
+
+
+
 ## [2.3.2](https://github.com/sarpik/turbo-schedule/compare/v2.3.1...v2.3.2) (2020-04-18)
 
 

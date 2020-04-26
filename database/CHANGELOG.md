@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/sarpik/turbo-schedule/compare/v2.4.0...v2.5.0) (2020-04-26)
+
+
+### Features
+
+* **db:** Extend schema with `teachers` & `rooms`! ([0e3d0d9](https://github.com/sarpik/turbo-schedule/commit/0e3d0d917eeaaa751cc564ea4e73b45a2c7c2f37))
+
+
+
+
+
 # [2.4.0](https://github.com/sarpik/turbo-schedule/compare/v2.3.2...v2.4.0) (2020-04-21)
 
 

@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/sarpik/turbo-schedule/compare/v2.4.0...v2.5.0) (2020-04-26)
+
+
+### Bug Fixes
+
+* **common:** Allow having `students` in `NonUniqueLesson` ([352ee96](https://github.com/sarpik/turbo-schedule/commit/352ee96221e4242c6e536c6f32fd502f9d77027f))
+* **common:** Remove `readonly` types from `Lesson` model's fields ([306b455](https://github.com/sarpik/turbo-schedule/commit/306b45524344074b43e4332d670fbe4bcf4edd95))
+* **common:** Use `text` field for initializing `Class` ([bf8f0d4](https://github.com/sarpik/turbo-schedule/commit/bf8f0d40b1518083df3d1ad1c959aafab3515006))
+
+
+### Features
+
+* **common:** Create `Room` model 🚀 ([38d6f93](https://github.com/sarpik/turbo-schedule/commit/38d6f931f22a5879b5a2418ac5469a8c48f6d533))
+* **common:** Create `Scrapable` model ([b5f54ca](https://github.com/sarpik/turbo-schedule/commit/b5f54ca419bd53e6fc5689070dbb2627713816db))
+* **common:** Create `Teacher` model 🚀 ([8ee4fa4](https://github.com/sarpik/turbo-schedule/commit/8ee4fa4573f697fb764c53f309016349f60571f5))
+
+
+
+
+
 ## [2.3.2](https://github.com/sarpik/turbo-schedule/compare/v2.3.1...v2.3.2) (2020-04-18)
 
 
