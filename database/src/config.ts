@@ -5,6 +5,8 @@ import {
 	/** , Change */
 	ScrapeInfo,
 	getDefaultScrapeInfo,
+	Teacher,
+	Room,
 } from "@turbo-schedule/common";
 
 import low from "lowdb";
@@ -25,6 +27,8 @@ export const databaseFile: string = path.join(defaultDatabaseDataDirPath, databa
 export interface DbSchema {
 	classes: Class[];
 	students: StudentFromList[];
+	teachers: Teacher[];
+	rooms: Room[];
 	lessons: Lesson[];
 	/** changes: Change[]; */
 	scrapeInfo: ScrapeInfo;
@@ -33,6 +37,8 @@ export interface DbSchema {
 export const defaultDbState: DbSchema = {
 	classes: [], //
 	students: [],
+	teachers: [],
+	rooms: [],
 	lessons: [],
 	/** , changes: [] */
 	scrapeInfo: getDefaultScrapeInfo(),

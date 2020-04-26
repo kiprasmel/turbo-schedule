@@ -5,7 +5,7 @@
 import { Router } from "express";
 
 import { initDb, Db } from "@turbo-schedule/database";
-import { Class, Lesson, StudentFromList } from "@turbo-schedule/common";
+import { Class, Lesson, StudentFromList, Teacher, Room } from "@turbo-schedule/common";
 
 import { isProd } from "../../util/isProd";
 
@@ -20,8 +20,10 @@ router.get("/", async (_req, res, next) => {
 
 		const classes: Class[] = await db.get("classes").value();
 		const students: StudentFromList[] = await db.get("students").value();
+		const teachers: Teacher[] = await db.get("teachers").value();
+		const rooms: Room[] = await db.get("rooms").value();
 
-		const scheduleItems = [...students, ...classes];
+		const scheduleItems = [...students, ...classes, ...teachers, ...rooms];
 
 		if (!scheduleItems?.length) {
 			const msg: string = `Schedule items not found (were \`${scheduleItems}\`)`;
@@ -63,7 +65,17 @@ router.get("/:scheduleItemName", async (req, res, next) => {
 			.value()
 			.find((c) => c.text.toLowerCase() === scheduleItemName.toLowerCase());
 
-		const scheduleItem = student ?? theClass;
+		const teacher: Teacher = await db
+			.get("teachers")
+			.find({ text: scheduleItemName })
+			.value();
+
+		const room: Room = await db
+			.get("rooms")
+			.find({ text: scheduleItemName })
+			.value();
+
+		const scheduleItem = student ?? theClass ?? teacher ?? room;
 
 		if (!scheduleItem) {
 			const msg: string = `ScheduleItem not found (was \`${scheduleItem}\`)`;
@@ -74,7 +86,19 @@ router.get("/:scheduleItemName", async (req, res, next) => {
 
 		const lessons: Lesson[] = db
 			.get("lessons")
-			.filter((lesson) => lesson.students.includes(scheduleItem.text))
+			.filter(
+				(lesson) =>
+					lesson.students.includes(scheduleItem.text) ||
+					/** BEGIN TODO PARTICIPANTS */ lesson.teacher
+						.split(",")
+						.map((t: Teacher["text"]) => t.trim())
+						.includes(scheduleItem.text) ||
+					lesson.room
+						.split(",")
+						.map((r: Room["text"]) => r.trim())
+						.includes(scheduleItem.text)
+				/** END TODO PARTICIPANTS */
+			)
 			.value();
 
 		if (!lessons?.length) {

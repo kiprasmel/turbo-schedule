@@ -2,18 +2,32 @@
 import { NonUniqueLesson, getHtml, Lesson } from "@turbo-schedule/common";
 import { prepareScheduleItems } from "./prepareScheduleItems";
 
+/**
+ * TODO rename these to `extractLessonsFromGrades5to10` and `extractLessonsFromGrades11to12`
+ * and `extractLessonsFromEitherGrades`
+ *
+ * OR just do it yourself instead of using the factory
+ * and expose only one method
+ *
+ * TODO turn `students` field into `participats` with `{ type: <enum>, text: <string>, isEmpty: <boolean> }`
+ * See https://github.com/sarpik/turbo-schedule/issues/57
+ */
+
 export const extractLessonFromStudent: LessonExtractor = extractLessonsFactory(extractLessonFromStudentParser);
 export const extractLessonFromClass: LessonExtractor = extractLessonsFactory(extractLessonFromClassParser);
+export const extractLessonFromTeacher: LessonExtractor = extractLessonsFactory(extractLessonFromTeacherParser);
 
 export type LessonExtractor = (
 	originalScheduleURI: string, //
-	scheduleEntityID: string
+	scheduleEntityID:
+		| string
+		| undefined /** `undefined` if the participant is not a student (temp hack (might not even be used), will be fixed with https://github.com/sarpik/turbo-schedule/issues/57) */
 ) => Promise<Lesson[]>;
 
 function extractLessonsFactory(parser: LessonParser): LessonExtractor {
 	return async (
 		originalScheduleURI: string, //
-		scheduleEntityID: string
+		scheduleEntityID: string | undefined
 	): Promise<Lesson[]> => {
 		// scheduleItemsArray = scheduleItemsArray.splice(0, 15);
 		// const lessonsArray: Array<any> = scheduleItemsArray.map((scheduleItem, index) => extractLesson(scheduleItem, index));
@@ -47,7 +61,7 @@ function extractLessonsFactory(parser: LessonParser): LessonExtractor {
 
 				const extractedLessonsWithStudent: Lesson[] = extractedLessons.map((lesson) => ({
 					...lesson,
-					students: [scheduleEntityID],
+					students: [...(lesson.students ?? []), ...(scheduleEntityID ? [scheduleEntityID] : [])],
 				}));
 
 				extractedLessonsArray = [...extractedLessonsArray, ...extractedLessonsWithStudent];
@@ -102,6 +116,11 @@ function extractLessonFromClassParser(
 	const room: string = removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[6]?.data ?? "");
 	const teacher: string = removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[4]?.data ?? "");
 
+	const students: string[] = (removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[2]?.data ?? "") ?? [])
+		.split(" ")
+		.map((stud) => stud.trim())
+		.filter((stud) => !!stud);
+
 	const isEmpty: boolean = !name || !teacher || !room;
 
 	/**
@@ -125,6 +144,7 @@ function extractLessonFromClassParser(
 			name,
 			teacher,
 			room,
+			students,
 		});
 
 		return [lesson];
@@ -194,6 +214,7 @@ function extractLessonFromClassParser(
 		teacher: teachers.join(", ").trim(),
 		room: rooms.join(", ").trim(),
 		/** END HACK */
+		students,
 	});
 
 	return [lesson];
@@ -202,6 +223,41 @@ function extractLessonFromClassParser(
 	/** TODO BEGIN good */
 	// }
 	/** TODO END good */
+}
+
+function extractLessonFromTeacherParser(
+	scheduleItem: CheerioElement, //
+	dayIndex: number,
+	timeIndex: number
+): NonUniqueLesson[] {
+	const itemWithClassNameTeacherAndRoom = scheduleItem.children[0] /** always skip this */.children;
+
+	// console.log("item with stuff", JSON.stringify(itemWithClassNameTeacherAndRoom));
+
+	const isLessonForGrades5to8: boolean =
+		!!removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[0].children?.[0]?.data ?? "") &&
+		!!removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[6]?.data ?? "") &&
+		!!removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[4]?.data ?? "");
+
+	const isLessonForGrades10to12: boolean =
+		!!removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[0].children?.[0]?.data ?? "") &&
+		!!removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[2]?.data ?? "") &&
+		!!removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[4]?.data ?? "");
+
+	const isEmpty: boolean = !isLessonForGrades5to8 && !isLessonForGrades10to12;
+
+	if (isEmpty) {
+		/** it doesn't matter which one (TODO make sure this is true in 100% of cases) */
+		return extractLessonFromClassParser(scheduleItem, dayIndex, timeIndex);
+	}
+
+	if (isLessonForGrades5to8) {
+		/** lesson for grades 5-10 */
+		return extractLessonFromClassParser(scheduleItem, dayIndex, timeIndex);
+	}
+
+	/** lessons for grades 11-12 */
+	return extractLessonFromStudentParser(scheduleItem, dayIndex, timeIndex);
 }
 
 const removeNewlineAndTrim = (content: string) => content.replace("\n", "").trim();
