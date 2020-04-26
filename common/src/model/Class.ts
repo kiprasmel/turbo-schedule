@@ -13,7 +13,7 @@ export const classNumMax = 12;
 export type TClassNum = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
 interface ClassInitData extends Partial<Class> {
-	fullClassOrig: string;
+	text: string;
 	originalHref: string;
 }
 
@@ -46,10 +46,10 @@ export interface Class {
 	/** END Class */
 }
 
-export function createClass(data: ClassInitData = { fullClassOrig: "", originalHref: "" }): Class {
-	const { fullClassOrig, originalHref } = data;
+export function createClass(data: ClassInitData = { text: "", originalHref: "" }): Class {
+	const { text, originalHref } = data;
 
-	const text = fullClassOrig;
+	const fullClassOrig = text;
 	const originalScheduleURI = getSpecificScheduleURI(originalHref);
 
 	const classNumOrig = parseClassNumOrig(fullClassOrig);
