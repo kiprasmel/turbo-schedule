@@ -36,9 +36,9 @@ You can also run `turbo-schedule` locally:
 * using docker:
 
 ```sh
-sudo docker pull kipras/turbo-schedule
-sudo docker run -p 5000:5000 --name turbo-schedule kipras/turbo-schedule
-# to stop:  sudo docker stop turbo-schedule
+docker pull kipras/turbo-schedule
+docker run -p 5000:5000 --name turbo-schedule kipras/turbo-schedule
+# to stop:  docker stop turbo-schedule
 ```
 
 & open <a href="http://localhost:5000">localhost:5000</a>
