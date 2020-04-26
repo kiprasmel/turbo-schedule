@@ -14,6 +14,8 @@ export class NonUniqueLesson {
 	teacher: string = "";
 	room: string = "";
 
+	students?: Student["id"][];
+
 	constructor(data?: Partial<NonUniqueLesson>) {
 		Object.assign(this, data);
 
