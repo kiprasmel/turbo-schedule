@@ -73,19 +73,6 @@ yarn dev
 
 & open <a href="http://localhost:3000">localhost:3000</a> for the client; <a href="http://localhost:5000">localhost:5000</a> for the server.
 
-## Couple things to know:
-
-* This is still a work-in-progress & we're continually working on improving the whole app!
-* Projects are split up into the `scraper`, `server`, `client` and `common` folders
-
-* <details> <summary>We're using <a href="https://yarnpkg.com/lang/en/docs/workspaces/"><code>yarn workspaces</code></a> + a little of <a href="https://github.com/lerna/lerna"><code>lerna</code></a> + TypeScript's <a href="https://www.typescriptlang.org/docs/handbook/project-references.html"><code>Project References</code></a>.</summary>
-
-  * https://stackoverflow.com/questions/51631786/how-to-use-project-references-in-typescript-3-0
-  * https://github.com/RyanCavanaugh/learn-a
-</details>
-
-* A mobile app with a very similar use case is being worked on by my friend - don't make a duplicate:D (more info soon, hopefully!)
-
 ## Contributing
 
 Contributions are welcome! If you're having problems - feel free to [open an issue](https://github.com/sarpik/turbo-schedule/issues/new) - we're happy to help:)

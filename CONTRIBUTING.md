@@ -2,6 +2,20 @@
 
 PRs welcome!
 
+## Couple things to know:
+
+* This is still a work-in-progress & we're continually working on improving the whole app!
+* Projects are split up into the `scraper`, `server`, `client` and `common` folders
+
+* <details> <summary>We're using <a href="https://yarnpkg.com/lang/en/docs/workspaces/">yarn workspaces</a> + a little of <a href="https://github.com/lerna/lerna">lerna</a> + TypeScript's <a href="https://www.typescriptlang.org/docs/handbook/project-references.html">Project References</a>.</summary>
+
+  See also:
+  * https://stackoverflow.com/questions/51631786/how-to-use-project-references-in-typescript-3-0
+  * https://github.com/RyanCavanaugh/learn-a
+</details>
+
+* A mobile app for `turbo-schedule` is being worked on by [my friend @sballl](http://github.com/sballl) - don't make a duplicate, or at least ping us before doing stuff:D (more info soon, hopefully!)
+
 ## Adding a new package folder (like `server` or `database`)
 
 1. Create the folder
