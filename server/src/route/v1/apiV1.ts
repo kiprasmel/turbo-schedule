@@ -4,6 +4,7 @@ import { scheduleItemRouter } from "./schedule-item";
 import { classRouter } from "./class";
 import { studentRouter } from "./student";
 import { teacherRouter } from "./teacher";
+import { roomRouter } from "./room";
 import { emailRouter } from "./email";
 import { openAPIDocsJSONHandler, openAPIDocsHTMLHandler } from "./openAPIDocs";
 
@@ -13,6 +14,7 @@ router.use("/schedule-item", scheduleItemRouter); /** combines `class` & `studen
 router.use("/class", classRouter);
 router.use("/student", studentRouter);
 router.use("/teacher", teacherRouter);
+router.use("/room", roomRouter);
 router.use("/email", emailRouter);
 
 router.use("/docs", openAPIDocsHTMLHandler);
