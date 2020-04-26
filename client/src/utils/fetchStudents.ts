@@ -2,15 +2,15 @@ import axios, { AxiosResponse } from "axios";
 import { StudentFromList } from "@turbo-schedule/common";
 
 interface Response {
-	students: StudentFromList[];
+	scheduleItems: StudentFromList[];
 }
 
 export const fetchStudents = async (): Promise<StudentFromList[]> => {
 	try {
-		const response: AxiosResponse<Response> = await axios.get<Response>("/api/v1/student");
+		const response: AxiosResponse<Response> = await axios.get<Response>("/api/v1/schedule-item");
 
 		const {
-			data: { students = [] },
+			data: { scheduleItems: students = [] },
 		} = response;
 
 		return students;
