@@ -71,7 +71,7 @@ yarn setup
 yarn dev
 ```
 
-& open <a href="http://localhost:3000">localhost:3000</a> (note the port - it's `3000`, not `5000` like previously)
+& open <a href="http://localhost:3000">localhost:3000</a> for the client; <a href="http://localhost:5000">localhost:5000</a> for the server.
 
 ## Couple things to know:
 
