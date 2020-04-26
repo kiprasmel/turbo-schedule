@@ -11,8 +11,8 @@ export class NonUniqueLesson {
 	readonly timeIndex: number = -1;
 
 	readonly name: string = "";
-	readonly teacher: string = "";
-	readonly room: string = "";
+	teacher: string = "";
+	room: string = "";
 
 	constructor(data?: Partial<NonUniqueLesson>) {
 		Object.assign(this, data);
