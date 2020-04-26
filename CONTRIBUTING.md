@@ -16,6 +16,13 @@ PRs welcome!
 
 * A mobile app for `turbo-schedule` is being worked on by [my friend @sballl](http://github.com/sballl) - don't make a duplicate, or at least ping us before doing stuff:D (more info soon, hopefully!)
 
+## Known issues
+
+| package | issue                                                                               | fix                                                         |
+| ------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| client  | `Error: ENOENT: no such file or directory, scandir 'node_modules/node-sass/vendor'` | in the repository root, run `npm rebuild node-sass --force` |
+
+
 ## Adding a new package folder (like `server` or `database`)
 
 1. Create the folder

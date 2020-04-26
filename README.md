@@ -88,7 +88,7 @@ TL;DR:
 
 That's it!
 
-> See also [CONTRIBUTING.md](./CONTRIBUTING.md)
+See also [CONTRIBUTING.md](./CONTRIBUTING.md), especially [#known-issues](./CONTRIBUTING.md#known-issues)!
 
 ## Other accomplishments alongside this project
 
