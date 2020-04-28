@@ -52,7 +52,7 @@
 		"docker:deploy": "yarn docker:build && yarn docker:login && yarn docker:push",
 		"docker:tag-version": "docker tag kipras/turbo-schedule:latest kipras/turbo-schedule:$LATEST_TAG",
 		"docker:push-tagged-version": "docker push kipras/turbo-schedule:$LATEST_TAG",
-		"purge:build": "rimraf './client/build' && rimraf './*/dist/' && rimraf './dist/'",
+		"purge:build": "rimraf './client/build' && rimraf './*/dist/' && rimraf './dist/' && rimraf './*/tsconfig.tsbuildinfo'",
 		"purge:modules": "rimraf './*/node_modules/' && rimraf './node_modules/'",
 		"purge:all": "yarn purge:build && yarn purge:modules && echo \"Do NOT forget to re-setup: \n\nyarn setup\n\""
 	},
