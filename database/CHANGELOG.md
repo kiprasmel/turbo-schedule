@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/sarpik/turbo-schedule/compare/v2.5.0...v2.5.1) (2020-04-28)
+
+
+### Bug Fixes
+
+* **db:** Replace invalid filename chars! ([f1ca949](https://github.com/sarpik/turbo-schedule/commit/f1ca9490a24602a2f17e3e807776ae69f21eed62))
+
+
+
+
+
 # [2.5.0](https://github.com/sarpik/turbo-schedule/compare/v2.4.0...v2.5.0) (2020-04-26)
 
 

@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/sarpik/turbo-schedule/compare/v2.5.0...v2.5.1) (2020-04-28)
+
+
+### Bug Fixes
+
+* Add missing `cross-env` for assigning env vars where missing ([6b15daf](https://github.com/sarpik/turbo-schedule/commit/6b15daf806af696853850e11d4258ad0cbbe855f))
+* Also remove `./*/tsconfig.tsbuildinfo` @ purge ([0e1b973](https://github.com/sarpik/turbo-schedule/commit/0e1b973a0c1d214d602b403f8b73aa81811223a0))
+* Do not `purge:build` before `build`ing ([f4ac803](https://github.com/sarpik/turbo-schedule/commit/f4ac8034ae04e38a454a114d55a024315057f1b8))
+* Do not `yarn purge` in `yarn setup` ([0fa33d9](https://github.com/sarpik/turbo-schedule/commit/0fa33d99ec9f28bd01bdba559176e2fe977e3dc7))
+* In `setup:prod` script, first `install`, only then call `cross-env` ([619f990](https://github.com/sarpik/turbo-schedule/commit/619f9904c414bdc22c91764dc80115f3a4f1c79b))
+* Remove `./*/dist` instead of specifying every package ([d578c8a](https://github.com/sarpik/turbo-schedule/commit/d578c8a6b2f07ad8b4b4abc9ed461f28686d0673))
+* Remove quotes around rimraf paths!! ([3ff92d1](https://github.com/sarpik/turbo-schedule/commit/3ff92d1af2e467099618c2480315084d767747bd))
+* Use `npx rimraf` instead of `yarn rimraf` since we only use it once now! ([1a033b0](https://github.com/sarpik/turbo-schedule/commit/1a033b047bad6e7e99236e531a82bde67af31904))
+* **db:** Replace invalid filename chars! ([f1ca949](https://github.com/sarpik/turbo-schedule/commit/f1ca9490a24602a2f17e3e807776ae69f21eed62))
+
+
+### Reverts
+
+* Revert "fix: Do not `purge:build` before `build`ing" ([90eb63a](https://github.com/sarpik/turbo-schedule/commit/90eb63aa91dac1484d9ac21afcfdc6f9747330e8))
+
+
+
+
+
 # [2.5.0](https://github.com/sarpik/turbo-schedule/compare/v2.4.0...v2.5.0) (2020-04-26)
 
 
