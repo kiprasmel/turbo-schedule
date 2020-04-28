@@ -139,16 +139,10 @@ export function createNewDatabaseFilePathSync(
 		"newFilePath",
 		newFilePath
 	);
-	/**
-	 * `databaseDataDirPath` will differ from the `defaultDatabaseDataDirPath`
-	 * if the `uniqueHash` is not an empty string
-	 */
-	const databaseDataDirPath: string = path.parse(newFilePath).dir;
-	fs.ensureDirSync(databaseDataDirPath);
+
+	fs.ensureFileSync(newFilePath);
 
 	if (shouldPutTheNewDatabaseFileToAction) {
-		fs.createFileSync(newFilePath);
-
 		try {
 			fs.unlinkSync(databaseFile);
 			fs.removeSync(databaseFile);
