@@ -51,7 +51,12 @@ export async function backupDbState(currentDatabaseFilePath: string = databaseFi
 
 	let backupDestinationPath: string = path.join(
 		path.parse(currentDatabaseFilePath).dir,
-		`${(await db.get("scrapeInfo").value()?.timeStartISO) || new Date().toISOString()}.${filenameExt}`
+		`${
+			((await db.get("scrapeInfo").value()?.timeStartISO) || new Date().toISOString()).replace(
+				/:/g,
+				"_"
+			) /** replace invalid chars (see https://stackoverflow.com/a/45403355/9285308) */
+		}.${filenameExt}`
 	);
 
 	/**

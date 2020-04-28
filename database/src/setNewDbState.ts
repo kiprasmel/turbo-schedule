@@ -116,13 +116,19 @@ export async function setNewDbState(
 export function createNewDatabaseFilePathSync(
 	shouldPutTheNewDatabaseFileToAction: boolean,
 	uniqueDataDirHash: string = "",
-	newFileName: string = `${new Date().toISOString()}.json`,
+	newFileNameRef: string = `${new Date().toISOString()}.json`.replace(
+		/:/g,
+		"_"
+	) /** replace invalid chars (see https://stackoverflow.com/a/45403355/9285308) */,
 	newFilePath: string = path.join(
 		path.resolve(defaultDatabaseDataDirPath) /** make sure no trailing slashes etc. for safe concatenation */ +
 			uniqueDataDirHash,
-		newFileName
+		newFileNameRef
 	)
 ): string {
+	/** replace the invalid chars here too in case some args were provided & others weren't. */
+	const newFileName: string = newFileNameRef.replace(/:/g, "_");
+
 	debug(
 		"shouldPutTheNewDatabaseFileToAction",
 		shouldPutTheNewDatabaseFileToAction,
