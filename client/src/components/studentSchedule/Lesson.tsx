@@ -1,6 +1,6 @@
 import React, { FC, Fragment } from "react";
 
-import { Lesson } from "@turbo-schedule/common";
+import { Lesson, getParticipantCount } from "@turbo-schedule/common";
 
 import LessonTextBox, { ILessonTextBox } from "./LessonTextBox";
 import { useRenderCount } from "../../hooks/useRenderCount";
@@ -22,18 +22,26 @@ const LessonItem: FC<LessonProps> = React.memo(
 	({ lessonIndex, lesson, handleLessonMouseClick, handleLessonKeyboardClick }) => {
 		useRenderCount("lesson");
 
-		const { id, name, room, teacher, students, dayIndex, timeIndex } = lesson;
+		const { id, name, room, teacher, dayIndex, timeIndex } = lesson;
 
 		/** TODO `howMuchDone` */
 		const { isHappeningNow } = isLessonHappeningNow(dayIndex, timeIndex);
 
-		const textBoxes: Array<ILessonTextBox> = [
-			{ logo: lessonLogo, text: name },
-			{ logo: classRoomLogo, text: room },
-			{ logo: teacherLogo, text: teacher },
-			{ logo: clockLogo, text: getLessonTimesFormatted(timeIndex) },
-			{ logo: studentLogo, text: students?.length || "" },
-		];
+		const textBoxes: Array<ILessonTextBox> = !lesson.isEmpty
+			? [
+					{ logo: lessonLogo, text: name },
+					{ logo: classRoomLogo, text: room },
+					{ logo: teacherLogo, text: teacher },
+					{ logo: clockLogo, text: getLessonTimesFormatted(timeIndex) },
+					{ logo: studentLogo, text: getParticipantCount(lesson).toString() },
+			  ]
+			: [
+					{ logo: lessonLogo, text: "" },
+					{ logo: classRoomLogo, text: "" },
+					{ logo: teacherLogo, text: "" },
+					{ logo: clockLogo, text: getLessonTimesFormatted(timeIndex) },
+					{ logo: studentLogo, text: getParticipantCount(lesson).toString() },
+			  ];
 
 		return (
 			<li
