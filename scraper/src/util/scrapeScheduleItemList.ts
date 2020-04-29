@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import cheerio from "cheerio";
 
-import { Scrapable, createClass, StudentFromList, createTeacher, createRoom } from "@turbo-schedule/common";
+import { Participant, ParticipantLabel } from "@turbo-schedule/common";
 
+import { Initializer } from "../initializer/Initializer";
 import { findElementIndex } from "./findElementIndex";
 
 export const scrapeClassList = scrapeScheduleItemListFactory("Klasės", "Mokytojai", createClass);
@@ -14,12 +15,13 @@ export const scrapeStudentList = scrapeScheduleItemListFactory(
 	(ctx) => new StudentFromList({ text: ctx.text, originalHref: ctx.originalHref })
 );
 
-export function scrapeScheduleItemListFactory<Item>(
+export function scrapeScheduleItemListFactory<T extends Participant>(
 	scheduleItemStartIdentifier: string | undefined,
 	scheduleItemEndIdentifier: string | undefined,
-	createItem: <Ctx extends Scrapable>(context: Ctx) => Item
+	labels: ParticipantLabel[],
+	createItem: Initializer<T>
 ) {
-	return (html: string): Item[] => {
+	return (html: string): T[] => {
 		const $ = cheerio.load(html);
 
 		/** first is useless and so is the last one, we take the middle table */
@@ -50,9 +52,9 @@ export function scrapeScheduleItemListFactory<Item>(
 
 		const scheduleItems = $("font a", selectedTds).toArray();
 
-		const dataArray: Item[] = scheduleItems.map(
-			({ attribs, children }: CheerioElement): Item =>
-				createItem({ originalHref: attribs.href, text: children[0].data || "" })
+		const dataArray: T[] = scheduleItems.map(
+			({ attribs, children }: CheerioElement): T =>
+				createItem({ originalHref: attribs.href, text: children[0].data || "", labels })
 		);
 
 		return dataArray;
