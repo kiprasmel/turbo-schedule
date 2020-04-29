@@ -5,7 +5,7 @@
 import { Router } from "express";
 
 import { initDb, Db } from "@turbo-schedule/database";
-import { createRoom, Lesson, Room } from "@turbo-schedule/common";
+import { getDefaultRoom, Lesson, Room } from "@turbo-schedule/common";
 
 import { isProd } from "../../util/isProd";
 
@@ -55,19 +55,12 @@ router.get("/:roomName", async (req, res, next) => {
 			const msg: string = `Room not found (was \`${room}\`)`;
 
 			console.error(msg);
-			return res.status(404).json({ room: createRoom(), message: msg });
+			return res.status(404).json({ room: getDefaultRoom(), message: msg });
 		}
 
 		const lessons: Lesson[] = await db
 			.get("lessons")
-			.filter(
-				(lesson) =>
-					lesson.room
-						.split(",")
-						.map((t: Room["text"]) => t.trim())
-						.includes(room.text) /** BEGIN TODO PARTICIPANTS */ ||
-					lesson.students.includes(room.text) /** END TODO PARTICIPANTS */
-			)
+			.filter((lesson) => lesson.rooms.includes(room.text))
 			.value();
 
 		if (!lessons?.length) {
@@ -84,7 +77,7 @@ router.get("/:roomName", async (req, res, next) => {
 		return !isProd() ? next() : res.end();
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ room: createRoom(), message: err });
+		res.status(500).json({ room: getDefaultRoom(), message: err });
 
 		return !isProd() ? next(err) : res.end();
 	}

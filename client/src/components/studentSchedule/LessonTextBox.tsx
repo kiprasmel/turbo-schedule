@@ -2,7 +2,7 @@ import React, { FC } from "react";
 
 export interface ILessonTextBox {
 	logo: any;
-	text: string | number;
+	text: string;
 }
 
 export interface LessonTextBoxProps {

@@ -1,8 +1,9 @@
+/* eslint-disable import/no-cycle */
+import { Participant } from "./Participant";
 import { Lesson } from "./Lesson";
 import { Student } from "./Student";
-import { getSpecificScheduleURI } from "./Schedule";
 
-export interface Teacher {
+export interface Teacher extends Participant {
 	readonly id: string;
 
 	readonly text: string;
@@ -23,35 +24,8 @@ export const getDefaultTeacher = (): Teacher => ({
 	text: "",
 	originalHref: "",
 	originalScheduleURI: "",
+	labels: [],
 	firstName: "",
 	lastName: "",
 	fullName: "",
 });
-
-export interface TeacherInitData extends Partial<Teacher> {
-	text: string;
-	originalHref: string;
-}
-
-export const createTeacher = (data: TeacherInitData = { text: "", originalHref: "" }): Teacher => {
-	const text = data.text.trim();
-	const originalHref = data.originalHref.trim();
-	const originalScheduleURI = getSpecificScheduleURI(originalHref.trim());
-
-	const splitText = text.split(" ");
-	const firstName = splitText.slice(-1).join(" ");
-	const lastName = splitText.slice(0, -1).join(" ");
-	const fullName = text;
-
-	const teacher: Teacher = {
-		id: text /** TODO ID */,
-		text,
-		originalHref,
-		originalScheduleURI,
-		firstName,
-		lastName,
-		fullName,
-	};
-
-	return teacher;
-};

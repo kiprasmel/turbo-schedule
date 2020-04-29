@@ -1,6 +1,6 @@
 import React, { FC, Fragment } from "react";
 
-import { Lesson } from "@turbo-schedule/common";
+import { Lesson, getParticipantCount } from "@turbo-schedule/common";
 
 import LessonTextBox, { ILessonTextBox } from "./LessonTextBox";
 import { useRenderCount } from "../../hooks/useRenderCount";
@@ -10,6 +10,9 @@ import { getLessonTimesFormatted, isLessonHappeningNow } from "../../utils/getLe
 // eslint-disable-next-line import/newline-after-import
 import assets from "../../assets";
 const { lessonLogo, classRoomLogo, studentLogo, teacherLogo, clockLogo } = assets;
+
+/** TODO use CSS; this is so bad lmao */
+const maxTextLen: number = 24;
 
 export interface LessonProps {
 	lessonIndex: number;
@@ -22,18 +25,29 @@ const LessonItem: FC<LessonProps> = React.memo(
 	({ lessonIndex, lesson, handleLessonMouseClick, handleLessonKeyboardClick }) => {
 		useRenderCount("lesson");
 
-		const { id, name, room, teacher, students, dayIndex, timeIndex } = lesson;
+		const { id, name, room, teacher, dayIndex, timeIndex } = lesson;
 
 		/** TODO `howMuchDone` */
 		const { isHappeningNow } = isLessonHappeningNow(dayIndex, timeIndex);
 
-		const textBoxes: Array<ILessonTextBox> = [
-			{ logo: lessonLogo, text: name },
-			{ logo: classRoomLogo, text: room },
-			{ logo: teacherLogo, text: teacher },
-			{ logo: clockLogo, text: getLessonTimesFormatted(timeIndex) },
-			{ logo: studentLogo, text: students?.length || "" },
-		];
+		const textBoxes: Array<ILessonTextBox> = !lesson.isEmpty
+			? [
+					{ logo: lessonLogo, text: name },
+					{ logo: classRoomLogo, text: room },
+					{ logo: teacherLogo, text: teacher },
+					{ logo: clockLogo, text: getLessonTimesFormatted(timeIndex) },
+					{ logo: studentLogo, text: getParticipantCount(lesson).toString() },
+			  ]
+			: [
+					{ logo: lessonLogo, text: "" },
+					{ logo: classRoomLogo, text: "" },
+					{ logo: teacherLogo, text: "" },
+					{ logo: clockLogo, text: getLessonTimesFormatted(timeIndex) },
+					{ logo: studentLogo, text: getParticipantCount(lesson).toString() },
+			  ].map((textBox) => ({
+					...textBox,
+					text: textBox.text.length <= maxTextLen ? textBox.text : `${textBox.text.slice(0, maxTextLen)}...`,
+			  }));
 
 		return (
 			<li

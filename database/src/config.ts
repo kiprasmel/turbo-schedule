@@ -7,6 +7,7 @@ import {
 	getDefaultScrapeInfo,
 	Teacher,
 	Room,
+	Participant,
 } from "@turbo-schedule/common";
 
 import low from "lowdb";
@@ -25,6 +26,7 @@ export const databaseFileName: string = "latest.json";
 export const databaseFile: string = path.join(defaultDatabaseDataDirPath, databaseFileName);
 
 export interface DbSchema {
+	participants: Participant[];
 	classes: Class[];
 	students: StudentFromList[];
 	teachers: Teacher[];
@@ -35,6 +37,7 @@ export interface DbSchema {
 }
 
 export const defaultDbState: DbSchema = {
+	participants: [],
 	classes: [], //
 	students: [],
 	teachers: [],

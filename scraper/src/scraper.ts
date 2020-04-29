@@ -6,18 +6,22 @@ import {
 	timeElapsedMs,
 	Teacher,
 	Room,
+	Participant,
 } from "@turbo-schedule/common";
 import { DbSchema, setDbStateAndBackupCurrentOne } from "@turbo-schedule/database";
 
 import { IScraperConfig } from "./config";
+
+import { OrderedCollectorsOfParticipants } from "./initializer/Initializer";
+import { createClass } from "./initializer/createClass";
+import { createTeacher } from "./initializer/createTeacher";
+import { createRoom } from "./initializer/createRoom";
+import { createStudentFromList } from "./initializer/createStudent";
+
 import { getFrontPageHtml } from "./util/getFrontPageHtml";
-
-import { mergeStudentsOfDuplicateLessons } from "./mergeStudentsOfDuplicateLessons";
-import { extractLessonFromClass, extractLessonFromStudent, extractLessonFromTeacher } from "./util/extractLessons";
+import { scrapeScheduleItemListFactory } from "./util/scrapeScheduleItemList";
+import { scrapeAndDoMagicWithLessonsFromParticipants } from "./util/scrapeAndDoMagicWithLessonsFromParticipants";
 import { createPageVersionIdentifier } from "./util/createPageVersionIdentifier";
-import { scrapeStudentList, scrapeClassList, scrapeTeacherList, scrapeRoomList } from "./util/scrapeScheduleItemList";
-
-// import { populateStudentsWithFriends } from "./populateStudentsWithFriends";
 
 export const scrape = async (config: IScraperConfig): Promise<void> => {
 	try {
@@ -27,121 +31,64 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		console.table(config);
 
 		/**
-		 * TODO use functional programming and chain everything with `.map` yooo
-		 * umm actually, it's `.then`,
-		 * since we sometimes need the whole array instead of a single value,
-		 * iterated N times.
+		 * @NOTE the order matters (in the last step when we save to the database)
 		 */
-
-		/**
-		 * TODO stop this pretty meh `memoize` logic
-		 * & only save the final students
-		 * at the end of the chain.
-		 */
+		const participantCollectors: OrderedCollectorsOfParticipants = [
+			{
+				from: "Klasės",
+				to: "Mokytojai",
+				labels: ["class", "student"],
+				initializer: createClass,
+			},
+			{
+				from: "Mokytojai",
+				to: "Kabinetai",
+				labels: ["teacher"],
+				initializer: createTeacher,
+			},
+			{
+				from: "Kabinetai",
+				to: "Moksleiviai",
+				labels: ["room"],
+				initializer: createRoom,
+			},
+			{
+				from: "Moksleiviai",
+				to: undefined,
+				labels: ["student"],
+				initializer: createStudentFromList,
+			},
+		];
 
 		const frontPageHtml: string = await getFrontPageHtml();
 
-		// eslint-disable-next-line prefer-const
-		let studentsFromList: StudentFromList[] = scrapeStudentList(frontPageHtml);
+		/** TODO typescript should do this \/ automatically */
+		// let participants2D: OrderedParticipants2D = participantCollectors.map((collector) =>
+		let participants2D: Participant[][] = participantCollectors.map((collector) =>
+			scrapeScheduleItemListFactory(
+				collector.from,
+				collector.to,
+				collector.labels,
+				collector.initializer
+			)(frontPageHtml)
+		);
 
-		// eslint-disable-next-line prefer-const
-		let classesFromList: Class[] = scrapeClassList(frontPageHtml);
-
-		// eslint-disable-next-line prefer-const
-		let teachersFromList: Teacher[] = scrapeTeacherList(frontPageHtml);
-
-		// eslint-disable-next-line prefer-const
-		let roomsFromList: Room[] = scrapeRoomList(frontPageHtml);
+		/**
+		 * `[ [a, b], [c, d] ]` => `[ a, b, c, d ]`
+		 */
+		let participants: Participant[] = participants2D.flat();
 
 		if (process.env.FAST) {
 			/** TODO document */
-			studentsFromList = studentsFromList.splice(0, 10);
-			classesFromList = classesFromList.splice(0, 10);
-			teachersFromList = teachersFromList.splice(0, 10);
-			roomsFromList = roomsFromList.splice(0, 10);
+			participants2D = participants2D.map((p) => p.slice(0, 10));
+			participants = participants.slice(0, 10);
 		}
 
-		const nonUniqueLessonsEachWithSingleStudent: Lesson[] = await (
-			await Promise.all(
-				studentsFromList.map((student) => extractLessonFromStudent(student.originalScheduleURI, student.id))
-			)
-		).flat();
-
-		const nonUniqueLessonsEachWithSingleClass: Lesson[] = await (
-			await Promise.all(
-				classesFromList.map((theClass) => extractLessonFromClass(theClass.originalScheduleURI, theClass.text))
-			)
-		).flat();
-
-		const nonUniqueLessonsEachWithSingleTeacher: Lesson[] = await (
-			await Promise.all(
-				// teachersFromList.map((teacher) => extractLessonFromTeacher(teacher.originalScheduleURI, undefined))
-				teachersFromList.map((teacher) =>
-					extractLessonFromTeacher(teacher.originalScheduleURI, teacher.text /** TODO FIXME */)
-				)
-			)
-		).flat();
-
-		const nonUniqueLessonsEachWithSingleRoom: Lesson[] = await (
-			await Promise.all(
-				// roomsFromList.map((room) => extractLessonFromTeacher(room.originalScheduleURI, undefined))
-				roomsFromList.map((room) =>
-					extractLessonFromTeacher(room.originalScheduleURI, room.text /** TODO FIXME */)
-				)
-			)
-		).flat();
-
-		/** */
-
-		const uniqueLessonsFromStudents: Lesson[] = mergeStudentsOfDuplicateLessons(
-			nonUniqueLessonsEachWithSingleStudent
-		);
+		const lessons: Lesson[] = await scrapeAndDoMagicWithLessonsFromParticipants(participants);
 
 		/**
-		 * TODO - `classes` will be placed inside `lesson.students` - is this what we want?
+		 * done! Now just save to the database, log info etc.
 		 */
-		const uniqueLessonsFromClasses: Lesson[] = mergeStudentsOfDuplicateLessons(nonUniqueLessonsEachWithSingleClass);
-
-		const uniqueLessonsFromTeachers: Lesson[] = mergeStudentsOfDuplicateLessons(
-			nonUniqueLessonsEachWithSingleTeacher
-		);
-
-		const uniqueLessonsFromRooms: Lesson[] = mergeStudentsOfDuplicateLessons(nonUniqueLessonsEachWithSingleRoom);
-
-		/**
-		 * merge once again!
-		 */
-		const allUniqueLessons: Lesson[] = mergeStudentsOfDuplicateLessons([
-			...uniqueLessonsFromClasses,
-			...uniqueLessonsFromStudents,
-			...uniqueLessonsFromTeachers,
-			...uniqueLessonsFromRooms,
-		]);
-
-		/** BEGIN SOON */
-		// .then((students) => populateStudentsWithFriends(students))
-		// .then((studentsWithFriends) => {
-		// 	fs.writeFileSync(
-		// 		path.join(config.latestScrapedDataDirPath, "temp-students-with-friends.json"),
-		// 		prettier.format(
-		// 			JSON.stringify(
-		// 				studentsWithFriends
-		// 					.flatMap((student) => student.friends)
-		// 					.sort(
-		// 						(left: Friend, right: Friend) =>
-		// 							right.totalEncounters - left.totalEncounters ||
-		// 							left.text.localeCompare(right.text)
-		// 					)
-		// 			),
-		// 			{
-		// 				parser: "json",
-		// 			}
-		// 		),
-		// 		{ encoding: "utf-8" }
-		// 	);
-
-		// 	return studentsWithFriends;
-		// })
 
 		const endTime: Date = new Date();
 
@@ -152,14 +99,23 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			pageVersionIdentifier: createPageVersionIdentifier(frontPageHtml),
 		};
 
-		/** create a new database */
+		/** create a new database state */
 		const newDbState: Omit<DbSchema, "Changes"> = {
 			scrapeInfo,
-			students: studentsFromList,
-			lessons: allUniqueLessons,
-			classes: classesFromList,
-			teachers: teachersFromList,
-			rooms: roomsFromList,
+			participants,
+			lessons,
+			/**
+			 * BEGIN TODO DEPRECATE
+			 *
+			 * `participants` replaces all of these,
+			 * we just need to migrate our API etc.,
+			 * which we'll do later
+			 */
+			classes: participants2D[0] as Class[],
+			teachers: participants2D[1] as Teacher[],
+			rooms: participants2D[2] as Room[],
+			students: participants2D[3] as StudentFromList[],
+			/** END TODO DEPRECATE */
 		};
 
 		await setDbStateAndBackupCurrentOne(newDbState);
