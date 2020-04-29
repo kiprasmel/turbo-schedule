@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { scheduleItemRouter } from "./schedule-item";
+import { participantRouter } from "./participant";
 import { classRouter } from "./class";
 import { studentRouter } from "./student";
 import { teacherRouter } from "./teacher";
@@ -10,11 +10,12 @@ import { openAPIDocsJSONHandler, openAPIDocsHTMLHandler } from "./openAPIDocs";
 
 const router: Router = Router();
 
-router.use("/schedule-item", scheduleItemRouter); /** combines `class` & `student` */
+router.use("/participant", participantRouter);
 router.use("/class", classRouter);
 router.use("/student", studentRouter);
 router.use("/teacher", teacherRouter);
 router.use("/room", roomRouter);
+
 router.use("/email", emailRouter);
 
 router.use("/docs", openAPIDocsHTMLHandler);
