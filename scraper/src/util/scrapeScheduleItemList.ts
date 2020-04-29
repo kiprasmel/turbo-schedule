@@ -6,15 +6,6 @@ import { Participant, ParticipantLabel } from "@turbo-schedule/common";
 import { Initializer } from "../initializer/Initializer";
 import { findElementIndex } from "./findElementIndex";
 
-export const scrapeClassList = scrapeScheduleItemListFactory("Klasės", "Mokytojai", createClass);
-export const scrapeTeacherList = scrapeScheduleItemListFactory("Mokytojai", "Kabinetai", createTeacher);
-export const scrapeRoomList = scrapeScheduleItemListFactory("Kabinetai", "Moksleiviai", createRoom);
-export const scrapeStudentList = scrapeScheduleItemListFactory(
-	"Moksleiviai",
-	undefined,
-	(ctx) => new StudentFromList({ text: ctx.text, originalHref: ctx.originalHref })
-);
-
 export function scrapeScheduleItemListFactory<T extends Participant>(
 	scheduleItemStartIdentifier: string | undefined,
 	scheduleItemEndIdentifier: string | undefined,
