@@ -11,6 +11,9 @@ import { getLessonTimesFormatted, isLessonHappeningNow } from "../../utils/getLe
 import assets from "../../assets";
 const { lessonLogo, classRoomLogo, studentLogo, teacherLogo, clockLogo } = assets;
 
+/** TODO use CSS; this is so bad lmao */
+const maxTextLen: number = 24;
+
 export interface LessonProps {
 	lessonIndex: number;
 	lesson: Lesson;
@@ -41,7 +44,10 @@ const LessonItem: FC<LessonProps> = React.memo(
 					{ logo: teacherLogo, text: "" },
 					{ logo: clockLogo, text: getLessonTimesFormatted(timeIndex) },
 					{ logo: studentLogo, text: getParticipantCount(lesson).toString() },
-			  ];
+			  ].map((textBox) => ({
+					...textBox,
+					text: textBox.text.length <= maxTextLen ? textBox.text : `${textBox.text.slice(0, maxTextLen)}...`,
+			  }));
 
 		return (
 			<li
