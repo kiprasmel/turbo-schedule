@@ -60,14 +60,7 @@ router.get("/:teacherName", async (req, res, next) => {
 
 		const lessons: Lesson[] = await db
 			.get("lessons")
-			.filter(
-				(lesson) =>
-					lesson.teacher
-						.split(",")
-						.map((t: Teacher["text"]) => t.trim())
-						.includes(teacher.text) ||
-					/** BEGIN TODO PARTICIPANTS */ lesson.students.includes(teacher.text) /** END TODO PARTICIPANTS */
-			)
+			.filter((lesson) => lesson.teachers.includes(teacher.text))
 			.value();
 
 		if (!lessons?.length) {
