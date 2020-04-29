@@ -2,11 +2,13 @@
 /* eslint-disable lines-between-class-members */
 /* eslint-disable import/no-cycle */
 
-import { ParticipantInLesson, Participant } from "./Participant";
+import { ParticipantInLesson, Participant, mergeDuplicateParticipantsInLessons } from "./Participant";
 import { Student } from "./Student";
 import { Teacher } from "./Teacher";
 import { Room } from "./Room";
 import { Class } from "./Class";
+
+import { mergeBy, MergeStrategy } from "../util/mergeBy";
 
 export interface LessonInitData {
 	isEmpty: boolean;
@@ -130,3 +132,33 @@ export const sortLessons = (lessons: NonUniqueLesson[]): NonUniqueLesson[] =>
 		}
 		return 0;
 	});
+
+const mergeDuplicateLessonsStrat: MergeStrategy<NonUniqueLesson> = (left, right) => ({
+	...left,
+	participants: mergeDuplicateParticipantsInLessons([...left.participants, ...right.participants]),
+});
+
+/**
+ * before:
+ *
+ * ```json
+ * lessons: [
+ *   { id: "Physics", participants: [ "Alice" ] },
+ *   { id: "Maths"  , participants: [ "Alice" ] },
+ *   { id: "Maths",   participants: [ "Bob"   ] },
+ *   { id: "Dances" , participants: [ "Bob"   ] }
+ * ]
+ * ```
+ *
+ * after:
+ *
+ * ```json
+ * lessons: [
+ *   { id: "Maths"  , participants: ["Alice", "Bob"] },
+ *   { id: "Physics", participants: ["Alice"       ] },
+ *   { id: "Dances" , participants: [         "Bob"] }
+ * ]
+ * ```
+ *
+ */
+export const mergeDuplicateLessons = mergeBy("id", mergeDuplicateLessonsStrat);
