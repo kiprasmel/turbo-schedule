@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.2](https://github.com/sarpik/turbo-schedule/compare/v2.6.1...v2.6.2) (2020-04-29)
+
+
+### Bug Fixes
+
+* **scraper:** Change field saving order to the db ([f98c492](https://github.com/sarpik/turbo-schedule/commit/f98c492d468e178250c51672066365a5cd86b7a9))
+
+
+
+
+
 ## [2.6.1](https://github.com/sarpik/turbo-schedule/compare/v2.6.0...v2.6.1) (2020-04-29)
 
 
