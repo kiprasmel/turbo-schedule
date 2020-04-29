@@ -5,6 +5,7 @@ export * from "./util/applyMixins";
 export * from "./util/toJson";
 export * from "./util/writeToSingleFile";
 export * from "./util/timeElapsed";
+export * from "./util/mergeBy";
 
 export * from "./model/Participant";
 export * from "./model/Schedule";
