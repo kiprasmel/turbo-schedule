@@ -29,7 +29,7 @@ const setup = async (_config: jest.GlobalConfig) => {
 		await fs.remove(databaseDirPath);
 	};
 
-	global.server = startServer();
+	global.server = startServer({ doNotScrapeContent: true });
 
 	/**
 	 * TODO UPSTREAM
