@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.1](https://github.com/sarpik/turbo-schedule/compare/v2.6.0...v2.6.1) (2020-04-29)
+
+
+### Bug Fixes
+
+* **server:** Default `/api/` to `/api/v1` (the latest API router) ([10c8947](https://github.com/sarpik/turbo-schedule/commit/10c8947b94e6f12ee6f6f37623adab43cf27c53a))
+* **server:** Default `/api/v1/` to `/api/v1/docs` ([d23bfa3](https://github.com/sarpik/turbo-schedule/commit/d23bfa3fda6a16a23e95851e55866019b0c844f1))
+
+
+
+
+
 # [2.6.0](https://github.com/sarpik/turbo-schedule/compare/v2.5.1...v2.6.0) (2020-04-29)
 
 
