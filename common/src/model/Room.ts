@@ -1,7 +1,9 @@
-import { Lesson } from "./Lesson";
-import { getSpecificScheduleURI } from "./Schedule";
+/* eslint-disable import/no-cycle */
 
-export interface Room {
+import { Participant } from "./Participant";
+import { Lesson } from "./Lesson";
+
+export interface Room extends Participant {
 	readonly id: string;
 
 	readonly text: string;
@@ -17,24 +19,5 @@ export const getDefaultRoom = (): Room => ({
 	text: "",
 	originalHref: "",
 	originalScheduleURI: "",
+	labels: [],
 });
-
-export interface RoomInitData extends Partial<Room> {
-	text: string;
-	originalHref: string;
-}
-
-export const createRoom = (data: RoomInitData = { text: "", originalHref: "" }): Room => {
-	const text = data.text.trim();
-	const originalHref = data.originalHref.trim();
-	const originalScheduleURI = getSpecificScheduleURI(originalHref.trim());
-
-	const room: Room = {
-		id: text /** TODO ID */,
-		text,
-		originalHref,
-		originalScheduleURI,
-	};
-
-	return room;
-};
