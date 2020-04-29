@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { initDb, Db } from "@turbo-schedule/database";
-import { Student, StudentFromList, Lesson } from "@turbo-schedule/common";
+import { Student, StudentFromList, Lesson, getDefaultStudent } from "@turbo-schedule/common";
 
 import { isProd } from "../../util/isProd";
 
@@ -51,7 +51,7 @@ router.get("/:studentName", async (req, res, next) => {
 			const msg: string = `Student not found (was \`${studentFromList}\`)`;
 
 			console.error(msg);
-			return res.status(404).json({ student: new Student(), message: msg });
+			return res.status(404).json({ student: getDefaultStudent(), message: msg });
 		}
 
 		const lessons: Lesson[] = await db
@@ -66,14 +66,14 @@ router.get("/:studentName", async (req, res, next) => {
 			return res.status(404).json({ student: studentFromList, message: msg });
 		}
 
-		const student: Student = new Student({ ...studentFromList, lessons: lessons });
+		const student: Student = { ...getDefaultStudent(), ...studentFromList, lessons };
 
 		res.json({ student });
 
 		return !isProd() ? next() : res.end();
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ student: new Student(), message: err });
+		res.status(500).json({ student: getDefaultStudent(), message: err });
 
 		return !isProd() ? next(err) : res.end();
 	}

@@ -5,7 +5,7 @@
 import { Router } from "express";
 
 import { initDb, Db } from "@turbo-schedule/database";
-import { createTeacher, Lesson, Teacher } from "@turbo-schedule/common";
+import { getDefaultTeacher, Lesson, Teacher } from "@turbo-schedule/common";
 
 import { isProd } from "../../util/isProd";
 
@@ -55,7 +55,7 @@ router.get("/:teacherName", async (req, res, next) => {
 			const msg: string = `Teacher not found (was \`${teacher}\`)`;
 
 			console.error(msg);
-			return res.status(404).json({ teacher: createTeacher(), message: msg });
+			return res.status(404).json({ teacher: getDefaultTeacher(), message: msg });
 		}
 
 		const lessons: Lesson[] = await db
@@ -84,7 +84,7 @@ router.get("/:teacherName", async (req, res, next) => {
 		return !isProd() ? next() : res.end();
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ teacher: createTeacher(), message: err });
+		res.status(500).json({ teacher: getDefaultTeacher(), message: err });
 
 		return !isProd() ? next(err) : res.end();
 	}

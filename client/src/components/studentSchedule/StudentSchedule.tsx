@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { throttle } from "lodash";
 
-import { Lesson } from "@turbo-schedule/common";
+import { Lesson, getDefaultLesson } from "@turbo-schedule/common";
 
 import "./StudentSchedule.scss";
 
@@ -108,7 +108,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	const [showStudents, setShowStudents] = useState(false);
 
-	const [selectedLesson, setSelectedLesson] = useState<Lesson>(() => new Lesson());
+	const [selectedLesson, setSelectedLesson] = useState<Lesson>(() => getDefaultLesson());
 
 	const handleLessonMouseClick = useCallback(
 		(_e: React.MouseEvent, lesson: Lesson) => {

@@ -1,4 +1,11 @@
-import { StudentFromList, Lesson, Student } from "@turbo-schedule/common";
+import {
+	StudentFromList,
+	Lesson,
+	Student,
+	getDefaultStudentFromList,
+	getDefaultStudent,
+	getDefaultLesson,
+} from "@turbo-schedule/common";
 import { defaultDbState, initDb, Db } from "@turbo-schedule/database";
 
 import { request, Response } from "./utils";
@@ -21,14 +28,16 @@ describe("/student API", () => {
 
 	it("should return a list of students", async () => {
 		const studentsFileContent: StudentFromList[] = [
-			new StudentFromList({
+			{
+				...getDefaultStudentFromList(),
 				originalHref: "x300111e_melni_kip220.htm",
 				text: "Melnikovas Kipras IIIe",
-			}),
-			new StudentFromList({
+			},
+			{
+				...getDefaultStudentFromList(),
 				originalHref: "x300112c_baltu_sim457.htm",
 				text: "Baltūsis Simonas IVGc",
-			}),
+			},
 		];
 
 		try {
@@ -72,10 +81,11 @@ describe("/student API", () => {
 	});
 
 	it("should return a student from list (without lessons) if it exists but does not have lessons", async () => {
-		const studentWithoutLessons: StudentFromList = new StudentFromList({
+		const studentWithoutLessons: StudentFromList = {
+			...getDefaultStudentFromList(),
 			originalHref: "x300111e_melni_kip220.htm",
 			text: "Melnikovas Kipras IIIe",
-		});
+		};
 
 		const encodedStudentName: string = encodeURIComponent(studentWithoutLessons.text);
 
@@ -97,27 +107,34 @@ describe("/student API", () => {
 	});
 
 	it("should return a specific student with lessons", async () => {
-		const studentWITHOUTLessons: StudentFromList = new StudentFromList({
+		const studentWITHOUTLessons: StudentFromList = {
+			...getDefaultStudentFromList(),
 			originalHref: "x300111e_melni_kip220.htm",
 			text: "Melnikovas Kipras IIIe",
-		});
+		};
 
+		/** TODO PARTICIPANTS */
 		const lessons: Lesson[] = [
-			new Lesson({
+			{
+				...getDefaultLesson(),
 				isEmpty: false,
 				dayIndex: 0,
 				timeIndex: 0,
 				id: "day:0/time:0/name:The angle ain't blunt - I'm blunt",
 				name: "The angle ain't blunt - I'm blunt",
+				/** BEGIN TODO DEPRECATE */
 				teacher: "Snoop Dawg",
 				room: "The Chamber (36 - 9 = 25)",
+				/** END TODO DEPRECATE */
+				teachers: ["Snoop Dawg"],
+				rooms: ["The Chamber (36 - 9 = 25)"],
 				students: [
 					studentWITHOUTLessons.text /** the student must exist in the lesson's students' list to get the lesson populated */,
 					"Alice Wonderland IIIGe",
 					"Bob Builder IIIa",
 					"Charlie Angel IVGx",
 				],
-			}),
+			},
 		];
 
 		const encodedStudentName: string = encodeURIComponent(studentWITHOUTLessons.text);
@@ -133,7 +150,7 @@ describe("/student API", () => {
 			expect(res.body).toHaveProperty("student");
 			expect(res.body.student).toHaveProperty("lessons");
 
-			const studentWITHLessons: Student = new Student({ ...studentWITHOUTLessons, lessons });
+			const studentWITHLessons: Student = { ...getDefaultStudent(), ...studentWITHOUTLessons, lessons };
 
 			expect(res.body.student).toEqual(studentWITHLessons);
 		} finally {

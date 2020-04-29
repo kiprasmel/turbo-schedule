@@ -5,7 +5,7 @@
 import { Router } from "express";
 
 import { initDb, Db } from "@turbo-schedule/database";
-import { Class, createClass, Lesson } from "@turbo-schedule/common";
+import { Class, getDefaultClass, Lesson } from "@turbo-schedule/common";
 
 import { isProd } from "../../util/isProd";
 
@@ -55,7 +55,7 @@ router.get("/:className", async (req, res, next) => {
 			const msg: string = `Class not found (was \`${theClass}\`)`;
 
 			console.error(msg);
-			return res.status(404).json({ class: createClass(), message: msg });
+			return res.status(404).json({ class: getDefaultClass(), message: msg });
 		}
 
 		const lessons: Lesson[] = await db
@@ -77,7 +77,7 @@ router.get("/:className", async (req, res, next) => {
 		return !isProd() ? next() : res.end();
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ class: createClass(), message: err });
+		res.status(500).json({ class: getDefaultClass(), message: err });
 
 		return !isProd() ? next(err) : res.end();
 	}
