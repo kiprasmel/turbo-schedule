@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/sarpik/turbo-schedule/compare/v2.5.1...v2.6.0) (2020-04-29)
+
+
+### Bug Fixes
+
+* **client:** Allow `LessonTextBox`'s `text` to be `string` only ([bb38ecd](https://github.com/sarpik/turbo-schedule/commit/bb38ecdfcc396ea4a40140d00778ea3a730355e3))
+* **client:** Display correct participant count & do not display participants if lesson is empty ([0ed4563](https://github.com/sarpik/turbo-schedule/commit/0ed4563a1951abcefdabc12ba9120895c8c145b3))
+* **client:** Fetch from the new `/participant` (instead of `/schedule-item`) endpoint ([8358452](https://github.com/sarpik/turbo-schedule/commit/8358452960f0c464a19b448881942ba0bad22dbe))
+* **common:** Handle empty `href`s @ `getSpecificScheduleURI` ([431a1dd](https://github.com/sarpik/turbo-schedule/commit/431a1ddcaece680bc49342a1e08efbaf4f2fa50f))
+* **server:** Instead of using `new ...()`, use `getDefault...()` ([d5e8f61](https://github.com/sarpik/turbo-schedule/commit/d5e8f61b3dbee2314f451a6efe2ff43030ef67c3))
+* **test:** Disable scraper cronjobs when running tests ([ed34388](https://github.com/sarpik/turbo-schedule/commit/ed34388b96a293f3374bbb2e299db63bf3640f79))
+* Add missing `cross-env` for assigning env vars where missing ([6b15daf](https://github.com/sarpik/turbo-schedule/commit/6b15daf806af696853850e11d4258ad0cbbe855f))
+* Do not `yarn purge` in `yarn setup` ([0fa33d9](https://github.com/sarpik/turbo-schedule/commit/0fa33d99ec9f28bd01bdba559176e2fe977e3dc7))
+* In `setup:prod` script, first `install`, only then call `cross-env` ([619f990](https://github.com/sarpik/turbo-schedule/commit/619f9904c414bdc22c91764dc80115f3a4f1c79b))
+
+
+### Features
+
+* **common:** Create the `mergeBy` util! 🚀 ([b8299e9](https://github.com/sarpik/turbo-schedule/commit/b8299e9361b5bba7ae60929fc6184d9884f51729))
+* **common:** Create the `Participant` model! 🚀 ([61bbf21](https://github.com/sarpik/turbo-schedule/commit/61bbf21ed58ae60e3fb7f6107e2bf31e9ad525cf))
+* **db:** Extend schema with `participants`! ([97032ab](https://github.com/sarpik/turbo-schedule/commit/97032ab8b41cf89cf3fd3fa88595d2b8e56ff1cf))
+* **scraper:** Add `labels` to `Participant`s on creation! ([f998b55](https://github.com/sarpik/turbo-schedule/commit/f998b55026abdc9182ba347a7ac53a483a4aba9e))
+* **scraper:** Create `Initializer` type ([be6f9fc](https://github.com/sarpik/turbo-schedule/commit/be6f9fc3637b286aee0edfb4f9def08edfefc20b))
+* **scraper:** Create `scrapeAndDoMagicWithLessonsFromParticipants` util ([3e3bcca](https://github.com/sarpik/turbo-schedule/commit/3e3bccadc197876ef3b263ed3a70f0e9e1c08b13))
+* **scraper:** Handle `Participant`s @ lesson extraction! ([488c79c](https://github.com/sarpik/turbo-schedule/commit/488c79c0bef26e2c274eef1738a922291c8e909d))
+* **scraper:** Use the new stuff to enable `Participant`s & more! 🔥 ([a822a4e](https://github.com/sarpik/turbo-schedule/commit/a822a4e0a4746eb334d55f307f027112233bb972))
+* **server:** Allow disabling scraper cronjobs @ `startServer` ([0ac1c0a](https://github.com/sarpik/turbo-schedule/commit/0ac1c0aa19284f81b547c7fc6db83593b51a1fc0))
+* **server:** Create the `/v1/participant` endpoint! ([7aad884](https://github.com/sarpik/turbo-schedule/commit/7aad8849dc1546184144f0a80dd64978adfcf077))
+
+
+
+# 2.5.0 (2020-04-26)
+
+
+
+
+
 ## [2.5.1](https://github.com/sarpik/turbo-schedule/compare/v2.5.0...v2.5.1) (2020-04-28)
 
 

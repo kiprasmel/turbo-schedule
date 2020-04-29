@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/sarpik/turbo-schedule/compare/v2.5.1...v2.6.0) (2020-04-29)
+
+
+### Bug Fixes
+
+* **server:** Instead of using `new ...()`, use `getDefault...()` ([d5e8f61](https://github.com/sarpik/turbo-schedule/commit/d5e8f61b3dbee2314f451a6efe2ff43030ef67c3))
+* **test:** Disable scraper cronjobs when running tests ([ed34388](https://github.com/sarpik/turbo-schedule/commit/ed34388b96a293f3374bbb2e299db63bf3640f79))
+
+
+### Features
+
+* **server:** Allow disabling scraper cronjobs @ `startServer` ([0ac1c0a](https://github.com/sarpik/turbo-schedule/commit/0ac1c0aa19284f81b547c7fc6db83593b51a1fc0))
+* **server:** Create the `/v1/participant` endpoint! ([7aad884](https://github.com/sarpik/turbo-schedule/commit/7aad8849dc1546184144f0a80dd64978adfcf077))
+
+
+
+# 2.5.0 (2020-04-26)
+
+
+
+
+
 ## [2.5.1](https://github.com/sarpik/turbo-schedule/compare/v2.5.0...v2.5.1) (2020-04-28)
 
 **Note:** Version bump only for package @turbo-schedule/server

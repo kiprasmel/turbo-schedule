@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/sarpik/turbo-schedule/compare/v2.5.1...v2.6.0) (2020-04-29)
+
+
+### Features
+
+* **db:** Extend schema with `participants`! ([97032ab](https://github.com/sarpik/turbo-schedule/commit/97032ab8b41cf89cf3fd3fa88595d2b8e56ff1cf))
+
+
+
+# 2.5.0 (2020-04-26)
+
+
+
+
+
 ## [2.5.1](https://github.com/sarpik/turbo-schedule/compare/v2.5.0...v2.5.1) (2020-04-28)
 
 

@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/sarpik/turbo-schedule/compare/v2.5.1...v2.6.0) (2020-04-29)
+
+
+### Bug Fixes
+
+* **client:** Allow `LessonTextBox`'s `text` to be `string` only ([bb38ecd](https://github.com/sarpik/turbo-schedule/commit/bb38ecdfcc396ea4a40140d00778ea3a730355e3))
+* **client:** Display correct participant count & do not display participants if lesson is empty ([0ed4563](https://github.com/sarpik/turbo-schedule/commit/0ed4563a1951abcefdabc12ba9120895c8c145b3))
+* **client:** Fetch from the new `/participant` (instead of `/schedule-item`) endpoint ([8358452](https://github.com/sarpik/turbo-schedule/commit/8358452960f0c464a19b448881942ba0bad22dbe))
+* **server:** Instead of using `new ...()`, use `getDefault...()` ([d5e8f61](https://github.com/sarpik/turbo-schedule/commit/d5e8f61b3dbee2314f451a6efe2ff43030ef67c3))
+
+
+
+# 2.5.0 (2020-04-26)
+
+
+
+
+
 # [2.5.0](https://github.com/sarpik/turbo-schedule/compare/v2.4.0...v2.5.0) (2020-04-26)
 
 

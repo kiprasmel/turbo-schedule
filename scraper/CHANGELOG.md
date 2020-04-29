@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/sarpik/turbo-schedule/compare/v2.5.1...v2.6.0) (2020-04-29)
+
+
+### Features
+
+* **scraper:** Add `labels` to `Participant`s on creation! ([f998b55](https://github.com/sarpik/turbo-schedule/commit/f998b55026abdc9182ba347a7ac53a483a4aba9e))
+* **scraper:** Create `Initializer` type ([be6f9fc](https://github.com/sarpik/turbo-schedule/commit/be6f9fc3637b286aee0edfb4f9def08edfefc20b))
+* **scraper:** Create `scrapeAndDoMagicWithLessonsFromParticipants` util ([3e3bcca](https://github.com/sarpik/turbo-schedule/commit/3e3bccadc197876ef3b263ed3a70f0e9e1c08b13))
+* **scraper:** Handle `Participant`s @ lesson extraction! ([488c79c](https://github.com/sarpik/turbo-schedule/commit/488c79c0bef26e2c274eef1738a922291c8e909d))
+* **scraper:** Use the new stuff to enable `Participant`s & more! 🔥 ([a822a4e](https://github.com/sarpik/turbo-schedule/commit/a822a4e0a4746eb334d55f307f027112233bb972))
+
+
+
+# 2.5.0 (2020-04-26)
+
+
+
+
+
 ## [2.5.1](https://github.com/sarpik/turbo-schedule/compare/v2.5.0...v2.5.1) (2020-04-28)
 
 **Note:** Version bump only for package @turbo-schedule/scraper

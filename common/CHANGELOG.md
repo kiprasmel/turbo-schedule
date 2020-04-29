@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/sarpik/turbo-schedule/compare/v2.5.1...v2.6.0) (2020-04-29)
+
+
+### Bug Fixes
+
+* **common:** Handle empty `href`s @ `getSpecificScheduleURI` ([431a1dd](https://github.com/sarpik/turbo-schedule/commit/431a1ddcaece680bc49342a1e08efbaf4f2fa50f))
+
+
+### Features
+
+* **common:** Create the `mergeBy` util! 🚀 ([b8299e9](https://github.com/sarpik/turbo-schedule/commit/b8299e9361b5bba7ae60929fc6184d9884f51729))
+* **common:** Create the `Participant` model! 🚀 ([61bbf21](https://github.com/sarpik/turbo-schedule/commit/61bbf21ed58ae60e3fb7f6107e2bf31e9ad525cf))
+
+
+
+# 2.5.0 (2020-04-26)
+
+
+
+
+
 # [2.5.0](https://github.com/sarpik/turbo-schedule/compare/v2.4.0...v2.5.0) (2020-04-26)
 
 
