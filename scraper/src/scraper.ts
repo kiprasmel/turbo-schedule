@@ -41,6 +41,12 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 				initializer: createClass,
 			},
 			{
+				from: "Moksleiviai",
+				to: undefined,
+				labels: ["student"],
+				initializer: createStudentFromList,
+			},
+			{
 				from: "Mokytojai",
 				to: "Kabinetai",
 				labels: ["teacher"],
@@ -51,12 +57,6 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 				to: "Moksleiviai",
 				labels: ["room"],
 				initializer: createRoom,
-			},
-			{
-				from: "Moksleiviai",
-				to: undefined,
-				labels: ["student"],
-				initializer: createStudentFromList,
 			},
 		];
 
@@ -112,9 +112,9 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			 * which we'll do later
 			 */
 			classes: participants2D[0] as Class[],
+			students: participants2D[3] as StudentFromList[],
 			teachers: participants2D[1] as Teacher[],
 			rooms: participants2D[2] as Room[],
-			students: participants2D[3] as StudentFromList[],
 			/** END TODO DEPRECATE */
 		};
 

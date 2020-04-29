@@ -20,10 +20,10 @@ export interface ParticipantCollector<T extends Participant = Participant> {
 /** typescrit pls fix */
 export type OrderedCollectorsOfParticipants = [
 	ParticipantCollector<Class>,
+	ParticipantCollector<StudentFromList>,
 	ParticipantCollector<Teacher>,
-	ParticipantCollector<Room>,
-	ParticipantCollector<StudentFromList>
+	ParticipantCollector<Room>
 ];
 
 /** MUST follow the same order as `OrderedCollectorsOfParticipants */
-export type OrderedParticipants2D = [Class[], Teacher[], Room[], StudentFromList[]];
+export type OrderedParticipants2D = [Class[], StudentFromList[], Teacher[], Room[]];
