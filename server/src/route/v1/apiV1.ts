@@ -21,4 +21,7 @@ router.use("/email", emailRouter);
 router.use("/docs", openAPIDocsHTMLHandler);
 router.use("/docs.json", openAPIDocsJSONHandler);
 
+/** default to the docs (MUST be the last route) */
+router.use("/", openAPIDocsHTMLHandler);
+
 export { router as apiRouterV1 };
