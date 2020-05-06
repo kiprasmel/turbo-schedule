@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.3](https://github.com/sarpik/turbo-schedule/compare/v2.6.2...v2.6.3) (2020-05-06)
+
+
+### Bug Fixes
+
+* **scraper:** Use somewhat type-safe `participants2D` accessor ([d3bb650](https://github.com/sarpik/turbo-schedule/commit/d3bb650ddb47eb1a00c89fdaa2e473ef67f165a2))
+
+
+
+
+
 ## [2.6.2](https://github.com/sarpik/turbo-schedule/compare/v2.6.1...v2.6.2) (2020-04-29)
 
 
