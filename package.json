@@ -80,6 +80,6 @@
 		"postinstall-postinstall": "^2.0.0",
 		"prettier": "^1.16.4",
 		"rimraf": "^3.0.0",
-		"typescript": "^3.8.2"
+		"typescript": "https://typescript.visualstudio.com/cf7ac146-d525-443c-b23c-0d58337efebc/_apis/build/builds/72713/artifacts?artifactName=tgz&fileId=5FDC6B0458B0184B85D790D1EB8AA47C0924EADA6FBC0575C4425A46F70973E002&fileName=/typescript-4.0.0-insiders.20200503.tgz"
 	}
 }
