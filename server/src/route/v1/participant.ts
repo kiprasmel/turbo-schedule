@@ -50,7 +50,10 @@ router.get("/:participantName", async (req, res, next) => {
 
 		const participant: Participant = await db
 			.get("participants")
-			.find((p) => p.text.toLowerCase() === participantName.toLowerCase())
+			.find(
+				(p) =>
+					p.text.toLowerCase() === participantName.toLowerCase() || p.handle === participantName.toLowerCase()
+			)
 			.value();
 
 		if (!participant) {

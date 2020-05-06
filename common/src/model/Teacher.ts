@@ -21,6 +21,7 @@ export interface Teacher extends Participant {
 
 export const getDefaultTeacher = (): Teacher => ({
 	id: "",
+	handle: "",
 	text: "",
 	originalHref: "",
 	originalScheduleURI: "",

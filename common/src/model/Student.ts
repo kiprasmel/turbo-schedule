@@ -32,6 +32,7 @@ export interface Student extends StudentFromList {
 
 export const getDefaultStudentFromList = (): StudentFromList => ({
 	id: "",
+	handle: "",
 
 	text: "",
 	originalHref: "",

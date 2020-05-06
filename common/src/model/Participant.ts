@@ -18,9 +18,11 @@ export interface ParticipantInLesson {
 	labels: ParticipantLabel[];
 }
 
-export type ParticipantInitData = Omit<Participant, "originalScheduleURI">;
+export type ParticipantInitData = Omit<Omit<Participant, "originalScheduleURI">, "handle">;
 
 export interface Participant {
+	handle: string;
+
 	text: string;
 	originalHref: string;
 	originalScheduleURI: string;
@@ -37,6 +39,8 @@ export const getDefaultParticipantLean = (): ParticipantInLesson => ({
 
 export const getDefaultParticipant = (): Participant => ({
 	// ...getDefaultScrapable(),
+	handle: "",
+
 	text: "",
 	originalHref: "",
 	originalScheduleURI: getSpecificScheduleURI(""),

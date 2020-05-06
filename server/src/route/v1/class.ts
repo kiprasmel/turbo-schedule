@@ -49,7 +49,7 @@ router.get("/:className", async (req, res, next) => {
 		const theClass: Class | undefined = await db
 			.get("classes")
 			.value()
-			.find((c) => c.text.toLowerCase() === className.toLowerCase());
+			.find((c) => c.text.toLowerCase() === className.toLowerCase() || c.handle === className.toLowerCase());
 
 		if (!theClass) {
 			const msg: string = `Class not found (was \`${theClass}\`)`;

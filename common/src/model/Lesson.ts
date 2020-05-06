@@ -25,6 +25,7 @@ export interface LessonInitData {
  */
 export interface NonUniqueLesson {
 	id: string;
+	handle: string;
 
 	isEmpty: boolean;
 	dayIndex: number;
@@ -50,6 +51,7 @@ export interface Lesson extends Omit<NonUniqueLesson, "participants"> {
 
 export const getDefaultNonUniqueLesson = (): NonUniqueLesson => ({
 	id: "",
+	handle: "",
 
 	isEmpty: true,
 	dayIndex: -1,

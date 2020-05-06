@@ -10,8 +10,11 @@ export const createTeacher = (data: ParticipantInitData = getDefaultParticipant(
 	const lastName = splitText.slice(0, -1).join(" ");
 	const fullName = text;
 
+	const handle = `${firstName}-${lastName}`;
+
 	const teacher: Teacher = {
 		id: text /** TODO ID */,
+		handle,
 
 		text,
 		originalHref,

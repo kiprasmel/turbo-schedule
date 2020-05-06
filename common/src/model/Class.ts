@@ -40,6 +40,8 @@ export interface Class extends Participant {
 
 export const getDefaultClass = (): Class => ({
 	id: "",
+	handle: "",
+
 	labels: [],
 	text: "",
 	originalHref: "",

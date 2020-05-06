@@ -32,8 +32,11 @@ export const createStudentFromList = (data: ParticipantInitData = getDefaultPart
 	const classCharOrig = parseClassCharOrig(fullClassOrig);
 	const classNumOrig = parseClassNumOrig(fullClassOrig);
 
+	const handle = `${firstName}-${lastName}-${fullClass}`.toLowerCase();
+
 	return {
 		id: text /** TODO ID */,
+		handle,
 
 		text,
 		originalHref,
@@ -129,12 +132,7 @@ const parseClassChar = (originalHref: string): string =>
 	 *         "e"
 	 *         "e"
 	 */
-	!originalHref
-		? ""
-		: originalHref
-				.split("_")[0]
-				.slice(-1)
-				.toLowerCase();
+	!originalHref ? "" : originalHref.split("_")[0].slice(-1).toLowerCase();
 
 const parseFullClass = (classNum: number, classChar: string): string =>
 	!Number.isInteger(classNum) || !classChar ? "" : classNum.toString() + classChar;

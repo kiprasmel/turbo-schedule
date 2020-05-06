@@ -16,6 +16,7 @@ export interface Room extends Participant {
 
 export const getDefaultRoom = (): Room => ({
 	id: "",
+	handle: "",
 	text: "",
 	originalHref: "",
 	originalScheduleURI: "",

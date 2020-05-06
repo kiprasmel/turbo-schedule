@@ -10,8 +10,11 @@ export const createRoom = (data: ParticipantInitData = getDefaultParticipant()):
 	const originalHref = data.originalHref.trim();
 	const originalScheduleURI = getSpecificScheduleURI(originalHref.trim());
 
+	const handle = `${text}`;
+
 	const room: Room = {
 		id: text /** TODO ID */,
+		handle,
 
 		text,
 		originalHref,
