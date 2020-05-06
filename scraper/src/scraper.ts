@@ -7,6 +7,7 @@ import {
 	Teacher,
 	Room,
 	Participant,
+	ParticipantLabel,
 } from "@turbo-schedule/common";
 import { DbSchema, setDbStateAndBackupCurrentOne } from "@turbo-schedule/database";
 
@@ -99,6 +100,12 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			pageVersionIdentifier: createPageVersionIdentifier(frontPageHtml),
 		};
 
+		/** type-safe saving of participants of different types into the database */
+		const getIdx = (type: ParticipantLabel): number =>
+			participantCollectors.findIndex((collector) => collector.labels[0] === type);
+
+		const getParticipants = (type: ParticipantLabel): Participant[] => participants2D[getIdx(type)];
+
 		/** create a new database state */
 		const newDbState: Omit<DbSchema, "Changes"> = {
 			scrapeInfo,
@@ -111,10 +118,10 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			 * we just need to migrate our API etc.,
 			 * which we'll do later
 			 */
-			classes: participants2D[0] as Class[],
-			students: participants2D[3] as StudentFromList[],
-			teachers: participants2D[1] as Teacher[],
-			rooms: participants2D[2] as Room[],
+			classes: getParticipants("class") as Class[],
+			students: getParticipants("student") as StudentFromList[],
+			teachers: getParticipants("teacher") as Teacher[],
+			rooms: getParticipants("room") as Room[],
 			/** END TODO DEPRECATE */
 		};
 
