@@ -3,24 +3,23 @@ import { Participant, Lesson, NonUniqueLesson, mergeDuplicateLessons, sortLesson
 import { extractLessonFromTeacher } from "./extractLessons";
 import { createLesson } from "../initializer/createLesson";
 
-export const scrapeAndDoMagicWithLessonsFromParticipants = async (participants: Participant[]): Promise<Lesson[]> => {
-	const nonUniqueLessons2DWithParticipants: NonUniqueLesson[][] = await Promise.all(
-		participants.map((p) =>
-			extractLessonFromTeacher(p.originalScheduleURI, {
-				text: p.text,
-				isActive: true,
-				labels: p.labels,
-			})
-		)
-	);
+const awaitAll = async <T>(promises: Promise<T[]>[]) => await Promise.all(promises);
+const flatten = <T>(items: T[][]): T[] => items.flat();
+const createLeanLessons = (lessons: NonUniqueLesson[]) => lessons.map(createLesson);
 
-	const nonUniqueLessonsWithParticipants: NonUniqueLesson[] = nonUniqueLessons2DWithParticipants.flat();
-
-	const uniqueLessonsWithParticipants: NonUniqueLesson[] = mergeDuplicateLessons(nonUniqueLessonsWithParticipants);
-
-	const sortedUniqueLessonsWithParticipants: NonUniqueLesson[] = sortLessons(uniqueLessonsWithParticipants);
-
-	const sortedUniqueLeanLessons: Lesson[] = sortedUniqueLessonsWithParticipants.map(createLesson);
-
-	return sortedUniqueLeanLessons;
-};
+export const scrapeAndDoMagicWithLessonsFromParticipants = async (
+	participants: Participant[] = [],
+	lessonPromises: Promise<NonUniqueLesson[]>[] = participants.map((p) =>
+		extractLessonFromTeacher(p.originalScheduleURI, {
+			text: p.text,
+			isActive: true,
+			labels: p.labels,
+		})
+	).flat()
+): Promise<Lesson[]> =>
+	await (lessonPromises |> awaitAll)
+		|> flatten
+		|> mergeDuplicateLessons
+		|> sortLessons
+		|> createLeanLessons
+	;
