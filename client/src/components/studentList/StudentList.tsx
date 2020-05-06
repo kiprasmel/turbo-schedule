@@ -16,7 +16,23 @@ const StudentList = () => {
 
 	useEffect(() => {
 		const wrapper = async () => {
-			const studentsList: StudentFromList[] = await fetchStudents();
+			const studentsList: StudentFromList[] = await (await fetchStudents()).map((s) => ({
+				...s,
+				text:
+					s.labels[0] === "student"
+						? s.firstName + " " + s.lastName + " " + s.classNum + s.classChar
+						: s.labels[0] === "class"
+							? s.text
+							: s.labels[0] === "teacher" || s.labels[0] === "room"
+						? s.text
+						: s.text,
+
+				// (
+				// 	s.firstName && s.lastName ? s.firstName + " " + s.lastName : s.text
+				// ) + (s.classNum && s.classChar)
+				// 	? " " + s.classNum + s.classChar
+				// 	: "",
+			}));
 
 			setStudentsList(studentsList);
 		};

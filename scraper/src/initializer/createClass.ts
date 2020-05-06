@@ -23,8 +23,11 @@ export function createClass(data: ParticipantInitData = getDefaultParticipant())
 	const classNum = parseClassNum(fullClassOrig);
 	const classChar = parseClassChar(fullClassOrig);
 
+	const handle = `${fullClass}`;
+
 	const theClass: Class = {
 		id: text /** TODO ID */,
+		handle,
 
 		text,
 		originalHref,

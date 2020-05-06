@@ -44,7 +44,7 @@ router.get("/:studentName", async (req, res, next) => {
 
 		const studentFromList: StudentFromList = await db
 			.get("students")
-			.find({ text: studentName })
+			.find((s) => s.text === studentName || s.handle === studentName.toLowerCase())
 			.value();
 
 		if (!studentFromList) {

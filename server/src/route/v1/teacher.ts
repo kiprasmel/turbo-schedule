@@ -49,7 +49,7 @@ router.get("/:teacherName", async (req, res, next) => {
 		const teacher: Teacher | undefined = await db
 			.get("teachers")
 			.value()
-			.find((t) => t.text.toLowerCase() === teacherName.toLowerCase());
+			.find((t) => t.text.toLowerCase() === teacherName.toLowerCase() || t.handle === teacherName.toLowerCase());
 
 		if (!teacher) {
 			const msg: string = `Teacher not found (was \`${teacher}\`)`;
