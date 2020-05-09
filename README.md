@@ -52,6 +52,7 @@ git clone https://github.com/sarpik/turbo-schedule.git
 cd turbo-schedule
 
 # note: you must not have `--ignore-scripts` enabled (default)
+# note: your `node` version shall be < 14 -- see https://github.com/sarpik/turbo-schedule/issues/78
 yarn setup:prod
 yarn serve
 ```
@@ -67,6 +68,7 @@ git clone https://github.com/sarpik/turbo-schedule.git
 cd turbo-schedule
 
 # note: you must not have `--ignore-scripts` enabled (default)
+# note: your `node` version shall be < 14 -- see https://github.com/sarpik/turbo-schedule/issues/78
 yarn setup
 yarn dev
 ```

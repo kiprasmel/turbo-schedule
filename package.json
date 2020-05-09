@@ -18,6 +18,7 @@
 			"client/eslint/**"
 		]
 	},
+	"engines": { "node": "< 14" },
 	"scripts": {
 		"postinstall": "patch-package",
 		"setup": "     yarn install &&                               yarn build",
