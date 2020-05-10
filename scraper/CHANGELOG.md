@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.1](https://github.com/sarpik/turbo-schedule/compare/v2.7.0...v2.7.1) (2020-05-10)
+
+
+### Bug Fixes
+
+* **scraper:** Split by `\n` instead of `,` (upstream) ([d55f6eb](https://github.com/sarpik/turbo-schedule/commit/d55f6eb0ee86363827c72245e69e4d4596f7b4b0))
+
+
+
+
+
 # [2.7.0](https://github.com/sarpik/turbo-schedule/compare/v2.6.3...v2.7.0) (2020-05-06)
 
 
