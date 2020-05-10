@@ -92,12 +92,12 @@ function extractLessonFromStudentParser(
 
 	const participants: ParticipantInLesson[] = [
 		...teacher
-			.split(",")
+			.split("\n")
 			.map((t) => t.trim())
 			.filter((t) => !!t)
 			.map((t): ParticipantInLesson => ({ isActive: !isEmpty, labels: ["teacher"], text: t })),
 		...room
-			.split(",")
+			.split("\n")
 			.map((r) => r.trim())
 			.filter((r) => !!r)
 			.map((r): ParticipantInLesson => ({ isActive: !isEmpty, labels: ["room"], text: r })),
@@ -137,12 +137,12 @@ function extractLessonFromClassParser(
 	const participants: ParticipantInLesson[] = [
 		...students.map((s): ParticipantInLesson => ({ isActive: !isEmpty, labels: ["student"], text: s })),
 		...teacher
-			.split(",")
+			.split("\n")
 			.map((t) => t.trim())
 			.filter((t) => !!t)
 			.map((t): ParticipantInLesson => ({ isActive: !isEmpty, labels: ["teacher"], text: t })),
 		...room
-			.split(",")
+			.split("\n")
 			.map((r) => r.trim())
 			.filter((r) => !!r)
 			.map((r): ParticipantInLesson => ({ isActive: !isEmpty, labels: ["room"], text: r })),
