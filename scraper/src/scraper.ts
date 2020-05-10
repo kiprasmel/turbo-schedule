@@ -1,3 +1,5 @@
+import fs from "fs-extra";
+
 import {
 	Class,
 	StudentFromList, //
@@ -19,7 +21,7 @@ import { createTeacher } from "./initializer/createTeacher";
 import { createRoom } from "./initializer/createRoom";
 import { createStudentFromList } from "./initializer/createStudent";
 
-import { getFrontPageHtml } from "./util/getFrontPageHtml";
+// import { getFrontPageHtml } from "./util/getFrontPageHtml";
 import { scrapeScheduleItemListFactory } from "./util/scrapeScheduleItemList";
 import { scrapeAndDoMagicWithLessonsFromParticipants } from "./util/scrapeAndDoMagicWithLessonsFromParticipants";
 import { createPageVersionIdentifier } from "./util/createPageVersionIdentifier";
@@ -61,7 +63,7 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			},
 		];
 
-		const frontPageHtml: string = await getFrontPageHtml();
+		const frontPageHtml: string = await fs.readFile("./frontpage.html", "utf8"); // getFrontPageHtml();
 
 		/** TODO typescript should do this \/ automatically */
 		// let participants2D: OrderedParticipants2D = participantCollectors.map((collector) =>
@@ -81,8 +83,9 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 
 		if (process.env.FAST) {
 			/** TODO document */
-			participants2D = participants2D.map((p) => p.slice(0, 10));
-			participants = participants.slice(0, 10);
+			const limit: number = Number(process.env.LIMIT) || 10;
+			participants2D = participants2D.map((p) => p.slice(0, limit));
+			participants = participants.slice(0, limit);
 		}
 
 		const lessons: Lesson[] = await scrapeAndDoMagicWithLessonsFromParticipants(participants);
