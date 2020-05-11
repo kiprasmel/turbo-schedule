@@ -5,6 +5,8 @@ import { Lesson, getDefaultLesson } from "@turbo-schedule/common";
 
 import "./StudentSchedule.scss";
 
+import Footer from "components/footer/Footer";
+import Header from "components/header/Header";
 import StudentListModal from "./StudentListModal";
 import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
@@ -15,6 +17,7 @@ import DaySelector from "./DaySelector";
 import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
 import OneDaySchedule from "./OneDaySchedule";
+import { SchedulePageDesktop } from "./SchedulePageDesktop";
 
 export interface IStudentScheduleProps {
 	match: any /** TODO */;
@@ -153,45 +156,57 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		);
 	}
 
+	const isDesktop: boolean = windowWidth > 1024;
+
 	return (
 		<>
-			<BackBtn />
-
-			<h1>{studentName}</h1>
-
-			<DaySelector selectedDay={selectedDay} handleClick={(_e, day) => setSelectedDay(day)} />
-
-			<br />
-
-			{selectedDay === "Week" ? (
-				scheduleByDays.map((lessonsArray, index) => (
-					<div key={index} style={weekStyles}>
-						<h3 style={{ padding: "1em 2em" }}>{t("weekday")(index)}</h3>
-
-						<OneDaySchedule
-							key={index}
-							lessonsArray={lessonsArray}
-							handleLessonMouseClick={handleLessonMouseClick}
-							handleLessonKeyboardClick={handleLessonKeyboardClick}
-							// ulProps={{ style: { display: "inline-block" } }}
-						/>
-					</div>
-				))
+			{isDesktop ? (
+				<SchedulePageDesktop />
 			) : (
 				<>
-					<OneDaySchedule
-						lessonsArray={scheduleByDays[selectedDay]}
-						handleLessonMouseClick={handleLessonMouseClick}
-						handleLessonKeyboardClick={handleLessonKeyboardClick}
+					<Header />
+
+					<BackBtn />
+
+					<h1>{studentName}</h1>
+
+					<DaySelector selectedDay={selectedDay} handleClick={(_e, day) => setSelectedDay(day)} />
+
+					<br />
+
+					{selectedDay === "*" ? (
+						scheduleByDays.map((lessonsArray, index) => (
+							<div key={index} style={weekStyles}>
+								<h3 style={{ padding: "1em 2em" }}>{t("weekday")(index)}</h3>
+
+								<OneDaySchedule
+									key={index}
+									lessonsArray={lessonsArray}
+									handleLessonMouseClick={handleLessonMouseClick}
+									handleLessonKeyboardClick={handleLessonKeyboardClick}
+									// ulProps={{ style: { display: "inline-block" } }}
+								/>
+							</div>
+						))
+					) : (
+						<>
+							<OneDaySchedule
+								lessonsArray={scheduleByDays[selectedDay]}
+								handleLessonMouseClick={handleLessonMouseClick}
+								handleLessonKeyboardClick={handleLessonKeyboardClick}
+							/>
+						</>
+					)}
+
+					<StudentListModal
+						isOpen={showStudents}
+						handleClose={() => setShowStudents((_showStudents) => !_showStudents)}
+						lesson={selectedLesson}
 					/>
+
+					<Footer />
 				</>
 			)}
-
-			<StudentListModal
-				isOpen={showStudents}
-				handleClose={() => setShowStudents((_showStudents) => !_showStudents)}
-				lesson={selectedLesson}
-			/>
 		</>
 	);
 };
