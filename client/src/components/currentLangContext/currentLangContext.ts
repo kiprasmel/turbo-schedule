@@ -22,6 +22,7 @@ let defaultContextValue: ICurrentLangContextValue = {
 	 * )
 	 */
 	setLang: (newLang: ILang = defaultLang): ILang => {
+		console.log("setLang", newLang);
 		defaultContextValue.currentLang = newLang;
 
 		/**
