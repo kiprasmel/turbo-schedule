@@ -15,6 +15,9 @@ const lessonStartTimes: Array<string> = [
 
 const lessonEndTimes: Array<string> = ["08:45", "09:40", "10:40", "11:40", "12:55", "13:55", "14:55", "15:50", "16:45"];
 
+export const getLessonStartTime = (timeIndex: number): string => lessonStartTimes[timeIndex];
+export const getLessonEndTime = (timeIndex: number): string => lessonEndTimes[timeIndex];
+
 export const getLessonStartOrEndTime = (timeIndex: number, startOrEnd: "start" | "end"): string =>
 	startOrEnd === "start" ? lessonStartTimes[timeIndex] : lessonEndTimes[timeIndex];
 
