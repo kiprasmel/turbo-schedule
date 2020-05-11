@@ -1,4 +1,5 @@
 export interface Dictionary {
+	"Turbo Schedule": string;
 	Language: string;
 	en: string;
 	lt: string;
