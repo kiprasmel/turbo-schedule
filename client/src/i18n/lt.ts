@@ -11,6 +11,10 @@ const weekdays: Array<string> = [
 ];
 
 export const lt: Dictionary = {
+	"Turbo Schedule": "Turbo Tvarkaraštis",
+	Schedule: "Tvarkaraštis",
+	Statistics: "Statistika",
+	About: "Apie mus",
 	Language: "Kalba",
 	en: "Anglų (English)",
 	lt: "Lietuvių (Lithuanian)",
