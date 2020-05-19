@@ -10,6 +10,11 @@ import { Dictionary } from "./Dictionary";
 import { en } from "./en";
 import { lt } from "./lt";
 
+export * from "./Dictionary";
+export * from "./en";
+export * from "./lt";
+export * from "./useTranslation";
+
 export interface ITranslations {
 	// [key: string]: ITranslation;
 	en: Dictionary;
