@@ -16,7 +16,7 @@ import { getWeekdayIndex, IWeekdayIndex } from "./getWeekday";
 // ];
 
 export interface IScheduleDays {
-	Week: string;
+	"*": string;
 	0: number;
 	1: number;
 	2: number;
@@ -34,10 +34,10 @@ export type ScheduleDayKind = IScheduleDays[keyof IScheduleDays];
 // 	en: ["Week", 1, 2, 3, 4, 5],
 // };
 
-export const scheduleDaysArray: Array<ScheduleDay> = ["Week", 0, 1, 2, 3, 4];
+export const scheduleDaysArray: Array<ScheduleDay> = ["*", 0, 1, 2, 3, 4];
 
 export const selectSchedule = (scheduleByDays: Array<Array<Lesson>>, day: ScheduleDay) => {
-	if (day === "Week") {
+	if (day === "*") {
 		return scheduleByDays;
 	}
 

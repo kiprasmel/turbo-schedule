@@ -11,6 +11,10 @@ const weekdays: Array<string> = [
 ];
 
 export const lt: Dictionary = {
+	"Turbo Schedule": "Turbo Tvarkaraštis",
+	Schedule: "Tvarkaraštis",
+	Statistics: "Statistika",
+	About: "Apie mus",
 	Language: "Kalba",
 	en: "Anglų (English)",
 	lt: "Lietuvių (Lithuanian)",
@@ -35,4 +39,9 @@ export const lt: Dictionary = {
 	Close: "Uždaryti",
 	Empty__lesson: "Laisva",
 	Students: "Mokiniai",
+	Teachers: "Mokytojai",
+	Classes: "Klasės",
+	Rooms: "Kabinetai",
+	toCompactString: (items: string[]): string =>
+		items.length > 1 ? `${items[0]} ir dar ${items.length - 1}` : items[0],
 };
