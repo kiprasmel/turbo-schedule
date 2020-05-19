@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable indent */
+/* eslint-disable react/display-name */
 import React, { FC, Fragment } from "react";
 
 import { Lesson, getParticipantCount } from "@turbo-schedule/common";
