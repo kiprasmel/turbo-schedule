@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /** not a concern since we're linking to a known website ourselves (github) */
 /* eslint-disable react/jsx-no-target-blank */
 
@@ -13,14 +14,14 @@ import { css } from "emotion";
 
 import { Lesson, Participant, getDefaultParticipant } from "@turbo-schedule/common";
 
+import { LessonsList } from "./LessonsList";
 import { fetchStudent } from "../../utils/fetchStudent";
 import { getTodaysScheduleDay, scheduleDaysArray, ScheduleDay } from "../../utils/selectSchedule";
+import { toNiceTimeIndex } from "../../utils/toNiceTimeIndex";
 import { CurrentLangContext } from "../currentLangContext/currentLangContext";
 import { availableLangs, useTranslation, ILang } from "../../i18n/i18n";
 
 import { getLessonStartTime, getLessonEndTime } from "../../utils/getLessonTimes";
-
-const toNiceTimeIndex = (num: number): string => (num >= 10 ? num : `0${num}`) + ".";
 
 // const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
 
@@ -408,168 +409,13 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 				</nav>
 
 				{/* 2nd - lessons of the day list */}
-				<nav
-					className={css`
-						/* background: lightgreen; */
-						flex: 2;
-						flex-shrink: 1;
-						/* flex: auto; */
-
-						min-width: 20em;
-
-						/* max-width: 100%;
-						width: 100%; */
-						/* max-height: 100%;
-						height: 100%;
-						overflow-x: hidden; */
-						overflow-y: auto;
-					`}
-				>
-					<ul
-						className={css`
-							display: flex;
-							flex-direction: column;
-
-							max-width: 100%;
-							width: 100%;
-							max-height: 100%;
-							height: 100%;
-
-							& > * + * {
-								border-top: 1px solid #000;
-							}
-
-							& > * {
-								flex: 1;
-							}
-						`}
-					>
-						{participant?.lessons
-							?.filter((l) => l.dayIndex === selectedDay)
-							.map((lesson) => {
-								const { id, name, timeIndex, teachers, rooms } = lesson;
-								return (
-									<li
-										key={id}
-										className={css`
-											position: relative;
-										`}
-									>
-										<button
-											key={id}
-											type="button"
-											onClick={(_e) => {
-												setSelectedLesson(lesson);
-												setSelectedLessonTimeIndex(timeIndex);
-											}}
-											className={css`
-												padding: 1em 2em;
-												/* padding-left: 2em;
-											padding-right: 2em;
-											padding-top: 1.25em;
-											padding-bottom: 1.25em; */
-
-												width: 100%;
-												height: 100%;
-											`}
-										>
-											{timeIndex === selectedLesson?.timeIndex && (
-												<div
-													className={css`
-														position: absolute;
-														left: 0;
-														top: 0;
-
-														width: 0.75em;
-														height: 100%;
-
-														background: #000;
-														/* border-left: 0.75em solid #000; */
-													`}
-												/>
-											)}
-
-											<div>
-												<header
-													className={css`
-														display: flex;
-														align-items: center;
-														justify-content: space-between;
-
-														& > * {
-															font-size: 1.75em;
-															font-weight: 700;
-														}
-
-														& > * + * {
-															margin-left: 0.5em;
-														}
-													`}
-												>
-													<h1
-														className={css`
-															margin: 0;
-															overflow: hidden;
-
-															/** https://css-tricks.com/snippets/css/truncate-string-with-ellipsis/ */
-															white-space: nowrap;
-															flex-wrap: nowrap;
-															text-overflow: ellipsis;
-														`}
-													>
-														{name}
-													</h1>
-													<span>{toNiceTimeIndex(timeIndex + 1)}</span>
-												</header>
-
-												{/* compact teacher & room; start/end times */}
-												<div
-													className={css`
-														display: flex;
-														justify-content: space-between;
-														align-items: flex-end;
-
-														margin-top: 0.5em;
-													`}
-												>
-													<div
-														className={css`
-															text-align: left;
-
-															& > * {
-																margin: 0;
-															}
-														`}
-													>
-														<p>{t("toCompactString")(teachers)}</p>
-														<p>{t("toCompactString")(rooms)}</p>
-													</div>
-
-													<div>
-														<p
-															className={css`
-																margin: 0;
-															`}
-														>
-															{getLessonStartTime(timeIndex)}
-														</p>
-														<Divider height="1px" />
-														<p
-															className={css`
-																margin: 0;
-															`}
-														>
-															{getLessonEndTime(timeIndex)}
-														</p>
-													</div>
-												</div>
-											</div>
-										</button>
-									</li>
-								);
-							})}
-					</ul>
-				</nav>
+				<LessonsList
+					lessons={participant?.lessons ?? []}
+					selectedDay={selectedDay}
+					selectedLesson={selectedLesson}
+					setSelectedLesson={setSelectedLesson}
+					setSelectedLessonTimeIndex={setSelectedLessonTimeIndex}
+				/>
 
 				{/* 3rd */}
 				<article
@@ -742,15 +588,6 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 		</div>
 	);
 };
-
-const Divider: FC<{ height?: string }> = ({ height = "2px" }) => (
-	<div
-		className={css`
-			height: ${height};
-			background: #000;
-		`}
-	/>
-);
 
 const ParticipantList: FC<{ participants: string[]; summary?: string; open?: boolean }> = ({
 	participants = [],
