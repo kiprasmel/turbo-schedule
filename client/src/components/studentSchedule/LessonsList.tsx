@@ -54,7 +54,7 @@ export const LessonsList: FC<{
 			`}
 		>
 			{lessons
-				.filter((l) => l.dayIndex === selectedDay)
+				.filter((l) => l.dayIndex === selectedDay || selectedDay === "*")
 				.map((lesson) => (
 					<LessonsListItem
 						key={lesson.id}
