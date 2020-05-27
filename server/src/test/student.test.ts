@@ -166,6 +166,8 @@ describe("/student API", () => {
 	 *
 	 * Calling `request.get` fixes this problem.
 	 * I'll investigate.
+	 *
+	 * Edit: see https://github.com/mpashkovskiy/express-oas-generator/issues/50
 	 */
 	it("should be the last test to avoid a bug", async () => {
 		try {
