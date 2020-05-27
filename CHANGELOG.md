@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.3](https://github.com/sarpik/turbo-schedule/compare/v2.7.2...v2.7.3) (2020-05-27)
+
+
+### Bug Fixes
+
+* Update typescript version ([d7e114c](https://github.com/sarpik/turbo-schedule/commit/d7e114c1f77e9c2fcd737b2e65533a69cd8c8900))
+
+
+
+
+
 ## [2.7.2](https://github.com/sarpik/turbo-schedule/compare/v2.7.1...v2.7.2) (2020-05-15)
 
 **Note:** Version bump only for package turbo-schedule

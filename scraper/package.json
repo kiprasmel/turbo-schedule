@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/scraper",
-	"version": "2.7.1",
+	"version": "2.7.3",
 	"description": "",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
@@ -17,8 +17,8 @@
 		"dev": "concurrently --raw --kill-others --names \"0: tsc,1: scraper\" \"yarn run watch:ts\" \"yarn run watch:scraper\""
 	},
 	"dependencies": {
-		"@turbo-schedule/common": "^2.7.0",
-		"@turbo-schedule/database": "^2.7.0",
+		"@turbo-schedule/common": "^2.7.3",
+		"@turbo-schedule/database": "^2.7.3",
 		"@types/cheerio": "^0.22.14",
 		"@types/fs-extra": "^8.0.0",
 		"@types/node-fetch": "^2.5.3",
