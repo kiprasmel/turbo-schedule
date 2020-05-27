@@ -6,7 +6,7 @@ import { css } from "emotion";
 import { Lesson } from "@turbo-schedule/common";
 
 import { Divider } from "./Divider";
-import { useTranslation } from "../../i18n/i18n";
+import { useTranslation } from "../../i18n/useTranslation";
 import { ScheduleDay } from "../../utils/selectSchedule";
 import { toNiceTimeIndex } from "../../utils/toNiceTimeIndex";
 import { getLessonStartTime, getLessonEndTime } from "../../utils/getLessonTimes";

@@ -19,7 +19,8 @@ import { fetchStudent } from "../../utils/fetchStudent";
 import { getTodaysScheduleDay, scheduleDaysArray, ScheduleDay } from "../../utils/selectSchedule";
 import { toNiceTimeIndex } from "../../utils/toNiceTimeIndex";
 import { CurrentLangContext } from "../currentLangContext/currentLangContext";
-import { availableLangs, useTranslation, ILang } from "../../i18n/i18n";
+import { availableLangs, ILang } from "../../i18n/i18n";
+import { useTranslation } from "../../i18n/useTranslation";
 
 import { getLessonStartTime, getLessonEndTime } from "../../utils/getLessonTimes";
 
