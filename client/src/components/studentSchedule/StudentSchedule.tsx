@@ -16,8 +16,8 @@ import { fetchStudent } from "../../utils/fetchStudent";
 import DaySelector from "./DaySelector";
 import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
-import OneDaySchedule from "./OneDaySchedule";
 import { SchedulePageDesktop } from "./SchedulePageDesktop";
+import { LessonsList } from "./LessonsList";
 
 export interface IStudentScheduleProps {
 	match: any /** TODO */;
@@ -121,18 +121,6 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		[setShowStudents, setSelectedLesson]
 	);
 
-	const handleLessonKeyboardClick = (e: React.KeyboardEvent, lesson: any) => {
-		if (e.key !== "Enter") {
-			return;
-		}
-
-		/** avoid instantly closing the modal */
-		e.preventDefault();
-
-		setShowStudents(!showStudents);
-		setSelectedLesson(lesson);
-	};
-
 	if (isLoading) {
 		return (
 			<>
@@ -179,21 +167,21 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 							<div key={index} style={weekStyles}>
 								<h3 style={{ padding: "1em 2em" }}>{t("weekday")(index)}</h3>
 
-								<OneDaySchedule
-									key={index}
-									lessonsArray={lessonsArray}
-									handleLessonMouseClick={handleLessonMouseClick}
-									handleLessonKeyboardClick={handleLessonKeyboardClick}
-									// ulProps={{ style: { display: "inline-block" } }}
+								<LessonsList
+									lessons={lessonsArray}
+									selectedDay={selectedDay}
+									selectedLesson={null}
+									handleClick={handleLessonMouseClick}
 								/>
 							</div>
 						))
 					) : (
 						<>
-							<OneDaySchedule
-								lessonsArray={scheduleByDays[selectedDay]}
-								handleLessonMouseClick={handleLessonMouseClick}
-								handleLessonKeyboardClick={handleLessonKeyboardClick}
+							<LessonsList
+								lessons={scheduleByDays[selectedDay]}
+								selectedDay={selectedDay}
+								selectedLesson={null}
+								handleClick={handleLessonMouseClick}
 							/>
 						</>
 					)}
