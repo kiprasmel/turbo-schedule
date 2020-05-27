@@ -163,7 +163,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 			<br />
 
-			{selectedDay === "Week" ? (
+					{selectedDay === "*" ? (
 				scheduleByDays.map((lessonsArray, index) => (
 					<div key={index} style={weekStyles}>
 						<h3 style={{ padding: "1em 2em" }}>{t("weekday")(index)}</h3>
