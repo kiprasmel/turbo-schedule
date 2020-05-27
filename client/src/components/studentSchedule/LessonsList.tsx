@@ -15,9 +15,8 @@ export const LessonsList: FC<{
 	lessons: Lesson[];
 	selectedDay: ScheduleDay;
 	selectedLesson: Lesson | null;
-	setSelectedLesson: React.Dispatch<React.SetStateAction<Lesson | null>>;
-	setSelectedLessonTimeIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
-}> = ({ lessons = [], selectedDay, selectedLesson, setSelectedLesson, setSelectedLessonTimeIndex }) => (
+	handleClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, lesson: Lesson) => any;
+}> = ({ lessons = [], selectedDay, selectedLesson, handleClick }) => (
 	<nav
 		className={css`
 			/* background: lightgreen; */
@@ -61,8 +60,7 @@ export const LessonsList: FC<{
 						key={lesson.id}
 						lesson={lesson}
 						selectedLesson={selectedLesson}
-						setSelectedLesson={setSelectedLesson}
-						setSelectedLessonTimeIndex={setSelectedLessonTimeIndex}
+						handleClick={handleClick}
 					/>
 				))}
 		</ul>
@@ -72,9 +70,8 @@ export const LessonsList: FC<{
 const LessonsListItem: FC<{
 	lesson: Lesson;
 	selectedLesson: Lesson | null;
-	setSelectedLesson: React.Dispatch<React.SetStateAction<Lesson | null>>;
-	setSelectedLessonTimeIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
-}> = ({ lesson, selectedLesson, setSelectedLesson, setSelectedLessonTimeIndex }) => {
+	handleClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, lesson: Lesson) => any;
+}> = ({ lesson, selectedLesson, handleClick }) => {
 	const t = useTranslation();
 
 	const { id, name, timeIndex, teachers, rooms } = lesson;
@@ -88,9 +85,8 @@ const LessonsListItem: FC<{
 			<button
 				key={id}
 				type="button"
-				onClick={(_e) => {
-					setSelectedLesson(lesson);
-					setSelectedLessonTimeIndex(timeIndex);
+				onClick={(e) => {
+					handleClick(e, lesson);
 				}}
 				className={css`
 					padding: 1em 2em;

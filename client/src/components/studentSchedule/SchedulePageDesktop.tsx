@@ -414,8 +414,10 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 					lessons={participant?.lessons ?? []}
 					selectedDay={selectedDay}
 					selectedLesson={selectedLesson}
-					setSelectedLesson={setSelectedLesson}
-					setSelectedLessonTimeIndex={setSelectedLessonTimeIndex}
+					handleClick={(_e, lesson) => {
+						setSelectedLesson(lesson);
+						setSelectedLessonTimeIndex(lesson.timeIndex);
+					}}
 				/>
 
 				{/* 3rd */}
