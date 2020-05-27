@@ -15146,9 +15146,9 @@ typescript@^3.7.2:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.2.tgz#27e489b95fa5909445e9fef5ee48d81697ad18fb"
   integrity sha512-ml7V7JfiN2Xwvcer+XAf2csGO1bPBdRbFCkYBczNZggrBZ9c7G3riSUeJmqEU5uOtXNPMhE3n+R4FA/3YOAWOQ==
 
-"typescript@https://typescript.visualstudio.com/cf7ac146-d525-443c-b23c-0d58337efebc/_apis/build/builds/72713/artifacts?artifactName=tgz&fileId=5FDC6B0458B0184B85D790D1EB8AA47C0924EADA6FBC0575C4425A46F70973E002&fileName=/typescript-4.0.0-insiders.20200503.tgz":
-  version "4.0.0-insiders.20200503"
-  resolved "https://typescript.visualstudio.com/cf7ac146-d525-443c-b23c-0d58337efebc/_apis/build/builds/72713/artifacts?artifactName=tgz&fileId=5FDC6B0458B0184B85D790D1EB8AA47C0924EADA6FBC0575C4425A46F70973E002&fileName=/typescript-4.0.0-insiders.20200503.tgz#bbee74f6f63a822f955da081d3ea7539bcb2985a"
+"typescript@https://typescript.visualstudio.com/cf7ac146-d525-443c-b23c-0d58337efebc/_apis/build/builds/74014/artifacts?artifactName=tgz&fileId=53B4D99407A93B4AF6FAEF8437B02126A8C7FEC62F1C3307DAA098F75D2CE5D602&fileName=/typescript-4.0.0-insiders.20200515.tgz":
+  version "4.0.0-insiders.20200515"
+  resolved "https://typescript.visualstudio.com/cf7ac146-d525-443c-b23c-0d58337efebc/_apis/build/builds/74014/artifacts?artifactName=tgz&fileId=53B4D99407A93B4AF6FAEF8437B02126A8C7FEC62F1C3307DAA098F75D2CE5D602&fileName=/typescript-4.0.0-insiders.20200515.tgz#0e629de7079a6e9fa86f6254a09ac4171ea2cff3"
 
 uglify-js@3.4.x:
   version "3.4.10"
