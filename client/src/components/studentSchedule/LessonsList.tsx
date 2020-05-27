@@ -6,6 +6,7 @@ import { css } from "emotion";
 import { Lesson } from "@turbo-schedule/common";
 
 import { Divider } from "./Divider";
+import { StrikeThrough } from "./StrikeThrough";
 import { useTranslation } from "../../i18n/useTranslation";
 import { ScheduleDay } from "../../utils/selectSchedule";
 import { toNiceTimeIndex } from "../../utils/toNiceTimeIndex";
@@ -74,7 +75,7 @@ const LessonsListItem: FC<{
 }> = ({ lesson, selectedLesson, handleClick }) => {
 	const t = useTranslation();
 
-	const { id, name, timeIndex, teachers, rooms } = lesson;
+	const { id, name, timeIndex, teachers, rooms, isEmpty } = lesson;
 
 	return (
 		<li
@@ -145,7 +146,7 @@ const LessonsListItem: FC<{
 						>
 							{name}
 						</h1>
-						<span>{toNiceTimeIndex(timeIndex + 1)}</span>
+						<StrikeThrough shouldStrike={isEmpty}>{toNiceTimeIndex(timeIndex + 1)}</StrikeThrough>
 					</header>
 
 					{/* compact teacher & room; start/end times */}
