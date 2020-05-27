@@ -15,6 +15,7 @@ import { css } from "emotion";
 import { Lesson, Participant, getDefaultParticipant } from "@turbo-schedule/common";
 
 import { LessonsList } from "./LessonsList";
+import { StrikeThrough } from "./StrikeThrough";
 import { fetchStudent } from "../../utils/fetchStudent";
 import { getTodaysScheduleDay, scheduleDaysArray, ScheduleDay } from "../../utils/selectSchedule";
 import { toNiceTimeIndex } from "../../utils/toNiceTimeIndex";
@@ -434,7 +435,7 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 					{/* <h1>hi {JSON.stringify(selectedLesson)}</h1> */}
 
 					{selectedLesson &&
-						(({ name, timeIndex, teachers, rooms, students, classes }: Lesson) => (
+						(({ name, timeIndex, teachers, rooms, students, classes, isEmpty }: Lesson) => (
 							<>
 								<section
 									className={css`
@@ -486,7 +487,9 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 												margin-left: calc(0.25em * var(--scale-lg));
 											`}
 										>
-											{toNiceTimeIndex(timeIndex + 1)}
+											<StrikeThrough shouldStrike={isEmpty}>
+												{toNiceTimeIndex(timeIndex + 1)}
+											</StrikeThrough>
 										</span>
 									</header>
 
