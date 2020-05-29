@@ -13,7 +13,7 @@ import { css } from "emotion";
 
 import { Lesson, Participant, getDefaultParticipant } from "@turbo-schedule/common";
 
-import { Navbar } from "../../common/Navbar";
+import { Navbar } from "../navbar/Navbar";
 import { LessonsList } from "./LessonsList";
 import { DaysList } from "./DaysList";
 import { LessonDisplay } from "./LessonDisplay";
@@ -139,9 +139,11 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 		>
 			<Navbar
 				ref={navbarElement}
-				searchElementRef={searchElementRef}
-				searchString={searchString}
-				setSearchString={setSearchString}
+				search={{
+					searchElementRef: searchElementRef,
+					searchString,
+					setSearchString,
+				}}
 			/>
 
 			<main

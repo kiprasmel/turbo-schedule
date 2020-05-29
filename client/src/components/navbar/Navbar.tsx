@@ -5,17 +5,16 @@ import React, { forwardRef, useContext } from "react";
 import { Link } from "react-router-dom";
 import { css } from "emotion";
 
-import { CurrentLangContext } from "../components/currentLangContext/currentLangContext";
-import { ILang } from "../i18n/i18n";
-import { useTranslation } from "../i18n/useTranslation";
+import { SearchProps, Search } from "./Search";
+import { CurrentLangContext } from "../currentLangContext/currentLangContext";
+import { ILang } from "../../i18n/i18n";
+import { useTranslation } from "../../i18n/useTranslation";
 
 interface Props {
-	searchElementRef: React.RefObject<HTMLInputElement>;
-	searchString: string;
-	setSearchString: React.Dispatch<React.SetStateAction<string>>;
+	search?: false | SearchProps;
 }
 
-export const Navbar = forwardRef<HTMLElement, Props>(({ searchElementRef, searchString, setSearchString }, ref) => {
+export const Navbar = forwardRef<HTMLElement, Props>(({ search }, ref) => {
 	const { currentLang, setLang, availableLangs } = useContext(CurrentLangContext);
 	const t = useTranslation();
 
@@ -61,56 +60,13 @@ export const Navbar = forwardRef<HTMLElement, Props>(({ searchElementRef, search
 				<Link to="/">{t("Turbo Schedule")}</Link>
 			</h1>
 
-			<span>
-				<input
-					type="search"
-					name="search"
-					ref={searchElementRef}
-					className={css`
-						font-size: 1.5em;
-						max-width: 12em;
-						padding: 0.3em 0.3em;
-						/* padding: 0.5em 0.5em; */
-
-						border: 0.125em solid #000;
-						border-radius: 0.5em;
-
-						border-top-right-radius: 0;
-						border-bottom-right-radius: 0;
-					`}
-					value={searchString}
-					onChange={(e) => setSearchString(e.target.value)}
-					onFocus={(e) => e.target.select()}
+			{!!search && (
+				<Search
+					searchElementRef={search.searchElementRef}
+					searchString={search.searchString}
+					setSearchString={search.setSearchString}
 				/>
-				<button
-					type="button"
-					onClick={(_e) => {
-						setSearchString("");
-						searchElementRef?.current?.focus();
-					}}
-					className={css`
-						/** same as input's - just different borders */
-						font-size: 1.5em;
-						max-width: 12em;
-						/* padding: 0.3em 0.3em; */
-						padding: 0.3em 0.6em;
-						/* padding: 0.5em 0.5em; */
-
-						border: 0.125em solid #000;
-						border-radius: 0.5em;
-
-						border-top-left-radius: 0;
-						border-bottom-left-radius: 0;
-
-						border-left: none; /** avoid double border */
-
-						outline: none;
-						cursor: pointer;
-					`}
-				>
-					X
-				</button>
-			</span>
+			)}
 
 			<ul
 				className={css`
