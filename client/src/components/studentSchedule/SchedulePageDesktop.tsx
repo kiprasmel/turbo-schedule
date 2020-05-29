@@ -15,15 +15,11 @@ import { Lesson, Participant, getDefaultParticipant } from "@turbo-schedule/comm
 
 import { Navbar } from "../../common/Navbar";
 import { LessonsList } from "./LessonsList";
-import { StrikeThrough } from "./StrikeThrough";
 import { DaysList } from "./DaysList";
+import { LessonDisplay } from "./LessonDisplay";
 import { fetchStudent } from "../../utils/fetchStudent";
 import { getTodaysScheduleDay, ScheduleDay } from "../../utils/selectSchedule";
-import { toNiceTimeIndex } from "../../utils/toNiceTimeIndex";
 import { CurrentLangContext } from "../currentLangContext/currentLangContext";
-import { useTranslation } from "../../i18n/useTranslation";
-
-import { getLessonStartTime, getLessonEndTime } from "../../utils/getLessonTimes";
 
 // const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
 
@@ -37,8 +33,6 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 	useEffect(() => {
 		console.log("currentLang", currentLang);
 	}, [currentLang]);
-
-	const t = useTranslation();
 
 	const searchElementRef = useRef<HTMLInputElement>(null);
 	// const [searchString, setSearchString] = useState<string>(participant.text || "");
@@ -187,233 +181,9 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 						overflow-y: auto;
 					`}
 				>
-					{/* <h1>hi {JSON.stringify(selectedLesson)}</h1> */}
-
-					{selectedLesson &&
-						(({ name, timeIndex, teachers, rooms, students, classes, isEmpty }: Lesson) => (
-							<>
-								<section
-									className={css`
-										/* --scale-sm: 2; */
-										--scale-lg: 3;
-
-										padding: 3em 4em;
-
-										/* padding-left: calc(2em * var(--scale-lg));
-										padding-right: calc(2em * var(--scale-lg));
-										padding-top: calc(1.25em * var(--scale-lg));
-										padding-bottom: calc(1.25em * var(--scale-lg)); */
-
-										& > * + * {
-											margin-top: 3em;
-										}
-									`}
-								>
-									{/* 1st - name & index */}
-									<header
-										className={css`
-											display: flex;
-											align-items: flex-start;
-											justify-content: space-between;
-
-											& > * {
-												font-size: calc(1em * var(--scale-lg));
-												font-weight: 700;
-											}
-										`}
-									>
-										<h1
-											className={css`
-												margin: 0;
-												overflow: hidden;
-
-												/** https://css-tricks.com/snippets/css/truncate-string-with-ellipsis/ */
-												/* white-space: nowrap; */
-												/* flex-wrap: nowrap; */
-												text-overflow: ellipsis;
-
-												text-align: left;
-											`}
-										>
-											{name}
-										</h1>
-										<span
-											className={css`
-												margin-left: calc(0.25em * var(--scale-lg));
-											`}
-										>
-											<StrikeThrough shouldStrike={isEmpty}>
-												{toNiceTimeIndex(timeIndex + 1)}
-											</StrikeThrough>
-										</span>
-									</header>
-
-									{/* 2nd - ~~compact teachers & rooms~~ & start/end times */}
-									<div
-										className={css`
-											display: flex;
-											/* justify-content: space-between; */
-											justify-content: flex-end;
-											align-items: flex-start;
-
-											margin-top: 2em;
-										`}
-									>
-										{/* teachers & rooms */}
-										{/* <div
-											className={css`
-												text-align: left;
-												& > * {
-													margin: 0;
-												}
-											`}
-										>
-											{teachers.length > 1 ? (
-												<details>
-													<summary>
-														{t("Teachers")} ({teachers.length})
-													</summary>
-													<p>{teachers.map((teacher) => teacher)}</p>
-												</details>
-											) : (
-												<p>{teachers.map((teacher) => teacher)}</p>
-											)}
-
-											{rooms.length > 1 ? (
-												<details>
-													<summary>
-														{t("Rooms")} ({rooms.length})
-													</summary>
-													<p>{rooms.map((room) => room)}</p>
-												</details>
-											) : (
-												<p>{rooms.map((room) => room)}</p>
-											)}
-										</div> */}
-
-										{/* start / end times */}
-										<div
-											className={css`
-												font-size: calc(1em * var(--scale-lg));
-											`}
-										>
-											{/*
-											<div>{getLessonStartTime(timeIndex)}</div>
-											<Divider />
-											<div>{getLessonEndTime(timeIndex)}</div> */}
-
-											<div>
-												{getLessonStartTime(timeIndex)} &mdash; {getLessonEndTime(timeIndex)}
-											</div>
-										</div>
-									</div>
-
-									{/* 3rd - Lesson's participants */}
-									<div
-										className={css`
-											display: flex;
-											justify-content: space-around;
-											/* justify-content: space-between; */
-											flex-wrap: wrap;
-
-											text-align: left;
-											font-size: 0.75em;
-
-											& > * + * {
-												margin-left: 2em;
-											}
-										`}
-									>
-										<ParticipantList
-											participants={students}
-											summary={t("Students") + ` (${students.length})`}
-										/>
-										<ParticipantList
-											participants={teachers}
-											summary={t("Teachers") + ` (${teachers.length})`}
-										/>
-										<ParticipantList
-											participants={rooms}
-											summary={t("Rooms") + ` (${rooms.length})`}
-										/>
-										<ParticipantList
-											participants={classes}
-											summary={t("Classes") + ` (${classes.length})`}
-										/>
-									</div>
-								</section>
-							</>
-						))(selectedLesson)}
+					<LessonDisplay lesson={selectedLesson} />
 				</article>
 			</main>
 		</div>
 	);
 };
-
-const ParticipantList: FC<{ participants: string[]; summary?: string; open?: boolean }> = ({
-	participants = [],
-	summary = "",
-	open = true,
-}) => (
-	<details
-		className={css`
-			text-align: left;
-			font-size: 1.5em;
-
-			position: relative;
-
-			outline: none;
-		`}
-		open={!!open}
-	>
-		{!!summary && (
-			<summary
-				className={css`
-					cursor: pointer;
-
-					outline: none;
-					/* &::after {
-							position: absolute;
-							bottom: 0;
-							left: 0;
-
-							content: "";
-							height: 1px;
-							background: #000;
-							width: 0;
-
-							transition: 200ms ease-out;
-						}
-
-						&:hover::after, &:focus::after {
-								transition: 200ms ease-in;
-								width: 100%;
-							}
-						} */
-				`}
-			>
-				<span>{summary}</span>
-			</summary>
-		)}
-
-		<ol
-			type="1"
-			className={css`
-				display: flex;
-				flex-direction: column;
-
-				& > * {
-					list-style-type: decimal-leading-zero;
-				}
-
-				& > * + * {
-					margin-top: 0.25em;
-				}
-			`}
-		>
-			{participants.map((p) => (
-				<li key={p}>{p}</li>
-			))}
-		</ol>
-	</details>
-);
