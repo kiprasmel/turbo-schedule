@@ -1,11 +1,11 @@
 import React from "react";
-import Header from "../header/Header";
+import { Navbar } from "../navbar/Navbar";
 import StudentList from "../studentList/StudentList";
 import Footer from "../footer/Footer";
 
 const Landing = () => (
 	<>
-		<Header />
+		<Navbar />
 		<StudentList />
 		<Footer />
 	</>
