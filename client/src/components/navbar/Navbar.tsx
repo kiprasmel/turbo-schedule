@@ -1,22 +1,37 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
 
-import React, { forwardRef, useContext } from "react";
+import React, { forwardRef, FC } from "react";
 import { Link } from "react-router-dom";
 import { css } from "emotion";
 
 import { SearchProps, Search } from "./Search";
-import { CurrentLangContext } from "../currentLangContext/currentLangContext";
-import { ILang } from "../../i18n/i18n";
+import { LangSelect } from "./LangSelect";
 import { useTranslation } from "../../i18n/useTranslation";
+import { NavbarMobile } from "./NavbarMobile";
 
 interface Props {
 	search?: false | SearchProps;
 }
 
-export const Navbar = forwardRef<HTMLElement, Props>(({ search }, ref) => {
-	const { currentLang, setLang, availableLangs } = useContext(CurrentLangContext);
-	const t = useTranslation();
+export const Navbar = forwardRef<HTMLElement, Props>((props, ref) => {
+	const isDesktop = window.innerWidth >= 1024; /** TODO FIXME WWidth */
+
+	const { search } = props;
+	const SearchElement = !search ? undefined : (
+		<Search
+			searchElementRef={search.searchElementRef}
+			searchString={search.searchString}
+			setSearchString={search.setSearchString}
+		/>
+	);
+
+	const NavbarElement = isDesktop ? (
+		<NavbarDesktop {...props} SearchElement={SearchElement} />
+	) : (
+		<NavbarMobile {...props} SearchElement={SearchElement} />
+	);
 
 	return (
 		<nav
@@ -24,6 +39,7 @@ export const Navbar = forwardRef<HTMLElement, Props>(({ search }, ref) => {
 			className={css`
 				/* background: red; */
 				/* flex: 0 1 auto; */
+				width: 100%;
 
 				/* min-height: 3.75em;
 					height: 3.75em; */
@@ -32,6 +48,7 @@ export const Navbar = forwardRef<HTMLElement, Props>(({ search }, ref) => {
 				font-size: 1.25em;
 
 				display: flex;
+				flex-direction: row;
 				align-items: center;
 				justify-content: end;
 				/* justify-content: space-between; */
@@ -44,29 +61,28 @@ export const Navbar = forwardRef<HTMLElement, Props>(({ search }, ref) => {
 				}
 			`}
 		>
-			{/* left */}
-			{/* <div
-					className={css`
-						display: flex;
-						align-items: center;
+			{NavbarElement}
+		</nav>
+	);
+});
 
-					`}
-				> */}
+const NavbarDesktop: FC<{ SearchElement?: JSX.Element }> = (props) => {
+	const { SearchElement } = props;
+
+	const t = useTranslation();
+
+	return (
+		<>
 			<h1
 				className={css`
 					display: inline-block;
 				`}
 			>
 				<Link to="/">{t("Turbo Schedule")}</Link>
+				{/* <Link to="/">{window.innerWidth >= 1024 ? t("Turbo Schedule") : <Logo />}</Link> */}
 			</h1>
 
-			{!!search && (
-				<Search
-					searchElementRef={search.searchElementRef}
-					searchString={search.searchString}
-					setSearchString={search.setSearchString}
-				/>
-			)}
+			{SearchElement}
 
 			<ul
 				className={css`
@@ -83,8 +99,19 @@ export const Navbar = forwardRef<HTMLElement, Props>(({ search }, ref) => {
 					font-size: 1.2em;
 				`}
 			>
-				{/* SOON™ */}
-				{/* <li>
+				<NavbarLinks />
+				<li>
+					<LangSelect />
+				</li>
+			</ul>
+		</>
+	);
+};
+
+export const NavbarLinks: FC<{}> = () => (
+	<>
+		{/* SOON™ */}
+		{/* <li>
 						<Link
 							to={`/${participant.text}`}
 							className={css`
@@ -98,50 +125,27 @@ export const Navbar = forwardRef<HTMLElement, Props>(({ search }, ref) => {
 					<li>
 						<Link to={`/${participant.text}/stats`}>{t("Statistics")}</Link>
 					</li> */}
-				{/* SOON™ */}
-				{/* <li
+		{/* SOON™ */}
+		{/* <li
 						className={css`
 							margin-left: auto;
 						`}
 					>
 						<Link to="/about">{t("About")}</Link>
 					</li> */}
-				<li
-					className={css`
-						margin-left: auto;
-					`}
-				>
-					<a href="https://ts.kipras.org/api" target="_blank" rel="noopener">
-						API
-					</a>
-				</li>
-				<li>
-					<a href="https://github.com/sarpik/turbo-schedule" target="_blank" rel="noopener">
-						GitHub
-					</a>
-				</li>
-				<li>
-					{/* <Select options={availableLangs.map((lang) => ({ value: lang, label: lang.toUpperCase() }))} /> */}
-					<select
-						name="lang"
-						// value={currentLang}
-						defaultValue={currentLang.toUpperCase()}
-						onChange={(e) => setLang(e.target.value.toLowerCase() as ILang)}
-						className={css`
-							vertical-align: bottom;
-							font-size: 1em;
-						`}
-					>
-						{availableLangs
-							.map((lang) => lang.toUpperCase())
-							.map((lang) => (
-								<option key={lang} value={lang}>
-									{lang}
-								</option>
-							))}
-					</select>
-				</li>
-			</ul>
-		</nav>
-	);
-});
+		<li
+			className={css`
+				margin-left: auto;
+			`}
+		>
+			<a href="https://ts.kipras.org/api" target="_blank" rel="noopener">
+				API
+			</a>
+		</li>
+		<li>
+			<a href="https://github.com/sarpik/turbo-schedule" target="_blank" rel="noopener">
+				GitHub
+			</a>
+		</li>
+	</>
+);

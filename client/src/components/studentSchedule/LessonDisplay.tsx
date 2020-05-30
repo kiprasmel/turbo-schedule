@@ -138,7 +138,7 @@ export const LessonDisplay: FC<Props> = ({ lesson }) => {
 			</div>
 
 			{/* 3rd - Lesson's participants */}
-			<ParticipantListList studentIds={students} teacherIds={teachers} roomIds={rooms} classIds={classes} />
+			<ParticipantListList participants={{ students, teachers, rooms, classes }} />
 		</section>
 	);
 };
