@@ -1,8 +1,10 @@
+/* eslint-disable react/prop-types */
+
 import React, { FC } from "react";
 import { css } from "emotion";
 
 export interface SearchProps {
-	searchElementRef: React.RefObject<HTMLInputElement>;
+	searchElementRef?: React.RefObject<HTMLInputElement>;
 	searchString: string;
 	setSearchString: React.Dispatch<React.SetStateAction<string>>;
 }

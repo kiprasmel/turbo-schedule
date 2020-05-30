@@ -91,6 +91,15 @@ export const p2rooms = (participants: (Participant | ParticipantInLesson)[]): st
 	...new Set([...participants.filter((p) => p.labels[0] === "room").map((p) => p.text)]),
 ];
 
+export const parseParticipants = (
+	participants: Participant[]
+): { students: string[]; teachers: string[]; rooms: string[]; classes: string[] } => ({
+	students: participants.filter((p) => p.labels[0] === "student").map((p) => p.text),
+	teachers: participants.filter((p) => p.labels[0] === "teacher").map((p) => p.text),
+	rooms: participants.filter((p) => p.labels[0] === "room").map((p) => p.text),
+	classes: participants.filter((p) => p.labels[0] === "class").map((p) => p.text),
+});
+
 export const getParticipantCount = ({ students, classes, teachers, rooms }: Lesson): number =>
 	students.length + classes.length + teachers.length + rooms.length;
 
