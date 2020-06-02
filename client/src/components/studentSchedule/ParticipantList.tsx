@@ -3,19 +3,31 @@
 import React, { FC } from "react";
 import { css } from "emotion";
 
-import { Student, Teacher, Room, Class } from "@turbo-schedule/common";
+import { Student, Teacher, Room, Class, Participant, parseParticipants } from "@turbo-schedule/common";
 
+import { Link } from "react-router-dom";
 import { useTranslation } from "../../i18n/useTranslation";
 
 interface Props {
-	studentIds: Student["text"][];
-	teacherIds: Teacher["text"][];
-	roomIds: Room["text"][];
-	classIds: Class["text"][];
+	participants:
+		| Participant[]
+		| {
+				students: Student["text"][];
+				teachers: Teacher["text"][];
+				rooms: Room["text"][];
+				classes: Class["text"][];
+		  };
 }
 
-export const ParticipantListList: FC<Props> = ({ studentIds, teacherIds, roomIds, classIds }) => {
+/** TODO use a `table` instead? */
+export const ParticipantListList: FC<Props> = ({ participants }) => {
 	const t = useTranslation();
+
+	console.log("participants", participants);
+
+	const { students, teachers, rooms, classes } = Array.isArray(participants)
+		? parseParticipants(participants)
+		: participants;
 
 	return (
 		<div
@@ -33,10 +45,10 @@ export const ParticipantListList: FC<Props> = ({ studentIds, teacherIds, roomIds
 				}
 			`}
 		>
-			<ParticipantList participants={studentIds} summary={t("Students") + ` (${studentIds.length})`} />
-			<ParticipantList participants={teacherIds} summary={t("Teachers") + ` (${teacherIds.length})`} />
-			<ParticipantList participants={roomIds} summary={t("Rooms") + ` (${roomIds.length})`} />
-			<ParticipantList participants={classIds} summary={t("Classes") + ` (${classIds.length})`} />
+			<ParticipantList participants={students} summary={t("Students") + ` (${students.length})`} />
+			<ParticipantList participants={teachers} summary={t("Teachers") + ` (${teachers.length})`} />
+			<ParticipantList participants={rooms} summary={t("Rooms") + ` (${rooms.length})`} />
+			<ParticipantList participants={classes} summary={t("Classes") + ` (${classes.length})`} />
 		</div>
 	);
 };
@@ -103,7 +115,9 @@ const ParticipantList: FC<{ participants: string[]; summary?: string; open?: boo
 			`}
 		>
 			{participants.map((p) => (
-				<li key={p}>{p}</li>
+				<li key={p}>
+					<Link to={p}>{p}</Link>
+				</li>
 			))}
 		</ol>
 	</details>

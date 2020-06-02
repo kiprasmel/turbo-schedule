@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { throttle } from "lodash";
 
-import { Lesson, getDefaultLesson } from "@turbo-schedule/common";
+import { Lesson, getDefaultLesson, Student } from "@turbo-schedule/common";
 
 import "./StudentSchedule.scss";
 
 import Footer from "components/footer/Footer";
-import Header from "components/header/Header";
+import { Navbar } from "components/navbar/Navbar";
+import { history } from "utils/history";
 import StudentListModal from "./StudentListModal";
 import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
-import { useRenderCount } from "../../hooks/useRenderCount";
 
 import { fetchStudent } from "../../utils/fetchStudent";
 import DaySelector from "./DaySelector";
@@ -26,8 +26,6 @@ export interface IStudentScheduleProps {
 const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const t = useTranslation();
 
-	useRenderCount("schedule");
-
 	/** scroll to top of page on mount */
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -35,6 +33,8 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	/** TODO week component */
 	const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+
+	const isDesktop: boolean = windowWidth > 1024;
 
 	const baseWeekStyles: React.CSSProperties = { verticalAlign: "top" };
 	const weekStyles: React.CSSProperties = {
@@ -52,12 +52,24 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	/** END TODO week component */
 
-	const { studentName } = match.params;
+	const { params } = match;
+	const { studentName } = params;
 
 	const todaysScheduleDay: ScheduleDay = getTodaysScheduleDay({
 		defaultToDay: 0,
 	});
-	const [selectedDay, setSelectedDay] = useState<ScheduleDay>(todaysScheduleDay);
+
+	/**
+	 * TODO FIXME PARAMS - everything that comes from the route params, SHALL BE the single source of truth
+	 * without any additional bs states, because we have to sync them & bugs come real quick
+	 */
+	const [selectedDay, setSelectedDay] = useState<ScheduleDay>(
+		params.dayIndex !== undefined ? decodeDay(params.dayIndex) : todaysScheduleDay
+	);
+
+	useEffect(() => {
+		setSelectedDay(params.dayIndex !== undefined ? decodeDay(params.dayIndex) : todaysScheduleDay);
+	}, [params.dayIndex]);
 
 	// const [selectedSchedule, setSelectedSchedule] = useState<Array<Array<ILesson>> | Array<ILesson>>([]);
 
@@ -109,17 +121,28 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		wrapper();
 	}, [studentName]);
 
+	/** TODO refactor me */
 	const [showStudents, setShowStudents] = useState(false);
 
 	const [selectedLesson, setSelectedLesson] = useState<Lesson>(() => getDefaultLesson());
 
-	const handleLessonMouseClick = useCallback(
-		(_e: React.MouseEvent, lesson: Lesson) => {
-			setShowStudents((_showStudents) => !_showStudents);
-			setSelectedLesson(lesson);
-		},
-		[setShowStudents, setSelectedLesson]
-	);
+	useEffect(() => {
+		/**
+		 * it should only open the lesson if the lesson was selected
+		 * (otherwise only the day has changed on mobile).
+		 *
+		 * But if it's desktop, we have enough screen size
+		 * & we update & show the lesson even if only the day is changed
+		 */
+		const shouldShowTheLesson: boolean = showStudents || isDesktop;
+
+		navigateToDesiredPath({
+			studentName,
+			day: selectedDay,
+			timeIndex: selectedLesson.timeIndex,
+			shouldShowTheLesson,
+		});
+	}, [studentName, selectedDay, selectedLesson, isDesktop, showStudents]);
 
 	if (isLoading) {
 		return (
@@ -144,21 +167,27 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		);
 	}
 
-	const isDesktop: boolean = windowWidth > 1024;
-
 	return (
 		<>
 			{isDesktop ? (
 				<SchedulePageDesktop match={match} />
 			) : (
 				<>
-					<Header />
-
-					<BackBtn />
+					<Navbar />
 
 					<h1>{studentName}</h1>
 
-					<DaySelector selectedDay={selectedDay} handleClick={(_e, day) => setSelectedDay(day)} />
+					<DaySelector
+						selectedDay={selectedDay}
+						handleClick={(_e, day) => {
+							setSelectedDay(day);
+							// handleLessonOrDaySelection({
+							// 	day,
+							// 	lesson: selectedLesson,
+							// 	shouldShowTheLesson: false,
+							// });
+						}}
+					/>
 
 					<br />
 
@@ -171,7 +200,15 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 									lessons={lessonsArray}
 									selectedDay={selectedDay}
 									selectedLesson={null}
-									handleClick={handleLessonMouseClick}
+									handleClick={(_e, lesson) => {
+										setSelectedLesson(lesson);
+										setShowStudents(true);
+										// handleLessonOrDaySelection({
+										// 	day: selectedDay,
+										// 	lesson,
+										// 	shouldShowTheLesson: true,
+										// });
+									}}
 								/>
 							</div>
 						))
@@ -181,7 +218,15 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 								lessons={scheduleByDays[selectedDay]}
 								selectedDay={selectedDay}
 								selectedLesson={null}
-								handleClick={handleLessonMouseClick}
+								handleClick={(_e, lesson) => {
+									setSelectedLesson(lesson);
+									setShowStudents(true);
+									// handleLessonOrDaySelection({
+									// 	day: selectedDay,
+									// 	lesson,
+									// 	shouldShowTheLesson: true,
+									// });
+								}}
 							/>
 						</>
 					)}
@@ -200,3 +245,36 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 };
 
 export default StudentSchedule;
+
+/** TODO architect in such a way that we won't need this */
+const encodeDay = (day: ScheduleDay) => (day === "*" ? "*" : Number(day) + 1);
+const decodeDay = (day: number | "*"): ScheduleDay => (day === "*" ? "*" : ((day - 1) as ScheduleDay));
+
+const encodeTimeIndex = (time: number) => time + 1;
+// const decodeTimeIndex = (time: number) => time - 1;
+
+const navigateToDesiredPath = ({
+	studentName,
+	day,
+	timeIndex,
+	shouldShowTheLesson /** shall be `false` on mobile unless the lesson was selected; always `true` on desktop */,
+}: {
+	studentName: Student["text"];
+	day: ScheduleDay;
+	timeIndex: number;
+	shouldShowTheLesson: boolean;
+}): void => {
+	const encodedDay = encodeDay(day);
+	const encodedTimeIndex = encodeTimeIndex(timeIndex);
+
+	if (!studentName?.trim() || day === undefined) {
+		return;
+	}
+
+	if (timeIndex === undefined || !shouldShowTheLesson) {
+		history.push(`/${studentName}/${encodedDay}`);
+		return;
+	}
+
+	history.push(`/${studentName}/${encodedDay}/${encodedTimeIndex}`);
+};
