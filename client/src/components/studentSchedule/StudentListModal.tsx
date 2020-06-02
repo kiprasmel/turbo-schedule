@@ -51,15 +51,15 @@ const StudentListModal = ({ handleClose, lesson, isOpen, ...rest }: any) => {
 
 				<div style={{ marginTop: "1em" }}>
 					<p style={{ margin: 0 }}>{t("Lesson")}:</p>
-					{lesson.name || t("Empty__lesson")}
+					{lesson?.name || t("Empty__lesson")}
 				</div>
 
 				<div style={{ marginTop: "1em" }}>
 					<p>
-						{t("Students")} ({lesson.students.length}):
+						{t("Students")} ({lesson?.students.length}):
 					</p>
 					<ul style={{ listStyle: "disc", paddingLeft: "30px" }}>
-						{lesson.students.map((student: string, index: number) => (
+						{lesson?.students.map((student: string, index: number) => (
 							<li key={index}>{student}</li>
 						))}
 					</ul>
