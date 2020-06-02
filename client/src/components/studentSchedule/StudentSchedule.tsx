@@ -6,7 +6,7 @@ import { Lesson, getDefaultLesson } from "@turbo-schedule/common";
 import "./StudentSchedule.scss";
 
 import Footer from "components/footer/Footer";
-import Header from "components/header/Header";
+import { Navbar } from "components/navbar/Navbar";
 import StudentListModal from "./StudentListModal";
 import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
@@ -152,9 +152,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 				<SchedulePageDesktop match={match} />
 			) : (
 				<>
-					<Header />
-
-					<BackBtn />
+					<Navbar />
 
 					<h1>{studentName}</h1>
 
