@@ -6,7 +6,8 @@ import { Lesson, getDefaultLesson } from "@turbo-schedule/common";
 import "./StudentSchedule.scss";
 
 import Footer from "components/footer/Footer";
-import Header from "components/header/Header";
+import { Navbar } from "components/navbar/Navbar";
+import { history } from "utils/history";
 import StudentListModal from "./StudentListModal";
 import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
@@ -52,12 +53,16 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	/** END TODO week component */
 
-	const { studentName } = match.params;
+	const { params } = match;
+	const { studentName } = params;
 
 	const todaysScheduleDay: ScheduleDay = getTodaysScheduleDay({
 		defaultToDay: 0,
 	});
-	const [selectedDay, setSelectedDay] = useState<ScheduleDay>(todaysScheduleDay);
+
+	const [selectedDay, setSelectedDay] = useState<ScheduleDay>(
+		params.dayIndex === "*" ? "*" : ((Number(params.dayIndex) - 1) as ScheduleDay) ?? todaysScheduleDay
+	);
 
 	// const [selectedSchedule, setSelectedSchedule] = useState<Array<Array<ILesson>> | Array<ILesson>>([]);
 
@@ -117,8 +122,25 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		(_e: React.MouseEvent, lesson: Lesson) => {
 			setShowStudents((_showStudents) => !_showStudents);
 			setSelectedLesson(lesson);
+
+			console.log("yeet", studentName, selectedDay, selectedLesson);
+
+			/**
+			 * TODO FIXME LATE by 1
+			 *
+			 * TODO FIXME Avoid this annoying parsing back & forth - change up the API itself?
+			 */
+			selectedLesson
+				? history.push(
+					`/${studentName}/${selectedDay === "*" ? "*" : Number(selectedDay) + 1}/${
+						selectedLesson.timeIndex + 1
+					}`
+				  )
+				: selectedDay
+					? history.push(`/${studentName}/${selectedDay === "*" ? "*" : Number(selectedDay) + 1}`)
+					: history.push(`/${studentName}/`);
 		},
-		[setShowStudents, setSelectedLesson]
+		[setShowStudents, setSelectedLesson, selectedDay, selectedLesson, studentName]
 	);
 
 	if (isLoading) {
@@ -152,13 +174,17 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 				<SchedulePageDesktop match={match} />
 			) : (
 				<>
-					<Header />
-
-					<BackBtn />
+					<Navbar />
 
 					<h1>{studentName}</h1>
 
-					<DaySelector selectedDay={selectedDay} handleClick={(_e, day) => setSelectedDay(day)} />
+					<DaySelector
+						selectedDay={selectedDay}
+						handleClick={(_e, day) => {
+							setSelectedDay(day);
+							handleLessonMouseClick(_e, selectedLesson);
+						}}
+					/>
 
 					<br />
 
