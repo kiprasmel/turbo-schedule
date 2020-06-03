@@ -28,6 +28,10 @@ const App: FC = () => (
 						<Switch>
 							<Route exact path="/" component={Landing} />
 							<Route exact path="/:studentName" component={StudentSchedule} />
+							<Route exact path="/:studentName/:dayIndex" component={StudentSchedule} />
+							<Route exact path="/:studentName/:dayIndex/:timeIndex" component={StudentSchedule} />
+							<Route exact path="/:studentName/:dayIndex/\*" component={StudentSchedule} />
+							<Route exact path="/:studentName/:dayIndex/:timeIndex/\*" component={StudentSchedule} />
 
 							{/* BACKWARDS-COMPATIBILITY -- REMOVE LATER */}
 							<Route exact path="/student/:studentName" component={StudentSchedule} />
