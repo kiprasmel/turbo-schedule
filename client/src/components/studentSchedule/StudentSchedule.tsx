@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { throttle } from "lodash";
 
-import { Lesson, getDefaultLesson } from "@turbo-schedule/common";
+import { Lesson, Student } from "@turbo-schedule/common";
 
 import "./StudentSchedule.scss";
 
 import Footer from "components/footer/Footer";
-import Header from "components/header/Header";
+import { Navbar } from "components/navbar/Navbar";
+import { history } from "utils/history";
 import StudentListModal from "./StudentListModal";
 import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
-import { useRenderCount } from "../../hooks/useRenderCount";
 
 import { fetchStudent } from "../../utils/fetchStudent";
 import DaySelector from "./DaySelector";
@@ -23,10 +23,48 @@ export interface IStudentScheduleProps {
 	match: any /** TODO */;
 }
 
+// type CausedBy = "initialLoad" | "routerParamChange" | "daySelection";
+
+// interface DaySelectionState {
+// 	day: ScheduleDay;
+// 	causedBy: CausedBy;
+
+// 	/** this will be true once the the `causedBy` is `"daySelection"`,
+// 	 * since the router params will react,
+// 	 * and thus we'll want to avoid going back
+// 	 */
+// 	hasAlreadyBeenNavigatedTo?: boolean;
+// }
+
+// const daySelectorReducer = (
+// 	state: DaySelectionState,
+// 	action: Omit<DaySelectionState, "hasAlreadyBeenNavigatedTo">
+// ): DaySelectionState => {
+// 	let hasAlreadyBeenNavigatedTo: boolean = false;
+
+// 	if (
+// 		state.day === action.day ||
+// 		(state.causedBy === "routerParamChange" && action.causedBy === "routerParamChange")
+// 	) {
+// 		hasAlreadyBeenNavigatedTo = true;
+// 	}
+
+// 	if (hasAlreadyBeenNavigatedTo) {
+// 		return { ...state, causedBy: action.causedBy, hasAlreadyBeenNavigatedTo };
+// 	} else {
+// 		return {
+// 			...state,
+// 			...action,
+// 			hasAlreadyBeenNavigatedTo,
+// 		};
+// 	}
+// 	// ...state,
+// 	// ...action,
+// 	// hasAlreadyBeenNavigatedTo: state.day === action.day,
+// };
+
 const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const t = useTranslation();
-
-	useRenderCount("schedule");
 
 	/** scroll to top of page on mount */
 	useEffect(() => {
@@ -35,6 +73,8 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	/** TODO week component */
 	const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+
+	const isDesktop: boolean = windowWidth > 1024;
 
 	const baseWeekStyles: React.CSSProperties = { verticalAlign: "top" };
 	const weekStyles: React.CSSProperties = {
@@ -52,12 +92,48 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	/** END TODO week component */
 
-	const { studentName } = match.params;
+	const { params } = match;
+	const { studentName } = params;
 
-	const todaysScheduleDay: ScheduleDay = getTodaysScheduleDay({
-		defaultToDay: 0,
-	});
-	const [selectedDay, setSelectedDay] = useState<ScheduleDay>(todaysScheduleDay);
+	// const todaysScheduleDay: ScheduleDay = getTodaysScheduleDay({
+	// 	defaultToDay: 0,
+	// });
+
+	/**
+	 * TODO FIXME PARAMS - everything that comes from the route params, SHALL BE the single source of truth
+	 * without any additional bs states, because we have to sync them & bugs come real quick
+	 *
+	 * oh wow we're gonna have to have a reducer here xoxo
+	 */
+	// // const [selectedDay, setSelectedDay] = useState<ScheduleDay>(
+	// // 	params.dayIndex !== undefined ? decodeDay(params.dayIndex) : todaysScheduleDay
+	// // );
+
+	/** lol I just understood how `setState` works
+	 * & how it's identical to a reducer that does this:
+	 *
+	 * `(state, action) => ({ ...state, ...action })`
+	 *
+	 */
+	// const [selectedDayState, dispatchSelectedDayState] = useReducer(
+	// 	daySelectorReducer,
+	// 	params.dayIndex !== undefined
+	// 		? { day: decodeDay(params.dayIndex), causedBy: "initialLoad" }
+	// 		: { day: todaysScheduleDay, causedBy: "initialLoad" }
+	// );
+
+	/** TODO FIXME ROUTER's state -- investigate */
+	// useEffect(() => {
+	// 	setSelectedDay(params.dayIndex !== undefined ? decodeDay(params.dayIndex) : todaysScheduleDay);
+	// }, [params.dayIndex, todaysScheduleDay]);
+
+	// useEffect(() => {
+	// 	dispatchSelectedDayState(
+	// 		params.dayIndex !== undefined
+	// 			? { day: decodeDay(params.dayIndex), causedBy: "routerParamChange" }
+	// 			: { day: todaysScheduleDay, causedBy: "routerParamChange" }
+	// 	);
+	// }, [params.dayIndex, todaysScheduleDay]);
 
 	// const [selectedSchedule, setSelectedSchedule] = useState<Array<Array<ILesson>> | Array<ILesson>>([]);
 
@@ -109,17 +185,82 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		wrapper();
 	}, [studentName]);
 
-	const [showStudents, setShowStudents] = useState(false);
+	/**
+	 * mimic the selectedDay
+	 *
+	 * TODO FIXME SINGLE-source-of-truth - remove this
+	 */
+	const [selectedDay, __setSelectedDay] = useState<ScheduleDay>(getTodaysScheduleDay({ defaultToDay: 0 }));
+	useEffect(() => {
+		__setSelectedDay(decodeDay(params.dayIndex));
+	}, [params.dayIndex]);
 
-	const [selectedLesson, setSelectedLesson] = useState<Lesson>(() => getDefaultLesson());
+	const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 
-	const handleLessonMouseClick = useCallback(
-		(_e: React.MouseEvent, lesson: Lesson) => {
-			setShowStudents((_showStudents) => !_showStudents);
-			setSelectedLesson(lesson);
-		},
-		[setShowStudents, setSelectedLesson]
-	);
+	useEffect(() => {
+		if (params.timeIndex === undefined || !scheduleByDays?.[selectedDay]?.length) {
+			setSelectedLesson(null);
+			return;
+		}
+
+		const lesson: Lesson = scheduleByDays[selectedDay].find(
+			(l: Lesson) => l.timeIndex === decodeTimeIndex(params.timeIndex)
+		);
+
+		console.log("lesson", lesson);
+
+		if (!lesson) {
+			return;
+		}
+
+		setSelectedLesson(lesson);
+	}, [params.timeIndex, scheduleByDays, selectedDay]);
+
+	// useEffect(() => {
+	// 	console.log(selectedDayState);
+
+	// 	if (selectedDayState.hasAlreadyBeenNavigatedTo) {
+	// 		return;
+	// 	}
+
+	// 	if (selectedDayState.causedBy === "daySelection") {
+	// 		console.log("forward");
+
+	// 		/**
+	// 		 * it should only open the lesson if the lesson was selected
+	// 		 * (otherwise only the day has changed on mobile).
+	// 		 *
+	// 		 * But if it's desktop, we have enough screen size
+	// 		 * & we update & show the lesson even if only the day is changed
+	// 		 */
+	// 		const shouldShowTheLesson: boolean = !!selectedLesson || isDesktop;
+
+	// 		navigateToDesiredPath({
+	// 			studentName,
+	// 			day: selectedDayState.day,
+	// 			timeIndex: selectedLesson?.timeIndex,
+	// 			shouldShowTheLesson,
+	// 		});
+
+	// 		// } else if (selectedDayState.causedBy === "daySelection") {
+	// 		// 	const desiredPath: string | undefined = navigateToDesiredPath({
+	// 		// 		studentName,
+	// 		// 		day: selectedDayState.day,
+	// 		// 		timeIndex: selectedLesson?.timeIndex,
+	// 		// 		shouldShowTheLesson,
+	// 		// 	});
+
+	// 		// 	if (!desiredPath) {
+	// 		// 		return;
+	// 		// 	}
+
+	// 		// 	history.push(desiredPath);
+	// 	} else if (selectedDayState.causedBy === "routerParamChange" && !selectedDayState.hasAlreadyBeenNavigatedTo) {
+	// 		console.log("back");
+
+	// 		history.goBack();
+	// 	}
+	// }, [studentName, selectedDayState, selectedLesson, isDesktop]);
 
 	if (isLoading) {
 		return (
@@ -144,24 +285,33 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		);
 	}
 
-	const isDesktop: boolean = windowWidth > 1024;
-
 	return (
 		<>
 			{isDesktop ? (
 				<SchedulePageDesktop match={match} />
 			) : (
 				<>
-					<Header />
-
-					<BackBtn />
+					<Navbar />
 
 					<h1>{studentName}</h1>
 
-					<DaySelector selectedDay={selectedDay} handleClick={(_e, day) => setSelectedDay(day)} />
+					<DaySelector
+						selectedDay={selectedDay}
+						handleClick={(_e, day) => {
+							// dispatchSelectedDayState({ day, causedBy: "daySelection" });
+
+							navigateToDesiredPath({
+								studentName,
+								day: day,
+								timeIndex: selectedLesson?.timeIndex,
+								shouldShowTheLesson: !!selectedLesson || isDesktop,
+							});
+						}}
+					/>
 
 					<br />
 
+					{/* {selectedDayState.day === "*" ? ( */}
 					{selectedDay === "*" ? (
 						scheduleByDays.map((lessonsArray, index) => (
 							<div key={index} style={weekStyles}>
@@ -171,7 +321,16 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 									lessons={lessonsArray}
 									selectedDay={selectedDay}
 									selectedLesson={null}
-									handleClick={handleLessonMouseClick}
+									handleClick={(_e, lesson) => {
+										navigateToDesiredPath({
+											studentName,
+											day: selectedDay,
+											timeIndex: lesson?.timeIndex,
+											shouldShowTheLesson: !!lesson || isDesktop,
+										});
+
+										setSelectedLesson(lesson);
+									}}
 								/>
 							</div>
 						))
@@ -180,15 +339,28 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 							<LessonsList
 								lessons={scheduleByDays[selectedDay]}
 								selectedDay={selectedDay}
-								selectedLesson={null}
-								handleClick={handleLessonMouseClick}
+								// selectedLesson={null}
+								selectedLesson={selectedLesson}
+								handleClick={(_e, lesson) => {
+									navigateToDesiredPath({
+										studentName,
+										day: selectedDay,
+										timeIndex: lesson?.timeIndex,
+										shouldShowTheLesson: !!lesson || isDesktop,
+									});
+
+									setSelectedLesson(lesson);
+								}}
 							/>
 						</>
 					)}
 
 					<StudentListModal
-						isOpen={showStudents}
-						handleClose={() => setShowStudents((_showStudents) => !_showStudents)}
+						isOpen={!!selectedLesson}
+						handleClose={() => {
+							history.goBack();
+							setSelectedLesson(null);
+						}}
 						lesson={selectedLesson}
 					/>
 
@@ -200,3 +372,37 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 };
 
 export default StudentSchedule;
+
+/** TODO architect in such a way that we won't need this */
+const encodeDay = (day: ScheduleDay) => (day === "*" ? "*" : Number(day) + 1);
+const decodeDay = (day: number | "*"): ScheduleDay => (day === "*" ? "*" : ((day - 1) as ScheduleDay));
+
+const encodeTimeIndex = (time: number): number => time + 1;
+const decodeTimeIndex = (time: number | string): number => Number(time) - 1;
+
+const navigateToDesiredPath = ({
+	studentName,
+	day,
+	timeIndex,
+	shouldShowTheLesson /** shall be `false` on mobile unless the lesson was selected; always `true` on desktop */,
+}: {
+	studentName: Student["text"];
+	day?: ScheduleDay;
+	timeIndex?: number;
+	shouldShowTheLesson: boolean;
+}): void => {
+	if (!studentName?.trim() || day === undefined) {
+		return;
+	}
+
+	const encodedDay = encodeDay(day);
+
+	if (timeIndex === undefined || !shouldShowTheLesson) {
+		history.push(`/${studentName}/${encodedDay}`);
+		return;
+	}
+
+	const encodedTimeIndex = encodeTimeIndex(timeIndex);
+
+	history.push(`/${studentName}/${encodedDay}/${encodedTimeIndex}`);
+};
