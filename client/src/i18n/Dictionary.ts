@@ -1,4 +1,8 @@
 export interface Dictionary {
+	"Turbo Schedule": string;
+	Schedule: string;
+	Statistics: string;
+	About: string;
 	Language: string;
 	en: string;
 	lt: string;
@@ -22,4 +26,9 @@ export interface Dictionary {
 	Close: string;
 	Empty__lesson: string;
 	Students: string;
+	Teachers: string;
+	Classes: string;
+	Rooms: string;
+	toCompactString: (items: string[]) => string;
+	"Made with love by (__html)": string;
 }

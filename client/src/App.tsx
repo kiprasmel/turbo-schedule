@@ -3,13 +3,12 @@ import { Router, Switch, Route } from "react-router-dom";
 
 import "./App.scss";
 
+import { SchedulePageDesktop } from "./components/studentSchedule/SchedulePageDesktop";
 import CurrentLangContextProvider from "./components/currentLangContext/CurrentLangContextProvider";
 
 /** pages */
-import Header from "./components/header/Header";
 import Landing from "./components/landing/Landing";
 import StudentSchedule from "./components/studentSchedule/StudentSchedule";
-import Footer from "./components/footer/Footer";
 
 /** misc */
 import { history } from "./utils/history";
@@ -22,21 +21,23 @@ const App: FC = () => (
 	<>
 		<CurrentLangContextProvider>
 			<div className="App">
-				{/* wrap before footer */}
-				<div style={{ minHeight: "100vh" }}>
-					<Header />
+				<div>
 					<Router history={history}>
 						<Switch>
 							<Route exact path="/" component={Landing} />
 							<Route exact path="/:studentName" component={StudentSchedule} />
+							<Route exact path="/:studentName/:dayIndex" component={StudentSchedule} />
+							<Route exact path="/:studentName/:dayIndex/:timeIndex" component={StudentSchedule} />
+							<Route exact path="/:studentName/:dayIndex/\*" component={StudentSchedule} />
+							<Route exact path="/:studentName/:dayIndex/:timeIndex/\*" component={StudentSchedule} />
 
 							{/* BACKWARDS-COMPATIBILITY -- REMOVE LATER */}
 							<Route exact path="/student/:studentName" component={StudentSchedule} />
+
+							<Route exact path="/new/:participantHandle" component={SchedulePageDesktop} />
 						</Switch>
 					</Router>
 				</div>
-
-				<Footer />
 			</div>
 		</CurrentLangContextProvider>
 	</>

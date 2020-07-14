@@ -36,6 +36,10 @@ const CloseBtn: FC<ICloseBtnProps> = ({ handleClose, text, ...rest }) => {
 const StudentListModal = ({ handleClose, lesson, isOpen, ...rest }: any) => {
 	const t = useTranslation();
 
+	if (!lesson?.students) {
+		return null;
+	}
+
 	return (
 		<>
 			<ReactModal
@@ -45,21 +49,26 @@ const StudentListModal = ({ handleClose, lesson, isOpen, ...rest }: any) => {
 				shouldReturnFocusAfterClose
 				isOpen={isOpen}
 				onRequestClose={() => handleClose()}
+				style={{
+					overlay: {
+						zIndex: 120,
+					},
+				}}
 				{...rest}
 			>
 				<CloseBtn handleClose={handleClose} style={{ marginTop: "1em" }} autoFocus />
 
 				<div style={{ marginTop: "1em" }}>
 					<p style={{ margin: 0 }}>{t("Lesson")}:</p>
-					{lesson.name || t("Empty__lesson")}
+					{lesson?.name || t("Empty__lesson")}
 				</div>
 
 				<div style={{ marginTop: "1em" }}>
 					<p>
-						{t("Students")} ({lesson.students.length}):
+						{t("Students")} ({lesson?.students.length}):
 					</p>
 					<ul style={{ listStyle: "disc", paddingLeft: "30px" }}>
-						{lesson.students.map((student: string, index: number) => (
+						{lesson?.students.map((student: string, index: number) => (
 							<li key={index}>{student}</li>
 						))}
 					</ul>
