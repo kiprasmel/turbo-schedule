@@ -3,55 +3,84 @@
 import React, { FC } from "react";
 import { css } from "emotion";
 
-import { Student, Teacher, Room, Class } from "@turbo-schedule/common";
+import { Student, Teacher, Room, Class, Participant, parseParticipants } from "@turbo-schedule/common";
 
+import { Link } from "react-router-dom";
 import { useTranslation } from "../../i18n/useTranslation";
 
 interface Props {
-	studentIds: Student["text"][];
-	teacherIds: Teacher["text"][];
-	roomIds: Room["text"][];
-	classIds: Class["text"][];
+	participants:
+		| Participant[]
+		| {
+				students: Student["text"][];
+				teachers: Teacher["text"][];
+				rooms: Room["text"][];
+				classes: Class["text"][];
+		  };
 }
 
-export const ParticipantListList: FC<Props> = ({ studentIds, teacherIds, roomIds, classIds }) => {
+export const ParticipantListList: FC<Props> = ({ participants }) => {
 	const t = useTranslation();
+
+	console.log("participants", participants);
+
+	const { students, teachers, rooms, classes } = Array.isArray(participants)
+		? parseParticipants(participants)
+		: participants;
+
+	const isOnlyOneMatchingParticipant: boolean =
+		students.length + teachers.length + rooms.length + classes.length === 1;
 
 	return (
 		<div
 			className={css`
-				display: flex;
-				justify-content: space-around;
-				/* justify-content: space-between; */
-				flex-wrap: wrap;
+				display: grid;
 
-				text-align: left;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 				font-size: 0.75em;
 
 				& > * + * {
-					margin-left: 2em;
+					margin-top: 2rem;
 				}
 			`}
 		>
-			<ParticipantList participants={studentIds} summary={t("Students") + ` (${studentIds.length})`} />
-			<ParticipantList participants={teacherIds} summary={t("Teachers") + ` (${teacherIds.length})`} />
-			<ParticipantList participants={roomIds} summary={t("Rooms") + ` (${roomIds.length})`} />
-			<ParticipantList participants={classIds} summary={t("Classes") + ` (${classIds.length})`} />
+			<ParticipantList
+				participants={students}
+				summary={t("Students") + ` (${students.length})`}
+				isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant}
+			/>
+			<ParticipantList
+				participants={teachers}
+				summary={t("Teachers") + ` (${teachers.length})`}
+				isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant}
+			/>
+			<ParticipantList
+				participants={rooms}
+				summary={t("Rooms") + ` (${rooms.length})`}
+				isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant}
+			/>
+			<ParticipantList
+				participants={classes}
+				summary={t("Classes") + ` (${classes.length})`}
+				isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant}
+			/>
 		</div>
 	);
 };
 
-const ParticipantList: FC<{ participants: string[]; summary?: string; open?: boolean }> = ({
-	participants = [],
-	summary = "",
-	open = true,
-}) => (
+const ParticipantList: FC<{
+	participants: string[];
+	summary?: string;
+	open?: boolean;
+	isOnlyOneMatchingParticipant?: boolean;
+}> = ({ participants = [], summary = "", open = true, isOnlyOneMatchingParticipant = false }) => (
 	<details
 		className={css`
+			margin-left: auto;
+			margin-right: auto;
+
 			text-align: left;
 			font-size: 1.5em;
-
-			position: relative;
 
 			outline: none;
 		`}
@@ -103,7 +132,21 @@ const ParticipantList: FC<{ participants: string[]; summary?: string; open?: boo
 			`}
 		>
 			{participants.map((p) => (
-				<li key={p}>{p}</li>
+				<li
+					key={p}
+					className={css`
+						${isOnlyOneMatchingParticipant && "font-weight: 600; font-size: 1.69rem;"}
+					`}
+				>
+					<Link
+						to={p}
+						className={css`
+							${isOnlyOneMatchingParticipant && "border-bottom: 3px solid #000;"}
+						`}
+					>
+						{p}
+					</Link>
+				</li>
 			))}
 		</ol>
 	</details>
