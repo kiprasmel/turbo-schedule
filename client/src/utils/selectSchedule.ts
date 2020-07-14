@@ -34,7 +34,7 @@ export type ScheduleDayKind = IScheduleDays[keyof IScheduleDays];
 // 	en: ["Week", 1, 2, 3, 4, 5],
 // };
 
-export const scheduleDaysArray: Array<ScheduleDay> = ["*", 0, 1, 2, 3, 4];
+export const scheduleDaysArray: Array<ScheduleDay> = [/** "*", */ 0, 1, 2, 3, 4];
 
 export const selectSchedule = (scheduleByDays: Array<Array<Lesson>>, day: ScheduleDay) => {
 	if (day === "*") {
