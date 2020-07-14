@@ -17,7 +17,7 @@ export const LessonsList: FC<{
 	selectedDay: ScheduleDay;
 	selectedLesson: Lesson | null;
 	handleClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, lesson: Lesson) => any;
-}> = ({ lessons = [], selectedDay, selectedLesson, handleClick }) => (
+}> = ({ lessons = [], selectedLesson, handleClick, selectedDay }) => (
 	<nav
 		className={css`
 			/* background: lightgreen; */
@@ -115,7 +115,6 @@ const LessonsListItem: FC<{
 						`}
 					/>
 				)}
-
 				<div>
 					<header
 						className={css`
