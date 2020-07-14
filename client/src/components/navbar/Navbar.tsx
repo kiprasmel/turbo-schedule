@@ -17,7 +17,6 @@ interface Props {
 }
 
 export const Navbar = forwardRef<HTMLElement, Props>((props, ref) => {
-	// export const Navbar: FC<Props> = (props) => {
 	const isDesktop = window.innerWidth >= 1024; /** TODO FIXME WWidth */
 
 	const { search } = props;
@@ -38,16 +37,10 @@ export const Navbar = forwardRef<HTMLElement, Props>((props, ref) => {
 		<NavbarMobile {...props} SearchElement={SearchElement} ref={ref} />
 	);
 
-	// useLayoutEffect(() => {
-	// 	search?.searchElementRef?.current?.focus();
-	// 	search?.searchElementRef?.current?.click();
-	// }, []);
-
 	/** TODO individual `nav` elements instead of some smart wrapper lmao */
 	return NavbarElement;
 });
 
-// const NavbarDesktop: FC<{ SearchElement?: JSX.Element }> = (props) => {
 const NavbarDesktop = forwardRef<HTMLElement, { SearchElement?: JSX.Element }>((props, ref) => {
 	const { SearchElement } = props;
 
@@ -57,12 +50,8 @@ const NavbarDesktop = forwardRef<HTMLElement, { SearchElement?: JSX.Element }>((
 		<nav
 			ref={ref}
 			className={css`
-				/* background: red; */
-				/* flex: 0 1 auto; */
 				width: 100%;
 
-				/* min-height: 3.75em;
-					height: 3.75em; */
 				max-height: 6rem;
 				height: 6rem;
 				font-size: 1.25em;
@@ -71,7 +60,6 @@ const NavbarDesktop = forwardRef<HTMLElement, { SearchElement?: JSX.Element }>((
 				flex-direction: row;
 				align-items: center;
 				justify-content: end;
-				/* justify-content: space-between; */
 
 				padding-left: 2em;
 				padding-right: 2em;

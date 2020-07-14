@@ -21,8 +21,6 @@ const App: FC = () => (
 	<>
 		<CurrentLangContextProvider>
 			<div className="App">
-				{/* wrap before footer */}
-				{/* <div style={{ minHeight: "100vh" }}> */}
 				<div>
 					<Router history={history}>
 						<Switch>

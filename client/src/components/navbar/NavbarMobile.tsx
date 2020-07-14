@@ -54,7 +54,6 @@ const menuMachine = createMachine({
 });
 
 /** TODO FIXME no scrolling behind the scenes */
-// export const NavbarMobile: FC<{ SearchElement?: JSX.Element }> = ({ SearchElement }) => {
 export const NavbarMobile = forwardRef<HTMLElement, { SearchElement?: JSX.Element }>(({ SearchElement }, ref) => {
 	const t = useTranslation();
 
@@ -134,11 +133,6 @@ export const NavbarMobile = forwardRef<HTMLElement, { SearchElement?: JSX.Elemen
 					<Link
 						to="/"
 						onClick={(_e) => sendMenuState("CLOSE")}
-						/**
-						 * close the nav popup too.
-						 * TODO FIXME - closes without animation if we're not in the main page (because of the route change probably)
-						 */
-
 						className={css`
 							display: inline-block;
 

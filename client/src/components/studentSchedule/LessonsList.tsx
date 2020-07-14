@@ -20,18 +20,11 @@ export const LessonsList: FC<{
 }> = ({ lessons = [], selectedLesson, handleClick, selectedDay }) => (
 	<nav
 		className={css`
-			/* background: lightgreen; */
 			flex: 2;
 			flex-shrink: 1;
-			/* flex: auto; */
 
 			min-width: 20em;
 
-			/* max-width: 100%;
-						width: 100%; */
-			/* max-height: 100%;
-						height: 100%;
-						overflow-x: hidden; */
 			overflow-y: auto;
 		`}
 	>
@@ -91,10 +84,6 @@ const LessonsListItem: FC<{
 				}}
 				className={css`
 					padding: 1em 2em;
-					/* padding-left: 2em;
-					padding-right: 2em;
-					padding-top: 1.25em;
-					padding-bottom: 1.25em; */
 
 					width: 100%;
 					height: 100%;
@@ -111,7 +100,6 @@ const LessonsListItem: FC<{
 							height: 100%;
 
 							background: #000;
-							/* border-left: 0.75em solid #000; */
 						`}
 					/>
 				)}

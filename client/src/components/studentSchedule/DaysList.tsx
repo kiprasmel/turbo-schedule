@@ -42,9 +42,6 @@ export const DaysList: FC<Props> = ({ selectedDay, setSelectedDay }) => (
 				& > * + * {
 					border-top: 1px solid #000;
 				}
-				/* & > :nth-child(odd) {
-								border-top: 1px solid #000;
-							} */
 			`}
 		>
 			{scheduleDaysArray.map((dayIndex) => (
@@ -70,7 +67,6 @@ export const DaysList: FC<Props> = ({ selectedDay, setSelectedDay }) => (
 								height: 100%;
 
 								background: #000;
-								/* border-left: 0.75em solid #000; */
 							`}
 						/>
 					)}

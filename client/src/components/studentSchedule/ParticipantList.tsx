@@ -92,24 +92,6 @@ const ParticipantList: FC<{
 					cursor: pointer;
 
 					outline: none;
-					/* &::after {
-							position: absolute;
-							bottom: 0;
-							left: 0;
-
-							content: "";
-							height: 1px;
-							background: #000;
-							width: 0;
-
-							transition: 200ms ease-out;
-						}
-
-						&:hover::after, &:focus::after {
-								transition: 200ms ease-in;
-								width: 100%;
-							}
-						} */
 				`}
 			>
 				<span>{summary}</span>

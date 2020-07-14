@@ -25,15 +25,9 @@ export const LessonDisplay: FC<Props> = ({ lesson }) => {
 	return (
 		<section
 			className={css`
-				/* --scale-sm: 2; */
 				--scale-lg: 3;
 
 				padding: 3em 4em;
-
-				/* padding-left: calc(2em * var(--scale-lg));
-										padding-right: calc(2em * var(--scale-lg));
-										padding-top: calc(1.25em * var(--scale-lg));
-										padding-bottom: calc(1.25em * var(--scale-lg)); */
 
 				& > * + * {
 					margin-top: 3em;
@@ -81,7 +75,6 @@ export const LessonDisplay: FC<Props> = ({ lesson }) => {
 			<div
 				className={css`
 					display: flex;
-					/* justify-content: space-between; */
 					justify-content: flex-end;
 					align-items: flex-start;
 
