@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/sarpik/turbo-schedule/compare/v2.7.3...v2.8.0) (2020-07-14)
+
+
+### Bug Fixes
+
+* **client:** Create miscallanious fixes & improvements ([29141bf](https://github.com/sarpik/turbo-schedule/commit/29141bfc81d899ffd987996f04976d6f930ddb3b))
+* **client:** Do not export `useTranslation` from `i18n` - errors with cycles ([24fb5c2](https://github.com/sarpik/turbo-schedule/commit/24fb5c2fc488671cee3f69cd4e703752298fc295))
+* **client:** Do not filter out lessons by index if the selectedDay is `*` ([c6644e3](https://github.com/sarpik/turbo-schedule/commit/c6644e354c016b2123c161ddc238aac61de44feb))
+* **client:** Fixes after review ([56e7cd8](https://github.com/sarpik/turbo-schedule/commit/56e7cd84ad3afbc7b429da209f3ff96ee5ecd2fe))
+* **client:** Handle StudentListModal's edge cases & add z-index ([e167c2c](https://github.com/sarpik/turbo-schedule/commit/e167c2cae963535bcb3c472d9ac7562db24d9e99))
+* **client:** Improve DaySelector's styles & css ([a51a255](https://github.com/sarpik/turbo-schedule/commit/a51a2550a8ac6a4d6a7057c53101ef2aa8599bd7))
+* **client:** Temporarely disable the "*" (week) schedule selection ([cc5acbe](https://github.com/sarpik/turbo-schedule/commit/cc5acbe829cb34587013fc017a4dbfe3cb89ce80))
+
+
+### Features
+
+* **client:** Add a few translations ([438a24b](https://github.com/sarpik/turbo-schedule/commit/438a24b6190aef31450eedc780420ef7b8144e4e))
+* **client:** Add some crazy amazing navigation @ mobile student schedule 🔥🔥🔥 ([6ef72e8](https://github.com/sarpik/turbo-schedule/commit/6ef72e83e52159eaf1ce9d1fae91fb5f5d26b33b))
+* **client:** Add some css resets for `a`, `button` etc. ([01da2db](https://github.com/sarpik/turbo-schedule/commit/01da2dbaa3e82158d5dfbcd771243fd2bc43388e))
+* **client:** Allow using `Header` & `Footer` conditionally ([9af0b85](https://github.com/sarpik/turbo-schedule/commit/9af0b85e4d2ef1563680badbba9ffe9a5b37fdeb))
+* **client:** Create `getLesson(Start|End)Time` utils ([96965a5](https://github.com/sarpik/turbo-schedule/commit/96965a59c92d648c511d6db331b48c47df9569cd))
+* **client:** Create a different, way better & simplier LangSelect! ([7a6d9b1](https://github.com/sarpik/turbo-schedule/commit/7a6d9b154e46e460f9aaccbd9883b82171c88b9d))
+* **client:** Create a separate Navbar for mobile & improve both! 🔥🔥 ([7058e89](https://github.com/sarpik/turbo-schedule/commit/7058e89c84049f5452ef33c82875084c9ed9cfca))
+* **client:** Create the alpha version of the new `SchedulePage`! 🔥 ([2ccb0b7](https://github.com/sarpik/turbo-schedule/commit/2ccb0b75f8590122057c3c0dc68809a89fa63cf1))
+* **client:** Improve the shit outta the Landing page! 🚀 ([34b2572](https://github.com/sarpik/turbo-schedule/commit/34b2572ca8d402923e8e5b14c40be4f742b20ef1))
+* **client:** Install emotion 💅 ([87d4fab](https://github.com/sarpik/turbo-schedule/commit/87d4fab9407916218ae36a7e9a495aca9c52bf9c))
+* **client:** Make ParticipantList actually good! 🚀 ([4e58371](https://github.com/sarpik/turbo-schedule/commit/4e583710b49a4a2da3779ac0601cf1cd1c896bc4))
+* **client:** Strike trough the lesson number if it's empty 〰 ([4f517f1](https://github.com/sarpik/turbo-schedule/commit/4f517f1291dabb1968594a3eab06f20d14e2ca27))
+* **client:** Use the new Navbar instead of the old Header @ Landing! ([3417e60](https://github.com/sarpik/turbo-schedule/commit/3417e60239fe5b75d5fe5d55fa17e6f701974cbc))
+
+
+
+
+
 ## [2.7.3](https://github.com/sarpik/turbo-schedule/compare/v2.7.2...v2.7.3) (2020-05-27)
 
 

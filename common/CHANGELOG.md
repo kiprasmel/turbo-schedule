@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/sarpik/turbo-schedule/compare/v2.7.3...v2.8.0) (2020-07-14)
+
+
+### Features
+
+* **common:** Create `parseParticipants` util ([cb75fa5](https://github.com/sarpik/turbo-schedule/commit/cb75fa5fc0aa1e016ce5faecef0ac7c1b6cbe5b6))
+
+
+
+
+
 ## [2.7.3](https://github.com/sarpik/turbo-schedule/compare/v2.7.2...v2.7.3) (2020-05-27)
 
 
