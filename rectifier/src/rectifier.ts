@@ -3,10 +3,11 @@
 
 import _debug from "debug";
 import fs from "fs-extra";
+import path from "path";
 import cheerio from "cheerio";
 import prettier from "prettier";
 
-import { getHtml, Lesson, Change } from "@turbo-schedule/common";
+import { Lesson, Change } from "@turbo-schedule/common";
 import { Db, initDb } from "@turbo-schedule/database";
 
 import { findTimeIndexes } from "./findTimeIndexes";
@@ -17,8 +18,12 @@ const debug = _debug("rectifier");
  *
  */
 const rectifier = async (): Promise<void> => {
-	const url: string = encodeURI("http://kpg.lt/pamokų-pakeitimai/");
-	const htmlRaw: string = await getHtml(url);
+	// const url: string = encodeURI("http://kpg.lt/pamokų-pakeitimai/");
+	// const htmlRaw: string = await getHtml(url);
+
+	const htmlRaw: string = await fs.readFile(path.join(__dirname, "..", "samples", "pp-20190603231728.html"), {
+		encoding: "utf-8",
+	});
 
 	/**
 	 * remove `&nbsp;` etc.
@@ -43,9 +48,12 @@ const rectifier = async (): Promise<void> => {
 	let lessons: Lesson[] = await db.get("lessons").value();
 
 	lessons = lessons.map((lesson) => {
+		// console.log("lesson", lesson);
+
 		const { teacher } = lesson;
 
-		if (!teacher) {
+		// console.log("teach", " " + teacher + " ");
+		if (!teacher?.trim()) {
 			return lesson;
 		}
 
@@ -138,6 +146,8 @@ const rectifier = async (): Promise<void> => {
 			.map((value) => value.trim().replace(/\s+/g, " "))
 			.filter((value) => !!value);
 
+		console.log("currChanges", currChanges);
+
 		/** remove trash */
 		currChanges = currChanges.filter((change) => !isTrash(change));
 
@@ -182,6 +192,7 @@ const rectifier = async (): Promise<void> => {
 
 			debug("newParsedChanges %o", newParsedChanges);
 
+			console.log("parsedChanges", parsedChanges);
 			parsedChanges = [...parsedChanges, ...newParsedChanges];
 		}
 	}

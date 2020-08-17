@@ -1,0 +1,772 @@
+[
+  {
+    "dayIndex": 0,
+    "timeIndex": 4,
+    "parent": "D. Račkuvienė",
+    "text": "savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 0,
+    "timeIndex": -1,
+    "parent": "D. Račkuvienė",
+    "text": "8c rekolekcijos",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 0,
+    "timeIndex": 4,
+    "parent": "I. Šedienė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 0,
+    "timeIndex": 5,
+    "parent": "I. Šedienė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 0,
+    "timeIndex": 4,
+    "parent": "V. Kavoliūnienė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 0,
+    "timeIndex": 5,
+    "parent": "V. Kavoliūnienė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 0,
+    "timeIndex": 2,
+    "parent": "L. Gadeikytė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 0,
+    "timeIndex": 3,
+    "parent": "L. Gadeikytė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 0,
+    "timeIndex": 4,
+    "parent": "L. Gadeikytė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 0,
+    "timeIndex": 5,
+    "parent": "L. Gadeikytė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 0,
+    "timeIndex": 3,
+    "parent": "A. Razmienė",
+    "text": "savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 0,
+    "timeIndex": 4,
+    "parent": "A. Razmienė",
+    "text": "savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 0,
+    "timeIndex": 5,
+    "parent": "A. Razmienė",
+    "text": "savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 5,
+    "parent": "",
+    "text": "6 pam. iš K 105 perkeliama į K 114",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 5,
+    "parent": "",
+    "text": "6-7 pam. iš K 103 perkeliamos į K 401",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 6,
+    "parent": "",
+    "text": "6-7 pam. iš K 103 perkeliamos į K 401",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 5,
+    "parent": "",
+    "text": "6-7 pam. iš K 206 perkeliamos į K 201",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 6,
+    "parent": "",
+    "text": "6-7 pam. iš K 206 perkeliamos į K 201",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": -1,
+    "parent": "A. Razmienė",
+    "text": "savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 2,
+    "parent": "G. Macienė",
+    "text": "2,3,5 pam. savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 3,
+    "parent": "G. Macienė",
+    "text": "2,3,5 pam. savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 5,
+    "parent": "G. Macienė",
+    "text": "2,3,5 pam. savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 3,
+    "parent": "G. Macienė",
+    "text": "4 pam. 6b vokiečių K 206, rusų pogrupiui literatūros skaitymas skaitykloje",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 5,
+    "parent": "G. Macienė",
+    "text": "6 pam. 6b paskutinė pamoka",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": -1,
+    "parent": "G. Macienė",
+    "text": "13.10 val. suolų sunešimas į sporto salę iš K 105, K 104, K 103, K",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": -1,
+    "parent": "G. Macienė",
+    "text": "205, K 206 , K 102 (mokiniai neturintys pamokų gali atlikti socialines",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": -1,
+    "parent": "G. Macienė",
+    "text": "valandas)",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": -1,
+    "parent": "G. Macienė",
+    "text": "14. 10 val. iš K 107",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": -1,
+    "parent": "D. Račkuvienė",
+    "text": "savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": -1,
+    "parent": "N. Petrauskienė",
+    "text": "5a į antrą pamoką",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 1,
+    "parent": "N. Petrauskienė",
+    "text": "2-6 pam. pagal tvarkaraštį",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 2,
+    "parent": "N. Petrauskienė",
+    "text": "2-6 pam. pagal tvarkaraštį",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 3,
+    "parent": "N. Petrauskienė",
+    "text": "2-6 pam. pagal tvarkaraštį",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 4,
+    "parent": "N. Petrauskienė",
+    "text": "2-6 pam. pagal tvarkaraštį",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 5,
+    "parent": "N. Petrauskienė",
+    "text": "2-6 pam. pagal tvarkaraštį",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 2,
+    "parent": "I. Šedienė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 4,
+    "parent": "I. Šedienė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 2,
+    "parent": "V. Kavoliūnienė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 4,
+    "parent": "V. Kavoliūnienė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 2,
+    "parent": "L. Gadeikytė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 3,
+    "parent": "L. Gadeikytė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 1,
+    "timeIndex": 4,
+    "parent": "L. Gadeikytė",
+    "text": "savarankiškas darbas, užduotys Tamo",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "Matematikos PUPP 8.45 val. K 106, K 107 kab.",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "II G kl. mokiniai privalo turėti galiojantį pasą",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "(arba asmens tapatybės kortelę), juodai ar tamsiai mėlynai rašantį",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "rašiklį, pieštuką, trintuką, braižybos ir matavimo įrankius,",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "skaičiuotuvą be tekstinės atminties.",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "K 104 patalpa vykdytojų daiktams laikyti",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "K 205, K 206 patalpos mokinių daiktams laikyti",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "Pamokos:",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "iš K 105 perkeliamos į K 201",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "iš K 104 perkeliamos į A 204",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "iš K 107 perkeliamos į K 401",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "iš K 205 1-4 pam. perkeliamos į K 204",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "iš K 206 perkeliamos į A 307",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "iš K 103 perkeliamos į A 212",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "V. Krikščiūnaitė - Buitvydė",
+    "text": "7b į antrą pamoką",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "V. Krikščiūnaitė - Buitvydė",
+    "text": "7d paskutinė pamoka",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "E. Buožius",
+    "text": "7c į trečią pamoką",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 2,
+    "parent": "E. Buožius",
+    "text": "3 pam. 5d istorija R. Norvaišienė A skaitykloje",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 3,
+    "parent": "E. Buožius",
+    "text": "4 pam. 5d paskutinė pamoka",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 4,
+    "parent": "E. Buožius",
+    "text": "5 pam. 8d paskutinė pamoka",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "A. Bastienė",
+    "text": "7c į trečią pamoką",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 2,
+    "parent": "A. Bastienė",
+    "text": "3 pam. IGc",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 3,
+    "parent": "A. Bastienė",
+    "text": "4 pam. 7b",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 4,
+    "parent": "A. Bastienė",
+    "text": "5 pam. 7b",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 5,
+    "parent": "A. Bastienė",
+    "text": "6 pam. 7a paskutinė pamoka",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "V. Masiokas",
+    "text": "IGb į antrą pamoką",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 1,
+    "parent": "V. Masiokas",
+    "text": "2 pam. IGa",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 2,
+    "parent": "V. Masiokas",
+    "text": "3 pam. IGc",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 3,
+    "parent": "V. Masiokas",
+    "text": "4 pam. 7b",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 4,
+    "parent": "V. Masiokas",
+    "text": "5 pam. 7b",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 5,
+    "parent": "V. Masiokas",
+    "text": "6 pam. 7a paskutinė pamoka",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "E. Miežetienė",
+    "text": "6b į antrą pamoką",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 3,
+    "parent": "E. Miežetienė",
+    "text": "4 pam. 5b literatūros skaitymas skaitykloje",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 4,
+    "parent": "E. Miežetienė",
+    "text": "5 pam. 6c paskutinė pamoka",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 5,
+    "parent": "E. Miežetienė",
+    "text": "6 pam. 6a paskutinė pamoka",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "J. Motijauskienė",
+    "text": "IGb į antrą pamoką",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 1,
+    "parent": "J. Motijauskienė",
+    "text": "2 pam. IGa",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 2,
+    "parent": "J. Motijauskienė",
+    "text": "3 pam. 5d istorija R. Norvaišienė A skaitykloje",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 3,
+    "parent": "J. Motijauskienė",
+    "text": "4 pam. 5d paskutinė pamoka",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 4,
+    "parent": "J. Motijauskienė",
+    "text": "5 pam. 8d paskutinė pamoka",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 6,
+    "parent": "L. Meškauskienė",
+    "text": "7 pam. 6d paskutinė pamoka",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 1,
+    "parent": "A. Navickaitė",
+    "text": "2 pam. 8b",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 5,
+    "parent": "A. Navickaitė",
+    "text": "6 pam. IGd",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "I. Padriezienė",
+    "text": "6a į antrą pamoką",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 1,
+    "parent": "I. Padriezienė",
+    "text": "2 pam. 6b literatūros skaitymas skaitykloje",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 3,
+    "parent": "I. Padriezienė",
+    "text": "4 pam. 6c matematika K 403 J. Petrauskienė",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 4,
+    "parent": "I. Padriezienė",
+    "text": "5 pam. 6d rusų k. skaitykloje , vokiečių K 204",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 5,
+    "parent": "I. Padriezienė",
+    "text": "6 pam. 6a paskutinė pamoka",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 0,
+    "parent": "K. Paulauskienė",
+    "text": "1 pam. 5d abu pogrupiai lietuvių k. V. Rudavičienė K 113",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 1,
+    "parent": "K. Paulauskienė",
+    "text": "2 pam. 7b",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 2,
+    "parent": "K. Paulauskienė",
+    "text": "3 pam. 7d savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 3,
+    "parent": "K. Paulauskienė",
+    "text": "4 pam. 6c matematika K 403 J. Petrauskienė",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 4,
+    "parent": "K. Paulauskienė",
+    "text": "5 pam. 6d rusų k. skaitykloje , vokiečių K 204",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": 4,
+    "parent": "A. Šneideraitis",
+    "text": "5 pam. 6c paskutinė pamoka",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "D. Račkuvienė",
+    "text": "savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "A. Razmienė",
+    "text": "savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 2,
+    "timeIndex": -1,
+    "parent": "A. Razmienė",
+    "text": "IGa, IGb kultųrinė pažintinė veikla",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 3,
+    "timeIndex": -1,
+    "parent": "",
+    "text": "7c rekolekcijos",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 3,
+    "timeIndex": -1,
+    "parent": "V. Baltūsienė",
+    "text": "L.Bernienė",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 3,
+    "timeIndex": 0,
+    "parent": "D. Račkuvienė",
+    "text": "savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 3,
+    "timeIndex": 5,
+    "parent": "D. Račkuvienė",
+    "text": "savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 4,
+    "timeIndex": -1,
+    "parent": "D. Račkuvienė",
+    "text": "8c į antrą pamoką",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 4,
+    "timeIndex": 1,
+    "parent": "D. Račkuvienė",
+    "text": "2-5 pam. savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 4,
+    "timeIndex": 2,
+    "parent": "D. Račkuvienė",
+    "text": "2-5 pam. savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 4,
+    "timeIndex": 3,
+    "parent": "D. Račkuvienė",
+    "text": "2-5 pam. savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 4,
+    "timeIndex": 4,
+    "parent": "D. Račkuvienė",
+    "text": "2-5 pam. savarankiškas darbas",
+    "isUnknown": false
+  },
+  {
+    "dayIndex": 4,
+    "timeIndex": -1,
+    "parent": "V. Baltūsienė",
+    "text": "L.Bernienė",
+    "isUnknown": true
+  },
+  {
+    "dayIndex": 4,
+    "timeIndex": -1,
+    "parent": "D. Račkuvienė",
+    "text": "savarankiškas darbas",
+    "isUnknown": false
+  }
+]
