@@ -25,3 +25,5 @@ export const scrapedDataDirPath: string = join(__dirname, "..", "..", "database"
 export const { studentsFilePath, latestScrapedDataDirPath, getStudentFilePath }: IScraperConfig = createScraperConfig(
 	scrapedDataDirPath
 );
+
+export const apiDocsRoutePath: string = "/api/v1/docs";
