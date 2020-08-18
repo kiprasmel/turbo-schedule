@@ -78,7 +78,7 @@ export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPIV3.D
 
 const docsServers: OpenAPIV3.ServerObject[] = [
 	{
-		url: "https://ts.kipras.org",
+		url: "https://tvarkarastis.com",
 		// "description": "Main server"
 	},
 	// {
