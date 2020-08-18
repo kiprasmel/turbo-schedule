@@ -18,26 +18,20 @@ export const serveStaticClientInProd = (app: Express): void => {
 
 	console.log("~ Server IS using client's production build");
 
-	const pathNormal: string = path.join(__dirname, "../", "../", "../", "client", "build");
-	const pathOnceBuilt: string = path.join(__dirname, "../", "../", "../", "../", "client", "build");
-	let pathToUse: string = "";
+	const clientBuildPath: string = path.join(__dirname, "../", "../", "../", "client", "build");
 
-	if (fs.pathExistsSync(pathOnceBuilt)) {
-		pathToUse = pathOnceBuilt;
-		console.log("~ Using the `built` path");
-	} else if (fs.pathExistsSync(pathNormal)) {
-		pathToUse = pathNormal;
-		console.log("~ Using the `normal` path");
-	} else {
-		throw new Error("~ Static assets path does not exist!");
+	if (!fs.pathExistsSync(clientBuildPath)) {
+		console.error("~ Static assets path does not exist!", { clientBuildPath, __dirname });
+		throw new Error();
 	}
 
-	app.use(express.static(pathToUse));
+	app.use(express.static(clientBuildPath));
 
-	const indexHtmlFilePath: string = path.join(pathToUse, "index.html");
+	const indexHtmlFilePath: string = path.join(clientBuildPath, "index.html");
 
 	if (!fs.pathExistsSync(indexHtmlFilePath)) {
-		throw new Error("~ Static index.html file does not exist!");
+		console.error("~ Static index.html file does not exist!", { indexHtmlFilePath, __dirname });
+		throw new Error();
 	}
 
 	/** capture everything that's outside our API routes and send the built react application (index.html file) */
