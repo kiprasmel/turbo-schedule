@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.1](https://github.com/sarpik/turbo-schedule/compare/v2.8.0...v2.8.1) (2020-08-18)
+
+
+### Bug Fixes
+
+* redirect to API docs instead of providing them ([fc722cd](https://github.com/sarpik/turbo-schedule/commit/fc722cddc31292c3298cb972ea1a718ab6a04035))
+
+
+
+
+
 # [2.8.0](https://github.com/sarpik/turbo-schedule/compare/v2.7.3...v2.8.0) (2020-07-14)
 
 **Note:** Version bump only for package @turbo-schedule/server
