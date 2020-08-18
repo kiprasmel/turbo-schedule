@@ -79,12 +79,7 @@ export function modifyGeneratedAPIDocs(savePathAndFilename: string): OpenAPIV3.D
 const docsServers: OpenAPIV3.ServerObject[] = [
 	{
 		url: "https://tvarkarastis.com",
-		// "description": "Main server"
 	},
-	// {
-	// 	"url": "https://tt.kipras.org",
-	// 	// "description": "Main server, just on a different sub-domain using a CNAME"
-	// }
 ];
 
 /**
@@ -127,33 +122,33 @@ Some useful resources:
 	<li>
 		GitHub repository -\
 		<a
-			href="https://github.com/sarpik/turbo-schedule/"
+			href="https://github.com/kiprasmel/turbo-schedule/"
 			target="_blank"
 			rel="noopener"\
 		>
-			github.com/sarpik/turbo-schedule
+			github.com/kiprasmel/turbo-schedule
 		</a>
 	</li>
 
 	<li>
 		Roadmap -\
 		<a
-			href="https://github.com/sarpik/turbo-schedule/issues/1"
+			href="https://github.com/kiprasmel/turbo-schedule/issues/1"
 			target="_blank"
 			rel="noopener"
 		>
-			github.com/sarpik/turbo-schedule/issues/1
+			github.com/kiprasmel/turbo-schedule/issues/1
 		</a>
 	</li>
 
 	<li>
 		Reporting an issue -\
 		<a
-			href="https://github.com/sarpik/turbo-schedule/issues/new"
+			href="https://github.com/kiprasmel/turbo-schedule/issues/new"
 			target="_blank"
 			rel="noopener"\
 		>
-			https://github.com/sarpik/turbo-schedule/issues/new
+			https://github.com/kiprasmel/turbo-schedule/issues/new
 		</a>
 	</li>
 </ul>

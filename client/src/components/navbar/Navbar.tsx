@@ -135,13 +135,13 @@ export const NavbarLinks: FC<{}> = () => (
 			`}
 		>
 			{/* eslint-disable-next-line react/jsx-no-target-blank */}
-			<a href="https://ts.kipras.org/api" target="_blank" rel="noopener">
+			<a href="/api/v1/docs" target="_blank" rel="noopener">
 				API
 			</a>
 		</li>
 		<li>
 			{/* eslint-disable-next-line react/jsx-no-target-blank */}
-			<a href="https://github.com/sarpik/turbo-schedule" target="_blank" rel="noopener">
+			<a href="https://github.com/kiprasmel/turbo-schedule" target="_blank" rel="noopener">
 				GitHub
 			</a>
 		</li>

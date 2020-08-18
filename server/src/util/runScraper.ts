@@ -34,7 +34,7 @@ export const runScraperIfUpdatesAvailable = async (): Promise<void> => {
 	const updatesAvailable: boolean = await wasScheduleUpdated();
 
 	if (updatesAvailable) {
-		/** TODO lockfile for scraper - see https://github.com/sarpik/turbo-schedule/issues/44 */
+		/** TODO lockfile for scraper - see https://github.com/kiprasmel/turbo-schedule/issues/44 */
 		await runScraper();
 	}
 };

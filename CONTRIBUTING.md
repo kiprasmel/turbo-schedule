@@ -18,10 +18,10 @@ PRs welcome!
 
 ## Known issues
 
-| package | issue                                                                                                                                                       | fix                                                                                                           | tracking                                           |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| package | issue                                                                                                                                                       | fix                                                                                                           | tracking                                              |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | client  | `Error: ENOENT: no such file or directory, scandir 'node_modules/node-sass/vendor'`                                                                         | in the repository root, run `npm rebuild node-sass --force`                                                   |
-| *       | `TypeError [ERR_FEATURE_UNAVAILABLE_ON_PLATFORM]: The feature watch recursively is unavailable on the current platform, which is being used to run Node.js` | downgrade nodejs version to < 14 (I recommend using https://github.com/tj/n or https://github.com/nvm-sh/nvm) | https://github.com/sarpik/turbo-schedule/issues/78 |
+| *       | `TypeError [ERR_FEATURE_UNAVAILABLE_ON_PLATFORM]: The feature watch recursively is unavailable on the current platform, which is being used to run Node.js` | downgrade nodejs version to < 14 (I recommend using https://github.com/tj/n or https://github.com/nvm-sh/nvm) | https://github.com/kiprasmel/turbo-schedule/issues/78 |
 
 
 ## Adding a new package folder (like `server` or `database`)

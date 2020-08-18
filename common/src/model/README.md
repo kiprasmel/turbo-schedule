@@ -2,7 +2,7 @@
 
 ## Approach
 
-The general way [I](https://github.com/sarpik) go about models is that we:
+The general way [I](https://github.com/kiprasmel) go about models is that we:
 
 * ~~create an interface for the model with optional parameters:~~ Use [`Partial<Friend>`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialt)!!! OMG this is so good!
 

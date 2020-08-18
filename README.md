@@ -1,4 +1,4 @@
-# [turbo-schedule](https://ts.kipras.org)
+# [turbo-schedule](https://tvarkarastis.com)
 
 <p align="left">
 
@@ -27,9 +27,9 @@
 
 ## Try it out!
 
-Visit <a href="https://ts.kipras.org">ts.kipras.org</a>!
+Visit <a href="https://tvarkarastis.com">tvarkarastis.com</a>!
 
-> there's also a public API available - <a href="https://ts.kipras.org/api/v1/docs/">ts.kipras.org/api/v1/docs</a> 🚀
+> there's also a public API available - <a href="https://tvarkarastis.com/api/v1/docs">tvarkarastis.com/api/v1/docs</a> 🚀
 
 You can also run `turbo-schedule` locally:
 

@@ -1,8 +1,8 @@
-export const baseAssetsUrl = "https://sarpik.github.io/turbo-schedule-assets";
+export const baseAssetsUrl = "https://kiprasmel.github.io/turbo-schedule-assets";
 
 /**
  * `relativeAssetPaths`,
- * as layed out in https://github.com/sarpik/turbo-schedule-assets
+ * as layed out in https://github.com/kiprasmel/turbo-schedule-assets
  *
  * Will be joined together with the `baseAssetsUrl`
  * to create the full url.
