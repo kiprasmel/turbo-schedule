@@ -13,7 +13,7 @@ import { createLessonWithParticipants } from "../initializer/createLesson";
  * and expose only one method
  *
  * TODO turn `students` field into `participats` with `{ type: <enum>, text: <string>, isEmpty: <boolean> }`
- * See https://github.com/sarpik/turbo-schedule/issues/57
+ * See https://github.com/kiprasmel/turbo-schedule/issues/57
  */
 
 export const extractLessonFromStudent: LessonExtractor = extractLessonsFactory(extractLessonFromStudentParser);
@@ -153,7 +153,7 @@ function extractLessonFromClassParser(
 	 * there's this thing where a class might contain multiple rooms & teachers
 	 * all bunched up into a single lesson
 	 *
-	 * (see https://github.com/sarpik/turbo-schedule/issues/31#issuecomment-612715871)
+	 * (see https://github.com/kiprasmel/turbo-schedule/issues/31#issuecomment-612715871)
 	 *
 	 * and we don't like that,
 	 * so we'll split them into separate ones here, if needed!

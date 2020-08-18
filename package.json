@@ -3,7 +3,7 @@
 	"private": true,
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/sarpik/turbo-schedule.git"
+		"url": "https://github.com/kiprasmel/turbo-schedule.git"
 	},
 	"workspaces": {
 		"packages": [

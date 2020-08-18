@@ -38,7 +38,7 @@ if (!isProd()) {
 	 * Re-use the pre-built specification if it exists
 	 * (we generate it using `yarn build:docs`)
 	 *
-	 * See https://github.com/sarpik/turbo-schedule/issues/45
+	 * See https://github.com/kiprasmel/turbo-schedule/issues/45
 	 */
 	let predefinedSpec: OpenAPIV2.Document | undefined;
 	try {

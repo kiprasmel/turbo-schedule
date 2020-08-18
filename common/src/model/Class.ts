@@ -13,8 +13,8 @@ export type TClassNum = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
  * A `class` describes all students within a particular class / grade,
  * for example the 6th grade students, the 11th grade students etc.
  *
- * TODO: https://github.com/sarpik/turbo-schedule/issues/34
- * TODO: https://github.com/sarpik/turbo-schedule/issues/36
+ * TODO: https://github.com/kiprasmel/turbo-schedule/issues/34
+ * TODO: https://github.com/kiprasmel/turbo-schedule/issues/36
  *
  */
 export interface Class extends Participant {
