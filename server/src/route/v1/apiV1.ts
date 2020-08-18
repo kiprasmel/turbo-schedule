@@ -7,6 +7,7 @@ import { teacherRouter } from "./teacher";
 import { roomRouter } from "./room";
 import { emailRouter } from "./email";
 import { openAPIDocsJSONHandler, openAPIDocsHTMLHandler } from "./openAPIDocs";
+import { redirectToApiDocs } from "../../util/redirectToApiDocs";
 
 const router: Router = Router();
 
@@ -21,7 +22,6 @@ router.use("/email", emailRouter);
 router.use("/docs", openAPIDocsHTMLHandler);
 router.use("/docs.json", openAPIDocsJSONHandler);
 
-/** default to the docs (MUST be the last route) */
-router.use("/", openAPIDocsHTMLHandler);
+router.use("/", redirectToApiDocs);
 
 export { router as apiRouterV1 };
