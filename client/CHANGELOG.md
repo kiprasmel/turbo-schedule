@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.8.4...v2.9.0) (2020-09-02)
+
+
+### Features
+
+* show all participants in the mobile lesson's info modal ([de7a11f](https://github.com/kiprasmel/turbo-schedule/commit/de7a11f12718a4465f2059f009d437fd53d92834))
+
+
+
+
+
 ## [2.8.4](https://github.com/kiprasmel/turbo-schedule/compare/v2.8.3...v2.8.4) (2020-08-18)
 
 **Note:** Version bump only for package @turbo-schedule/client
