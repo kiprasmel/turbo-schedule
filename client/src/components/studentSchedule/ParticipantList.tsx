@@ -25,12 +25,14 @@ export const ParticipantListList: FC<Props> = ({ participants, className, ...res
 
 	console.log("participants", participants);
 
+	const participantExtras: string[] = useParticipantExtras();
+
 	const { students, teachers, rooms, classes } = Array.isArray(participants)
 		? parseParticipants(participants)
 		: participants;
 
 	const isOnlyOneMatchingParticipant: boolean =
-		students.length + teachers.length + rooms.length + classes.length === 1;
+		participantExtras.length + students.length + teachers.length + rooms.length + classes.length === 1;
 
 	return (
 		<div
@@ -49,6 +51,13 @@ export const ParticipantListList: FC<Props> = ({ participants, className, ...res
 			].join(" ")}
 			{...rest}
 		>
+			{participantExtras.length ? (
+				<ParticipantList
+					participants={participantExtras}
+					summary={t("Extras")(participantExtras.length)}
+					isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant}
+				/>
+			) : null}
 			<ParticipantList
 				participants={students}
 				summary={t("Students") + ` (${students.length})`}
@@ -78,7 +87,8 @@ const ParticipantList: FC<{
 	summary?: string;
 	open?: boolean;
 	isOnlyOneMatchingParticipant?: boolean;
-}> = ({ participants = [], summary = "", open = true, isOnlyOneMatchingParticipant = false }) => (
+	onClick?: ((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void) | undefined;
+}> = ({ participants = [], summary = "", open = true, isOnlyOneMatchingParticipant = false, onClick = () => {} }) => (
 	<details
 		className={css`
 			margin-left: auto;
@@ -127,6 +137,7 @@ const ParticipantList: FC<{
 				>
 					<Link
 						to={p}
+						onClick={onClick}
 						className={css`
 							${isOnlyOneMatchingParticipant && "border-bottom: 3px solid #000;"}
 						`}
