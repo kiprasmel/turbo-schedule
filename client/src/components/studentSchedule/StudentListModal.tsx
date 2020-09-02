@@ -1,6 +1,11 @@
 import React, { FC } from "react";
 import ReactModal from "react-modal";
-import { useTranslation } from "i18n/useTranslation";
+import { css } from "emotion";
+
+import { Lesson } from "@turbo-schedule/common";
+
+import { ParticipantListList } from "./ParticipantList";
+import { useTranslation } from "../../i18n/useTranslation";
 
 /**
  * http://reactcommunity.org/react-modal/accessibility/#app-element
@@ -33,7 +38,13 @@ const CloseBtn: FC<ICloseBtnProps> = ({ handleClose, text, ...rest }) => {
 	);
 };
 
-const StudentListModal = ({ handleClose, lesson, isOpen, ...rest }: any) => {
+interface Props {
+	handleClose: () => any;
+	lesson: Lesson | null;
+	isOpen: boolean;
+}
+
+const StudentListModal: FC<Props> = ({ handleClose, lesson, isOpen, ...rest }) => {
 	const t = useTranslation();
 
 	if (!lesson?.students) {
@@ -54,27 +65,27 @@ const StudentListModal = ({ handleClose, lesson, isOpen, ...rest }: any) => {
 						zIndex: 120,
 					},
 				}}
+				bodyOpenClassName={css`
+					text-align: center;
+
+					> div div > * + * {
+						margin-top: 2rem;
+					}
+				`}
 				{...rest}
 			>
-				<CloseBtn handleClose={handleClose} style={{ marginTop: "1em" }} autoFocus />
+				<CloseBtn handleClose={handleClose} autoFocus />
 
-				<div style={{ marginTop: "1em" }}>
-					<p style={{ margin: 0 }}>{t("Lesson")}:</p>
-					{lesson?.name || t("Empty__lesson")}
-				</div>
+				<h2>{lesson?.name || t("Empty__lesson")}</h2>
 
-				<div style={{ marginTop: "1em" }}>
-					<p>
-						{t("Students")} ({lesson?.students.length}):
-					</p>
-					<ul style={{ listStyle: "disc", paddingLeft: "30px" }}>
-						{lesson?.students.map((student: string, index: number) => (
-							<li key={index}>{student}</li>
-						))}
-					</ul>
-				</div>
+				<ParticipantListList
+					participants={lesson}
+					className={css`
+						grid-template-columns: none !important;
+					`}
+				/>
 
-				<CloseBtn handleClose={handleClose} style={{ marginTop: "1em" }} />
+				<CloseBtn handleClose={handleClose} />
 			</ReactModal>
 		</>
 	);
