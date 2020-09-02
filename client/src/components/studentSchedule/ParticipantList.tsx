@@ -17,9 +17,10 @@ interface Props {
 				rooms: Room["text"][];
 				classes: Class["text"][];
 		  };
+	className?: string;
 }
 
-export const ParticipantListList: FC<Props> = ({ participants }) => {
+export const ParticipantListList: FC<Props> = ({ participants, className, ...rest }) => {
 	const t = useTranslation();
 
 	console.log("participants", participants);
@@ -33,16 +34,20 @@ export const ParticipantListList: FC<Props> = ({ participants }) => {
 
 	return (
 		<div
-			className={css`
-				display: grid;
+			className={[
+				css`
+					display: grid;
 
-				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-				font-size: 0.75em;
+					grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+					font-size: 0.75em;
 
-				& > * + * {
-					margin-top: 2rem;
-				}
-			`}
+					& > * + * {
+						margin-top: 2rem;
+					}
+				`,
+				className,
+			].join(" ")}
+			{...rest}
 		>
 			<ParticipantList
 				participants={students}
