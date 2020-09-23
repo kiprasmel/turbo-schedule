@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.9.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.9.0...v2.9.1) (2020-09-23)
+
+
+### Bug Fixes
+
+* add `/` to participant links to make them work ([085d153](https://github.com/kiprasmel/turbo-schedule/commit/085d1539e099f4401df14f01ec7a41aba2cdfd9b))
+
+
+
+
+
 # [2.9.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.8.4...v2.9.0) (2020-09-02)
 
 
