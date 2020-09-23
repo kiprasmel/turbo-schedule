@@ -126,7 +126,7 @@ const ParticipantList: FC<{
 					`}
 				>
 					<Link
-						to={p}
+						to={`/${p}`}
 						className={css`
 							${isOnlyOneMatchingParticipant && "border-bottom: 3px solid #000;"}
 						`}
