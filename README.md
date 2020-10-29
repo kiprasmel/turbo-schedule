@@ -2,8 +2,8 @@
 
 <p align="left">
 
-  <a href="https://github.com/sarpik/turbo-schedule/actions">
-	<img alt="GitHub Actions CI" src="https://github.com/sarpik/turbo-schedule/workflows/install-build-test-deploy/badge.svg" />
+  <a href="https://github.com/kiprasmel/turbo-schedule/actions">
+	<img alt="GitHub Actions CI" src="https://github.com/kiprasmel/turbo-schedule/workflows/install-build-test-deploy/badge.svg" />
   </a>
 
   <a href="https://hub.docker.com/r/kipras/turbo-schedule">
@@ -11,8 +11,8 @@
   </a>
 
 <!--  TODO  -->
-  <!-- <a href="https://github.com/sarpik/turbo-schedule/releases">
-    <img alt="latest version" src="https://img.shields.io/github/v/tag/sarpik/turbo-schedule?include_prereleases&sort=semver" />
+  <!-- <a href="https://github.com/kiprasmel/turbo-schedule/releases">
+    <img alt="latest version" src="https://img.shields.io/github/v/tag/kiprasmel/turbo-schedule?include_prereleases&sort=semver" />
   </a> -->
 
   <a href="https://github.com/semantic-release/semantic-release">
@@ -46,13 +46,13 @@ docker run -p 5000:5000 --name turbo-schedule kipras/turbo-schedule
 * or from source:
 
 ```sh
-git clone https://github.com/sarpik/turbo-schedule.git
-# or:  git clone git@github.com:sarpik/turbo-schedule.git
+git clone https://github.com/kiprasmel/turbo-schedule.git
+# or:  git clone git@github.com:kiprasmel/turbo-schedule.git
 
 cd turbo-schedule
 
 # note: you must not have `--ignore-scripts` enabled (default)
-# note: your `node` version shall be < 14 -- see https://github.com/sarpik/turbo-schedule/issues/78
+# note: your `node` version shall be < 14 -- see https://github.com/kiprasmel/turbo-schedule/issues/78
 yarn setup:prod
 yarn serve
 ```
@@ -62,13 +62,13 @@ yarn serve
 ## Development
 
 ```sh
-git clone https://github.com/sarpik/turbo-schedule.git
-# or:  git clone git@github.com:sarpik/turbo-schedule.git
+git clone https://github.com/kiprasmel/turbo-schedule.git
+# or:  git clone git@github.com:kiprasmel/turbo-schedule.git
 
 cd turbo-schedule
 
 # note: you must not have `--ignore-scripts` enabled (default)
-# note: your `node` version shall be < 14 -- see https://github.com/sarpik/turbo-schedule/issues/78
+# note: your `node` version shall be < 14 -- see https://github.com/kiprasmel/turbo-schedule/issues/78
 yarn setup
 yarn dev
 ```
@@ -77,16 +77,16 @@ yarn dev
 
 ## Contributing
 
-Contributions are welcome! If you're having problems - feel free to [open an issue](https://github.com/sarpik/turbo-schedule/issues/new) - we're happy to help:)
+Contributions are welcome! If you're having problems - feel free to [open an issue](https://github.com/kiprasmel/turbo-schedule/issues/new) - we're happy to help:)
 
-For starters - you can check out our [Roadmap](https://github.com/sarpik/turbo-schedule/issues/1)!
+For starters - you can check out our [Roadmap](https://github.com/kiprasmel/turbo-schedule/issues/1)!
 
 If you're contributing code - take a look at [github's simple guide](https://guides.github.com/activities/forking/) on how to do so!
 
 TL;DR:
-* [fork the repository](https://github.com/sarpik/turbo-schedule/fork)
+* [fork the repository](https://github.com/kiprasmel/turbo-schedule/fork)
 * get the app going locally, as explained in the [`Development` section above ☝](#Development)
-* commit your changes & [create a pull request](https://github.com/sarpik/turbo-schedule/compare)
+* commit your changes & [create a pull request](https://github.com/kiprasmel/turbo-schedule/compare)
 
 That's it!
 
@@ -98,7 +98,7 @@ See also [CONTRIBUTING.md](./CONTRIBUTING.md), especially [#known-issues](./CONT
 
 ### Contributing to [express-oas-generator](https://github.com/mpashkovskiy/express-oas-generator)
 
-I found a tool that could generate API documentation automatically for my `express` server - it was `express-oas-generator`. I've started using it here - it worked! However, I've encountered various issues with it, and thus [I've contributed heavily to the project](https://github.com/mpashkovskiy/express-oas-generator/pulls?q=author%3Asarpik+) & improved it both for myself & others!
+I found a tool that could generate API documentation automatically for my `express` server - it was `express-oas-generator`. I've started using it here - it worked! However, I've encountered various issues with it, and thus [I've contributed heavily to the project](https://github.com/mpashkovskiy/express-oas-generator/pulls?q=author%3Akiprasmel+) & improved it both for myself & others!
 
 ### Using github actions (CI) with `semantic-release` & `lerna` and finding the deeply hidden bug
 
@@ -110,7 +110,7 @@ the list is not exhaustive. I appreciate open source & try to contribute if poss
 
 ## License
 
-[AGPL-3.0-only](./LICENSE) © 2019-present [Kipras Melnikovas](https://github.com/sarpik)
+[AGPL-3.0-only](./LICENSE) © 2019-present [Kipras Melnikovas](https://github.com/kiprasmel)
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as published by

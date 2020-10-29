@@ -1,5 +1,5 @@
 module.exports = {
 	extends: [
-		"eslint-config-sarpik" /** https://github.com/sarpik/eslint-config-sarpik */
+		"eslint-config-sarpik" /** https://github.com/kiprasmel/eslint-config-sarpik */
 	]
 }
