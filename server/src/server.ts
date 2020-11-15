@@ -106,11 +106,18 @@ export function startServer({
 		console.log(`~ Server listening on PORT \`${PORT}\` @ NODE_ENV \`${process.env.NODE_ENV}\``);
 
 		if (!doNotScrapeContent) {
-			/** checks for updates every minute & runs the scraper if updates available */
-			watchForUpdatesAndRunScraper();
+			try {
+				/** checks for updates every minute & runs the scraper if updates available */
+				watchForUpdatesAndRunScraper();
 
-			/** runs the scraper once a day just in case */
-			enableScraperCronjob();
+				/** runs the scraper once a day just in case */
+				enableScraperCronjob();
+			} catch (e) {
+				/**
+				 * handle gracefully without halting the whole application
+				 */
+				console.error("encountered scraper error @ server:", e);
+			}
 		}
 	});
 
