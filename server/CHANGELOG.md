@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.0...v2.10.1) (2020-11-15)
+
+
+### Bug Fixes
+
+* **server:** do not die if scraper encounters error ([b67721f](https://github.com/kiprasmel/turbo-schedule/commit/b67721f1d31c922ee7baaeb72e183c46097766a5))
+
+
+
+
+
 ## [2.8.4](https://github.com/kiprasmel/turbo-schedule/compare/v2.8.3...v2.8.4) (2020-08-18)
 
 **Note:** Version bump only for package @turbo-schedule/server
