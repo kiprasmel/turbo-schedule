@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.1...v2.10.2) (2020-12-31)
+
+
+### Bug Fixes
+
+* **client:** update to even leaner analytics ([75863e5](https://github.com/kiprasmel/turbo-schedule/commit/75863e51724dae5f90a803bd50da85b95341593a))
+
+
+
+
+
 # [2.10.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.9.1...v2.10.0) (2020-10-29)
 
 

@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.1...v2.10.2) (2020-12-31)
+
+
+### Bug Fixes
+
+* **ci:** fix the syntax of adding env variable lol ([6139b35](https://github.com/kiprasmel/turbo-schedule/commit/6139b35503664f7288e210df671062c67e93ca2e))
+* **ci:** update to latest github actions syntax ([b31a627](https://github.com/kiprasmel/turbo-schedule/commit/b31a6276800e228ee51bb8e9538546425b4f8e91))
+* **client:** update to even leaner analytics ([75863e5](https://github.com/kiprasmel/turbo-schedule/commit/75863e51724dae5f90a803bd50da85b95341593a))
+* **server:** do not die if scraper encounters error ([b67721f](https://github.com/kiprasmel/turbo-schedule/commit/b67721f1d31c922ee7baaeb72e183c46097766a5))
+
+
+
+# 2.10.0 (2020-10-29)
+
+
+
+
+
 ## [2.10.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.0...v2.10.1) (2020-11-15)
 
 
