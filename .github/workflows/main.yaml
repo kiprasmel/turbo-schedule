@@ -99,7 +99,7 @@ jobs:
 
             # get the latest tag
             # see https://github.com/actions/starter-workflows/issues/68#issuecomment-552074596
-            - run: echo "LATEST_TAG=$(git describe --tags --abbrev=0) >> $GITHUB_ENV"
+            - run: echo "LATEST_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
             # print for debugging
             - run: echo "$LATEST_TAG"
