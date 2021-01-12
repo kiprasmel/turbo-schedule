@@ -33,6 +33,7 @@
 		"build:prod": "yarn purge:build && yarn build:all:prod",
 		"serve": "yarn --cwd ./server/ serve",
 		"docker": "yarn docker:deploy",
+		"docker:commit": "yarn docker:deploy:commit",
 		"purge": "yarn purge:all",
 		"updts": "yarn lerna add typescript@latest --dev",
 		"-----": "-----",
@@ -55,6 +56,10 @@
 		"docker:deploy": "yarn docker:build && yarn docker:login && yarn docker:push",
 		"docker:tag-version": "docker tag kipras/turbo-schedule:latest kipras/turbo-schedule:$LATEST_TAG",
 		"docker:push-tagged-version": "docker push kipras/turbo-schedule:$LATEST_TAG",
+		"docker:build:commit": "yarn build:prod && docker build -t kipras/turbo-schedule:$(git rev-parse HEAD)$VERSION_SUFFIX .",
+		"docker:login:commit": "docker login",
+		"docker:push:commit": "docker push kipras/turbo-schedule:$(git rev-parse HEAD)$VERSION_SUFFIX",
+		"docker:deploy:commit": "echo $VERSION_SUFFIX && yarn docker:build:commit && yarn docker:login:commit && yarn docker:push:commit && echo $(git rev-parse HEAD)$VERSION_SUFFIX",
 		"purge:build": "npx rimraf ./client/build ./*/dist/ ./dist/ ./*/tsconfig.tsbuildinfo",
 		"purge:modules": "npx rimraf ./*/node_modules/ ./node_modules/",
 		"purge:all": "yarn purge:build & yarn purge:modules & echo \"Do NOT forget to re-setup: \n\nyarn setup\n\""
