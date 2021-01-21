@@ -105,24 +105,29 @@ router.get("/common-availability", async (req, res, next) => {
 			for (let j = minTimeIndex; j <= maxTimeIndex; j++) {
 				const related: Lesson[] = lessons.filter((l) => l.dayIndex === i && l.timeIndex === j);
 
-				const bussy: number = related.filter((l) => !l.isEmpty).length;
+				const sum = (accum: number, curr: number): number => accum + curr;
 
 				/**
-				 * TODO: this is a work-around.
-				 *
-				 * We need to figure out why some participants don't have lessons
-				 * even though others do
-				 *
-				 * -> it's probably because they have less maximum lessons
-				 * and the scraper parses them like so.
-				 *
-				 * Thus maybe not so bad;
-				 * we'll just need to think about how we'll populate
-				 * which participants (by names) are available and which not.
-				 * (still doable just fine - filter)
-				 *
+				 * there could be multiple participants in the same lesson,
+				 * thus account for them all, not once.
 				 */
-				const available: number = related.filter((l) => l.isEmpty).length;
+				const bussy: number = related
+					.filter((l) => !l.isEmpty)
+					.flatMap((l): number[] =>
+						[l.students, l.teachers, l.classes, l.rooms].map(
+							(participants) => participants.filter((participant) => wanted.includes(participant)).length
+						)
+					)
+					.reduce(sum, 0);
+
+				const available: number = related
+					.filter((l) => l.isEmpty)
+					.flatMap((l): number[] =>
+						[l.students, l.teachers, l.classes, l.rooms].map(
+							(participants) => participants.filter((participant) => wanted.includes(participant)).length
+						)
+					)
+					.reduce(sum, 0);
 
 				availability[i][j] = {
 					dayIndex: i, //
