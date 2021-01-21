@@ -122,8 +122,7 @@ router.get("/common-availability", async (req, res, next) => {
 				 * (still doable just fine - filter)
 				 *
 				 */
-				// const available: number = related.filter((l) => l.isEmpty).length; /** TODO */
-				const available: number = totalWantedParticipants - bussy;
+				const available: number = related.filter((l) => l.isEmpty).length;
 
 				availability[i][j] = {
 					dayIndex: i, //
