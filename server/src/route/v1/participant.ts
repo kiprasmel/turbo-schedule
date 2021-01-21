@@ -38,6 +38,14 @@ router.get("/", async (_req, res, next) => {
 });
 
 router.get("/common-availability", async (req, res, next) => {
+	const getDefaultReturn = () => ({
+		minDayIndex: -1, //
+		maxDayIndex: -1,
+		minTimeIndex: -1,
+		maxTimeIndex: -1,
+		availability: [],
+	});
+
 	try {
 		const db: Db = await initDb();
 
@@ -59,7 +67,7 @@ router.get("/common-availability", async (req, res, next) => {
 
 			console.error(msg);
 
-			res.status(400).json({ participants: [], msg });
+			res.status(400).json({ ...getDefaultReturn(), msg });
 			return !isProd() ? next(msg) : res.end();
 		}
 
@@ -149,7 +157,10 @@ router.get("/common-availability", async (req, res, next) => {
 		return !isProd() ? next() : res.end();
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ participant: {}, message: err });
+		res.status(500).json({
+			...getDefaultReturn(),
+			msg: err,
+		});
 
 		return !isProd() ? next(err) : res.end();
 	}
