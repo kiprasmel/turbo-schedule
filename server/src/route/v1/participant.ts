@@ -117,10 +117,10 @@ router.get("/common-availability", async (req, res, next) => {
 				 * there could be multiple participants in the same lesson,
 				 * thus account for them all, not once.
 				 */
-				const bussy: string[] = [
+				const getParticipants = (filterPred: (l: Lesson) => boolean): Participant["text"][] => [
 					...new Set(
 						related
-							.filter((l) => !l.isEmpty)
+							.filter(filterPred)
 							.flatMap((l): string[] =>
 								[l.students, l.teachers, l.classes, l.rooms].flatMap((participants) =>
 									participants.filter((participant) => wanted.includes(participant))
@@ -129,23 +129,14 @@ router.get("/common-availability", async (req, res, next) => {
 					),
 				];
 
-				const available: string[] = [
-					...new Set(
-						related
-							.filter((l) => l.isEmpty)
-							.flatMap((l): string[] =>
-								[l.students, l.teachers, l.classes, l.rooms].flatMap((participants) =>
-									participants.filter((participant) => wanted.includes(participant))
-								)
-							)
-					),
-				];
+				const availableParticipants: Participant["text"][] = getParticipants((l) => l.isEmpty);
+				const bussyParticipants: Participant["text"][] = getParticipants((l) => !l.isEmpty);
 
 				availability[i][j] = {
 					dayIndex: i, //
 					timeIndex: j,
-					availableParticipants: available,
-					bussyParticipants: bussy,
+					availableParticipants,
+					bussyParticipants,
 				};
 			}
 		}
