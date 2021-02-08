@@ -300,7 +300,10 @@ export const Availability: FC = () => {
 														key={`${a.dayIndex}--${a.timeIndex}`}
 														className={css`
 											/*
-											background: ${mapRatioToHSLThroughHue(a.bussyParticipants / (a.availableParticipants + a.bussyParticipants))};
+											background: ${mapRatioToHSLThroughHue(
+												a.bussyParticipants.length /
+													(a.availableParticipants.length + a.bussyParticipants.length)
+											)};
 											*/
 
 											margin-top: 0.5em;
@@ -338,7 +341,9 @@ export const Availability: FC = () => {
 																color: grey;
 															`}
 														>
-															={a.availableParticipants + a.bussyParticipants}
+															=
+															{a.availableParticipants.length +
+																a.bussyParticipants.length}
 														</span>
 													</li>
 												) : displayType === "mapped ratio to HSL" ? (
@@ -346,15 +351,24 @@ export const Availability: FC = () => {
 														key={`${a.dayIndex}--${a.timeIndex}`}
 														className={css`
 													/*
-													background: ${mapRatioToHSLThroughHue(a.bussyParticipants / (a.availableParticipants + a.bussyParticipants))};
+													background: ${mapRatioToHSLThroughHue(
+														a.bussyParticipants.length /
+															(a.availableParticipants.length +
+																a.bussyParticipants.length)
+													)};
 													*/
 
 													/* background: ${mapRatioToHSBThroughBrightness(
-														a.bussyParticipants /
-															(a.availableParticipants + a.bussyParticipants)
+														a.bussyParticipants.length /
+															(a.availableParticipants.length +
+																a.bussyParticipants.length)
 													)}; */
 
-													background: ${colorMapperEntry.fn(a.bussyParticipants / (a.availableParticipants + a.bussyParticipants))};
+													background: ${colorMapperEntry.fn(
+														a.bussyParticipants.length /
+															(a.availableParticipants.length +
+																a.bussyParticipants.length)
+													)};
 
 
 													margin-top: 0.5em;
@@ -388,8 +402,10 @@ export const Availability: FC = () => {
 																	filter: invert(100%);
 																`}
 															>
-																{a.availableParticipants}/
-																{a.availableParticipants + a.bussyParticipants}
+																{/* {a.availableParticipants}/ */}
+																{a.availableParticipants.length}/
+																{a.availableParticipants.length +
+																	a.bussyParticipants.length}
 															</span>
 														</button>
 
@@ -575,22 +591,23 @@ export const Availability: FC = () => {
 						//
 					`}
 				>
-					<h1>extra info (coming soon!)</h1>
+					<h1>extra info</h1>
 
-					{selectedAvailability ? (
+					{!selectedAvailability ? (
+						<p>Select a time interval</p>
+					) : (
 						<>
-							<p>this will display the participants' names (by availability)</p>
-
-							<p>day {selectedAvailability.dayIndex + 1}</p>
-							<p>time {selectedAvailability.timeIndex + 1}</p>
-							<p>avail {selectedAvailability.availableParticipants}</p>
-							<p>bussy {selectedAvailability.bussyParticipants}</p>
-							<p>
+							<div>day {selectedAvailability.dayIndex + 1}</div>
+							<div>time {selectedAvailability.timeIndex + 1}</div>
+							<div>available:{selectedAvailability.availableParticipants}</div>
+							<div>bussy {selectedAvailability.bussyParticipants}</div>
+							<div>
 								total{" "}
-								{selectedAvailability.availableParticipants + selectedAvailability.bussyParticipants}
-							</p>
+								{selectedAvailability.availableParticipants.length +
+									selectedAvailability.bussyParticipants.length}
+							</div>
 						</>
-					) : null}
+					)}
 				</section>
 				{/* /detailed availability info */}
 			</main>

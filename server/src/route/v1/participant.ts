@@ -113,29 +113,25 @@ router.get("/common-availability", async (req, res, next) => {
 			for (let j = minTimeIndex; j <= maxTimeIndex; j++) {
 				const related: Lesson[] = lessons.filter((l) => l.dayIndex === i && l.timeIndex === j);
 
-				const sum = (accum: number, curr: number): number => accum + curr;
-
 				/**
 				 * there could be multiple participants in the same lesson,
 				 * thus account for them all, not once.
 				 */
-				const bussy: number = related
+				const bussy: string[] = related
 					.filter((l) => !l.isEmpty)
-					.flatMap((l): number[] =>
-						[l.students, l.teachers, l.classes, l.rooms].map(
-							(participants) => participants.filter((participant) => wanted.includes(participant)).length
+					.flatMap((l): string[] =>
+						[l.students, l.teachers, l.classes, l.rooms].flatMap((participants) =>
+							participants.filter((participant) => wanted.includes(participant))
 						)
-					)
-					.reduce(sum, 0);
+					);
 
-				const available: number = related
+				const available: string[] = related
 					.filter((l) => l.isEmpty)
-					.flatMap((l): number[] =>
-						[l.students, l.teachers, l.classes, l.rooms].map(
-							(participants) => participants.filter((participant) => wanted.includes(participant)).length
+					.flatMap((l): string[] =>
+						[l.students, l.teachers, l.classes, l.rooms].flatMap((participants) =>
+							participants.filter((participant) => wanted.includes(participant))
 						)
-					)
-					.reduce(sum, 0);
+					);
 
 				availability[i][j] = {
 					dayIndex: i, //
