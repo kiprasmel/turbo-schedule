@@ -129,8 +129,21 @@ router.get("/common-availability", async (req, res, next) => {
 					),
 				];
 
-				const availableParticipants: Participant["text"][] = getParticipants((l) => l.isEmpty);
+				let availableParticipants: Participant["text"][] = getParticipants((l) => l.isEmpty);
 				const bussyParticipants: Participant["text"][] = getParticipants((l) => !l.isEmpty);
+
+				/**
+				 * TODO FIXME HACK:
+				 *
+				 * The scraper is messed up for some edge cases (upstream -_-),
+				 * and there might be duplicate lessons, some not properly scraped.
+				 *
+				 * We know for a fact, though, that if a participant is bussy,
+				 * it cannot be available -- this fixes the issue (temporarily),
+				 * before we fix the underlying issue.
+				 *
+				 */
+				availableParticipants = availableParticipants.filter((p) => !bussyParticipants.includes(p));
 
 				availability[i][j] = {
 					dayIndex: i, //
