@@ -597,15 +597,39 @@ export const Availability: FC = () => {
 						<p>Select a time interval</p>
 					) : (
 						<>
-							<div>day {selectedAvailability.dayIndex + 1}</div>
-							<div>time {selectedAvailability.timeIndex + 1}</div>
-							<div>available:{selectedAvailability.availableParticipants}</div>
-							<div>bussy {selectedAvailability.bussyParticipants}</div>
-							<div>
-								total{" "}
-								{selectedAvailability.availableParticipants.length +
-									selectedAvailability.bussyParticipants.length}
-							</div>
+							<article>
+								<h1>day: {selectedAvailability.dayIndex + 1}</h1>
+							</article>
+
+							<article>
+								<h1>time: {selectedAvailability.timeIndex + 1}</h1>
+							</article>
+
+							<article>
+								<h1>available ({selectedAvailability.availableParticipants.length}):</h1>
+								<ul>
+									{selectedAvailability.availableParticipants.map((p) => (
+										<li>{p}</li>
+									))}
+								</ul>
+							</article>
+
+							<article>
+								<h1>bussy ({selectedAvailability.bussyParticipants.length}):</h1>
+								<ul>
+									{selectedAvailability.bussyParticipants.map((p) => (
+										<li>{p}</li>
+									))}
+								</ul>
+							</article>
+
+							<article>
+								<h1>
+									total:{" "}
+									{selectedAvailability.availableParticipants.length +
+										selectedAvailability.bussyParticipants.length}
+								</h1>
+							</article>
 						</>
 					)}
 				</section>
