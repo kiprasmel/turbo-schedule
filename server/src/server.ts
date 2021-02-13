@@ -97,7 +97,7 @@ export interface StartServerOptions {
 
 export function startServer({
 	portOverride = undefined, //
-	doNotScrapeContent = false,
+	doNotScrapeContent = !!process.env.DO_NOT_SCRAPE ?? false,
 }: StartServerOptions = {}): Server {
 	const PORT: number | string = portOverride ?? process.env.PORT ?? 5000;
 
