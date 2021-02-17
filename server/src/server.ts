@@ -92,20 +92,24 @@ export { app };
 
 export interface StartServerOptions {
 	portOverride?: number | string;
-	doNotScrapeContent?: boolean;
+	enableScraping?: boolean;
 }
 
 export function startServer({
 	portOverride = undefined, //
-	doNotScrapeContent = !!process.env.DO_NOT_SCRAPE ?? false,
+	enableScraping = !!process.env.FORCE_ENABLE_SCRAPING || process.env.NODE_ENV === "production" || false,
 }: StartServerOptions = {}): Server {
 	const PORT: number | string = portOverride ?? process.env.PORT ?? 5000;
 
 	/** serving */
 	const server: Server = app.listen(PORT, () => {
-		console.log(`~ Server listening on PORT \`${PORT}\` @ NODE_ENV \`${process.env.NODE_ENV}\``);
+		console.log(
+			`~ Server listening on PORT \`${PORT}\` @ NODE_ENV \`${process.env.NODE_ENV}\`, scraping \`${
+				enableScraping ? "enabled" : "disabled"
+			}\``
+		);
 
-		if (!doNotScrapeContent) {
+		if (enableScraping) {
 			try {
 				/** checks for updates every minute & runs the scraper if updates available */
 				watchForUpdatesAndRunScraper();

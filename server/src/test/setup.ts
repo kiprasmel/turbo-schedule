@@ -27,7 +27,7 @@ const setup = async (_config: jest.GlobalConfig) => {
 		await fs.remove(databaseDirPath);
 	};
 
-	global.server = startServer({ doNotScrapeContent: true });
+	global.server = startServer({ enableScraping: false });
 };
 
 export default setup;
