@@ -15,7 +15,7 @@
 import express, { Express } from "express";
 // import jsonServer from "json-server";
 import fs from "fs-extra";
-import { handleResponses, handleRequests, OpenAPIV2 } from "express-oas-generator";
+import expressOasGenerator, { OpenAPIV2 } from "express-oas-generator";
 import helmet from "helmet";
 import cors from "cors";
 import { Server } from "http";
@@ -24,7 +24,6 @@ import { Server } from "http";
 // import { mwPickFields } from "./middleware/mwPickFields";
 
 import { openAPIFilePath } from "./config";
-import { isProd } from "./util/isProd";
 import { setupLogger } from "./util/setupLogger";
 import { apiRouter } from "./route/apiRouter";
 import { serveStaticClientInProd } from "./util/serveStaticClientInProd";
@@ -33,7 +32,7 @@ import { watchForUpdatesAndRunScraper } from "./util/watchForUpdatesAndRunScrape
 
 const app: Express = express();
 
-if (!isProd()) {
+if (process.env.NODE_ENV !== "production") {
 	/**
 	 * Re-use the pre-built specification if it exists
 	 * (we generate it using `yarn build:docs`)
@@ -49,11 +48,16 @@ if (!isProd()) {
 		//
 	}
 
-	handleResponses(app, {
-		specOutputPath: openAPIFilePath,
-		writeIntervalMs: 0,
-		predefinedSpec: predefinedSpec ? () => predefinedSpec : undefined,
-	});
+	app.use((req, res, next) =>
+		expressOasGenerator({
+			specOutputPath: openAPIFilePath,
+			writeIntervalMs: 0,
+			predefinedSpec: predefinedSpec ? () => predefinedSpec : predefinedSpec,
+			alwaysServeDocs: true,
+		})(req, res, next)
+	);
+
+	// expressOasGenerator.serveApiDocs(app);
 }
 
 /** config */
@@ -77,15 +81,12 @@ app.use("/api", apiRouter);
 // const jsonServerRouter = jsonServer.router(databaseFile, { foreignKeySuffix: "" });
 // app.use("/api/temp", [mwReadOnly, jsonServerRouter]); /** TODO RENAME */
 
-serveStaticClientInProd(app);
+app.use((_req, _res, next) => {
+	console.log("app", app);
+	next();
+});
 
-/**
- * handle the app's `requests`
- * this SHALL be the last middleware.
- */
-if (!isProd()) {
-	handleRequests();
-}
+serveStaticClientInProd(app);
 
 /** export the express app after it's set up - the tests use it */
 export { app };

@@ -59,6 +59,7 @@ export async function generateOpenAPIDocs(savePathAndFilename: string): Promise<
 			throw err;
 		}
 
+		fs.ensureFileSync(savePathAndFilename);
 		const generatedDocsUnmodified: string = fs.readFileSync(savePathAndFilename, { encoding: "utf-8" });
 
 		if (!generatedDocsUnmodified || generatedDocsUnmodified === "{}") {

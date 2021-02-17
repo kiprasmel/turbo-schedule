@@ -7,6 +7,8 @@ describe("/email API", () => {
 
 		const res: Response = await request.post(`/api/v1/email`).send({ email });
 
+		// console.error("res", res);
+
 		expect(res.status).toBe(200);
 
 		expect(res.body).toHaveProperty("emailEntry");
