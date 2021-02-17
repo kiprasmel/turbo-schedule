@@ -1,5 +1,9 @@
 # .gitignore
 
+# temporarily disabled until [1] is merged
+# [1] https://github.com/kiprasmel/turbo-schedule/pull/24
+/rectifier/
+
 # testing
 /test-server/
 
