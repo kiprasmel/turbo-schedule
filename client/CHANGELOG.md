@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.2...v2.10.3) (2021-02-17)
+
+
+### Bug Fixes
+
+* **client:** only track from specified domains ([99d1879](https://github.com/kiprasmel/turbo-schedule/commit/99d1879dd2cd0f8bda96e43ead5c994e953b489a))
+* **scraper:** do not use the pipeline operator & switch to official typescript ([096d748](https://github.com/kiprasmel/turbo-schedule/commit/096d748ce6ba19047e74ed7d67fdd59bbdb2a41b))
+
+
+
+
+
 ## [2.10.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.1...v2.10.2) (2020-12-31)
 
 
