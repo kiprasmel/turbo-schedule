@@ -80,7 +80,6 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		let participants: Participant[] = participants2D.flat();
 
 		if (process.env.FAST) {
-			/** TODO document */
 			participants2D = participants2D.map((p) => p.slice(0, 10));
 			participants = participants.slice(0, 10);
 		}
