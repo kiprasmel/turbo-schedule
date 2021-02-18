@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/client",
-	"version": "2.11.2",
+	"version": "2.11.3",
 	"description": "",
 	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
 	"license": "",
@@ -45,7 +45,7 @@
 		"typescript": "4.2.1-rc"
 	},
 	"resolutions": {
- 	 	"@types/react": "^15.0.16"
+		"@types/react": "^15.0.16"
 	},
 	"eslintConfig": {
 		"extends": "eslint-config-sarpik"
