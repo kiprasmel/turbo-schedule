@@ -65,6 +65,7 @@ router.get("/:participantName", async (req, res, next) => {
 			.filter(
 				(lesson) =>
 					lesson.students.includes(participant.text) ||
+					lesson.classes.includes(participant.text) ||
 					lesson.teachers.includes(participant.text) ||
 					lesson.rooms.includes(participant.text)
 			)

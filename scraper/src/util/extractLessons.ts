@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-import { getHtml, ParticipantInLesson, NonUniqueLesson } from "@turbo-schedule/common";
+import { getHtml, ParticipantInLesson, NonUniqueLesson, createLessonWithParticipants } from "@turbo-schedule/common";
 
 import { prepareScheduleItems } from "./prepareScheduleItems";
-import { createLessonWithParticipants } from "../initializer/createLesson";
 
 /**
  * TODO rename these to `extractLessonsFromGrades5to10` and `extractLessonsFromGrades11to12`

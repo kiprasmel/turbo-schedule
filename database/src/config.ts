@@ -34,6 +34,9 @@ export interface DbSchema {
 	lessons: Lesson[];
 	/** changes: Change[]; */
 	scrapeInfo: ScrapeInfo;
+
+	/** defaults to `false` */
+	isDataFake?: boolean;
 }
 
 export const defaultDbState: DbSchema = {
@@ -45,6 +48,7 @@ export const defaultDbState: DbSchema = {
 	lessons: [],
 	/** , changes: [] */
 	scrapeInfo: getDefaultScrapeInfo(),
+	isDataFake: false,
 };
 
 export type Db = low.LowdbAsync<DbSchema>;

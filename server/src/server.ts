@@ -123,6 +123,10 @@ export function startServer({
 				console.error("encountered scraper error @ server:", e);
 			}
 		}
+		/**
+		 * else, the `initDb` function will create some fake data
+		 * if the mode is development and we do not have a database file yet.
+		 */
 	});
 
 	return server;

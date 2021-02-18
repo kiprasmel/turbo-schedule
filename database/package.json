@@ -5,6 +5,9 @@
 	"typings": "dist/index.d.ts",
 	"author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
 	"license": "UNLICENSED",
+	"scripts": {
+		"create-fake-data": "yarn ts-node-dev ./src/script/create-fake-data.ts"
+	},
 	"dependencies": {
 		"@turbo-schedule/common": "^2.10.3",
 		"@types/debug": "^4.1.5",
