@@ -17,22 +17,22 @@
 		"dev": "concurrently --raw --kill-others --names \"0: tsc,1: scraper\" \"yarn run watch:ts\" \"yarn run watch:scraper\""
 	},
 	"dependencies": {
-		"@turbo-schedule/common": "^2.12.0",
-		"@turbo-schedule/database": "^2.12.0",
-		"@types/cheerio": "^0.22.14",
-		"@types/fs-extra": "^8.0.0",
-		"@types/node-fetch": "^2.5.3",
-		"@types/prettier": "^1.18.2",
-		"cheerio": "^1.0.0-rc.3",
-		"fs-extra": "^8.1.0",
-		"iconv-lite": "^0.5.0",
-		"node-fetch": "^2.6.0",
-		"prettier": "^1.19.1"
+		"@turbo-schedule/common": "2.12.0",
+		"@turbo-schedule/database": "2.12.0",
+		"@types/cheerio": "0.22.14",
+		"@types/fs-extra": "8.0.0",
+		"@types/node-fetch": "2.5.3",
+		"@types/prettier": "1.18.2",
+		"cheerio": "1.0.0-rc.3",
+		"fs-extra": "8.1.0",
+		"iconv-lite": "0.5.0",
+		"node-fetch": "2.6.0",
+		"prettier": "1.19.1"
 	},
 	"devDependencies": {
-		"@types/node": "^12.12.7",
-		"nodemon": "^1.19.3",
-		"ts-node-dev": "^1.0.0-pre.44",
+		"@types/node": "12.12.7",
+		"nodemon": "1.19.3",
+		"ts-node-dev": "1.0.0-pre.44",
 		"typescript": "https://typescript.visualstudio.com/cf7ac146-d525-443c-b23c-0d58337efebc/_apis/build/builds/74014/artifacts?artifactName=tgz&fileId=53B4D99407A93B4AF6FAEF8437B02126A8C7FEC62F1C3307DAA098F75D2CE5D602&fileName=/typescript-4.0.0-nsiders.20200515.tgz"
 	},
 	"keywords": [
