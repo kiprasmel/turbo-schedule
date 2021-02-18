@@ -41,4 +41,13 @@ export interface Dictionary {
 	participants: (count: number) => string;
 	"Click me!": string;
 	"Enter the participant names": string;
+	"The UI/UX will be improved by the time the Beta phase is over": string;
+	"Extra info": string;
+	"Select a time interval": string;
+	day: string;
+	time: string;
+	"available (adj, mult)": string;
+	"bussy (adj, mult)": string;
+	total: string;
+	"(to) clear": string;
 }

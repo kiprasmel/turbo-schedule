@@ -552,7 +552,13 @@ export const Availability: FC = () => {
 								color: inherit;
 							`}
 							>
-								<h1>Clear</h1>
+								<h1
+									className={css`
+										text-transform: capitalize;
+									`}
+								>
+									{t("(to) clear")}
+								</h1>
 							</button>
 						</div>
 
@@ -588,8 +594,7 @@ export const Availability: FC = () => {
 									text-align: left;
 								`}
 							>
-								The UI/UX will be improved by the time the Beta phase is over.
-								{/* Dėmesio!Neteisingai suvedus mokinio / mokytojo / klasės / kabineto pavadinimą, jis prisidės prie bendro dalyvių kiekio, bet nebus atsižvelgta į laikus, kai jis užimtas (kitaip tariant - jis visada bus laisvas). Kai išeisime iš Beta versijos &ndash; šios problemos nebeliks. */}
+								{t("The UI/UX will be improved by the time the Beta phase is over")}.
 							</p>
 						)}
 					</div>
@@ -603,22 +608,28 @@ export const Availability: FC = () => {
 						//
 					`}
 				>
-					<h1>extra info</h1>
+					<h1>{t("Extra info")}</h1>
 
 					{!selectedAvailability ? (
-						<p>Select a time interval</p>
+						<p>{t("Select a time interval")}</p>
 					) : (
 						<>
 							<article>
-								<h1>day: {selectedAvailability.dayIndex + 1}</h1>
+								<h1>
+									{t("day")}: {selectedAvailability.dayIndex + 1}
+								</h1>
 							</article>
 
 							<article>
-								<h1>time: {selectedAvailability.timeIndex + 1}</h1>
+								<h1>
+									{t("time")}: {selectedAvailability.timeIndex + 1}
+								</h1>
 							</article>
 
 							<article>
-								<h1>available ({selectedAvailability.availableParticipants.length}):</h1>
+								<h1>
+									{t("available (adj, mult)")} ({selectedAvailability.availableParticipants.length}):
+								</h1>
 								<ul>
 									{selectedAvailability.availableParticipants.map((p) => (
 										<li>{p}</li>
@@ -627,7 +638,9 @@ export const Availability: FC = () => {
 							</article>
 
 							<article>
-								<h1>bussy ({selectedAvailability.bussyParticipants.length}):</h1>
+								<h1>
+									{t("bussy (adj, mult)")} ({selectedAvailability.bussyParticipants.length}):
+								</h1>
 								<ul>
 									{selectedAvailability.bussyParticipants.map((p) => (
 										<li>{p}</li>
@@ -637,7 +650,7 @@ export const Availability: FC = () => {
 
 							<article>
 								<h1>
-									total:{" "}
+									{t("total")}:{" "}
 									{selectedAvailability.availableParticipants.length +
 										selectedAvailability.bussyParticipants.length}
 								</h1>

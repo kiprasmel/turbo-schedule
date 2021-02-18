@@ -56,4 +56,14 @@ export const en: Dictionary = {
 	participants: (count) => (count === 1 ? `${count} participant` : `${count} participants`),
 	"Click me!": "Click me!",
 	"Enter the participant names": "Enter the participant names",
+	"The UI/UX will be improved by the time the Beta phase is over":
+		"The UI/UX will be improved by the time the Beta phase is over",
+	"Extra info": "Extra info",
+	"Select a time interval": "Select a time interval",
+	day: "day",
+	time: "time",
+	"available (adj, mult)": "available",
+	"bussy (adj, mult)": "bussy",
+	total: "total",
+	"(to) clear": "clear",
 };

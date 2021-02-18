@@ -69,4 +69,14 @@ export const lt: Dictionary = {
 	// 	: `${count} dalyviai`,
 	"Click me!": "Paspausk mane!",
 	"Enter the participant names": "Įveskite dalyvių vardus",
+	"The UI/UX will be improved by the time the Beta phase is over":
+		'Vartotojo sąsajos veikimo įpatumai patobulės pasibaigus "Beta" fazei',
+	"Extra info": "Papildoma informacija",
+	"Select a time interval": "Pasirinkite laiko intervalą",
+	day: "diena",
+	time: "laikas",
+	"available (adj, mult)": "laisvi",
+	"bussy (adj, mult)": "užimti",
+	total: "iš viso",
+	"(to) clear": "išvalyti",
 };
