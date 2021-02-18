@@ -99,7 +99,8 @@ export interface StartServerOptions {
 
 export function startServer({
 	portOverride = undefined, //
-	enableScraping = !!process.env.FORCE_ENABLE_SCRAPING || process.env.NODE_ENV === "production" || false,
+	enableScraping = !process.env.NO_SCRAPE &&
+		(!!process.env.FORCE_ENABLE_SCRAPING || process.env.NODE_ENV === "production" || false),
 }: StartServerOptions = {}): Server {
 	const PORT: number | string = portOverride ?? process.env.PORT ?? 5000;
 
