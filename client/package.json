@@ -44,6 +44,9 @@
 		"node-sass": "^4.13.0",
 		"typescript": "4.2.1-rc"
 	},
+	"resolutions": {
+ 	 	"@types/react": "^15.0.16"
+	},
 	"eslintConfig": {
 		"extends": "eslint-config-sarpik"
 	},
