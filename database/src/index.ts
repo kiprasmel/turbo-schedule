@@ -7,3 +7,5 @@ export * from "./setNewDbState";
 
 export * from "./fakeDb";
 export * from "./injectDb";
+
+export * from "./script/module/createFakeData";
