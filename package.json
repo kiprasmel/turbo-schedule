@@ -23,16 +23,17 @@
 	},
 	"scripts": {
 		"postinstall": "patch-package",
-		"setup": "     yarn install &&                               yarn build",
-		"setup:prod": "yarn install && cross-env NODE_ENV=production yarn build:prod",
+		"setup": "     yarn install --frozen-lockfile --check-files &&                               yarn build",
+		"setup:prod": "yarn install --frozen-lockfile --check-files && cross-env NODE_ENV=production yarn build:prod",
 		"start": "yarn dev  # depends on `setup`",
 		"test": "cross-env CI=true NODE_ENV=test lerna run test",
 		"lint": "    yarn eslint . --ext js,jsx,ts,tsx",
 		"lint:fix": "yarn eslint . --ext js,jsx,ts,tsx --fix",
-		"build": "     yarn purge:build && yarn build:all",
+		"build": "yarn purge:build && yarn build:all",
 		"build:prod": "yarn purge:build && yarn build:all:prod",
 		"serve": "yarn --cwd ./server/ serve",
 		"docker": "yarn docker:deploy",
+		"docker:commit": "yarn docker:deploy:commit",
 		"purge": "yarn purge:all",
 		"updts": "yarn lerna add typescript@latest --dev",
 		"-----": "-----",
@@ -47,14 +48,18 @@
 		"build:client:prod": "cross-env NODE_ENV=production yarn --cwd ./client/ build",
 		"build:server": "     yarn --cwd ./server/ build",
 		"build:server:prod": "cross-env NODE_ENV=production yarn --cwd ./server/ build:prod",
-		"build:all": "     yarn build:ts &&                           yarn build:server",
+		"build:all": "yarn cross-env-shell USE_FAKE_DATA_INSTEAD_OF_SCRAPING=1 \"yarn build:ts && yarn build:server\"",
 		"build:all:prod": "cross-env NODE_ENV=production yarn build:ts && yarn build:client:prod && yarn build:server:prod",
-		"docker:build": "docker build -t kipras/turbo-schedule:latest .",
+		"docker:build": "cross-env USE_FAKE_DATA_INSTEAD_OF_SCRAPING=1 docker build -t kipras/turbo-schedule:latest .",
 		"docker:login": "echo \"$DOCKERHUB_PASSWORD\" | docker login --username \"$DOCKERHUB_USERNAME\" --password-stdin",
 		"docker:push": "docker push kipras/turbo-schedule:latest",
 		"docker:deploy": "yarn docker:build && yarn docker:login && yarn docker:push",
 		"docker:tag-version": "docker tag kipras/turbo-schedule:latest kipras/turbo-schedule:$LATEST_TAG",
 		"docker:push-tagged-version": "docker push kipras/turbo-schedule:$LATEST_TAG",
+		"docker:build:commit": "cross-env USE_FAKE_DATA_INSTEAD_OF_SCRAPING=1 yarn build:prod && docker build -t kipras/turbo-schedule:$(git rev-parse HEAD)$VERSION_SUFFIX .",
+		"docker:login:commit": "docker login",
+		"docker:push:commit": "docker push kipras/turbo-schedule:$(git rev-parse HEAD)$VERSION_SUFFIX",
+		"docker:deploy:commit": "echo $VERSION_SUFFIX && yarn docker:build:commit && yarn docker:login:commit && yarn docker:push:commit && echo $(git rev-parse HEAD)$VERSION_SUFFIX",
 		"purge:build": "npx rimraf ./client/build ./*/dist/ ./dist/ ./*/tsconfig.tsbuildinfo",
 		"purge:modules": "npx rimraf ./*/node_modules/ ./node_modules/",
 		"purge:all": "yarn purge:build & yarn purge:modules & echo \"Do NOT forget to re-setup: \n\nyarn setup\n\""
@@ -83,6 +88,9 @@
 		"postinstall-postinstall": "^2.0.0",
 		"prettier": "^1.16.4",
 		"rimraf": "^3.0.0",
-		"typescript": "4.2.1-rc"
+		"typescript": "https://typescript.visualstudio.com/cf7ac146-d525-443c-b23c-0d58337efebc/_apis/build/builds/74014/artifacts?artifactName=tgz&fileId=53B4D99407A93B4AF6FAEF8437B02126A8C7FEC62F1C3307DAA098F75D2CE5D602&fileName=/typescript-4.0.0-nsiders.20200515.tgz"
+	},
+	"resolutions": {
+		"@types/react": "16.9.19"
 	}
 }

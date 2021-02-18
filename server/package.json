@@ -18,7 +18,7 @@
 		"dev": "concurrently --raw --kill-others --names \"0: tsc,1: server\" \"yarn watch:ts\" \"yarn watch:server\"",
 		"test:api": "cross-env NODE_ENV=test PORT=5069  jest --config ./src/test/jest.config.js",
 		"build:ts": "          yarn tsc -b -v                                                                   ",
-		"build:content": "     yarn --cwd ../database create-fake-data",
+		"build:content": "     yarn ts-node-dev ./src/script/scrape-content.ts   ",
 		"build:content:prod": "cross-env NODE_ENV=production     node        ./dist/script/scrape-content.js          # depends on `build:ts`",
 		"build:docs": "        yarn ts-node-dev      ./src/script/generate-openapi-docs.ts                          ",
 		"build:docs:prod": "cross-env NODE_ENV=production        node        ./dist/script/generate-openapi-docs.js   # depends on `build:ts`"
@@ -61,7 +61,7 @@
 		"supertest": "^4.0.2",
 		"ts-jest": "^24.1.0",
 		"ts-node-dev": "^1.0.0-pre.44",
-		"typescript": "4.2.1-rc"
+		"typescript": "https://typescript.visualstudio.com/cf7ac146-d525-443c-b23c-0d58337efebc/_apis/build/builds/74014/artifacts?artifactName=tgz&fileId=53B4D99407A93B4AF6FAEF8437B02126A8C7FEC62F1C3307DAA098F75D2CE5D602&fileName=/typescript-4.0.0-nsiders.20200515.tgz"
 	},
 	"resolutions": {
 		"express-oas-generator/swagger-ui-express": "^4.1.2"

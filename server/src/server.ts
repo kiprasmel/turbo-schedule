@@ -20,6 +20,8 @@ import helmet from "helmet";
 import cors from "cors";
 import { Server } from "http";
 
+import { initDb } from "@turbo-schedule/database";
+
 // import { mwReadOnly } from "./middleware/mwReadOnly";
 // import { mwPickFields } from "./middleware/mwPickFields";
 
@@ -97,12 +99,13 @@ export interface StartServerOptions {
 
 export function startServer({
 	portOverride = undefined, //
-	enableScraping = !!process.env.FORCE_ENABLE_SCRAPING || process.env.NODE_ENV === "production" || false,
+	enableScraping = !process.env.NO_SCRAPE &&
+		(!!process.env.FORCE_ENABLE_SCRAPING || process.env.NODE_ENV === "production" || false),
 }: StartServerOptions = {}): Server {
 	const PORT: number | string = portOverride ?? process.env.PORT ?? 5000;
 
 	/** serving */
-	const server: Server = app.listen(PORT, () => {
+	const server: Server = app.listen(PORT, async () => {
 		console.log(
 			`~ Server listening on PORT \`${PORT}\` @ NODE_ENV \`${process.env.NODE_ENV}\`, scraping \`${
 				enableScraping ? "enabled" : "disabled"
@@ -123,10 +126,12 @@ export function startServer({
 				console.error("encountered scraper error @ server:", e);
 			}
 		}
+
 		/**
-		 * else, the `initDb` function will create some fake data
+		 * if appropriate, the `initDb` function will create some fake data
 		 * if the mode is development and we do not have a database file yet.
 		 */
+		await initDb();
 	});
 
 	return server;

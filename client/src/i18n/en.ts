@@ -45,4 +45,25 @@ export const en: Dictionary = {
 	toCompactString: (items: string[]): string =>
 		items.length > 1 ? `${items[0]} and ${items.length - 1} more` : items[0],
 	"Made with love by (__html)": `Made with <span aria-label="love">❤</span> by`,
+	Availability: "Availability",
+	Common: "Common",
+	"Common Availability": "Common availability",
+	"There're often situations when you have a group of people and want to find a common time to meet":
+		"There're often situations when you have a group of people and want to find a common time to meet",
+	"is exactly the tool you need": "is exactly the tool you need",
+	"red - bussy; blue - available": "red - bussy; blue - available",
+	"white - bussy; black - available": "white - bussy; black - available",
+	participants: (count) => (count === 1 ? `${count} participant` : `${count} participants`),
+	"Click me!": "Click me!",
+	"Enter the participant names": "Enter the participant names",
+	"The UI/UX will be improved by the time the Beta phase is over":
+		"The UI/UX will be improved by the time the Beta phase is over",
+	"Extra info": "Extra info",
+	"Select a time interval": "Select a time interval",
+	day: "day",
+	time: "time",
+	"available (adj, mult)": "available",
+	"bussy (adj, mult)": "bussy",
+	total: "total",
+	"(to) clear": "clear",
 };

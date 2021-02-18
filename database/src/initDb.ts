@@ -12,7 +12,8 @@ export const initDb = async (storageFile: string = databaseFile): Promise<Db> =>
 	debug("Initializing database. `storageFile` = ", storageFile);
 
 	if (process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "test") {
-		if (!fs.pathExists(storageFile)) {
+		if (!fs.pathExistsSync(storageFile)) {
+			console.log("~creating fake data");
 			createFakeData();
 		}
 	}

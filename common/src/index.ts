@@ -6,6 +6,7 @@ export * from "./util/toJson";
 export * from "./util/writeToSingleFile";
 export * from "./util/timeElapsed";
 export * from "./util/mergeBy";
+export * from "./util/random";
 
 export * from "./model/Participant";
 export * from "./model/Schedule";
@@ -16,3 +17,4 @@ export * from "./model/Room";
 export * from "./model/Lesson";
 export * from "./model/Email";
 export * from "./model/ScrapeInfo";
+export * from "./model/Availability";

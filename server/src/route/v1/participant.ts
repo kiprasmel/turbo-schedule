@@ -5,7 +5,7 @@
 import { Router } from "express";
 
 import { initDb, Db } from "@turbo-schedule/database";
-import { Participant, Lesson } from "@turbo-schedule/common";
+import { Participant, Lesson, Availability, pickNPseudoRandomly, pickSome } from "@turbo-schedule/common";
 
 import { isProd } from "../../util/isProd";
 
@@ -33,6 +33,152 @@ router.get("/", async (_req, res, next) => {
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ participants: [], message: err });
+		return !isProd() ? next(err) : res.end();
+	}
+});
+
+router.get("/random", async (req, res, next) => {
+	const db: Db = await initDb();
+	const participants: Participant[] = await db.get("participants").value();
+
+	if (!req.query["count"]) {
+		res.json({ participants: pickSome(participants) });
+		return !isProd() ? next() : res.end();
+	} else {
+		const n = Number(req.query["count"]);
+
+		if (Number.isNaN(n)) {
+			const msg: string = `req.query.count NaN (provided as \`${req.query["count"]}\`, parsed as ${n})`;
+
+			res.status(400).json({
+				participants: [],
+				message: msg,
+			});
+
+			return !isProd() ? next(msg) : res.end();
+		} else {
+			res.json({ participants: pickNPseudoRandomly(n)(participants) });
+			return !isProd() ? next() : res.end();
+		}
+	}
+});
+
+router.get("/common-availability", async (req, res, next) => {
+	const getDefaultReturn = () => ({
+		minDayIndex: -1, //
+		maxDayIndex: -1,
+		minTimeIndex: -1,
+		maxTimeIndex: -1,
+		availability: [],
+	});
+
+	try {
+		const db: Db = await initDb();
+
+		const wantedParticipants: Participant["text"][] =
+			req.query?.["wanted-participants"]
+				?.split(",")
+				?.map((p: string | any) => p?.trim())
+				.filter((p: string | any) => !!p) ?? [];
+
+		const totalWantedParticipants: number = wantedParticipants.length;
+
+		console.log(wantedParticipants, totalWantedParticipants);
+
+		if (!wantedParticipants.length) {
+			const msg: string = `Request query \`wanted-participants\` was empty (${wantedParticipants})`;
+
+			console.error(msg);
+
+			res.status(400).json({ ...getDefaultReturn(), msg });
+			return !isProd() ? next(msg) : res.end();
+		}
+
+		const lessons: Lesson[] = await db
+			.get("lessons")
+			.filter(
+				(l) =>
+					wantedParticipants.some((w) => l.students.includes(w)) ||
+					wantedParticipants.some((w) => l.classes.includes(w)) ||
+					wantedParticipants.some((w) => l.teachers.includes(w)) ||
+					wantedParticipants.some((w) => l.rooms.includes(w))
+			)
+			.value();
+
+		const minDayIndex = lessons.reduce((prevMin, curr) => Math.min(prevMin, curr.dayIndex), 1e9);
+		const maxDayIndex = lessons.reduce((prevMax, curr) => Math.max(prevMax, curr.dayIndex), 0);
+
+		const minTimeIndex = lessons.reduce((prevMin, curr) => Math.min(prevMin, curr.timeIndex), 1e9);
+		const maxTimeIndex = lessons.reduce((prevMax, curr) => Math.max(prevMax, curr.timeIndex), 0);
+
+		const availability: Availability[][] = [];
+
+		/**
+		 * O(fast enough)
+		 */
+		for (let i = minDayIndex; i <= maxDayIndex; i++) {
+			availability[i] = [];
+
+			for (let j = minTimeIndex; j <= maxTimeIndex; j++) {
+				const related: Lesson[] = lessons.filter((l) => l.dayIndex === i && l.timeIndex === j);
+
+				/**
+				 * there could be multiple participants in the same lesson,
+				 * thus account for them all, not once.
+				 */
+				const getParticipants = (filterPred: (l: Lesson) => boolean): Participant["text"][] => [
+					...new Set(
+						related
+							.filter(filterPred)
+							.flatMap((l): string[] =>
+								[l.students, l.teachers, l.classes, l.rooms].flatMap((participants) =>
+									participants.filter((participant) => wantedParticipants.includes(participant))
+								)
+							)
+					),
+				];
+
+				let availableParticipants: Participant["text"][] = getParticipants((l) => l.isEmpty);
+				const bussyParticipants: Participant["text"][] = getParticipants((l) => !l.isEmpty);
+
+				/**
+				 * TODO FIXME HACK:
+				 *
+				 * The scraper is messed up for some edge cases (upstream -_-),
+				 * and there might be duplicate lessons, some not properly scraped.
+				 *
+				 * We know for a fact, though, that if a participant is bussy,
+				 * it cannot be available -- this fixes the issue (temporarily),
+				 * before we fix the underlying issue.
+				 *
+				 */
+				availableParticipants = availableParticipants.filter((p) => !bussyParticipants.includes(p));
+
+				availability[i][j] = {
+					dayIndex: i, //
+					timeIndex: j,
+					availableParticipants,
+					bussyParticipants,
+				};
+			}
+		}
+
+		res.status(200).json({
+			minDayIndex, //
+			maxDayIndex,
+			minTimeIndex,
+			maxTimeIndex,
+			availability,
+		});
+
+		return !isProd() ? next() : res.end();
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({
+			...getDefaultReturn(),
+			msg: err,
+		});
+
 		return !isProd() ? next(err) : res.end();
 	}
 });
