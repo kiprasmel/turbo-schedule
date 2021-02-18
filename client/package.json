@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/client",
-	"version": "2.11.0",
+	"version": "2.11.2",
 	"description": "",
 	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
 	"license": "",
@@ -14,7 +14,7 @@
 		"eject": "react-scripts eject"
 	},
 	"dependencies": {
-		"@turbo-schedule/common": "^2.11.0",
+		"@turbo-schedule/common": "^2.11.2",
 		"@types/history": "^4.7.3",
 		"@types/jest": "24.0.18",
 		"@types/lodash": "^4.14.147",
