@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.11.3...v2.12.0) (2021-02-18)
+
+
+### Bug Fixes
+
+* bring back the sane typescript version ([2f250e4](https://github.com/kiprasmel/turbo-schedule/commit/2f250e43153c272ff5a21792f347e62957b18217))
+* initialize db once starting server to make sure default data is created ([467744e](https://github.com/kiprasmel/turbo-schedule/commit/467744ed8141502ed19de96c0201cdc10957f26c))
+
+
+
+
+
 ## [2.11.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.11.1...v2.11.2) (2021-02-18)
 
 **Note:** Version bump only for package @turbo-schedule/database

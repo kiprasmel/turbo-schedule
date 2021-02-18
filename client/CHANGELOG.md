@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.11.3...v2.12.0) (2021-02-18)
+
+
+### Bug Fixes
+
+* **client:** internationalize the common availability page ([171f8c6](https://github.com/kiprasmel/turbo-schedule/commit/171f8c628e86d3b9868a1cfe992d8b8290b36bac))
+* bring back the sane typescript version ([2f250e4](https://github.com/kiprasmel/turbo-schedule/commit/2f250e43153c272ff5a21792f347e62957b18217))
+
+
+### Features
+
+* create `/participant/random` route & use it for common-availability example ([df58b06](https://github.com/kiprasmel/turbo-schedule/commit/df58b060139a409e2d6284808917c85db0d00843))
+* create common availability (beta) 🚀🚀 ([5fd7efa](https://github.com/kiprasmel/turbo-schedule/commit/5fd7efa2714b58b8087b26d97454a48ef36c4174))
+* improve UI of extra info ([1a95ec2](https://github.com/kiprasmel/turbo-schedule/commit/1a95ec299ebf5c4f7894352a91363b345d3d3071))
+* provide participant names instead of their count 👨👩 ([4a4bd16](https://github.com/kiprasmel/turbo-schedule/commit/4a4bd16b7334957a2c11aaec9c9abf3e6412076f))
+
+
+
+
+
 ## [2.11.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.11.2...v2.11.3) (2021-02-18)
 
 

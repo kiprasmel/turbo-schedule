@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.11.3...v2.12.0) (2021-02-18)
+
+
+### Bug Fixes
+
+* always build docker images & dev builds with fake data 🔎 ([7d4f8e6](https://github.com/kiprasmel/turbo-schedule/commit/7d4f8e6c44c8b6694346cfc617aaed10f95b8363))
+* bring back the sane typescript version ([2f250e4](https://github.com/kiprasmel/turbo-schedule/commit/2f250e43153c272ff5a21792f347e62957b18217))
+* create hacky work-around for duplicate lessons @ availability ([72d118a](https://github.com/kiprasmel/turbo-schedule/commit/72d118ada45629b5a9503a8de3eb51aa6300528b))
+* ensure busy & available participants are unique ([7f24a06](https://github.com/kiprasmel/turbo-schedule/commit/7f24a06351055d2d12abdda3ec9b279cfb1a6f39))
+* fix "common availability" bug - account for **each** wanted participant in a lesson, not one ([609dd04](https://github.com/kiprasmel/turbo-schedule/commit/609dd0465e0cdb480b69a4ad5eda1bf09131b94a))
+* handle err response properly @ common avail ([5e12cd0](https://github.com/kiprasmel/turbo-schedule/commit/5e12cd00c8414b45d98a8285d7206fbde240ed15))
+* initialize db once starting server to make sure default data is created ([467744e](https://github.com/kiprasmel/turbo-schedule/commit/467744ed8141502ed19de96c0201cdc10957f26c))
+* make a bug easy to spot:D ([6b67a29](https://github.com/kiprasmel/turbo-schedule/commit/6b67a29b599c0aacd59dc2a4123db1e65fab0011))
+
+
+### Features
+
+* create `/participant/random` route & use it for common-availability example ([df58b06](https://github.com/kiprasmel/turbo-schedule/commit/df58b060139a409e2d6284808917c85db0d00843))
+* create common availability (beta) 🚀🚀 ([5fd7efa](https://github.com/kiprasmel/turbo-schedule/commit/5fd7efa2714b58b8087b26d97454a48ef36c4174))
+* provide participant names instead of their count 👨👩 ([4a4bd16](https://github.com/kiprasmel/turbo-schedule/commit/4a4bd16b7334957a2c11aaec9c9abf3e6412076f))
+
+
+
+
+
 ## [2.11.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.11.1...v2.11.2) (2021-02-18)
 
 **Note:** Version bump only for package @turbo-schedule/server

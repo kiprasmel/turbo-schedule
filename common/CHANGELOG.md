@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.11.3...v2.12.0) (2021-02-18)
+
+
+### Bug Fixes
+
+* bring back the sane typescript version ([2f250e4](https://github.com/kiprasmel/turbo-schedule/commit/2f250e43153c272ff5a21792f347e62957b18217))
+
+
+### Features
+
+* create common availability (beta) 🚀🚀 ([5fd7efa](https://github.com/kiprasmel/turbo-schedule/commit/5fd7efa2714b58b8087b26d97454a48ef36c4174))
+* provide participant names instead of their count 👨👩 ([4a4bd16](https://github.com/kiprasmel/turbo-schedule/commit/4a4bd16b7334957a2c11aaec9c9abf3e6412076f))
+
+
+
+
+
 ## [2.11.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.11.1...v2.11.2) (2021-02-18)
 
 **Note:** Version bump only for package @turbo-schedule/common
