@@ -8,6 +8,7 @@ import {
 	Room,
 	Participant,
 	ParticipantLabel,
+	makeLessonsUnique,
 } from "@turbo-schedule/common";
 import { DbSchema, setDbStateAndBackupCurrentOne } from "@turbo-schedule/database";
 
@@ -21,8 +22,8 @@ import { createStudentFromList } from "./initializer/createStudent";
 
 import { getFrontPageHtml } from "./util/getFrontPageHtml";
 import { scrapeScheduleItemListFactory } from "./util/scrapeScheduleItemList";
-import { scrapeAndDoMagicWithLessonsFromParticipants } from "./util/scrapeAndDoMagicWithLessonsFromParticipants";
 import { createPageVersionIdentifier } from "./util/createPageVersionIdentifier";
+import { extractLessonFromTeacher } from "./util/extractLessons";
 
 export const scrape = async (config: IScraperConfig): Promise<void> => {
 	try {
@@ -93,7 +94,21 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		 */
 		const participants: Participant[] = participants2D.flat();
 
-		const lessons: Lesson[] = await scrapeAndDoMagicWithLessonsFromParticipants(participants);
+		const extractNonUniqueLessons = () =>
+			participants
+				.map(
+					async (p) =>
+						await extractLessonFromTeacher(p.originalScheduleURI, {
+							text: p.text,
+							isActive: true,
+							labels: p.labels,
+						})
+				)
+				.flat();
+
+		const nonUniqueLessons = (await Promise.all(extractNonUniqueLessons())).flat();
+
+		const lessons: Lesson[] = await makeLessonsUnique(nonUniqueLessons);
 
 		/**
 		 * done! Now just save to the database, log info etc.
