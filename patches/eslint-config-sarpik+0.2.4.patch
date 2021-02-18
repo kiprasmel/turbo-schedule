@@ -1,0 +1,13 @@
+diff --git a/node_modules/eslint-config-sarpik/.eslintrc.js b/node_modules/eslint-config-sarpik/.eslintrc.js
+index dce29b0..a0185a4 100755
+--- a/node_modules/eslint-config-sarpik/.eslintrc.js
++++ b/node_modules/eslint-config-sarpik/.eslintrc.js
+@@ -55,7 +55,7 @@ module.exports = {
+ 		"no-unused-vars": [
+ 			1,
+ 			{
+-				ignoreSiblings: true,
++				ignoreRestSiblings: true,
+ 				argsIgnorePattern: "res|next|^err",
+ 			},
+ 		],
