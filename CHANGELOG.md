@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.4](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.3...v2.10.4) (2021-02-18)
+
+
+### Bug Fixes
+
+* **server:** disable scraping by default, except in production ([0349a4a](https://github.com/kiprasmel/turbo-schedule/commit/0349a4a2f5de15dd94b953567adfb71c707ae9df))
+
+
+
+
+
 ## [2.10.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.2...v2.10.3) (2021-02-17)
 
 
