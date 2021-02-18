@@ -49,21 +49,18 @@ router.get("/common-availability", async (req, res, next) => {
 	try {
 		const db: Db = await initDb();
 
-		// const _wanted: Participant["text"][] | Participant["text"] = req.query?.["wanted-participants"] ?? [];
-		// const wanted: Participant["text"][] = Array.isArray(_wanted) ? _wanted : [_wanted];
-
-		const wanted: Participant["text"][] =
+		const wantedParticipants: Participant["text"][] =
 			req.query?.["wanted-participants"]
 				?.split(",")
 				?.map((p: string | any) => p?.trim())
 				.filter((p: string | any) => !!p) ?? [];
 
-		const totalWantedParticipants: number = wanted.length;
+		const totalWantedParticipants: number = wantedParticipants.length;
 
-		console.log(wanted, totalWantedParticipants);
+		console.log(wantedParticipants, totalWantedParticipants);
 
-		if (!wanted.length) {
-			const msg: string = `Request query \`wanted-participants\` was empty (${wanted})`;
+		if (!wantedParticipants.length) {
+			const msg: string = `Request query \`wanted-participants\` was empty (${wantedParticipants})`;
 
 			console.error(msg);
 
@@ -71,27 +68,14 @@ router.get("/common-availability", async (req, res, next) => {
 			return !isProd() ? next(msg) : res.end();
 		}
 
-		// const wantedParticipants: Participant[] = await db
-		// 	.get("participants")
-		// 	.filter((p) => wanted.includes(p.text))
-		// 	.value();
-
-		// console.log(wantedParticipants);
-
-		/**
-		 * we want to build a schedule that's common between all participants
-		 * that indicates at each time period
-		 * how many participants are available / unavailable
-		 */
-
 		const lessons: Lesson[] = await db
 			.get("lessons")
 			.filter(
 				(l) =>
-					wanted.some((w) => l.students.includes(w)) ||
-					wanted.some((w) => l.classes.includes(w)) ||
-					wanted.some((w) => l.teachers.includes(w)) ||
-					wanted.some((w) => l.rooms.includes(w))
+					wantedParticipants.some((w) => l.students.includes(w)) ||
+					wantedParticipants.some((w) => l.classes.includes(w)) ||
+					wantedParticipants.some((w) => l.teachers.includes(w)) ||
+					wantedParticipants.some((w) => l.rooms.includes(w))
 			)
 			.value();
 
@@ -104,8 +88,7 @@ router.get("/common-availability", async (req, res, next) => {
 		const availability: Availability[][] = [];
 
 		/**
-		 * O(7) days * O(~10) time intervals * O(n * 7 * ~10) participants * max lessons = students * (days * time intervals)
-		 * => O(7**2 * ~10**2 * n) where n = max participant count
+		 * O(fast enough)
 		 */
 		for (let i = minDayIndex; i <= maxDayIndex; i++) {
 			availability[i] = [];
@@ -123,7 +106,7 @@ router.get("/common-availability", async (req, res, next) => {
 							.filter(filterPred)
 							.flatMap((l): string[] =>
 								[l.students, l.teachers, l.classes, l.rooms].flatMap((participants) =>
-									participants.filter((participant) => wanted.includes(participant))
+									participants.filter((participant) => wantedParticipants.includes(participant))
 								)
 							)
 					),
