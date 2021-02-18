@@ -5,7 +5,7 @@
 import { Router } from "express";
 
 import { initDb, Db } from "@turbo-schedule/database";
-import { Participant, Lesson, Availability } from "@turbo-schedule/common";
+import { Participant, Lesson, Availability, pickNPseudoRandomly, pickSome } from "@turbo-schedule/common";
 
 import { isProd } from "../../util/isProd";
 
@@ -34,6 +34,32 @@ router.get("/", async (_req, res, next) => {
 		console.error(err);
 		res.status(500).json({ participants: [], message: err });
 		return !isProd() ? next(err) : res.end();
+	}
+});
+
+router.get("/random", async (req, res, next) => {
+	const db: Db = await initDb();
+	const participants: Participant[] = await db.get("participants").value();
+
+	if (!req.query["count"]) {
+		res.json({ participants: pickSome(participants) });
+		return !isProd() ? next() : res.end();
+	} else {
+		const n = Number(req.query["count"]);
+
+		if (Number.isNaN(n)) {
+			const msg: string = `req.query.count NaN (provided as \`${req.query["count"]}\`, parsed as ${n})`;
+
+			res.status(400).json({
+				participants: [],
+				message: msg,
+			});
+
+			return !isProd() ? next(msg) : res.end();
+		} else {
+			res.json({ participants: pickNPseudoRandomly(n)(participants) });
+			return !isProd() ? next() : res.end();
+		}
 	}
 });
 

@@ -4,7 +4,7 @@ import React, { FC, useState, useEffect, useRef, useReducer } from "react";
 import axios from "axios";
 import { cx, css } from "emotion";
 
-import { Availability as IAvailability } from "@turbo-schedule/common";
+import { Availability as IAvailability, Participant } from "@turbo-schedule/common";
 
 import { Dictionary } from "../../i18n/i18n";
 import { useWindow } from "../../hooks/useWindow";
@@ -460,9 +460,21 @@ export const Availability: FC = () => {
 						<button
 							type="button"
 							onClick={() =>
-								setWantedParticipants(
-									"Melnikovas Kipras IVe, Baltūsienė Violeta, Mėčius Gediminas IVe, Zaboras Edgaras IVGc, Adomaitis Jurgis IIIc, Rimkus Gabrielius IIIc, IIGd, IIGb, IGb, IIGa, IGa"
-								)
+								axios
+									.get(`/api/v1/participant/random`)
+									.then((res: { data: { participants: Participant[] } }) =>
+										setWantedParticipants(
+											(res.data?.participants ?? [])
+												.map((participant) => participant.text)
+												.join(", ")
+										)
+									)
+									.catch((err) => {
+										console.error(err);
+										setWantedParticipants(
+											"Melnikovas Kipras IVe, Baltūsienė Violeta, Mėčius Gediminas IVe, Zaboras Edgaras IVGc, Adomaitis Jurgis IIIc, Rimkus Gabrielius IIIc, IIGd, IIGb, IGb, IIGa, IGa"
+										);
+									})
 							}
 							className={css`
 								font-family: inherit;
