@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.4...v2.11.0) (2021-02-18)
+
+
+### Bug Fixes
+
+* **client:** handle partly-empty schedule with lesson gap(s) ([79caef8](https://github.com/kiprasmel/turbo-schedule/commit/79caef8bd57a23648f205d7532084754dcf7d407))
+
+
+
+## 2.10.3 (2021-02-17)
+
+
+
+
+
 ## [2.10.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.2...v2.10.3) (2021-02-17)
 
 

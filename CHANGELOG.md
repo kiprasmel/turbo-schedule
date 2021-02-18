@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.4...v2.11.0) (2021-02-18)
+
+
+### Bug Fixes
+
+* **client:** handle partly-empty schedule with lesson gap(s) ([79caef8](https://github.com/kiprasmel/turbo-schedule/commit/79caef8bd57a23648f205d7532084754dcf7d407))
+* **server:** disable scraping by default, except in production ([0349a4a](https://github.com/kiprasmel/turbo-schedule/commit/0349a4a2f5de15dd94b953567adfb71c707ae9df))
+* **server:** include `classes` in the `participant` lookup ([15a1dd6](https://github.com/kiprasmel/turbo-schedule/commit/15a1dd63592bbea61b7cb02d1add8a143b94839e))
+
+
+### Features
+
+* **database:** create `create-fake-data` 🔥🔥🔥 ([21f48f7](https://github.com/kiprasmel/turbo-schedule/commit/21f48f775d612169fbd3c36d79596d7039a133b8))
+* **database:** create fake data if none available yet (ideal for new clones) 🚀 ([3bf22b5](https://github.com/kiprasmel/turbo-schedule/commit/3bf22b5cdeba7fbf6a6a5ba36f2d06ed7cb9fd09))
+
+
+
+## 2.10.3 (2021-02-17)
+
+
+
+
+
 ## [2.10.4](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.3...v2.10.4) (2021-02-18)
 
 

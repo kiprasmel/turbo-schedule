@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.4...v2.11.0) (2021-02-18)
+
+
+### Features
+
+* **database:** create `create-fake-data` 🔥🔥🔥 ([21f48f7](https://github.com/kiprasmel/turbo-schedule/commit/21f48f775d612169fbd3c36d79596d7039a133b8))
+* **database:** create fake data if none available yet (ideal for new clones) 🚀 ([3bf22b5](https://github.com/kiprasmel/turbo-schedule/commit/3bf22b5cdeba7fbf6a6a5ba36f2d06ed7cb9fd09))
+
+
+
+## 2.10.3 (2021-02-17)
+
+
+
+
+
 ## [2.10.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.2...v2.10.3) (2021-02-17)
 
 
