@@ -74,16 +74,24 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			)(frontPageHtml)
 		);
 
+		if (process.env.FAST !== undefined && process.env.FAST !== null && process.env.FAST !== "") {
+			const defaultLimit: number = 5;
+			const limit: number = Number(process.env.FAST) || defaultLimit;
+
+			/**
+			 * note: data becomes invalid
+			 *
+			 * i.e. replationships between different participants will break,
+			 * meaning that links from a lesson to any participant
+			 * might link to a participant we have removed
+			 */
+			participants2D = participants2D.map((p) => p.slice(0, limit));
+		}
+
 		/**
 		 * `[ [a, b], [c, d] ]` => `[ a, b, c, d ]`
 		 */
-		let participants: Participant[] = participants2D.flat();
-
-		if (process.env.FAST) {
-			/** TODO document */
-			participants2D = participants2D.map((p) => p.slice(0, 10));
-			participants = participants.slice(0, 10);
-		}
+		const participants: Participant[] = participants2D.flat();
 
 		const lessons: Lesson[] = await scrapeAndDoMagicWithLessonsFromParticipants(participants);
 
