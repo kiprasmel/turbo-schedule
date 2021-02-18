@@ -70,18 +70,22 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 					return;
 				}
 
-				const scheduleByDays: Array<Array<Lesson>> = [];
+				const tempScheduleByDays: Array<Array<Lesson>> = [];
 
 				lessons.forEach((lesson) => {
 					/** make sure there's always an array inside an array */
-					if (!scheduleByDays[lesson.dayIndex]) {
-						scheduleByDays.push([]);
+					if (!tempScheduleByDays[lesson.dayIndex]) {
+						/**
+						 * TODO FIXME! Not sure if this is correct :/
+						 */
+						// tempScheduleByDays.push([]);
+						tempScheduleByDays[lesson.dayIndex] = [];
 					}
 
-					scheduleByDays[lesson.dayIndex].push(lesson);
+					tempScheduleByDays[lesson.dayIndex].push(lesson);
 				});
 
-				setScheduleByDays(scheduleByDays);
+				setScheduleByDays(tempScheduleByDays);
 				setIsLoading(false);
 			} catch (err) {
 				console.error("Error!", err);
@@ -165,7 +169,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		);
 	}
 
-	if (!scheduleByDays || !scheduleByDays.length || !scheduleByDays[0] || !scheduleByDays[0].length) {
+	if (!scheduleByDays || !scheduleByDays.length || !scheduleByDays[0] /* || !scheduleByDays[0].length */) {
 		return (
 			<>
 				<BackBtn />
