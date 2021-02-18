@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.12.0...v2.12.1) (2021-02-18)
+
+
+### Bug Fixes
+
+* force **exact** versions for all dependencies ([05ae6d8](https://github.com/kiprasmel/turbo-schedule/commit/05ae6d8b78a2897753f7e65fe34b6b2cf02e6b35))
+
+
+
+
+
 # [2.12.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.11.3...v2.12.0) (2021-02-18)
 
 
