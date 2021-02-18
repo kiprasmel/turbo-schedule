@@ -23,8 +23,8 @@
 	},
 	"scripts": {
 		"postinstall": "patch-package",
-		"setup": "     yarn install &&                               yarn build",
-		"setup:prod": "yarn install && cross-env NODE_ENV=production yarn build:prod",
+		"setup": "     yarn install --frozen-lockfile --check-files &&                               yarn build",
+		"setup:prod": "yarn install --frozen-lockfile --check-files && cross-env NODE_ENV=production yarn build:prod",
 		"start": "yarn dev  # depends on `setup`",
 		"test": "cross-env CI=true NODE_ENV=test lerna run test",
 		"lint": "    yarn eslint . --ext js,jsx,ts,tsx",
