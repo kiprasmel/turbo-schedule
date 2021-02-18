@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.11.0...v2.11.1) (2021-02-18)
+
+
+### Bug Fixes
+
+* **server:** create fake data instead of scraping in development ([914aaa5](https://github.com/kiprasmel/turbo-schedule/commit/914aaa554f061c76166aded6ba6704ac156ef383))
+
+
+
+
+
 # [2.11.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.10.4...v2.11.0) (2021-02-18)
 
 
