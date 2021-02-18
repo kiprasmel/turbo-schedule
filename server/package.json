@@ -18,7 +18,7 @@
 		"dev": "concurrently --raw --kill-others --names \"0: tsc,1: server\" \"yarn watch:ts\" \"yarn watch:server\"",
 		"test:api": "cross-env NODE_ENV=test PORT=5069  jest --config ./src/test/jest.config.js",
 		"build:ts": "          yarn tsc -b -v                                                                   ",
-		"build:content": "     yarn --cwd ../database create-fake-data",
+		"build:content": "     yarn ts-node-dev ./src/script/scrape-content.ts   ",
 		"build:content:prod": "cross-env NODE_ENV=production     node        ./dist/script/scrape-content.js          # depends on `build:ts`",
 		"build:docs": "        yarn ts-node-dev      ./src/script/generate-openapi-docs.ts                          ",
 		"build:docs:prod": "cross-env NODE_ENV=production        node        ./dist/script/generate-openapi-docs.js   # depends on `build:ts`"

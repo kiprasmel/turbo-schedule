@@ -29,13 +29,14 @@ PRs welcome!
 
 The following environment variables affect some parts of the functionality
 
-| env variable (`process.env.`) | description                                                                                                                                                                                                                   |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `NODE_ENV`                    | one of the following: `"development"`, `"production"`, or `"test"`. `"development"` is the default, `"production"` disables development-only features, and `"test"` is somewhere in the middle, used only when running tests. |
-| `PORT`                        | The server port (check default @ [./server/src/server.ts](./server/src/server.ts)).                                                                                                                                           |
-| `FORCE_ENABLE_SCRAPING`       | Enable scraping of the schedule data, even in development mode. By default, schedule data scraping is disabled in development mode and the default sample data is used.                                                       |
-| `START_SCRAPER_NOW`           | Start scrapping schedule data immediately instead of when it gets updated / periodically todo.                                                                                                                                |
-| `FAST`                        | (only applicable if data is being scraped) scrape only a limited amount of users from the schedule instead of all of them. Useful for prototyping/debugging the scraper without overloading the upstream.                     |
+| env variable (`process.env.`)       | description                                                                                                                                                                                                                   |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NODE_ENV`                          | one of the following: `"development"`, `"production"`, or `"test"`. `"development"` is the default, `"production"` disables development-only features, and `"test"` is somewhere in the middle, used only when running tests. |
+| `PORT`                              | The server port (check default @ [./server/src/server.ts](./server/src/server.ts)).                                                                                                                                           |
+| `FORCE_ENABLE_SCRAPING`             | Enable scraping of the schedule data, even in development mode. By default, schedule data scraping is disabled in development mode and the default sample data is used.                                                       |
+| `START_SCRAPER_NOW`                 | Start scrapping schedule data immediately instead of when it gets updated / periodically todo.                                                                                                                                |
+| `FAST`                              | (only applicable if data is being scraped) scrape only a limited amount of users from the schedule instead of all of them. Useful for prototyping/debugging the scraper without overloading the upstream.                     |
+| `USE_FAKE_DATA_INSTEAD_OF_SCRAPING` | Forget the scraper -- just use some fake data bro.                                                                                                                                                                            |
 
 ## Adding a new package folder (like `server` or `database`)
 

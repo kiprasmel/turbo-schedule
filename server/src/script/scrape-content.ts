@@ -27,7 +27,15 @@
  *
  */
 
+import { createFakeData } from "@turbo-schedule/database";
 import scraper from "@turbo-schedule/scraper";
+
 import { scrapedDataDirPath } from "../config";
 
-scraper(scrapedDataDirPath);
+if (process.env.USE_FAKE_DATA_INSTEAD_OF_SCRAPING) {
+	console.log("going fake");
+	createFakeData();
+} else {
+	console.log("going scrape");
+	scraper(scrapedDataDirPath);
+}
