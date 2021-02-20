@@ -53,6 +53,7 @@ cd turbo-schedule
 
 # note: you must not have `--ignore-scripts` enabled (default)
 # note: your `node` version shall be < 14 -- see https://github.com/kiprasmel/turbo-schedule/issues/78
+# note: scraping might fail due to upstream, see https://github.com/kiprasmel/turbo-schedule/pull/94
 yarn setup:prod
 yarn serve
 ```
