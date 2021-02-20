@@ -37,7 +37,7 @@ You can also run `turbo-schedule` locally:
 
 ```sh
 docker pull kipras/turbo-schedule
-docker run -p 5000:5000 -e NO_SCRAPE=1 --name turbo-schedule kipras/turbo-schedule
+docker run -d -p 5000:5000 -e NO_SCRAPE=1 --name turbo-schedule kipras/turbo-schedule
 # to stop:  docker stop turbo-schedule
 ```
 
