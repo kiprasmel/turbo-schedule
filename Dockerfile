@@ -13,7 +13,7 @@
 #
 #
 
-FROM node as node
+FROM node:12 as node
 
 ENV workdir=/usr/src/app
 
