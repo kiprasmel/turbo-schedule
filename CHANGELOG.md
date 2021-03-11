@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.12.2...v2.12.3) (2021-03-11)
+
+
+### Bug Fixes
+
+* **scraper:** add missing `isEmpty` fix and refactor it ([61b53e2](https://github.com/kiprasmel/turbo-schedule/commit/61b53e2d4298af5962411b98ead48e3863da772e))
+* use specific version @ Dockerfile to match with `engines` in package.json ([65a4479](https://github.com/kiprasmel/turbo-schedule/commit/65a447924845dff5610604a34082612cefca5d7c))
+
+
+
+
+
 ## [2.12.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.12.1...v2.12.2) (2021-03-11)
 
 
