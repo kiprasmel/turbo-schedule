@@ -87,7 +87,7 @@ function extractLessonFromStudentParser(
 	const teacher = removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[2]?.data ?? "");
 	const room = removeNewlineAndTrim(itemWithClassNameTeacherAndRoom[4]?.data ?? "");
 
-	const isEmpty: boolean = !name || !teacher || !room;
+	const isEmpty: boolean = !name && !teacher && !room;
 
 	const participants: ParticipantInLesson[] = [
 		...teacher
