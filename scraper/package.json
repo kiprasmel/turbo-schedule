@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/scraper",
-	"version": "2.12.1",
+	"version": "2.12.2",
 	"description": "",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",

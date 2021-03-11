@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.12.1...v2.12.2) (2021-03-11)
+
+
+### Bug Fixes
+
+* **scraper:** mark lessons as empty if ALL not SOME fields are missing ([7fa3aaa](https://github.com/kiprasmel/turbo-schedule/commit/7fa3aaa6b6ed27afabcd6d07b7582505d5726ebe))
+
+
+
+
+
 ## [2.12.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.12.0...v2.12.1) (2021-02-18)
 
 
