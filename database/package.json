@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/database",
-	"version": "2.12.1",
+	"version": "2.13.0",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
 	"author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
@@ -9,7 +9,7 @@
 		"create-fake-data": "yarn ts-node-dev ./src/script/create-fake-data.ts"
 	},
 	"dependencies": {
-		"@turbo-schedule/common": "^2.12.1",
+		"@turbo-schedule/common": "^2.13.0",
 		"@types/debug": "4.1.5",
 		"@types/lowdb": "1.0.9",
 		"@types/uuid": "7.0.2",
