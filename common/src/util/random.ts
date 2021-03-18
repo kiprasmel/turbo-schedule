@@ -76,8 +76,22 @@ export const pickNPseudoRandomly = (n: number) => <T>(origArr: T[], alreadyTaken
 
 export const randomUpToNExcl = (n: number): number => Math.ceil(Math.random() * (n - 1));
 
-export const pickSome = <T>(origArr: T[], alreadyTakenArr: T[] = []): T[] => {
-	const howManyToPick: number = randomUpToNExcl(origArr.length);
+interface PickSomeOptions<T> {
+	maxCount?: number;
+	alreadyTakenArr?: T[];
+}
+
+export const pickSome = <T>(
+	origArr: T[], //
+	{
+		maxCount = origArr.length, //
+		alreadyTakenArr = [],
+	}: PickSomeOptions<T>
+): T[] => {
+	// eslint-disable-next-line no-param-reassign
+	maxCount = Math.min(maxCount, origArr.length);
+
+	const howManyToPick: number = randomUpToNExcl(maxCount);
 
 	return pickNPseudoRandomly(howManyToPick)(origArr, alreadyTakenArr);
 };

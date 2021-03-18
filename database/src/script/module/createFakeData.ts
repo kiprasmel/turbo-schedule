@@ -113,16 +113,20 @@ export const createFakeData = (
 					}
 
 					// let pickedStudentNames: string[] = pickNPseudoRandomly(1)(studentNames, alreadyPickedStudentNames);
-					let pickedStudentNames: string[] = pickSome(studentNames, alreadyPickedStudentNames);
+					let pickedStudentNames: string[] = pickSome(studentNames, {
+						alreadyTakenArr: alreadyPickedStudentNames,
+					});
 
 					// let pickedStudentNames: string[] = pickNPseudoRandomly(1)(studentNames, alreadyPickedStudentNames);
-					let pickedClassNames: string[] = pickSome(classNames, alreadyPickedClassNames);
+					let pickedClassNames: string[] = pickSome(classNames, { alreadyTakenArr: alreadyPickedClassNames });
 
 					// let pickedTeacherNames: string[] = pickNPseudoRandomly(1)(teacherNames, alreadyPickedTeacherNames);
-					let pickedTeacherNames: string[] = pickSome(teacherNames, alreadyPickedTeacherNames);
+					let pickedTeacherNames: string[] = pickSome(teacherNames, {
+						alreadyTakenArr: alreadyPickedTeacherNames,
+					});
 
 					// let pickedRoomNames: string[] = pickNPseudoRandomly(1)(roomNames, alreadyPickedRoomNames);
-					let pickedRoomNames: string[] = pickSome(roomNames, alreadyPickedRoomNames);
+					let pickedRoomNames: string[] = pickSome(roomNames, { alreadyTakenArr: alreadyPickedRoomNames });
 
 					let isEmpty: boolean = false; // time >= Math.ceil(maxTimeIndex * 0.8) ? Math.random() <= 0.5 : Math.random() <= 0.1;
 

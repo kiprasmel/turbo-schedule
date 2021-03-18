@@ -37,12 +37,19 @@ router.get("/", async (_req, res, next) => {
 	}
 });
 
+/**
+ * req.query:
+ * - `count` (optional): exact count of how many participants to return
+ * - `max`   (optional): maximum number of participants to return IF an exact count is not specified
+ */
 router.get("/random", async (req, res, next) => {
 	const db: Db = await initDb();
 	const participants: Participant[] = await db.get("participants").value();
 
 	if (!req.query["count"]) {
-		res.json({ participants: pickSome(participants) });
+		const maxCount: number = Number(req.query["max"]) || 32;
+
+		res.json({ participants: pickSome(participants, { maxCount }) });
 		return !isProd() ? next() : res.end();
 	} else {
 		const n = Number(req.query["count"]);
