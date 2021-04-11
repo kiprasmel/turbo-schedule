@@ -1,6 +1,12 @@
 import cheerio from "cheerio";
 
-import { getHtml, ParticipantInLesson, NonUniqueLesson, createLessonWithParticipants } from "@turbo-schedule/common";
+import {
+	getHtml,
+	ParticipantInLesson,
+	NonUniqueLesson,
+	createLessonWithParticipants,
+	delayBlockingSync,
+} from "@turbo-schedule/common";
 
 import { prepareScheduleItems } from "./prepareScheduleItems";
 
@@ -23,6 +29,21 @@ function extractLessonsFactory(parser: LessonParser): LessonExtractor {
 		participant: ParticipantInLesson
 	): Promise<NonUniqueLesson[]> => {
 		const html: string = await getHtml(originalScheduleURI, "windows-1257");
+
+		/**
+		 * the production server works just fine without delays;
+		 *
+		 * on the development rig, however,
+		 * I keep overhoarding the upstream & getting banned.
+		 *
+		 * It's starting to get confusing as to why some things help
+		 * and some don't, but this seems good.
+		 *
+		 */
+		if (process.env.NODE_ENV !== "production") {
+			const delayMs: number = Number(process.env.SYNC_DELAY) ?? 250;
+			delayBlockingSync(delayMs);
+		}
 
 		const scheduleItemsArray: CheerioElement[] = prepareScheduleItems(html);
 

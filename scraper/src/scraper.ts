@@ -76,8 +76,10 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		);
 
 		if (process.env.FAST !== undefined && process.env.FAST !== null && process.env.FAST !== "") {
-			const defaultLimit: number = 5;
+			const defaultLimit: number = 10;
 			const limit: number = Number(process.env.FAST) || defaultLimit;
+
+			console.log("limit", limit);
 
 			/**
 			 * note: data becomes invalid
@@ -86,7 +88,7 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			 * meaning that links from a lesson to any participant
 			 * might link to a participant we have removed
 			 */
-			participants2D = participants2D.map((p) => p.slice(0, limit));
+			participants2D = participants2D.map((p, i) => (i === 1 ? p : p.slice(0, limit + 1)));
 		}
 
 		/**
