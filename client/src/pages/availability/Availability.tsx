@@ -495,8 +495,7 @@ export const Availability: FC = () => {
 								color: white;
 							`}
 						>
-							{/* <h2>Pamatyti pavyzdį</h2> */}
-							<h2>See an example</h2>
+							<h2>{t("See an example")}</h2>
 						</button>
 					) : null}
 				</section>
