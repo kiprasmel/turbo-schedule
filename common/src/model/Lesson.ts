@@ -109,9 +109,20 @@ export const getParticipantCount = ({ students, classes, teachers, rooms }: Less
  * * WILL     BE unique, IF a {Lesson}          is passed in.
  */
 export const createLessonWithParticipantsId = (lesson: NonUniqueLesson): string => {
-	const { isEmpty, dayIndex, timeIndex, name, teacher, room } = lesson;
+	const { isEmpty, dayIndex, timeIndex, name } = lesson;
 
-	const id: string = `${isEmpty}/${dayIndex}/${timeIndex}/${name}/${teacher}/${room}`;
+	/**
+	 * Do not use `teacher`, `room` (or `students`) (any participants in general)
+	 * when creating the `id` of the lesson, since the upstream is bogus
+	 * and it excludes the participant from the list if we're viewing their schedule
+	 *
+	 * e.g. if we're looking at participant class "8a", lessons with multiple participants
+	 * will not show "8a" in their participant list (nor their respective teacher or room).
+	 *
+	 * Gladly, the `name` seems to stay the same always.
+	 *
+	 */
+	const id: string = `${isEmpty}/${dayIndex}/${timeIndex}/${name}`;
 	return id;
 };
 
