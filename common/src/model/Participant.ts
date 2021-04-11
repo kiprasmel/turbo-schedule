@@ -49,3 +49,33 @@ const mergeStrat: MergeStrategy<ParticipantInLesson> = (left, right): Participan
 });
 
 export const mergeDuplicateParticipantsInLessons = mergeBy("text", mergeStrat);
+
+export const participantHasLesson = (participant: Participant) => (lesson: Lesson): boolean =>
+	lesson.students.includes(participant.text) ||
+	lesson.classes.includes(participant.text) ||
+	lesson.teachers.includes(participant.text) ||
+	lesson.rooms.includes(participant.text);
+
+type Duplicate = [Participant["text"], Lesson];
+
+/**
+ * should return an empty array, but sometimes,
+ * if the upstream messes up, this might find some duplicates
+ */
+export const findParticipantsWithDuplicateLessons = (participants: Participant[], lessons: Lesson[]): Duplicate[] => {
+	const dupes: Duplicate[] = [];
+
+	participants.forEach((participant) => {
+		const myLessons: Map<Lesson["id"], Lesson> = new Map();
+
+		lessons.filter(participantHasLesson(participant)).forEach((lesson) => {
+			if (myLessons.has(lesson.id)) {
+				dupes.push([participant.text, lesson]);
+			}
+
+			myLessons.set(lesson.id, lesson);
+		});
+	});
+
+	return dupes;
+};
