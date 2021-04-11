@@ -5,7 +5,15 @@
 import { Router } from "express";
 
 import { initDb, Db } from "@turbo-schedule/database";
-import { Participant, Lesson, Availability, pickNPseudoRandomly, pickSome } from "@turbo-schedule/common";
+import {
+	Participant, //
+	Lesson,
+	Availability,
+	pickNPseudoRandomly,
+	pickSome,
+	participantHasLesson,
+	findParticipantsWithDuplicateLessons,
+} from "@turbo-schedule/common";
 
 import { isProd } from "../../util/isProd";
 
@@ -190,6 +198,24 @@ router.get("/common-availability", async (req, res, next) => {
 	}
 });
 
+router.get("/debug/duplicates", async (_req, res, next) => {
+	try {
+		const db: Db = await initDb();
+
+		const participants: Participant[] = db.get("participants").value();
+		const lessons: Lesson[] = db.get("lessons").value();
+
+		const dupes = findParticipantsWithDuplicateLessons(participants, lessons);
+
+		console.log("dupes", dupes);
+
+		res.json({ dupes });
+		return !isProd() ? next() : res.end();
+	} catch (e) {
+		throw e;
+	}
+});
+
 /**
  * get full schedule of single participant by it's name
  */
@@ -215,13 +241,7 @@ router.get("/:participantName", async (req, res, next) => {
 
 		const lessons: Lesson[] = await db
 			.get("lessons")
-			.filter(
-				(lesson) =>
-					lesson.students.includes(participant.text) ||
-					lesson.classes.includes(participant.text) ||
-					lesson.teachers.includes(participant.text) ||
-					lesson.rooms.includes(participant.text)
-			)
+			.filter(participantHasLesson(participant))
 			.value();
 
 		if (!lessons?.length) {
