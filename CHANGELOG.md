@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.15.1...v2.15.2) (2021-04-11)
+
+
+### Bug Fixes
+
+* **client:** bind extra info of common availability to update once availability itself updates ([c65f0c1](https://github.com/kiprasmel/turbo-schedule/commit/c65f0c149e99ffc7a5b7e70c97feae9a24af2030))
+* indent with spaces in .yaml too ([6c900b8](https://github.com/kiprasmel/turbo-schedule/commit/6c900b8c063128f9840a8388448cc792d564ce41))
+
+
+### Features
+
+* create deploy script ([98350c3](https://github.com/kiprasmel/turbo-schedule/commit/98350c36fc38b79913f0a5faeed02f56413e886e))
+
+
+
+
+
 ## [2.15.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.15.0...v2.15.1) (2021-04-11)
 
 
