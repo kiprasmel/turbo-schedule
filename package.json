@@ -36,6 +36,7 @@
 		"docker:commit": "yarn docker:deploy:commit",
 		"purge": "yarn purge:all",
 		"updts": "yarn lerna add typescript@latest --dev",
+		"copy-prod-data": "bash ./database/copy-prod-data.sh",
 		"-----": "-----",
 		"watch:ts": "tsc -b -w",
 		"watch:server": "yarn --cwd ./server/ watch:server",
