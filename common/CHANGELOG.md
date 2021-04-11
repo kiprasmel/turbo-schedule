@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.13.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.13.0...v2.13.1) (2021-04-11)
+
+
+### Bug Fixes
+
+* **common:** exclude `teacher(s)` & `room(s)` from lesson's ID ([b87fc56](https://github.com/kiprasmel/turbo-schedule/commit/b87fc569fb2828613c118c1b7aaba5c25902adb2))
+
+
+
+
+
 # [2.13.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.12.3...v2.13.0) (2021-03-18)
 
 
