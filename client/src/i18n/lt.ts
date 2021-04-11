@@ -79,4 +79,5 @@ export const lt: Dictionary = {
 	"bussy (adj, mult)": "užimti",
 	total: "iš viso",
 	"(to) clear": "išvalyti",
+	"See an example": "Pamatyti pavyzdį",
 };

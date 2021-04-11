@@ -7,6 +7,7 @@ import { Student, Teacher, Room, Class, Participant, parseParticipants } from "@
 
 import { Link } from "react-router-dom";
 import { useTranslation } from "../../i18n/useTranslation";
+import { createLinkToLesson } from "./LessonsList";
 
 interface Props {
 	participants:
@@ -119,22 +120,40 @@ const ParticipantList: FC<{
 			`}
 		>
 			{participants.map((p) => (
-				<li
-					key={p}
-					className={css`
-						${isOnlyOneMatchingParticipant && "font-weight: 600; font-size: 1.69rem;"}
-					`}
-				>
-					<Link
-						to={`/${p}`}
-						className={css`
-							${isOnlyOneMatchingParticipant && "border-bottom: 3px solid #000;"}
-						`}
-					>
-						{p}
-					</Link>
-				</li>
+				<ParticipantListItem participant={p} isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant} />
 			))}
 		</ol>
 	</details>
+);
+
+export const ParticipantListItem: FC<{
+	participant: string;
+	isOnlyOneMatchingParticipant?: boolean;
+	dayIndex?: number;
+	timeIndex?: number;
+	highlightInsteadOfOpen?: boolean;
+}> = ({
+	participant, //
+	isOnlyOneMatchingParticipant = false,
+	dayIndex,
+	timeIndex,
+	highlightInsteadOfOpen = true,
+	children,
+}) => (
+	<li
+		key={participant}
+		className={css`
+			${isOnlyOneMatchingParticipant && "font-weight: 600; font-size: 1.69rem;"}
+		`}
+	>
+		<Link
+			to={createLinkToLesson(participant, dayIndex, timeIndex, highlightInsteadOfOpen)}
+			className={css`
+				${isOnlyOneMatchingParticipant && "border-bottom: 3px solid #000;"}
+			`}
+		>
+			{participant}
+			{children}
+		</Link>
+	</li>
 );

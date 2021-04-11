@@ -66,4 +66,5 @@ export const en: Dictionary = {
 	"bussy (adj, mult)": "bussy",
 	total: "total",
 	"(to) clear": "clear",
+	"See an example": "See an example",
 };

@@ -50,4 +50,5 @@ export interface Dictionary {
 	"bussy (adj, mult)": string;
 	total: string;
 	"(to) clear": string;
+	"See an example": string;
 }

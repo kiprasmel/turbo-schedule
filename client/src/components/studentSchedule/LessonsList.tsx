@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
 
-import React, { FC } from "react";
+import React, { FC, useRef } from "react";
 import { css } from "emotion";
 
-import { Lesson } from "@turbo-schedule/common";
+import { Lesson, Participant } from "@turbo-schedule/common";
 
+import { useHighlightElementById } from "../../hooks/useHighlightElementById";
 import { StrikeThrough } from "./StrikeThrough";
 import { useTranslation } from "../../i18n/useTranslation";
 import { ScheduleDay } from "../../utils/selectSchedule";
@@ -61,6 +62,38 @@ export const LessonsList: FC<{
 	</nav>
 );
 
+export const createLessonHtmlId = (dayIndex: Lesson["dayIndex"], timeIndex: Lesson["timeIndex"]): string =>
+	`lesson-${dayIndex}-${timeIndex}`;
+
+export const createLinkToLesson = (
+	participant: Participant["text"],
+	dayIndex?: Lesson["dayIndex"],
+	timeIndex?: Lesson["timeIndex"],
+	highlightInsteadOfOpen: boolean = true
+): string => {
+	let link = `/${participant}`;
+
+	if (dayIndex || dayIndex === 0) {
+		// eslint-disable-next-line no-param-reassign
+		dayIndex++;
+
+		link += `/${dayIndex}`;
+
+		if (timeIndex || timeIndex === 0) {
+			// eslint-disable-next-line no-param-reassign
+			timeIndex++;
+
+			if (highlightInsteadOfOpen) {
+				link += `#${createLessonHtmlId(dayIndex, timeIndex)}`;
+			} else {
+				link += `/${timeIndex}`;
+			}
+		}
+	}
+
+	return link;
+};
+
 const LessonsListItem: FC<{
 	lesson: Lesson;
 	selectedLesson: Lesson | null;
@@ -68,10 +101,17 @@ const LessonsListItem: FC<{
 }> = ({ lesson, selectedLesson, handleClick }) => {
 	const t = useTranslation();
 
-	const { id, name, timeIndex, teachers, rooms, isEmpty } = lesson;
+	const { id, name, dayIndex, timeIndex, teachers, rooms, isEmpty } = lesson;
+
+	const ref = useRef<HTMLLIElement>(null);
+	const htmlId: string = createLessonHtmlId(dayIndex + 1, timeIndex + 1);
+
+	useHighlightElementById(htmlId, ref);
 
 	return (
 		<li
+			ref={ref}
+			id={htmlId}
 			className={css`
 				position: relative;
 			`}
