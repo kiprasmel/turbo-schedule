@@ -98,6 +98,14 @@ export const Availability: FC = () => {
 			.catch((e) => console.error(e));
 	}, [wantedParticipants]);
 
+	const [selectedAvailability, setSelectedAvailability] = useState<IAvailability | null>(null);
+
+	useEffect(() => {
+		setSelectedAvailability((currAvail) =>
+			!currAvail ? null : availability?.[currAvail.dayIndex]?.[currAvail.timeIndex] ?? null
+		);
+	}, [availability]);
+
 	const availabilityGridRef = useRef<HTMLDivElement>(null);
 
 	console.log("availabilityGridRef", availabilityGridRef);
@@ -145,8 +153,6 @@ export const Availability: FC = () => {
 	/** end bussy/available button indication */
 
 	const { isDesktop } = useWindow();
-
-	const [selectedAvailability, setSelectedAvailability] = useState<IAvailability | null>(null);
 
 	return (
 		<>
