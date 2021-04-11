@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.14.0...v2.14.1) (2021-04-11)
+
+
+### Bug Fixes
+
+* count duplicates by day & time, not by ID ([0545ccb](https://github.com/kiprasmel/turbo-schedule/commit/0545ccbf99728eee13d200efd7119fc98875770b))
+
+
+
+
+
 # [2.14.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.13.1...v2.14.0) (2021-04-11)
 
 
