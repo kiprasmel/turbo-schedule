@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.15.0...v2.15.1) (2021-04-11)
+
+
+### Bug Fixes
+
+* **scraper:** use proper parsing for lesson attribute entries instead of hard-coded indices ([ac72b84](https://github.com/kiprasmel/turbo-schedule/commit/ac72b84441961d60f5a4905255550ff26b08833b))
+
+
+
+
+
 # [2.15.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.14.1...v2.15.0) (2021-04-11)
 
 **Note:** Version bump only for package @turbo-schedule/scraper
