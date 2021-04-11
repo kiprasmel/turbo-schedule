@@ -1,0 +1,32 @@
+# docker-compose.yml
+
+#
+# environment variables
+#
+# see https://docs.docker.com/compose/compose-file/compose-file-v3/#variable-substitution
+#
+# - TAG: the tag of the turbo-schedule image. defaults to "latest"
+#
+#
+
+version: "3.8"
+
+services:
+  turbo-schedule:
+    # container_name: turbo-schedule
+    image: kipras/turbo-schedule:${TAG:-latest}
+    build: . # in case we wanna force build instead of getting the already built image
+    ports:
+      - "127.0.0.1:7000:5000"
+    restart: unless-stopped
+    volumes:
+      # - "server-generated:/usr/src/app/server/generated"
+      # - "database-data:/usr/src/app/database/data"
+      - "turbo-schedule--generated:/usr/src/app/server/generated"
+      - "turbo-schedule--database:/usr/src/app/database/data"
+
+volumes:
+  # server-generated:
+  # database-data:
+  turbo-schedule--generated:
+  turbo-schedule--database:
