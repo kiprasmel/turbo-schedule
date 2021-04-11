@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.15.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.14.1...v2.15.0) (2021-04-11)
+
+
+### Features
+
+* **db:** create `copy-prod-data` script ([8e82e0a](https://github.com/kiprasmel/turbo-schedule/commit/8e82e0a66cb7e5e0d5c113077acca670e7af68f6))
+
+
+
+
+
 ## [2.14.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.14.0...v2.14.1) (2021-04-11)
 
 
