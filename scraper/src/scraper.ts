@@ -23,7 +23,7 @@ import { createStudentFromList } from "./initializer/createStudent";
 import { getFrontPageHtml } from "./util/getFrontPageHtml";
 import { scrapeScheduleItemListFactory } from "./util/scrapeScheduleItemList";
 import { createPageVersionIdentifier } from "./util/createPageVersionIdentifier";
-import { extractLessonFromTeacher } from "./util/extractLessons";
+import { extractLessonsFromIndividualHtmlPage } from "./util/extractLessons";
 
 export const scrape = async (config: IScraperConfig): Promise<void> => {
 	try {
@@ -98,7 +98,7 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 			participants
 				.map(
 					async (p) =>
-						await extractLessonFromTeacher(p.originalScheduleURI, {
+						await extractLessonsFromIndividualHtmlPage(p.originalScheduleURI, {
 							text: p.text,
 							isActive: true,
 							labels: p.labels,
