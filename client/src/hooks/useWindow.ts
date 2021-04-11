@@ -12,5 +12,8 @@ export const useWindow = () => {
 
 	const isDesktop: boolean = windowWidth > 1024;
 
-	return { windowWidth, isDesktop };
+	const desktop = `@media (min-width: ${1024}px)`;
+	const notDesktop = `@media(max-width: ${1023}px)`;
+
+	return { windowWidth, isDesktop, desktop, notDesktop };
 };

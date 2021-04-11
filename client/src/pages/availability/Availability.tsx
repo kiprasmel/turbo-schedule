@@ -152,7 +152,7 @@ export const Availability: FC = () => {
 	}, colorMapperEntrys.filter((e) => e.name === colorMapperName)?.[0] ?? colorMapperEntrys[0]);
 	/** end bussy/available button indication */
 
-	const { isDesktop } = useWindow();
+	const { desktop, notDesktop } = useWindow();
 
 	return (
 		<>
@@ -167,29 +167,26 @@ export const Availability: FC = () => {
 						grid-template-rows: minmax(2em, autofit);
 
 						margin-top: 2em;
-					`,
 
-					{
-						[css`
-							grid-template-areas:
-								"info info info"
-								"select display detailed-info"
-								"select display detailed-info";
-						`]: isDesktop,
-					},
-					{
-						[css`
 							grid-template-areas:
 								"info info info"
 								"select select select"
 								"display display display"
 								"detailed-info detailed-info detailed-info";
 
+						${notDesktop} {
 							& > * + * {
 								margin-top: 2em;
 							}
-						`]: !isDesktop,
 					}
+
+						${desktop} {
+							grid-template-areas:
+								"info info info"
+								"select display detailed-info"
+								"select display detailed-info";
+						}
+					`
 				)}
 			>
 				<section
@@ -667,13 +664,13 @@ export const Availability: FC = () => {
 				{/* /detailed availability info */}
 			</main>
 
-			{!isDesktop ? (
 				<div
 					className={css`
+					${notDesktop} {
 						min-height: 20vh;
+					}
 					`}
 				/>
-			) : null}
 		</>
 	);
 };
