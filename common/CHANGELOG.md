@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.16.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.15.3...v2.16.0) (2021-04-11)
+
+
+### Features
+
+* display lesson info @ availability & properly link to them (html hash to id) ([d18803e](https://github.com/kiprasmel/turbo-schedule/commit/d18803ed7183b5292b96ddf52b61c54a7772d178))
+
+
+
+
+
 ## [2.14.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.14.0...v2.14.1) (2021-04-11)
 
 

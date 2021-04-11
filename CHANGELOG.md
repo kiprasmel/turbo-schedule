@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.16.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.15.3...v2.16.0) (2021-04-11)
+
+
+### Bug Fixes
+
+* **client:** Use translated "See an example" text ([c049748](https://github.com/kiprasmel/turbo-schedule/commit/c049748521226c739fb2b31032cfb272cfc24f4f))
+
+
+### Features
+
+* **client:** highlight lesson on load if it's selected via url hash ([e4bc18b](https://github.com/kiprasmel/turbo-schedule/commit/e4bc18b61b8a89c9d2275caa3b965261b3fbba63))
+* display lesson info @ availability & properly link to them (html hash to id) ([d18803e](https://github.com/kiprasmel/turbo-schedule/commit/d18803ed7183b5292b96ddf52b61c54a7772d178))
+
+
+
+
+
 ## [2.15.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.15.2...v2.15.3) (2021-04-11)
 
 **Note:** Version bump only for package turbo-schedule
