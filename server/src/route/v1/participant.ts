@@ -13,6 +13,7 @@ import {
 	pickSome,
 	participantHasLesson,
 	findParticipantsWithMultipleLessonsInSameTime,
+	MinimalLesson,
 } from "@turbo-schedule/common";
 
 import { isProd } from "../../util/isProd";
@@ -137,24 +138,36 @@ router.get("/common-availability", async (req, res, next) => {
 			for (let j = minTimeIndex; j <= maxTimeIndex; j++) {
 				const related: Lesson[] = lessons.filter((l) => l.dayIndex === i && l.timeIndex === j);
 
+				type Ret = {
+					participant: Participant["text"];
+					lesson: MinimalLesson;
+				};
 				/**
 				 * there could be multiple participants in the same lesson,
 				 * thus account for them all, not once.
 				 */
-				const getParticipants = (filterPred: (l: Lesson) => boolean): Participant["text"][] => [
+				const getParticipants = (filterPred: (l: Lesson) => boolean): Ret[] => [
 					...new Set(
-						related
-							.filter(filterPred)
-							.flatMap((l): string[] =>
-								[l.students, l.teachers, l.classes, l.rooms].flatMap((participants) =>
-									participants.filter((participant) => wantedParticipants.includes(participant))
-								)
+						related.filter(filterPred).flatMap((l) =>
+							[l.students, l.teachers, l.classes, l.rooms].flatMap((participants) =>
+								participants
+									.filter((participant) => wantedParticipants.includes(participant))
+									.map(
+										(participant): Ret => ({
+											participant,
+											lesson: {
+												id: l.id,
+												name: l.name,
+											},
+										})
+									)
 							)
+						)
 					),
 				];
 
-				let availableParticipants: Participant["text"][] = getParticipants((l) => l.isEmpty);
-				const bussyParticipants: Participant["text"][] = getParticipants((l) => !l.isEmpty);
+				let availableParticipants = getParticipants((l) => l.isEmpty);
+				const bussyParticipants = getParticipants((l) => !l.isEmpty);
 
 				/**
 				 * TODO FIXME HACK:
@@ -167,7 +180,9 @@ router.get("/common-availability", async (req, res, next) => {
 				 * before we fix the underlying issue.
 				 *
 				 */
-				availableParticipants = availableParticipants.filter((p) => !bussyParticipants.includes(p));
+				availableParticipants = availableParticipants.filter(
+					(p) => !bussyParticipants.some((bussyP) => p.participant === bussyP.participant)
+				);
 
 				availability[i][j] = {
 					dayIndex: i, //

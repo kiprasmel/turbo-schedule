@@ -6,6 +6,7 @@ import { cx, css } from "emotion";
 
 import { Availability as IAvailability, Participant } from "@turbo-schedule/common";
 
+import { ParticipantListItem } from "../../components/studentSchedule/ParticipantList";
 import { Dictionary } from "../../i18n/i18n";
 import { useWindow } from "../../hooks/useWindow";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
@@ -168,17 +169,17 @@ export const Availability: FC = () => {
 
 						margin-top: 2em;
 
-							grid-template-areas:
-								"info info info"
-								"select select select"
-								"display display display"
-								"detailed-info detailed-info detailed-info";
+						grid-template-areas:
+							"info info info"
+							"select select select"
+							"display display display"
+							"detailed-info detailed-info detailed-info";
 
 						${notDesktop} {
 							& > * + * {
 								margin-top: 2em;
 							}
-					}
+						}
 
 						${desktop} {
 							grid-template-areas:
@@ -634,7 +635,11 @@ export const Availability: FC = () => {
 								</h1>
 								<ul>
 									{selectedAvailability.availableParticipants.map((p) => (
-										<li>{p}</li>
+										<ParticipantListItem
+											participant={p.participant}
+											dayIndex={selectedAvailability.dayIndex}
+											timeIndex={selectedAvailability.timeIndex}
+										/>
 									))}
 								</ul>
 							</article>
@@ -645,7 +650,15 @@ export const Availability: FC = () => {
 								</h1>
 								<ul>
 									{selectedAvailability.bussyParticipants.map((p) => (
-										<li>{p}</li>
+										<ParticipantListItem
+											key={`${p.participant}/${p.lesson.id}`}
+											participant={p.participant}
+											dayIndex={selectedAvailability.dayIndex}
+											timeIndex={selectedAvailability.timeIndex}
+										>
+											{" "}
+											({p.lesson.name})
+										</ParticipantListItem>
 									))}
 								</ul>
 							</article>
@@ -663,13 +676,13 @@ export const Availability: FC = () => {
 				{/* /detailed availability info */}
 			</main>
 
-				<div
-					className={css`
+			<div
+				className={css`
 					${notDesktop} {
 						min-height: 20vh;
 					}
-					`}
-				/>
+				`}
+			/>
 		</>
 	);
 };
