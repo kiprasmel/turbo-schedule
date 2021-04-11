@@ -56,25 +56,48 @@ export const participantHasLesson = (participant: Participant) => (lesson: Lesso
 	lesson.teachers.includes(participant.text) ||
 	lesson.rooms.includes(participant.text);
 
-type Duplicate = [Participant["text"], Lesson];
+type DayTimeId = string;
+type Duplicates = Record<Participant["text"], Record<DayTimeId, Lesson[]>>;
 
 /**
- * should return an empty array, but sometimes,
+ * should return an empty object, but sometimes,
  * if the upstream messes up, this might find some duplicates
  */
-export const findParticipantsWithDuplicateLessons = (participants: Participant[], lessons: Lesson[]): Duplicate[] => {
-	const dupes: Duplicate[] = [];
+export const findParticipantsWithMultipleLessonsInSameTime = (
+	participants: Participant[], //
+	lessons: Lesson[]
+): Duplicates => {
+	/**
+	 * duplciate candidates.
+	 *
+	 * collect all lessons for a participant at every day & time combination,
+	 * and keep those that had more than 1 lesson in the same day & time
+	 */
+	const dupes: Duplicates = {};
 
 	participants.forEach((participant) => {
-		const myLessons: Map<Lesson["id"], Lesson> = new Map();
+		dupes[participant.text] = {};
 
 		lessons.filter(participantHasLesson(participant)).forEach((lesson) => {
-			if (myLessons.has(lesson.id)) {
-				dupes.push([participant.text, lesson]);
+			const dayTimeId: DayTimeId = [lesson.timeIndex, lesson.dayIndex].join("/");
+
+			if (!dupes[participant.text][dayTimeId]) {
+				dupes[participant.text][dayTimeId] = [];
 			}
 
-			myLessons.set(lesson.id, lesson);
+			dupes[participant.text][dayTimeId].push(lesson);
 		});
+
+		/** it's a duplicate if there's more than 1 lesson in the same time */
+		const confirmedDuplicates = Object.entries(dupes[participant.text]).filter(
+			([_key, duplicateLessons]) => duplicateLessons.length > 1
+		);
+
+		if (confirmedDuplicates.length === 0) {
+			delete dupes[participant.text];
+		} else {
+			dupes[participant.text] = Object.fromEntries(confirmedDuplicates);
+		}
 	});
 
 	return dupes;

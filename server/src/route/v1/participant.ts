@@ -12,7 +12,7 @@ import {
 	pickNPseudoRandomly,
 	pickSome,
 	participantHasLesson,
-	findParticipantsWithDuplicateLessons,
+	findParticipantsWithMultipleLessonsInSameTime,
 } from "@turbo-schedule/common";
 
 import { isProd } from "../../util/isProd";
@@ -205,11 +205,11 @@ router.get("/debug/duplicates", async (_req, res, next) => {
 		const participants: Participant[] = db.get("participants").value();
 		const lessons: Lesson[] = db.get("lessons").value();
 
-		const dupes = findParticipantsWithDuplicateLessons(participants, lessons);
+		const duplicates = findParticipantsWithMultipleLessonsInSameTime(participants, lessons);
 
-		console.log("dupes", dupes);
+		console.log("duplicates", duplicates);
 
-		res.json({ dupes });
+		res.json({ duplicates });
 		return !isProd() ? next() : res.end();
 	} catch (e) {
 		throw e;
