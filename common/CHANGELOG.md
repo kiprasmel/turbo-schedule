@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.14.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.13.1...v2.14.0) (2021-04-11)
+
+
+### Features
+
+* create debug entrypoint for finding participants with duplicate lessons ([2ea82cd](https://github.com/kiprasmel/turbo-schedule/commit/2ea82cd9ebe90aba88b62ba474d286fba8288c3e))
+
+
+
+
+
 ## [2.13.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.13.0...v2.13.1) (2021-04-11)
 
 
