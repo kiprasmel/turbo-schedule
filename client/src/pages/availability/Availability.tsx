@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 
-import React, { FC, useState, useEffect, useRef, useReducer } from "react";
+import React, { FC, useState, useEffect, useRef, useReducer, useCallback, useMemo } from "react";
 import axios from "axios";
 import { cx, css } from "emotion";
 
@@ -10,7 +10,7 @@ import { ParticipantListItem } from "../../components/studentSchedule/Participan
 import { Dictionary } from "../../i18n/i18n";
 import { useWindow } from "../../hooks/useWindow";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
-import { useQueryFor } from "../../hooks/useQueryFor";
+import { useQueryFor, EncoderDecoder } from "../../hooks/useQueryFor";
 import { Navbar } from "../../components/navbar/Navbar";
 import { useTranslation } from "../../i18n/useTranslation";
 
@@ -53,33 +53,37 @@ const mapRatioToHSBThroughBrightness = (ratio: number, start: number = 0, end: n
 export const Availability: FC = () => {
 	const t = useTranslation();
 
-	// const history = useHistory();
-	const [wantedParticipants, setWantedParticipants] = useQueryFor(
-		"p",
-		// "Melnikovas Kipras IVe, Mėčius Gediminas IVe, Adomaitis Jurgis IIIc, "
-		// "Melnikovas Kipras IVe, Baltūsienė Violeta, Mėčius Gediminas IVe, Zaboras Edgaras IVGc, Adomaitis Jurgis IIIc, Rimkus Gabrielius IIIc, IIGd, IIGb, IGb, IIGa, IGa"
-		""
-	);
+	const [wantedParticipants, setWantedParticipants] = useQueryFor("p");
+
+	const invalidEnDeVal = -1;
+	const ende: EncoderDecoder<number> = {
+		encode: (x) => (x === invalidEnDeVal ? "" : x.toString()), //
+		decode: (x) => (!x ? invalidEnDeVal : Number(x)),
+	};
+	const [selectedDay, setSelectedDay] = useQueryFor("day", ende);
+	const [selectedTime, setSelectedTime] = useQueryFor("time", ende);
 
 	type TDisplayType = "+-=" | "available / total" | "bussy / total" | "mapped ratio to HSL";
 
 	const [displayType] = useState<TDisplayType>("mapped ratio to HSL");
 
-	// const handleWantedParticipantsChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-	// 	setWantedParticipants(e.target.value);
-
-	// 	const params = new URLSearchParams();
-	// 	params.append("p", e.target.value);
-
-	// 	console.log("params upd", params.toString());
-
-	// 	history.push({ search: params.toString() });
-	// };
-
 	const [availability, setAvailability] = useState<IAvailability[][]>([]);
 
+	const selectedAvailability: IAvailability = useMemo(() => availability?.[selectedDay]?.[selectedTime] ?? null, [
+		availability,
+		selectedDay,
+		selectedTime,
+	]);
+	const setSelectedAvailability = useCallback(
+		(dayIndex: number, timeIndex: number): void => {
+			setSelectedDay(dayIndex);
+			setSelectedTime(timeIndex);
+		},
+		[setSelectedDay, setSelectedTime]
+	);
+
 	useEffect(() => {
-		if (!wantedParticipants?.length) {
+		if (!wantedParticipants?.trim().length) {
 			setAvailability([]);
 			return;
 		}
@@ -99,19 +103,7 @@ export const Availability: FC = () => {
 			.catch((e) => console.error(e));
 	}, [wantedParticipants]);
 
-	const [selectedAvailability, setSelectedAvailability] = useState<IAvailability | null>(null);
-
-	useEffect(() => {
-		setSelectedAvailability((currAvail) =>
-			!currAvail ? null : availability?.[currAvail.dayIndex]?.[currAvail.timeIndex] ?? null
-		);
-	}, [availability]);
-
 	const availabilityGridRef = useRef<HTMLDivElement>(null);
-
-	console.log("availabilityGridRef", availabilityGridRef);
-
-	console.log(availability);
 
 	/** begin bussy/available button indication */
 	interface IColorMapperEntry {
@@ -353,7 +345,8 @@ export const Availability: FC = () => {
 												) : displayType === "mapped ratio to HSL" ? (
 													<li
 														key={`${a.dayIndex}--${a.timeIndex}`}
-														className={css`
+														className={cx(
+															css`
 													/*
 													background: ${mapRatioToHSLThroughHue(
 														a.bussyParticipants.length /
@@ -378,12 +371,25 @@ export const Availability: FC = () => {
 													margin-top: 0.5em;
 													margin-bottom: 0.5em;
 
+													border: 2px solid transparent;
+
 													/* padding: 0.5em; */
-												`}
+												`,
+															{
+																[css`
+																	/* border: 1px solid #ffc400; */
+																	border: 2px solid hsl(38, 100%, 50%);
+																`]:
+																	a.dayIndex === selectedDay &&
+																	a.timeIndex === selectedTime,
+															}
+														)}
 													>
 														<button
 															type="button"
-															onClick={() => setSelectedAvailability(a)}
+															onClick={() =>
+																setSelectedAvailability(a.dayIndex, a.timeIndex)
+															}
 															className={css`
 																padding: 1em;
 
@@ -529,7 +535,7 @@ export const Availability: FC = () => {
 						>
 							<h1 className={css``}>
 								{t("participants")(
-									wantedParticipants
+									(wantedParticipants ?? "")
 										.split(",")
 										.map((wp) => wp.trim())
 										.filter((wp) => !!wp).length
@@ -538,7 +544,10 @@ export const Availability: FC = () => {
 
 							<button
 								type="button"
-								onClick={() => setWantedParticipants("")}
+								onClick={() => {
+									setWantedParticipants("");
+									setSelectedAvailability(invalidEnDeVal, invalidEnDeVal);
+								}}
 								className={css`
 								font-family: inherit;
 								background: inherit;
@@ -636,6 +645,7 @@ export const Availability: FC = () => {
 								<ul>
 									{selectedAvailability.availableParticipants.map((p) => (
 										<ParticipantListItem
+											key={p.participant}
 											participant={p.participant}
 											dayIndex={selectedAvailability.dayIndex}
 											timeIndex={selectedAvailability.timeIndex}
