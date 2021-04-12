@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.17.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.16.0...v2.17.0) (2021-04-12)
+
+
+### Features
+
+* **client:** fix useQueryFor & add encoding/decoding of values ([a521960](https://github.com/kiprasmel/turbo-schedule/commit/a521960a52a51c9997b25b1cf233a74c9ba35da7))
+* **client:** sync selected day & time @ availability to query params too ([e6bbc4b](https://github.com/kiprasmel/turbo-schedule/commit/e6bbc4b3594e479219dcba6a5dbb71412ce3a93b))
+
+
+
+
+
 # [2.16.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.15.3...v2.16.0) (2021-04-11)
 
 
