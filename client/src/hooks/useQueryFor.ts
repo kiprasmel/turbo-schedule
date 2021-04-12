@@ -2,56 +2,52 @@
  * https://reactrouter.com/web/example/queryParams-parameters
  */
 
-import { useLocation, useHistory } from "react-router-dom";
-import { useState, useEffect, useCallback } from "react";
+import { useHistory } from "react-router-dom";
+import { useState, useCallback } from "react";
 
-type TSetQuery = (query: string, shouldReplace?: boolean) => void;
+export type TQuery = string;
+export type TSetQuery<T> = (query: T, shouldReplace?: boolean) => void;
 
-export const useQueryFor = (
+export type EncoderDecoder<T> = {
+	encode: (value: T) => TQuery;
+	decode: (value: TQuery) => T;
+};
+
+export const useQueryFor = <T = string>(
 	key: string, //
-	defaultValueFallback?: string
-	/**
-	 * TODO: stringify() & parse() (put all in optional object?)
-	 */
-): [string, TSetQuery] => {
+	{ defaultValueFallback, encode, decode }: EncoderDecoder<T> & { defaultValueFallback?: string } = {
+		encode: (value) => (value as unknown) as TQuery,
+		decode: (value) => (value as unknown) as T,
+	}
+): [T, TSetQuery<T>] => {
 	const history = useHistory();
-	const [_queryParams] = useState<URLSearchParams>(new URLSearchParams(useLocation().search));
 
-	const [query, _setQuery] = useState<string>(_queryParams.get(key) ?? defaultValueFallback ?? "");
+	const [_queryParams] = useState<URLSearchParams>(new URLSearchParams(history.location.search));
 
-	const setQuery: TSetQuery = useCallback(
-		(q, shouldReplace = false) => {
-			const params = new URLSearchParams();
+	const [query, _setQuery] = useState<T>(decode(_queryParams.get(key) ?? defaultValueFallback ?? ""));
 
-			params.append(key, q ?? "");
+	const setQuery: TSetQuery<T> = useCallback(
+		(_q, shouldReplace = false) => {
+			const params = new URLSearchParams(history.location.search);
+
+			const q = encode(_q);
+
+			if (!q) {
+				params.delete(key);
+				_setQuery(decode(""));
+			} else {
+				params.set(key, q);
+				_setQuery(_q);
+			}
 
 			if (shouldReplace) {
 				history.replace({ search: params.toString() });
 			} else {
 				history.push({ search: params.toString() });
 			}
-
-			_setQuery(params.get(key) as string);
-
-			console.log("params upd", params.toString());
 		},
-		[history, key]
+		[history, key, encode, decode]
 	);
-
-	/**
-	 * on initial load
-	 */
-	useEffect(() => {
-		const currQuery = _queryParams.get(key);
-
-		if (currQuery === null || currQuery === undefined) {
-			if (defaultValueFallback !== null && defaultValueFallback !== undefined) {
-				setQuery(defaultValueFallback, true);
-			} else {
-				setQuery("");
-			}
-		}
-	}, [_queryParams, defaultValueFallback, key, setQuery]);
 
 	return [query, setQuery];
 };
