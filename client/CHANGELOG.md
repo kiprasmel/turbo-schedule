@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.19.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.18.0...v2.19.0) (2021-04-13)
+
+
+### Bug Fixes
+
+* **client:** use LRUCache as single source of truth instead of an intermediary ([8121842](https://github.com/kiprasmel/turbo-schedule/commit/8121842042986e40ffe708ab2d35fcbd2c0b9509))
+* **client:** use LRUCache's value from localStorage to fix stale state ([07a5be6](https://github.com/kiprasmel/turbo-schedule/commit/07a5be650a5c15460996d5d99629a365696f899e))
+
+
+
+
+
 # [2.18.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.17.0...v2.18.0) (2021-04-13)
 
 

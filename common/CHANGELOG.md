@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.19.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.18.0...v2.19.0) (2021-04-13)
+
+
+### Features
+
+* **common:** add caching for all value retrieval @ LRUCache & abstract ([a8fef4c](https://github.com/kiprasmel/turbo-schedule/commit/a8fef4c76d013e5ea242ed271ce09638e955f296))
+
+
+
+
+
 # [2.18.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.17.0...v2.18.0) (2021-04-13)
 
 
