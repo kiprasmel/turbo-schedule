@@ -55,7 +55,7 @@ export function createUsePersistedLRUCache<T = unknown>(
 	};
 }
 
-const maxCacheSize: number = 100;
+const maxCacheSize: number = 5;
 
 export const useMostRecentlyViewedParticipants = createUsePersistedLRUCache<Participant["text"]>(
 	"turbo-schedule.most-recent-participants",
