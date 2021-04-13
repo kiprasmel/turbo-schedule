@@ -74,6 +74,7 @@ export const ParticipantListList: FC<Props> = ({ participants, className, ...res
 		>
 			{renderables.map(({ k: summary, v: theParticipants }) => (
 				<ParticipantList
+					key={summary}
 					participants={theParticipants}
 					summary={t(summary) + ` (${theParticipants.length})`}
 					isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant}
@@ -129,7 +130,11 @@ const ParticipantList: FC<{
 			`}
 		>
 			{participants.map((p) => (
-				<ParticipantListItem participant={p} isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant} />
+				<ParticipantListItem
+					key={p} //
+					participant={p}
+					isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant}
+				/>
 			))}
 		</ol>
 	</details>
