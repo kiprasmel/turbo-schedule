@@ -95,37 +95,52 @@ export function LRUCache<T>(maxSizeIncl: number) {
 		}
 	}
 
+	const getAllWithCacheFactory = (newestOrOldest: "newest" | "oldest"): (() => T[]) => {
+		/**
+		 * stores a reference to the (at the time) most recently added node
+		 */
+		let cacheKey: List<T>;
+		let cache: T[] = [];
+		/** check if the head node hasn't changed */
+		const isCacheHit = (): boolean => cacheKey === head;
+
+		return (): T[] => {
+			if (isCacheHit()) {
+				return cache;
+			}
+
+			const values: T[] = [];
+
+			/**
+			 * place these here instead of in the outter function
+			 * to avoid creating a closure with stale `tail` & `head` values
+			 */
+			let [initialNode, nextOrPreviousAccessor] = ({
+				newest: [head, "prev"], //
+				oldest: [tail, "next"],
+			} as const)[newestOrOldest];
+
+			while (initialNode !== null) {
+				values.push(initialNode.value);
+				initialNode = initialNode[nextOrPreviousAccessor];
+			}
+
+			cacheKey = head;
+			cache = values;
+
+			return values;
+		};
+	};
+
 	/**
 	 * walk from *tail* to *head*
 	 */
-	const getAllOldToNew = (): T[] => {
-		const values: T[] = [];
-
-		let tempTail: List<T> = tail;
-
-		while (tempTail !== null) {
-			values.push(tempTail.value);
-			tempTail = tempTail.next;
-		}
-
-		return values;
-	};
+	const getAllOldToNew = getAllWithCacheFactory("oldest");
 
 	/**
 	 * walk from *head* to *tail*
 	 */
-	const getAllNewToOld = (): T[] => {
-		const values: T[] = [];
-
-		let tempHead: List<T> = head;
-
-		while (tempHead !== null) {
-			values.push(tempHead.value);
-			tempHead = tempHead.prev;
-		}
-
-		return values;
-	};
+	const getAllNewToOld = getAllWithCacheFactory("newest");
 
 	const getTail = (): List<T> => tail;
 	const getHead = (): List<T> => head;
