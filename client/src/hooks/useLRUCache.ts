@@ -19,20 +19,18 @@ export function createUsePersistedLRUCache<T = unknown>(
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, []);
 
-		const values: T[] = {
-			newest: cache.current.getAllNewToOld(), //
-			oldest: cache.current.getAllOldToNew(),
-		}[newestOrOldest];
-
 		const add = useCallback(
 			(val: T) => {
 				cache.current.add(val);
-				_setPersistedCache(cache.current.getAllOldToNew());
+
+				_setPersistedCache(
+					newestOrOldest === "newest" ? cache.current.getAllNewToOld() : cache.current.getAllOldToNew()
+				);
 			},
 			[_setPersistedCache]
 		);
 
-		return [values, add];
+		return [_persistedCache, add];
 	};
 }
 
