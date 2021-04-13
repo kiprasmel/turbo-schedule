@@ -7,6 +7,7 @@ import { Student, Teacher, Room, Class, Participant, parseParticipants } from "@
 
 import { Link } from "react-router-dom";
 
+import { useMostRecentlyViewedParticipants } from "../../hooks/useLRUCache";
 import { Dictionary } from "../../i18n/i18n";
 import { useTranslation } from "../../i18n/useTranslation";
 import { createLinkToLesson } from "./LessonsList";
@@ -35,11 +36,23 @@ export const ParticipantListList: FC<Props> = ({ participants, className, ...res
 	const isOnlyOneMatchingParticipant: boolean =
 		students.length + teachers.length + rooms.length + classes.length === 1;
 
+	const [mostRecentlyViewedParticipants] = useMostRecentlyViewedParticipants();
+
 	const renderables: { k: keyof Dictionary; v: string[] }[] = [
 		{ k: "Students", v: students },
 		{ k: "Teachers", v: teachers },
 		{ k: "Rooms", v: rooms },
 		{ k: "Classes", v: classes },
+		{
+			k: "Recently viewed (adj, mult)",
+			v: mostRecentlyViewedParticipants.filter(
+				(recentP) =>
+					(participants as Participant[])?.map?.((p) => p.text).includes(recentP) ??
+					Object.values(participants as MehParticipants)
+						.flat()
+						.includes(recentP)
+			),
+		},
 	];
 
 	return (

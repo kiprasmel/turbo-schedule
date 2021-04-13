@@ -11,7 +11,6 @@
 		"outDir": "build",
 		"module": "esnext",
 		"target": "es5",
-		"lib": ["es6", "dom", "esnext.asynciterable"],
 		"sourceMap": true,
 		"allowJs": true,
 		"jsx": "react",

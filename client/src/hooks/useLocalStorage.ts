@@ -1,7 +1,7 @@
 /**
  * https://usehooks.com/useLocalStorage/
  */
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
 	// State to store our value
@@ -30,25 +30,30 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T)
 
 	// ... persists the new value to localStorage.
 
-	const setValue = (value: T | ((val: T) => T)) => {
-		try {
-			// Allow value to be a function so we have same API as useState
+	const setValue = useCallback(
+		// (value: T | ((val: T) => T)) => {
+		(value: T) => {
+			try {
+				// Allow value to be a function so we have same API as useState
 
-			const valueToStore = value instanceof Function ? value(storedValue) : value;
+				// const valueToStore = value instanceof Function ? value(storedValue) : value;
+				const valueToStore = value;
 
-			// Save state
+				// Save state
 
-			setStoredValue(valueToStore);
+				setStoredValue(valueToStore);
 
-			// Save to local storage
+				// Save to local storage
 
-			window.localStorage.setItem(key, JSON.stringify(valueToStore));
-		} catch (error) {
-			// A more advanced implementation would handle the error case
+				window.localStorage.setItem(key, JSON.stringify(valueToStore));
+			} catch (error) {
+				// A more advanced implementation would handle the error case
 
-			console.log(error);
-		}
-	};
+				console.log(error);
+			}
+		},
+		[key]
+	);
 
 	return [storedValue, setValue];
 }
