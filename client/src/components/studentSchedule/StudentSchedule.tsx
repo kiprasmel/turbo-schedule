@@ -56,7 +56,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const { params } = match;
 	const { studentName } = params;
 
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 	const [scheduleByDays, setScheduleByDays] = useState([[]] as Array<Array<Lesson>>);
 
 	useAddMostRecentParticipantOnPageChange(studentName);
