@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.20.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.19.0...v2.20.0) (2021-04-16)
+
+
+### Bug Fixes
+
+* extract scraper specific participant classifier into common (revertable) ([9ce6d51](https://github.com/kiprasmel/turbo-schedule/commit/9ce6d51ea5a192bd8b7380ae49f6d6a439fb4634))
+
+
+
+
+
 # [2.19.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.18.0...v2.19.0) (2021-04-13)
 
 **Note:** Version bump only for package @turbo-schedule/scraper

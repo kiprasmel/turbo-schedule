@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.20.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.19.0...v2.20.0) (2021-04-16)
+
+
+### Bug Fixes
+
+* **client:** student schedule `isLoading` state `false` by default ([e1c3207](https://github.com/kiprasmel/turbo-schedule/commit/e1c32073c6c1fd26c0db47c43ef83535f11e2459))
+* extract scraper specific participant classifier into common (revertable) ([9ce6d51](https://github.com/kiprasmel/turbo-schedule/commit/9ce6d51ea5a192bd8b7380ae49f6d6a439fb4634))
+
+
+### Features
+
+* **client:** create LRUCache utils & hooks to add/get most recent participants 👀 ([415c9e9](https://github.com/kiprasmel/turbo-schedule/commit/415c9e97d4bb6f9329c2b591b96c91565d189c25))
+* **client:** display most recent participants individually by group/label 🚀 ([b5378ea](https://github.com/kiprasmel/turbo-schedule/commit/b5378ea1e060273fea3c631404ab306df6172410))
+* **client:** use LRUCache utils to track most recent participants ([2fa617a](https://github.com/kiprasmel/turbo-schedule/commit/2fa617a08d17d3cce173cb9ac053eb18175a9a5c))
+
+
+
+
+
 # [2.19.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.18.0...v2.19.0) (2021-04-13)
 
 
