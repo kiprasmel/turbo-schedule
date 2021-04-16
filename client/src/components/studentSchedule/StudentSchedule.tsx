@@ -5,7 +5,7 @@ import { Lesson, Student } from "@turbo-schedule/common";
 
 import "./StudentSchedule.scss";
 
-import { useMostRecentlyViewedParticipants } from "../../hooks/useLRUCache";
+import { useAddMostRecentParticipantOnPageChange } from "../../hooks/useLRUCache";
 import Footer from "../footer/Footer";
 import { Navbar } from "../navbar/Navbar";
 import { history } from "../../utils/history";
@@ -59,11 +59,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [scheduleByDays, setScheduleByDays] = useState([[]] as Array<Array<Lesson>>);
 
-	const [, addMostRecent] = useMostRecentlyViewedParticipants();
-
-	useEffect(() => {
-		addMostRecent(studentName);
-	}, [addMostRecent, studentName]);
+	useAddMostRecentParticipantOnPageChange(studentName);
 
 	useEffect(() => {
 		const wrapper = async () => {
