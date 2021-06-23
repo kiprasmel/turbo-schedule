@@ -91,6 +91,36 @@ That's it!
 
 See also [CONTRIBUTING.md](./CONTRIBUTING.md), especially [#known-issues](./CONTRIBUTING.md#known-issues)!
 
+## Deploying
+
+### Automatic
+
+Once a PR is merged into the `master` branch, the deployment procedure will automatically begin in the CI suite (assuming the previous steps - installation, building and testing - pass).
+
+See [./.github/workflows/main.yaml](./.github/workflows/main.yaml)
+
+### Manual
+
+However, sometimes one might want to deploy from a specific version they are currently developing, even though it's still not merged into `master`.
+
+In this case, there's a script ready:
+
+```sh
+yarn docker:deploy:my-current-workspace
+```
+
+#### Requirements:
+  - dockerhub login and access to the `kipras/turbo-schedule` image
+  - ssh access to the production server
+
+#### It will:
+  - build the project from your current workspace (note - uncommited changes **will be** included),
+  - create a docker image with a tag pointing to the latest commit,
+  - push the image to dockerhub,
+  - ssh into the production server,
+  - pull the docker image from the specific tag and
+  - deploy it
+
 ## Other accomplishments alongside this project
 
 > Some interesting stuff I've gone through thanks to this project
