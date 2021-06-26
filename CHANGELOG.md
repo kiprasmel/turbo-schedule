@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.21.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.20.0...v2.21.0) (2021-06-26)
+
+
+### Bug Fixes
+
+* **server:** increase max http header size to 64K ([298fd00](https://github.com/kiprasmel/turbo-schedule/commit/298fd008493c9d31c2dafc3b6ab77e371be9cdb2))
+
+
+### Features
+
+* create /comfy/ participant picker in common availability ([4ff262a](https://github.com/kiprasmel/turbo-schedule/commit/4ff262abf19df9a2456ab670d5c984c44577156c))
+
+
+
+
+
 # [2.20.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.19.0...v2.20.0) (2021-04-16)
 
 
