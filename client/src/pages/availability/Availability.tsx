@@ -65,9 +65,8 @@ export const Availability: FC = () => {
 	const [selectedDay, setSelectedDay] = useQueryFor("day", ende);
 	const [selectedTime, setSelectedTime] = useQueryFor("time", ende);
 
-	/** TODO FIXME */
 	const hasSelectedExtraInfo: boolean =
-		// wantedParticipants.length === 0 ? false : [selectedDay, selectedTime].some((x) => x !== invalidEnDeVal);
+		/* wantedParticipants.length === 0 ? false : */
 		[selectedDay, selectedTime].some((x) => x !== invalidEnDeVal);
 
 	type TDisplayType = "+-=" | "available / total" | "bussy / total" | "mapped ratio to HSL";
@@ -180,7 +179,6 @@ export const Availability: FC = () => {
 		axios
 			.get<{ availability: IAvailability[][] }>(url)
 			.then((res) => {
-				console.log("res", res);
 				setAvailability(res?.data?.availability ?? []);
 			})
 			.catch((e) => console.error(e));

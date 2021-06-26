@@ -21,17 +21,11 @@ interface ParticipantPickerProps
 		| "wantedParticipants"
 		| "setWantedParticipants"
 	> {
-	// handleChange: (wantedParticipants: string[]) => void;
-
 	wantedParticipants: WantedParticipant[];
 	setWantedParticipants: (newWantedParticipants: WantedParticipant[]) => void;
 }
 
 export const ParticipantPicker: FC<ParticipantPickerProps> = ({
-	// wantedParticipants, //
-	// setWantedParticipants: _setWantedParticipants,
-	// handleChange,
-
 	wantedParticipants,
 	setWantedParticipants: _setWantedParticipants,
 }) => {
@@ -224,16 +218,6 @@ interface ParticipantSubsetPickerProps {
 	isSelectedStateOverride?: true | undefined;
 }
 
-/**
- * TODO: currently only for `students` - make for all types of participants
- * 	- Tree-based logic for top-level toggles (just like now for students -> all students),
- * 	  now just participants -> all participants.
- *  - <Indent> </Indent>
- *
- * TODO: verify the tightly packed information fits well in various cases
- * 	(the column count is not very dynamic sadly lol)
- *
- */
 export const ParticipantSubsetPicker: FC<ParticipantSubsetPickerProps> = ({
 	subsetTitle,
 	participantSubset: fullParticipantSubset,
@@ -281,15 +265,6 @@ export const ParticipantSubsetPicker: FC<ParticipantSubsetPickerProps> = ({
 			<ul
 				className={cx(
 					css`
-						/* max-height: 40em;
-									max-width: 100%;
-
-									display: flex;
-									flex-direction: column;
-									flex-wrap: wrap;
-
-									text-align: left; */
-
 						display: grid;
 						grid-auto-flow: column;
 
