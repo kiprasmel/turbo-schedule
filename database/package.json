@@ -6,7 +6,8 @@
 	"author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
 	"license": "UNLICENSED",
 	"scripts": {
-		"create-fake-data": "yarn ts-node-dev ./src/script/create-fake-data.ts"
+		"create-fake-data": "yarn ts-node-dev ./src/script/create-fake-data.ts",
+		"copy-prod-data": "bash ./copy-prod-data.sh"
 	},
 	"dependencies": {
 		"@turbo-schedule/common": "^2.20.0",

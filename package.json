@@ -60,6 +60,7 @@
 		"docker:build:commit": "cross-env USE_FAKE_DATA_INSTEAD_OF_SCRAPING=1 yarn build:prod && docker build -t kipras/turbo-schedule:$(git rev-parse HEAD)$VERSION_SUFFIX .",
 		"docker:login:commit": "docker login",
 		"docker:push:commit": "docker push kipras/turbo-schedule:$(git rev-parse HEAD)$VERSION_SUFFIX",
+		"docker:complete-deploy:commit": "bash ./deploy.sh \"$(git rev-parse HEAD)$VERSION_SUFFIX\"",
 		"docker:deploy:commit": "echo $VERSION_SUFFIX && yarn docker:build:commit && yarn docker:login:commit && yarn docker:push:commit && echo $(git rev-parse HEAD)$VERSION_SUFFIX",
 		"purge:build": "npx rimraf ./client/build ./*/dist/ ./dist/ ./*/tsconfig.tsbuildinfo",
 		"purge:modules": "npx rimraf ./*/node_modules/ ./node_modules/",

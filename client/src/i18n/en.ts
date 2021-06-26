@@ -59,6 +59,8 @@ export const en: Dictionary = {
 	"The UI/UX will be improved by the time the Beta phase is over":
 		"The UI/UX will be improved by the time the Beta phase is over",
 	"Extra info": "Extra info",
+	"Participant picker": "Participant picker",
+	Everyone: "Everyone",
 	"Select a time interval": "Select a time interval",
 	day: "day",
 	time: "time",

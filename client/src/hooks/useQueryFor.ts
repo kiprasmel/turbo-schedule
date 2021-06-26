@@ -3,7 +3,7 @@
  */
 
 import { useHistory } from "react-router-dom";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 export type TQuery = string;
 export type TSetQuery<T> = (query: T, shouldReplace?: boolean) => void;
@@ -13,9 +13,34 @@ export type EncoderDecoder<T> = {
 	decode: (value: TQuery) => T;
 };
 
+export const arrayEncoderDecoder: EncoderDecoder<string[]> = {
+	encode: (x) => x.join(","),
+	decode: (x) =>
+		x
+			.split(",")
+			.map((y) => y.trim())
+			.filter((y) => !!y),
+};
+
+export const defaultEncoderDecoder = {
+	encode: (value: any) => (value as unknown) as TQuery,
+	decode: (value: any) => (value as unknown) as string,
+
+	// encode: (value) => (value as unknown) as TQuery,
+	// decode: (value) => (value as unknown) as T,
+};
+
+/**
+ * NOTE: Memoize the encode / decode functions / the encoderDecoder!
+ */
 export const useQueryFor = <T = string>(
 	key: string, //
-	{ defaultValueFallback, encode, decode }: EncoderDecoder<T> & { defaultValueFallback?: string } = {
+	{
+		defaultValueFallback,
+		valueOverrideOnceChanges,
+		encode,
+		decode,
+	}: EncoderDecoder<T> & { defaultValueFallback?: TQuery; valueOverrideOnceChanges?: TQuery } = {
 		encode: (value) => (value as unknown) as TQuery,
 		decode: (value) => (value as unknown) as T,
 	}
@@ -48,6 +73,12 @@ export const useQueryFor = <T = string>(
 		},
 		[history, key, encode, decode]
 	);
+
+	useEffect(() => {
+		if (valueOverrideOnceChanges) {
+			setQuery(decode(valueOverrideOnceChanges));
+		}
+	}, [valueOverrideOnceChanges, setQuery, decode]);
 
 	return [query, setQuery];
 };

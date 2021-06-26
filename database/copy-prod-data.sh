@@ -2,7 +2,7 @@
 
 REMOTE="${1:-prod}"
 
-ssh "$REMOTE" <<"EOF"
+ssh -o BatchMode=yes -o AddKeysToAgent=no "$REMOTE" <<"EOF"
 docker cp turbo-schedule:/usr/src/app/database/data/latest.json /tmp/latest.json
 EOF
 

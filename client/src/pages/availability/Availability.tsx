@@ -1,4 +1,4 @@
-/* eslint-disable indent */
+/* eslint-disable indent, no-multi-str */
 
 import React, { FC, useState, useEffect, useRef, useReducer, useCallback, useMemo } from "react";
 import axios from "axios";
@@ -13,6 +13,7 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useQueryFor, EncoderDecoder } from "../../hooks/useQueryFor";
 import { Navbar } from "../../components/navbar/Navbar";
 import { useTranslation } from "../../i18n/useTranslation";
+import { ParticipantPicker, WantedParticipant } from "./ParticipantPicker";
 
 const mapRatioToHSLThroughHue = (ratio: number, hueStart: number = 240, hueEnd: number = 360): string => {
 	const hue: number = hueStart + (hueEnd - hueStart) * ratio;
@@ -53,15 +54,21 @@ const mapRatioToHSBThroughBrightness = (ratio: number, start: number = 0, end: n
 export const Availability: FC = () => {
 	const t = useTranslation();
 
-	const [wantedParticipants, setWantedParticipants] = useQueryFor("p");
-
 	const invalidEnDeVal = -1;
-	const ende: EncoderDecoder<number> = {
-		encode: (x) => (x === invalidEnDeVal ? "" : x.toString()), //
-		decode: (x) => (!x ? invalidEnDeVal : Number(x)),
-	};
+	const ende: EncoderDecoder<number> = useMemo(
+		() => ({
+			encode: (x) => (x === invalidEnDeVal ? "" : x.toString()), //
+			decode: (x) => (!x ? invalidEnDeVal : Number(x)),
+		}),
+		[invalidEnDeVal]
+	);
 	const [selectedDay, setSelectedDay] = useQueryFor("day", ende);
 	const [selectedTime, setSelectedTime] = useQueryFor("time", ende);
+
+	/** TODO FIXME */
+	const hasSelectedExtraInfo: boolean =
+		// wantedParticipants.length === 0 ? false : [selectedDay, selectedTime].some((x) => x !== invalidEnDeVal);
+		[selectedDay, selectedTime].some((x) => x !== invalidEnDeVal);
 
 	type TDisplayType = "+-=" | "available / total" | "bussy / total" | "mapped ratio to HSL";
 
@@ -81,27 +88,10 @@ export const Availability: FC = () => {
 		},
 		[setSelectedDay, setSelectedTime]
 	);
-
-	useEffect(() => {
-		if (!wantedParticipants?.trim().length) {
-			setAvailability([]);
-			return;
-		}
-
-		axios
-			.get<{ availability: IAvailability[][] }>(
-				`/api/v1/participant/common-availability?wanted-participants=${wantedParticipants
-					.split(",")
-					.map((wp) => wp.trim())
-					.filter((wp) => !!wp)
-					.join(",")}`
-			)
-			.then((res) => {
-				console.log("res", res);
-				setAvailability(res?.data?.availability ?? []);
-			})
-			.catch((e) => console.error(e));
-	}, [wantedParticipants]);
+	const unselectAvailability = useCallback(() => {
+		setSelectedDay(invalidEnDeVal);
+		setSelectedTime(invalidEnDeVal);
+	}, [setSelectedDay, setSelectedTime, invalidEnDeVal]);
 
 	const availabilityGridRef = useRef<HTMLDivElement>(null);
 
@@ -147,6 +137,55 @@ export const Availability: FC = () => {
 
 	const { desktop, notDesktop } = useWindow();
 
+	const [wantedParticipants, setWantedParticipants] = useState<WantedParticipant[]>([]);
+
+	const [isFirstMount, setIsFirstMount] = useState(true);
+	useEffect((): void => {
+		if (!wantedParticipants?.length) {
+			/**
+			 * if the query was empty,
+			 * reset the time & date params (thus, the "hasSelectedExtraInfo" too),
+			 * freeing up screen space for a wider participant picker
+			 */
+
+			if (isFirstMount) {
+				setIsFirstMount(false);
+			} else {
+				/**
+				 * only resets the params if it's not the first mount
+				 *
+				 * technically it's not the first/non-first mount,
+				 * the point is is that the `wantedParticipants` have had a chance by now
+				 * to get updated from the `ParticipantPicker`s url queries `students`, `teachers`, `classes` & `rooms`,
+				 * and thus if there were some selected participants - we do not want to remove
+				 * the selected day & time, and if there were 0 selected participants - we do want to remove,
+				 * which is what we're doing here:
+				 */
+				setSelectedDay(invalidEnDeVal);
+				setSelectedTime(invalidEnDeVal);
+			}
+
+			setAvailability([]);
+
+			return;
+		}
+
+		const wantedParticipantsPrepared: string = wantedParticipants
+			.map((wp) => wp.text.trim())
+			.filter((wp) => !!wp)
+			.join(",");
+
+		const url: string = `/api/v1/participant/common-availability?wanted-participants=${wantedParticipantsPrepared}`;
+
+		axios
+			.get<{ availability: IAvailability[][] }>(url)
+			.then((res) => {
+				console.log("res", res);
+				setAvailability(res?.data?.availability ?? []);
+			})
+			.catch((e) => console.error(e));
+	}, [isFirstMount, wantedParticipants, invalidEnDeVal, setSelectedDay, setSelectedTime, setAvailability]);
+
 	return (
 		<>
 			<Navbar />
@@ -174,10 +213,15 @@ export const Availability: FC = () => {
 						}
 
 						${desktop} {
-							grid-template-areas:
-								"info info info"
-								"select display detailed-info"
-								"select display detailed-info";
+							grid-template-areas: ${hasSelectedExtraInfo
+								? '	"info info info" \
+									"select display detailed-info" \
+									"select display detailed-info"; '
+								: '	"info info info" \
+									"select select display" \
+									"select select display"; '};
+
+							/* the 'detailed-info' grid-area is hidden below if it has not been selected */
 						}
 					`
 				)}
@@ -410,6 +454,10 @@ export const Availability: FC = () => {
 
 																	color: inherit;
 																	filter: invert(100%);
+
+																	/** https://twitter.com/piccalilli_/status/1233358303092232194 */
+																	font-feature-settings: "tnum";
+																	font-variant-numeric: tabular-nums;
 																`}
 															>
 																{/* {a.availableParticipants}/ */}
@@ -466,24 +514,17 @@ export const Availability: FC = () => {
 								))}
 							</div>
 						</div>
-					) : !wantedParticipants ? (
+					) : !wantedParticipants?.length ? (
 						<button
 							type="button"
-							onClick={() =>
+							onClick={(): Promise<void> =>
 								axios
 									.get(`/api/v1/participant/random`)
 									.then((res: { data: { participants: Participant[] } }) =>
-										setWantedParticipants(
-											(res.data?.participants ?? [])
-												.map((participant) => participant.text)
-												.join(", ")
-										)
+										setWantedParticipants(res.data?.participants ?? [])
 									)
 									.catch((err) => {
 										console.error(err);
-										setWantedParticipants(
-											"Melnikovas Kipras IVe, Baltūsienė Violeta, Mėčius Gediminas IVe, Zaboras Edgaras IVGc, Adomaitis Jurgis IIIc, Rimkus Gabrielius IIIc, IIGd, IIGb, IGb, IIGa, IGa"
-										);
 									})
 							}
 							className={css`
@@ -509,8 +550,12 @@ export const Availability: FC = () => {
 				{/* /availability display */}
 
 				{/* participant selection */}
-				<section className={css``}>
-					<div
+				<section
+					className={css`
+						grid-area: select;
+					`}
+				>
+					{/* <div
 						className={css`
 							grid-area: select;
 
@@ -549,20 +594,13 @@ export const Availability: FC = () => {
 									setSelectedAvailability(invalidEnDeVal, invalidEnDeVal);
 								}}
 								className={css`
-								font-family: inherit;
-								background: inherit;
-								color: inherit;
+									font-family: inherit;
+									background: inherit;
+									color: inherit;
 
-
-								/* border-radius: 5px; */
-
-								/*
-								background: ${colorMapperEntrys.filter((e) => e.name === colorMapperName)[0].gradient ?? colorMapperEntrys[0].gradient};
-								*/
-
-								background: inherit;
-								color: inherit;
-							`}
+									background: inherit;
+									color: inherit;
+								`}
 							>
 								<h1
 									className={css`
@@ -609,6 +647,20 @@ export const Availability: FC = () => {
 								{t("The UI/UX will be improved by the time the Beta phase is over")}.
 							</p>
 						)}
+					</div> */}
+
+					<div
+						className={css`
+							margin-left: ${hasSelectedExtraInfo ? "0em" : "1em"};
+							margin-bottom: 2em;
+						`}
+					>
+						<ParticipantPicker
+							hasSelectedExtraInfo={hasSelectedExtraInfo} //
+							// handleChange={handleWantedParticipantChange}
+							wantedParticipants={wantedParticipants}
+							setWantedParticipants={setWantedParticipants}
+						/>
 					</div>
 				</section>
 				{/* /participant selection */}
@@ -617,10 +669,29 @@ export const Availability: FC = () => {
 				<section
 					className={css`
 						grid-area: detailed-info;
-						//
+
+						${!hasSelectedExtraInfo ? "display: none;" : ""}
 					`}
 				>
-					<h1>{t("Extra info")}</h1>
+					<h1
+						className={css`
+							& > * + * {
+								margin-left: 1em;
+							}
+						`}
+					>
+						<span>{t("Extra info")}</span>
+
+						<button
+							type="button"
+							onClick={unselectAvailability}
+							className={css`
+								font-size: inherit;
+							`}
+						>
+							X
+						</button>
+					</h1>
 
 					{!selectedAvailability ? (
 						<p>{t("Select a time interval")}</p>

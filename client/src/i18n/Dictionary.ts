@@ -43,6 +43,8 @@ export interface Dictionary {
 	"Enter the participant names": string;
 	"The UI/UX will be improved by the time the Beta phase is over": string;
 	"Extra info": string;
+	"Participant picker": string;
+	Everyone: string;
 	"Select a time interval": string;
 	day: string;
 	time: string;
