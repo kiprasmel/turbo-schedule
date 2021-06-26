@@ -2,7 +2,12 @@
 
 REMOTE="${REMOTE:-prod}"
 
-ssh -t -t "$REMOTE" "TAG=\"${TAG:-latest}\" " 'bash -s' <<"EOF"
+TAG="${TAG:-$1}"
+TAG=${TAG:-latest}
+
+echo "TAG $TAG"
+
+ssh -o BatchMode=yes -o AddKeysToAgent=no "$REMOTE" "TAG=\"${TAG}\" " 'bash -s' <<"EOF"
 
 IMAGE_USER="kipras"
 IMAGE_NAME="turbo-schedule"

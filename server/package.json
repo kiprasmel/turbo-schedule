@@ -11,7 +11,7 @@
 		"test": "yarn test:api --forceExit",
 		"build": "     yarn build:ts && yarn build:content      && yarn build:docs",
 		"build:prod": "cross-env NODE_ENV=production yarn build:ts && yarn build:content:prod && yarn build:docs:prod",
-		"serve": "cross-env NODE_ENV=production node dist/script/start-server.js",
+		"serve": "cross-env NODE_ENV=production node --max-http-header-size 64000 dist/script/start-server.js",
 		"-----": "-----",
 		"watch:ts": "tsc -b -w",
 		"watch:server": "ts-node-dev ./src/script/start-server.ts",

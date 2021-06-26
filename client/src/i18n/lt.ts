@@ -72,6 +72,8 @@ export const lt: Dictionary = {
 	"The UI/UX will be improved by the time the Beta phase is over":
 		'Vartotojo sąsajos veikimo įpatumai patobulės pasibaigus "Beta" fazei',
 	"Extra info": "Papildoma informacija",
+	"Participant picker": "Dalyvių pasirinkimas",
+	Everyone: "Visi",
 	"Select a time interval": "Pasirinkite laiko intervalą",
 	day: "diena",
 	time: "laikas",

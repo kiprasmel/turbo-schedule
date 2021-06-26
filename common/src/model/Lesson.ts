@@ -91,14 +91,33 @@ export const p2rooms = (participants: (Participant | ParticipantInLesson)[]): st
 	...new Set([...participants.filter((p) => p.labels[0] === "room").map((p) => p.text)]),
 ];
 
-export const parseParticipants = (
-	participants: Participant[]
-): { students: string[]; teachers: string[]; rooms: string[]; classes: string[] } => ({
-	students: participants.filter((p) => p.labels[0] === "student").map((p) => p.text),
-	teachers: participants.filter((p) => p.labels[0] === "teacher").map((p) => p.text),
-	rooms: participants.filter((p) => p.labels[0] === "room").map((p) => p.text),
-	classes: participants.filter((p) => p.labels[0] === "class").map((p) => p.text),
-});
+export type TParseParticipants = {
+	[key in "students" | "teachers" | "rooms" | "classes" | "allParticipants"]: string[];
+};
+
+export const parseParticipants = (participants: Participant[]): TParseParticipants => {
+	const ret: TParseParticipants = {
+		students: [], //
+		teachers: [],
+		rooms: [],
+		classes: [],
+		allParticipants: [],
+	};
+
+	participants.forEach((p) => {
+		const kind = p.labels[0];
+
+		ret["allParticipants"].push(p.text);
+
+		if (kind === "student") ret.students.push(p.text);
+		else if (kind === "teacher") ret.teachers.push(p.text);
+		else if (kind === "class") ret.classes.push(p.text);
+		else if (kind === "room") ret.rooms.push(p.text);
+		else throw new Error("Invalid kind");
+	});
+
+	return ret;
+};
 
 export const getParticipantCount = ({ students, classes, teachers, rooms }: Lesson): number =>
 	students.length + classes.length + teachers.length + rooms.length;
