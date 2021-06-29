@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.21.1-alpha.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.21.0...v2.21.1-alpha.0) (2021-06-29)
+
+
+### Features
+
+* **ci:** lerna's force-publish via commit message ([ee0c09b](https://github.com/kiprasmel/turbo-schedule/commit/ee0c09b5e20d08fb3cb0bd59ed8d8eefb23b5b56))
+* **client:** allow ssh tunnel on httpS with react-dev-utils patch ([2a43075](https://github.com/kiprasmel/turbo-schedule/commit/2a43075547282235db596fcfba34fd17ecf27dd3))
+
+
+
+
+
 # [2.21.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.20.0...v2.21.0) (2021-06-26)
 
 

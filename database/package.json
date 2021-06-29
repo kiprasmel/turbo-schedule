@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/database",
-	"version": "2.21.0",
+	"version": "2.21.1-alpha.0",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
 	"author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
@@ -10,7 +10,7 @@
 		"copy-prod-data": "bash ./copy-prod-data.sh"
 	},
 	"dependencies": {
-		"@turbo-schedule/common": "^2.21.0",
+		"@turbo-schedule/common": "^2.21.1-alpha.0",
 		"@types/debug": "4.1.5",
 		"@types/lowdb": "1.0.9",
 		"@types/uuid": "7.0.2",
