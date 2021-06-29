@@ -130,17 +130,14 @@ export const NavbarMobile = forwardRef<HTMLElement, { SearchElement?: JSX.Elemen
 					justify-content: space-between;
 				`}
 			>
-				<h1 className={css``}>
-					<Link
-						to="/"
-						onClick={(_e) => sendMenuState("CLOSE")}
-						className={css`
-							display: inline-block;
-
-							padding: 1rem;
-							margin: -1rem;
-						`}
-					>
+				<h1
+					onClick={(_e) => sendMenuState("CLOSE")}
+					className={css`
+						display: inline-block;
+						padding-top: 1rem;
+					`}
+				>
+					<Link to="/">
 						<Logo />
 					</Link>
 				</h1>
@@ -152,8 +149,7 @@ export const NavbarMobile = forwardRef<HTMLElement, { SearchElement?: JSX.Elemen
 						type="button"
 						onClick={(_e) => sendMenuState(nextMenuEvent)}
 						className={css`
-							padding: 1rem;
-							margin: -1rem;
+							padding-top: 1rem;
 						`}
 					>
 						<More className={css``} />
