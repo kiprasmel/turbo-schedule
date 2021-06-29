@@ -1,4 +1,13 @@
-import React, { FC, useCallback, useState, useEffect, useMemo, PropsWithChildren, ReactElement } from "react";
+import React, {
+	FC,
+	useCallback,
+	useState,
+	useEffect,
+	useMemo,
+	PropsWithChildren,
+	ReactElement,
+	startTransition,
+} from "react";
 import { css, cx } from "emotion";
 
 import { parseParticipants, Participant } from "@turbo-schedule/common";
@@ -233,11 +242,13 @@ export const ParticipantSubsetPicker: FC<ParticipantSubsetPickerProps> = ({
 
 	const handleCheckboxClick = useCallback(
 		(p) => (isSelected: boolean): void => {
-			if (isSelected) {
-				setWantedParticipants([...wantedParticipants, p]);
-			} else {
-				setWantedParticipants(wantedParticipants.filter((x) => x !== p));
-			}
+			startTransition(() => {
+				if (isSelected) {
+					setWantedParticipants([...wantedParticipants, p]);
+				} else {
+					setWantedParticipants(wantedParticipants.filter((x) => x !== p));
+				}
+			});
 		},
 		[wantedParticipants, setWantedParticipants]
 	);
