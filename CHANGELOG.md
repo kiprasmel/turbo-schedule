@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.22.0-alpha.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.21.1-alpha.0...v2.22.0-alpha.0) (2021-06-29)
+
+
+### Bug Fixes
+
+* **client:** do not fetch expensive resource if it's cancelled ([65588bf](https://github.com/kiprasmel/turbo-schedule/commit/65588bffc5ccc124c5f017aa40ff5fef0569da7b))
+* react types ([c8127b8](https://github.com/kiprasmel/turbo-schedule/commit/c8127b86f5e9b8baa7a814d164d08004a992e65d))
+
+
+### Features
+
+* **client:** upgrade to react 18 alpha ([9dbe704](https://github.com/kiprasmel/turbo-schedule/commit/9dbe7045ef0a54d8c7c02fd1092f2c7db7dfc819))
+* **client:** use startTransition to defer less important updates @ Availability ([fe0c780](https://github.com/kiprasmel/turbo-schedule/commit/fe0c780bc7061fe9fff765d0ab9ede8020172c9c))
+
+
+
+
+
 ## [2.21.1-alpha.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.21.0...v2.21.1-alpha.0) (2021-06-29)
 
 
