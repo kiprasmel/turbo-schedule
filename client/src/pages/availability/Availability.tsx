@@ -176,12 +176,18 @@ export const Availability: FC = () => {
 
 		const url: string = `/api/v1/participant/common-availability?wanted-participants=${wantedParticipantsPrepared}`;
 
+		let isCancelled: boolean = false;
+
 		axios
 			.get<{ availability: IAvailability[][] }>(url)
 			.then((res) => {
-				setAvailability(res?.data?.availability ?? []);
+				if (!isCancelled) setAvailability(res?.data?.availability ?? []);
 			})
 			.catch((e) => console.error(e));
+
+		return (): void => {
+			isCancelled = true;
+		};
 	}, [isFirstMount, wantedParticipants, invalidEnDeVal, setSelectedDay, setSelectedTime, setAvailability]);
 
 	return (
