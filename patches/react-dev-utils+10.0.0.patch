@@ -1,0 +1,25 @@
+diff --git a/node_modules/react-dev-utils/webpackHotDevClient.js b/node_modules/react-dev-utils/webpackHotDevClient.js
+index fb515f0..41bee66 100644
+--- a/node_modules/react-dev-utils/webpackHotDevClient.js
++++ b/node_modules/react-dev-utils/webpackHotDevClient.js
+@@ -59,7 +59,19 @@ if (module.hot && typeof module.hot.dispose === 'function') {
+ // Connect to WebpackDevServer via a socket.
+ var connection = new WebSocket(
+   url.format({
+-    protocol: 'ws',
++	protocol: (() => {
++		if (process && process.env && process.env.NODE_ENV === "development") {
++			/**
++			 * use websockets secure to allow sharing local dev env
++			 * on a remote via ssh tunnel and access through https
++			 *
++			 * firefox specifically (others work by default):
++			 * see https://stackoverflow.com/a/11770124/9285308
++			*/
++			return "wss";
++		}
++		return "ws";
++	})(),
+     hostname: window.location.hostname,
+     port: window.location.port,
+     // Hardcoded in WebpackDevServer
