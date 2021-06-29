@@ -216,16 +216,12 @@ export const ParticipantListItem: FC<{
 		key={participant}
 		className={css`
 			${isOnlyOneMatchingParticipant && "font-weight: 600; font-size: 1.69rem;"}
+			${isOnlyOneMatchingParticipant && "border-bottom: 3px solid #000;"}
 		`}
 	>
-		<Link
-			to={createLinkToLesson(participant, dayIndex, timeIndex, highlightInsteadOfOpen)}
-			className={css`
-				${isOnlyOneMatchingParticipant && "border-bottom: 3px solid #000;"}
-			`}
-		>
+		<Link to={createLinkToLesson(participant, dayIndex, timeIndex, highlightInsteadOfOpen)}>
 			{participant}
-			{children}
+			{(children as unknown) as any}
 		</Link>
 	</li>
 );

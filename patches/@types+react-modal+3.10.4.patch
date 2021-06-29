@@ -1,0 +1,13 @@
+diff --git a/node_modules/@types/react-modal/index.d.ts b/node_modules/@types/react-modal/index.d.ts
+index fe1a2fd..5f9a2e0 100644
+--- a/node_modules/@types/react-modal/index.d.ts
++++ b/node_modules/@types/react-modal/index.d.ts
+@@ -128,7 +128,7 @@ declare namespace ReactModal {
+     }
+ }
+ 
+-declare class ReactModal extends React.Component<ReactModal.Props> {
++declare class ReactModal extends React.Component<ReactModal.Props, any> {
+     /* Override base styles for all instances of this component. */
+     static defaultStyles: ReactModal.Styles;
+     /**

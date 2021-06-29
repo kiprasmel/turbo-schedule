@@ -1,6 +1,6 @@
 /* eslint-disable indent, no-multi-str */
 
-import React, { FC, useState, useEffect, useRef, useReducer, useCallback, useMemo } from "react";
+import React, { FC, useState, useEffect, useRef, useReducer, useCallback, useMemo, startTransition } from "react";
 import axios from "axios";
 import { cx, css } from "emotion";
 
@@ -136,10 +136,19 @@ export const Availability: FC = () => {
 
 	const { desktop, notDesktop } = useWindow();
 
-	const [wantedParticipants, setWantedParticipants] = useState<WantedParticipant[]>([]);
+	const [wantedParticipants, __setWantedParticipants] = useState<WantedParticipant[]>([]);
+
+	const setWantedParticipants = useCallback(
+		(newWantedParticipants: WantedParticipant[]): void => {
+			startTransition(() => {
+				__setWantedParticipants(newWantedParticipants);
+			});
+		},
+		[__setWantedParticipants]
+	);
 
 	const [isFirstMount, setIsFirstMount] = useState(true);
-	useEffect((): void => {
+	useEffect(() => {
 		if (!wantedParticipants?.length) {
 			/**
 			 * if the query was empty,
@@ -176,12 +185,18 @@ export const Availability: FC = () => {
 
 		const url: string = `/api/v1/participant/common-availability?wanted-participants=${wantedParticipantsPrepared}`;
 
+		let isCancelled: boolean = false;
+
 		axios
 			.get<{ availability: IAvailability[][] }>(url)
 			.then((res) => {
-				setAvailability(res?.data?.availability ?? []);
+				if (!isCancelled) setAvailability(res?.data?.availability ?? []);
 			})
 			.catch((e) => console.error(e));
+
+		return (): void => {
+			isCancelled = true;
+		};
 	}, [isFirstMount, wantedParticipants, invalidEnDeVal, setSelectedDay, setSelectedTime, setAvailability]);
 
 	return (

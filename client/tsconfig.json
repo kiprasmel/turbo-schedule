@@ -29,7 +29,8 @@
 		"strict": true,
 		"resolveJsonModule": true,
 		"isolatedModules": true,
-		"noEmit": true
+		"noEmit": true,
+		"types": ["react/next", "react-dom/next", "jest"]
 	},
 	"exclude": ["node_modules", "build", "scripts", "acceptance-tests", "webpack", "jest", "src/setupTests.ts"],
 	"include": ["src"]
