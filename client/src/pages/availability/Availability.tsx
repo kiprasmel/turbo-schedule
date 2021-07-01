@@ -699,10 +699,11 @@ export const Availability: FC = () => {
 							type="button"
 							onClick={unselectAvailability}
 							className={css`
-								font-size: inherit;
+								font-size: larger;
+								font-weight: bold;
 							`}
 						>
-							X
+							&times;
 						</button>
 					</h1>
 
