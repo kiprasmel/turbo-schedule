@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.23.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.22.1...v2.23.0) (2021-07-01)
+
+
+### Features
+
+* **client:** do not use classifier because participant type already is available ([62c666d](https://github.com/kiprasmel/turbo-schedule/commit/62c666d8c8782dc45e675a3df33bf418749adeba))
+* classify participant through api if scraper specific classifier fails ([49af97d](https://github.com/kiprasmel/turbo-schedule/commit/49af97d27d3a0155976afb3e2a1c789b5534a257))
+
+
+
+
+
 ## [2.22.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.22.0...v2.22.1) (2021-07-01)
 
 
