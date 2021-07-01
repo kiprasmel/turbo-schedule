@@ -8,7 +8,6 @@ import {
 	Class,
 	Room,
 	ParticipantLabel,
-	participantClassifier,
 } from "@turbo-schedule/common";
 
 import { useLocalStorage } from "./useLocalStorage";
@@ -119,11 +118,15 @@ export const useMostRecentlyViewedParticipantsSplit = () => {
 	};
 };
 
-export const useAddMostRecentParticipantOnPageChange = (participantName: string): void => {
+export const useAddMostRecentParticipantOnPageChange = (
+	participantName: string,
+	participantType: ParticipantLabel | null
+): void => {
 	const { addMostRecent } = useMostRecentlyViewedParticipantsSplit();
 
 	useEffect(() => {
-		const participantKind: ParticipantLabel = participantClassifier(participantName);
-		addMostRecent(participantKind, participantName);
-	}, [addMostRecent, participantName]);
+		if (participantType) {
+			addMostRecent(participantType, participantName);
+		}
+	}, [addMostRecent, participantName, participantType]);
 };
