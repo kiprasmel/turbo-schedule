@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { throttle } from "lodash";
 
-import { Lesson, Student } from "@turbo-schedule/common";
+import { Lesson, Student, ParticipantLabel } from "@turbo-schedule/common";
 
 import "./StudentSchedule.scss";
 
@@ -59,13 +59,16 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [scheduleByDays, setScheduleByDays] = useState([[]] as Array<Array<Lesson>>);
 
-	useAddMostRecentParticipantOnPageChange(studentName);
+	const [participantType, setParticipantType] = useState<ParticipantLabel | null>(null);
+	useAddMostRecentParticipantOnPageChange(studentName, participantType);
 
 	useEffect(() => {
 		const wrapper = async () => {
 			try {
 				setIsLoading(true);
-				const { lessons } = await fetchStudent(studentName);
+				const { lessons, labels } = await fetchStudent(studentName);
+
+				setParticipantType(labels[0]);
 
 				if (!lessons || !lessons.length) {
 					setScheduleByDays([[]]);
