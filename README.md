@@ -97,6 +97,8 @@ See also [CONTRIBUTING.md](./CONTRIBUTING.md), especially [#known-issues](./CONT
 
 Once a PR is merged into the `master` branch, the deployment procedure will automatically begin in the CI suite (assuming the previous steps - installation, building and testing - pass).
 
+It will create & push a new docker image, who's deployment one should complete via `./deploy.sh`.
+
 See [./.github/workflows/main.yaml](./.github/workflows/main.yaml)
 
 ### Manual
@@ -127,15 +129,11 @@ yarn docker:deploy:my-current-workspace
 
 ### Contributing to [express-oas-generator](https://github.com/mpashkovskiy/express-oas-generator)
 
-I found a tool that could generate API documentation automatically for my `express` server - it was `express-oas-generator`. I've started using it here - it worked! However, I've encountered various issues with it, and thus [I've contributed heavily to the project](https://github.com/mpashkovskiy/express-oas-generator/pulls?q=author%3Akiprasmel+) & improved it both for myself & others!
+I found a tool that could generate API documentation automatically for my `express` server - it was `express-oas-generator`. I've started using it here - it worked! However, I've encountered various issues with it, and thus [I've contributed to the project](https://github.com/mpashkovskiy/express-oas-generator/pulls?q=author%3Akiprasmel+).
 
 ### Using github actions (CI) with `semantic-release` & `lerna` and finding the deeply hidden bug
 
-This one's worth a read:D https://github.com/actions/checkout/issues/217
-
-### & other goodies
-
-the list is not exhaustive. I appreciate open source & try to contribute if possible - I encourage you too!
+https://github.com/lerna/lerna/issues/2542
 
 ## License
 

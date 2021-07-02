@@ -5,7 +5,7 @@ PRs welcome!
 ## Couple things to know:
 
 * This is still a work-in-progress & we're continually working on improving the whole app!
-* Projects are split up into the `scraper`, `server`, `client` and `common` folders
+* Projects are split up into the `scraper`, `server`, `client`, `common` and `database` folders
 
 * The deployed version of the app might not be directly from the default `master` branch -- we sometimes deploy from a selected commit in a [pull request](https://github.com/kiprasmel/turbo-schedule/pulls).
 
@@ -15,8 +15,6 @@ PRs welcome!
   * https://stackoverflow.com/questions/51631786/how-to-use-project-references-in-typescript-3-0
   * https://github.com/RyanCavanaugh/learn-a
 </details>
-
-* A mobile app for `turbo-schedule` is being worked on by [my friend @sballl](http://github.com/sballl) - don't make a duplicate, or at least ping us before doing stuff:D (more info soon, hopefully!)
 
 ## Known issues
 
