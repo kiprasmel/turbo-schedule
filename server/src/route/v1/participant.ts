@@ -29,23 +29,27 @@ export interface ParticipantsRes extends WithErr {
 	participants: Participant[];
 }
 
-router.get<any, ParticipantsRes>("/", withSender({ participants: [] }), async (_req, res) => {
-	const send = res.sender;
+router.get<any, ParticipantsRes>(
+	"/",
+	withSender<ParticipantsRes>({ participants: [] }),
+	async (_req, res) => {
+		const send = res.sender;
 
-	try {
-		const db: Db = await initDb();
+		try {
+			const db: Db = await initDb();
 
-		const participants: Participant[] = await db.get("participants").value();
+			const participants: Participant[] = await db.get("participants").value();
 
-		if (!participants?.length) {
-			return send(404, { participants: [], err: `Schedule items not found (were \`${participants}\`)` });
+			if (!participants?.length) {
+				return send(404, { participants: [], err: `Schedule items not found (were \`${participants}\`)` });
+			}
+
+			return send(200, { participants });
+		} catch (err) {
+			return send(500, { participants: [], err });
 		}
-
-		return send(200, { participants });
-	} catch (err) {
-		return send(500, { participants: [], err });
 	}
-});
+);
 
 /**
  * req.query:
@@ -56,32 +60,36 @@ export interface ParticipantRandomRes extends WithErr {
 	participants: Participant[];
 }
 
-router.get<any, ParticipantRandomRes>("/random", withSender({ participants: [] }), async (req, res) => {
-	const send = res.sender;
+router.get<any, ParticipantRandomRes>(
+	"/random",
+	withSender<ParticipantRandomRes>({ participants: [] }),
+	async (req, res) => {
+		const send = res.sender;
 
-	try {
-		const db: Db = await initDb();
-		const participants: Participant[] = await db.get("participants").value();
+		try {
+			const db: Db = await initDb();
+			const participants: Participant[] = await db.get("participants").value();
 
-		if (!req.query["count"]) {
-			const maxCount: number = Number(req.query["max"]) || 32;
-			return send(200, { participants: pickSome(participants, { maxCount }) });
-		} else {
-			const n = Number(req.query["count"]);
-
-			if (Number.isNaN(n)) {
-				return send(400, {
-					participants: [],
-					err: `req.query.count NaN (provided as \`${req.query["count"]}\`, parsed as ${n})`,
-				});
+			if (!req.query["count"]) {
+				const maxCount: number = Number(req.query["max"]) || 32;
+				return send(200, { participants: pickSome(participants, { maxCount }) });
 			} else {
-				return send(200, { participants: pickNPseudoRandomly(n)(participants) });
+				const n = Number(req.query["count"]);
+
+				if (Number.isNaN(n)) {
+					return send(400, {
+						participants: [],
+						err: `req.query.count NaN (provided as \`${req.query["count"]}\`, parsed as ${n})`,
+					});
+				} else {
+					return send(200, { participants: pickNPseudoRandomly(n)(participants) });
+				}
 			}
+		} catch (err) {
+			return send(500, { participants: [], err });
 		}
-	} catch (err) {
-		return send(500, { participants: [], err });
 	}
-});
+);
 
 export interface ParticipantCommonAvailabilityRes extends WithErr {
 	minDayIndex: number;
@@ -102,7 +110,7 @@ const getDefaultParticipantCommonAvailRes = (): ParticipantCommonAvailabilityRes
 router.get<any, ParticipantCommonAvailabilityRes>(
 	"/common-availability",
 	withSender(getDefaultParticipantCommonAvailRes()),
-	async (req, res) => {
+	async (req, res): Promise<ParticipantCommonAvailabilityRes> => {
 		const send = res.sender;
 
 		try {
@@ -228,36 +236,40 @@ export interface ParticipantClassifyRes extends WithErr {
 	participants: WantedParticipant[];
 }
 
-router.get<any, ParticipantClassifyRes>("/classify", withSender({ participants: [] }), async (req, res) => {
-	const send = res.sender;
+router.get<any, ParticipantClassifyRes>(
+	"/classify",
+	withSender<ParticipantClassifyRes>({ participants: [] }),
+	async (req, res) => {
+		const send = res.sender;
 
-	try {
-		const participants: string[] =
-			req.query?.["participants"]
-				?.split(",")
-				?.map((p: string) => p?.trim())
-				.filter((p: string) => !!p) ?? [];
+		try {
+			const participants: string[] =
+				req.query?.["participants"]
+					?.split(",")
+					?.map((p: string) => p?.trim())
+					.filter((p: string) => !!p) ?? [];
 
-		if (!participants.length) {
-			return send(400, {
-				participants: [],
-				err: `No participants included in request.query (${participants})`,
-			});
+			if (!participants.length) {
+				return send(400, {
+					participants: [],
+					err: `No participants included in request.query (${participants})`,
+				});
+			}
+
+			const db: Db = await initDb();
+
+			const classifiedParticipants: ParticipantClassifyRes["participants"] = await db
+				.get("participants")
+				.filter((p) => participants.includes(p.text))
+				.map((p) => ({ text: p.text, labels: p.labels }))
+				.value();
+
+			return send(200, { participants: classifiedParticipants });
+		} catch (err) {
+			return send(500, { participants: [], err });
 		}
-
-		const db: Db = await initDb();
-
-		const classifiedParticipants: ParticipantClassifyRes["participants"] = await db
-			.get("participants")
-			.filter((p) => participants.includes(p.text))
-			.map((p) => ({ text: p.text, labels: p.labels }))
-			.value();
-
-		return send(200, { participants: classifiedParticipants });
-	} catch (err) {
-		return send(500, { participants: [], err });
 	}
-});
+);
 
 export interface ParticipantDuplicatesRes extends WithErr {
 	duplicates: Record<string, Record<string, Lesson[]>>;

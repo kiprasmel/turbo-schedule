@@ -1,24 +1,46 @@
 diff --git a/node_modules/@types/express-serve-static-core/index.d.ts b/node_modules/@types/express-serve-static-core/index.d.ts
-index dc77fbc..67ebf14 100644
+index dc77fbc..e857d5b 100644
 --- a/node_modules/@types/express-serve-static-core/index.d.ts
 +++ b/node_modules/@types/express-serve-static-core/index.d.ts
-@@ -492,6 +492,8 @@ export interface MediaType {
+@@ -40,10 +40,10 @@ export type Params = ParamsDictionary | ParamsArray;
+ 
+ export interface RequestHandler<P extends Params = ParamsDictionary, ResBody = any, ReqBody = any> {
+     // tslint:disable-next-line callable-types (This is extended from and can't extend from a type alias in ts<2.2
+-    (req: Request<P, ResBody, ReqBody>, res: Response<ResBody>, next: NextFunction): any;
++    (req: Request<P, ResBody, ReqBody>, res: Response<ResBody>, next: NextFunction): ResBody | Promise<ResBody>;
+ }
+ 
+-export type ErrorRequestHandler<P extends Params = ParamsDictionary, ResBody = any, ReqBody = any> = (err: any, req: Request<P, ResBody, ReqBody>, res: Response<ResBody>, next: NextFunction) => any;
++export type ErrorRequestHandler<P extends Params = ParamsDictionary, ResBody = any, ReqBody = any> = (err: any, req: Request<P, ResBody, ReqBody>, res: Response<ResBody>, next: NextFunction) => ResBody | Promise<ResBody>;
+ 
+ export type PathParams = string | RegExp | Array<string | RegExp>;
+ 
+@@ -492,6 +492,17 @@ export interface MediaType {
  
  export type Send<ResBody = any, T = Response<ResBody>> = (body?: ResBody) => T;
  
-+export type Sender<ResBody = any, T = Response<ResBody>> = (code: number, body?: ResBody) => void;
++// export interface Sender<ResBody = any, T = Response<ResBody>>{
++// 	(code: number, body?: ResBody): ResBody;
++// 	// (code: number, body?: ResBody): Promise<ResBody>;
++// }
++// export interface Sender<ResBody = any, T = Response<ResBody>>{
++// 	// (code: number, body?: ResBody): ResBody;
++// 	(code: number, body?: ResBody): Promise<ResBody>;
++// }
++
++export type Sender<ResBody = any> = (code: number, body?: ResBody) => ResBody;
 +
  export interface Response<ResBody = any> extends http.ServerResponse, Express.Response {
      /**
       * Set status `code`.
-@@ -535,6 +537,11 @@ export interface Response<ResBody = any> extends http.ServerResponse, Express.Re
+@@ -535,6 +546,11 @@ export interface Response<ResBody = any> extends http.ServerResponse, Express.Re
       */
      send: Send<ResBody, this>;
  
 +	/**
 +	 * custom. available when used together with the `withSender` middleware
 +	 */
-+	sender: Sender<ResBody, this>;
++	sender: Sender<ResBody>;
 +
      /**
       * Send JSON response.
