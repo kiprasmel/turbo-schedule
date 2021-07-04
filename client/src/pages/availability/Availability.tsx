@@ -138,16 +138,18 @@ export const Availability: FC = () => {
 
 	const [wantedParticipants, __setWantedParticipants] = useState<WantedParticipant[]>([]);
 
+	const [hasUpsyncedWantedParticipants, setHasUpsyncedWantedParticipants] = useState(false);
+
 	const setWantedParticipants = useCallback(
 		(newWantedParticipants: WantedParticipant[]): void => {
 			startTransition(() => {
 				__setWantedParticipants(newWantedParticipants);
+				setHasUpsyncedWantedParticipants(true);
 			});
 		},
 		[__setWantedParticipants]
 	);
 
-	const [isFirstMount, setIsFirstMount] = useState(true);
 	useEffect(() => {
 		if (!wantedParticipants?.length) {
 			/**
@@ -156,9 +158,7 @@ export const Availability: FC = () => {
 			 * freeing up screen space for a wider participant picker
 			 */
 
-			if (isFirstMount) {
-				setIsFirstMount(false);
-			} else {
+			if (hasUpsyncedWantedParticipants) {
 				/**
 				 * only resets the params if it's not the first mount
 				 *
@@ -197,7 +197,14 @@ export const Availability: FC = () => {
 		return (): void => {
 			isCancelled = true;
 		};
-	}, [isFirstMount, wantedParticipants, invalidEnDeVal, setSelectedDay, setSelectedTime, setAvailability]);
+	}, [
+		hasUpsyncedWantedParticipants, //
+		wantedParticipants,
+		invalidEnDeVal,
+		setSelectedDay,
+		setSelectedTime,
+		setAvailability,
+	]);
 
 	return (
 		<>
