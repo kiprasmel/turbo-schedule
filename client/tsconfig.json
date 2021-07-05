@@ -32,6 +32,15 @@
 		"noEmit": true,
 		"types": ["react/next", "react-dom/next", "jest"]
 	},
-	"exclude": ["node_modules", "build", "scripts", "acceptance-tests", "webpack", "jest", "src/setupTests.ts"],
+	"exclude": [
+		"node_modules", //
+		"build",
+		"scripts",
+		"acceptance-tests",
+		"webpack",
+		"jest",
+		"src/setupTests.ts",
+		"src/test-utils.tsx"
+	],
 	"include": ["src"]
 }

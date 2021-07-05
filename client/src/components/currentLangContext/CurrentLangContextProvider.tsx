@@ -6,12 +6,13 @@ import { ILang, defaultLang, availableLangs, getLang, setLang } from "../../i18n
 
 export interface ICurrentLangContextProviderProps {
 	/** nothing yet, except `children` by default */
+	currentLang?: ILang;
 }
 
-const CurrentLangContextProvider: FC<ICurrentLangContextProviderProps> = ({ children }) => {
+const CurrentLangContextProvider: FC<ICurrentLangContextProviderProps> = ({ children, currentLang }) => {
 	const [contextValue, setContextValue] = useState<ICurrentLangContextValue>({
 		availableLangs,
-		currentLang: getLang(),
+		currentLang: currentLang ?? getLang(),
 		setLang: (newLang: ILang = defaultLang): ILang => {
 			/**
 			 * update self to trigger a re-render

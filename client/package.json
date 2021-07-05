@@ -10,13 +10,12 @@
 	"scripts": {
 		"start": "cross-env BROWSER=none react-scripts start",
 		"build": "react-scripts build",
-		"test": "cross-env CI=true react-scripts test",
+		"test": "cross-env CI=true react-scripts test --env=jest-environment-jsdom-sixteen",
 		"eject": "react-scripts eject"
 	},
 	"dependencies": {
 		"@turbo-schedule/common": "^2.23.1",
 		"@types/history": "4.7.3",
-		"@types/jest": "24.0.18",
 		"@types/lodash": "4.14.147",
 		"@types/node": "12.12.7",
 		"@types/react": "^17.0.11",
@@ -39,9 +38,13 @@
 		"xstate": "4.10.0"
 	},
 	"devDependencies": {
+		"@testing-library/jest-dom": "^5.14.1",
+		"@testing-library/react": "https://pkg.csb.dev/testing-library/react-testing-library/commit/0e2cf7da/@testing-library/react",
 		"@types/jest": "^26.0.23",
 		"concurrently": "5.0.0",
 		"cross-env": "6.0.3",
+		"jest-environment-jsdom-sixteen": "^2.0.0",
+		"msw": "^0.30.1",
 		"node-sass": "4.13.0",
 		"typescript": "https://typescript.visualstudio.com/cf7ac146-d525-443c-b23c-0d58337efebc/_apis/build/builds/74014/artifacts?artifactName=tgz&fileId=53B4D99407A93B4AF6FAEF8437B02126A8C7FEC62F1C3307DAA098F75D2CE5D602&fileName=/typescript-4.0.0-nsiders.20200515.tgz"
 	},
