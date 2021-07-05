@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.25.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.24.0...v2.25.0) (2021-07-05)
+
+
+### Features
+
+* **server:** add exported type definitions for other pkgs to use ([2e07878](https://github.com/kiprasmel/turbo-schedule/commit/2e07878fd7a8fc49197622e3785d93711e2e8a64))
+* **server:** make participant route type-safe with new toys 🚀🚀 ([b763696](https://github.com/kiprasmel/turbo-schedule/commit/b76369696c82aa0fc3938757017061369c7f68ff))
+* **server:** make withSender merge defaultData by default, tho configurable 🚀 ([565b6d8](https://github.com/kiprasmel/turbo-schedule/commit/565b6d880dc02184ffc50376400bc3a9479822ac))
+* create express `res.sender` with `withSender` middleware ([c4af6d3](https://github.com/kiprasmel/turbo-schedule/commit/c4af6d3a88cd7b238b522fe57222594348339272))
+
+
+
+
+
 ## [2.23.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.23.0...v2.23.1) (2021-07-02)
 
 **Note:** Version bump only for package @turbo-schedule/server
