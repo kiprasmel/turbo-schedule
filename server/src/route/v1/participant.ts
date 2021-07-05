@@ -38,12 +38,12 @@ router.get<any, ParticipantsRes>("/", withSender({ participants: [] }), async (_
 		const participants: Participant[] = await db.get("participants").value();
 
 		if (!participants?.length) {
-			return send(404, { participants: [], err: `Schedule items not found (were \`${participants}\`)` });
+			return send(404, { err: `Schedule items not found (were \`${participants}\`)` });
 		}
 
 		return send(200, { participants });
 	} catch (err) {
-		return send(500, { participants: [], err });
+		return send(500, { err });
 	}
 });
 
@@ -79,7 +79,7 @@ router.get<any, ParticipantRandomRes>("/random", withSender({ participants: [] }
 			}
 		}
 	} catch (err) {
-		return send(500, { participants: [], err });
+		return send(500, { err });
 	}
 });
 
@@ -120,7 +120,6 @@ router.get<any, ParticipantCommonAvailabilityRes>(
 
 			if (!wantedParticipants.length) {
 				return send(400, {
-					...getDefaultParticipantCommonAvailRes(),
 					err: `Request query \`wanted-participants\` was empty (${wantedParticipants})`,
 				});
 			}
@@ -216,10 +215,7 @@ router.get<any, ParticipantCommonAvailabilityRes>(
 				availability,
 			});
 		} catch (err) {
-			return send(500, {
-				...getDefaultParticipantCommonAvailRes(),
-				err,
-			});
+			return send(500, { err });
 		}
 	}
 );
@@ -239,10 +235,7 @@ router.get<any, ParticipantClassifyRes>("/classify", withSender({ participants: 
 				.filter((p: string) => !!p) ?? [];
 
 		if (!participants.length) {
-			return send(400, {
-				participants: [],
-				err: `No participants included in request.query (${participants})`,
-			});
+			return send(400, { err: `No participants included in request.query (${participants})` });
 		}
 
 		const db: Db = await initDb();
@@ -255,7 +248,7 @@ router.get<any, ParticipantClassifyRes>("/classify", withSender({ participants: 
 
 		return send(200, { participants: classifiedParticipants });
 	} catch (err) {
-		return send(500, { participants: [], err });
+		return send(500, { err });
 	}
 });
 
@@ -273,8 +266,8 @@ router.get<any, ParticipantDuplicatesRes>("/debug/duplicates", withSender({ dupl
 		const duplicates = findParticipantsWithMultipleLessonsInSameTime(participants, lessons);
 
 		return res.sender(200, { duplicates });
-	} catch (e) {
-		return res.sender(500, { duplicates: {}, err: e });
+	} catch (err) {
+		return res.sender(500, { err });
 	}
 });
 
@@ -304,10 +297,7 @@ router.get<any, ParticipantScheduleByNameRes>(
 				.value();
 
 			if (!participant) {
-				return send(404, {
-					participant: getDefaultParticipant(),
-					err: `Participant not found (was \`${participant}\`)`,
-				});
+				return send(404, { err: `Participant not found (was \`${participant}\`)` });
 			}
 
 			const lessons: Lesson[] = await db
@@ -323,7 +313,7 @@ router.get<any, ParticipantScheduleByNameRes>(
 
 			return send(200, { participant: participantWithLessons });
 		} catch (err) {
-			return send(500, { participant: getDefaultParticipant(), err });
+			return send(500, { err });
 		}
 	}
 );
