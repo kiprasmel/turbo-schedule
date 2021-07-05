@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.24.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.23.2...v2.24.0) (2021-07-05)
+
+
+### Features
+
+* **client:** test Availability to *not* reset extra info day & time if participants selected ([f15bd18](https://github.com/kiprasmel/turbo-schedule/commit/f15bd1856e8a41f2c826f18fa85c579428b85308))
+
+
+
+
+
 ## [2.23.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.23.1...v2.23.2) (2021-07-04)
 
 
