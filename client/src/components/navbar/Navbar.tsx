@@ -12,7 +12,7 @@ import { useTranslation } from "../../i18n/useTranslation";
 // eslint-disable-next-line import/no-cycle
 import { NavbarMobile } from "./NavbarMobile";
 import { CurrentLangContext } from "../currentLangContext/currentLangContext";
-import { BadgeBeta } from "../../common/Badge";
+import { BadgeBeta, BadgeHolder, BadgeNew } from "../../common/Badge";
 
 interface Props {
 	search?: SearchProps;
@@ -156,14 +156,7 @@ export const NavbarLinksOne: FC<React.HTMLProps<HTMLLIElement>> = (firstElementP
 			<li>
 				<Link to="/avail">
 					<div>
-						<span
-							className={css`
-								display: inline-flex;
-								flex-direction: column;
-
-								position: relative;
-							`}
-						>
+						<BadgeHolder>
 							{/* {isDesktop ? ( */}
 							<>
 								<span
@@ -191,7 +184,7 @@ export const NavbarLinksOne: FC<React.HTMLProps<HTMLLIElement>> = (firstElementP
 							)} */}
 
 							<BadgeBeta gapWidth={gapWidth} />
-						</span>
+						</BadgeHolder>
 					</div>
 				</Link>
 			</li>
@@ -211,6 +204,14 @@ export const NavbarLinksOne: FC<React.HTMLProps<HTMLLIElement>> = (firstElementP
 						<Link to={`/${participant.text}/stats`}>{t("Statistics")}</Link>
 					</li> */}
 			{/* SOON™ */}
+			<li>
+				<Link to="/archive">
+					<BadgeHolder>
+						{t("Archive")}
+						<BadgeNew />
+					</BadgeHolder>
+				</Link>
+			</li>
 		</>
 	);
 };

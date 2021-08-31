@@ -83,4 +83,5 @@ export const lt: Dictionary = {
 	"(to) clear": "išvalyti",
 	"See an example": "Pamatyti pavyzdį",
 	"Recently viewed (adj, mult)": "Neseniai peržiūrėti",
+	Archive: "Archyvas",
 };

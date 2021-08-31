@@ -40,9 +40,39 @@ export const Badge: FC<Props> = ({ text, gapWidth = 0, ...rest }) => (
 	</div>
 );
 
+export const BadgeHolder: FC = ({ children }) => (
+	<span
+		className={css`
+			display: inline-flex;
+			flex-direction: column;
+
+			position: relative;
+		`}
+	>
+		{children}
+	</span>
+);
+
 type P = Omit<Props, "text">;
 
-export const BadgeNew: FC<P> = ({ gapWidth }) => <Badge text="New" gapWidth={gapWidth} />;
+export const BadgeNew: FC<P> = ({ gapWidth, ...rest }) => (
+	<Badge
+		text="New" //
+		gapWidth={gapWidth}
+		{...rest}
+		className={cx(
+			css`
+				transform: rotateZ(8deg);
+				top: clamp(-22px, -2.2vw, -30px);
+				right: -20px;
+
+				background-color: hsl(200, 100%, 80%);
+				color: hsl(200, 90%, 30%) !important;
+			`,
+			rest.className
+		)}
+	/>
+);
 
 export const BadgeBeta: FC<P> = ({ gapWidth }) => (
 	<Badge

@@ -10,6 +10,7 @@ import CurrentLangContextProvider from "./components/currentLangContext/CurrentL
 import Landing from "./components/landing/Landing";
 import StudentSchedule from "./components/studentSchedule/StudentSchedule";
 import { Availability } from "./pages/availability/Availability";
+import { Archive } from "./pages/archive/Archive";
 
 /** misc */
 import { history } from "./utils/history";
@@ -28,6 +29,8 @@ const App: FC = () => (
 							<Route exact path="/" component={Landing} />
 
 							<Route exact path="/avail" component={Availability} />
+
+							<Route exact path="/archive" component={Archive} />
 
 							<Route exact path="/:studentName" component={StudentSchedule} />
 							<Route exact path="/:studentName/:dayIndex" component={StudentSchedule} />

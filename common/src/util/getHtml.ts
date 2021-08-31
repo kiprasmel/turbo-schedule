@@ -37,6 +37,6 @@ export const getHtml = async (url: string, encoding: string = "utf-8"): Promise<
 	} catch (err) {
 		/** this probably will never be reached */
 		console.error("Error! Failed to `getHtml`: ", err);
-		return Promise.reject(new Error(err));
+		return Promise.reject(err);
 	}
 };

@@ -259,7 +259,7 @@ export const createHierarchy = <
 	// currentItems: ParseHierarchyFromDiff<[D]>[0]["currentItems"] // TODO
 ): ParseHierarchyFromDiff<[D]>[0] | null => {
 	if (!currentItems?.length) {
-		console.warn("createHierarchy: currentItems.length falsy")
+		console.warn("createHierarchy: currentItems.length falsy");
 		return null;
 	}
 
@@ -296,14 +296,14 @@ export const createHierarchy = <
 		return {
 			debug: differentiators.debug,
 			groupName:  differentiators.getGroupName(currentItems[0]),
-			currentItems: currentItems
+			currentItems
 		};
 	}
 
 	const { children } = differentiators;
 
 	if (children.length === 0) {
-		throw new Error("differentiators.children cannot be of length 0")
+		throw new Error("differentiators.children cannot be of length 0");
 	}
 
 	let parsedChildren = [];
@@ -315,13 +315,11 @@ export const createHierarchy = <
 		} else {
 			parsedChildren = newItemGroups.map((group) => createHierarchy(children[0])(group));
 		}
-	} else {
-		if (children.length !== newItemGroups.length) {
+	} else if (children.length !== newItemGroups.length) {
 			parsedChildren = [{debug: `ERR children and newItemGroups lengths do not match (${children.length}, ${newItemGroups.length})`}];
 		} else {
-			parsedChildren = children.map((child, idx) => createHierarchy(child)(newItemGroups[idx])) // `newItemGroups` <-> identical to `[currentItems]`
+			parsedChildren = children.map((child, idx) => createHierarchy(child)(newItemGroups[idx])); // `newItemGroups` <-> identical to `[currentItems]`
 		}
-	}
 
 	return {
 		debug: differentiators.debug,
@@ -331,7 +329,7 @@ export const createHierarchy = <
 	} as ParseHierarchyFromDiff<[D]>[0] | null; // `children` fix
 };
 
-type ParticipantHierarchyArr = ParseHierarchyFromDiff<[ParticipantDiffHierarchy]>;
+// type ParticipantHierarchyArr = ParseHierarchyFromDiff<[ParticipantDiffHierarchy]>;
 /**
  * the only one that we actually need
  *
@@ -342,8 +340,8 @@ type ParticipantHierarchyArr = ParseHierarchyFromDiff<[ParticipantDiffHierarchy]
  * TODO FIXME HACK - temporarily using the manual value instead until this is resolved
  *
  */
-export type ParticipantHierarchy = ParticipantHierarchyArr[0] | null;
-// export type ParticipantHierarchy = ParticipantHierarchyManual;
+// export type ParticipantHierarchy = ParticipantHierarchyArr[0] | null;
+export type ParticipantHierarchy = ParticipantHierarchyManual;
 
 const createParticipantHierarchyArr = createHierarchy<Participant, ParticipantDiffHierarchy>(participantDifferenciators);
 /**
@@ -356,4 +354,4 @@ const createParticipantHierarchyArr = createHierarchy<Participant, ParticipantDi
  * see also https://github.com/microsoft/TypeScript/issues/34933#issuecomment-889570502
  */
 // export const createParticipantHierarchy = (currentItems: Participant[]): ParticipantHierarchy => createParticipantHierarchyArr(currentItems) ?? null
-export const createParticipantHierarchy = (currentItems: Participant[]): ParticipantHierarchyManual => createParticipantHierarchyArr(currentItems) ?? null
+export const createParticipantHierarchy = (currentItems: Participant[]): ParticipantHierarchyManual => createParticipantHierarchyArr(currentItems) ?? null;
