@@ -71,4 +71,6 @@ export const en: Dictionary = {
 	"See an example": "See an example",
 	"Recently viewed (adj, mult)": "Recently viewed",
 	Archive: "Archive",
+	"Select wanted year": "Select wanted year",
+	latest: "latest",
 };

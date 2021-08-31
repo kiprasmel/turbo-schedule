@@ -84,4 +84,6 @@ export const lt: Dictionary = {
 	"See an example": "Pamatyti pavyzdį",
 	"Recently viewed (adj, mult)": "Neseniai peržiūrėti",
 	Archive: "Archyvas",
+	"Select wanted year": "Pasirinkite norimus metus",
+	latest: "naujausi",
 };

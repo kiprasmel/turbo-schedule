@@ -1,69 +1,66 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
+import { css } from "emotion";
 
 import { Select } from "../../common/Select";
 import { Navbar } from "../../components/navbar/Navbar";
 import { useTranslation } from "../../i18n/useTranslation";
 
-export type _YearsRange = `${number}-${number}`;
-export type YearsRange = "latest" | _YearsRange;
-
-const getYearsRanges = (startingFromIncl = 2017): YearsRange[] => {
-	const years: YearsRange[] = [];
-
-	for (let year = startingFromIncl; year < new Date().getFullYear(); year++) {
-		const range: YearsRange = `${year}-${year + 1}`;
-		years.push(range);
-	}
-
-	years.push("latest");
-
-	years.reverse();
-
-	return years;
-};
+import { defaultYearRange, getYearRanges, YearRange } from "./getYearRanges";
+import { CurrentYearCtx } from "./currentYearContext";
 
 export const Archive: FC<{}> = () => {
 	const t = useTranslation();
 
-	const yearsRanges: YearsRange[] = getYearsRanges();
+	const yearsRanges: YearRange[] = getYearRanges();
+
+	const mappedOptions: JSX.Element[] = yearsRanges.map((year) => (
+		<option key={year} value={year}>
+			{year === "latest" ?  t("latest") : year}
+		</option>
+	));
+
+	const [currentYearRange, setCurrentYearRange] = useContext(CurrentYearCtx);
 
 	return (
-		<div>
+		<>
 			<Navbar />
 
 			<h1>{t("Archive")}</h1>
 
 			<section>
-				<h2>select curr year</h2>
-				<Select onChange={(e: any) => console.log(e.target.value)}>
-					{yearsRanges.map((year) => (
-						<option key={year} value={year}>
-							{year}
-						</option>
-					))}
+				<h2>{t("Select wanted year")}</h2>
+				<Select defaultValue={currentYearRange ?? defaultYearRange}	onChange={(e: any) => setCurrentYearRange(e.target.value)}>
+					{mappedOptions}
 				</Select>
 			</section>
 
 			<section>
-				<h2>what has changed between</h2>
-				<Select defaultValue={yearsRanges[yearsRanges.length - 1]}>
-					{yearsRanges.map((year) => (
-						<option key={year} value={year}>
-							{year}
-						</option>
-					))}
-				</Select>
+				<details
+					className={css`
+						margin-top: 2rem;
+					`}
+				>
+					<summary
+						className={css`
+							cursor: pointer;
+						`}
+					>
+						WIP
+					</summary>
 
-				<span> and </span>
+					<h2>what has changed between</h2>
+					<Select defaultValue={yearsRanges[yearsRanges.length - 1]}>
+						{mappedOptions}
+					</Select>
 
-				<Select defaultValue={yearsRanges[0]}>
-					{yearsRanges.map((year) => (
-						<option key={year} value={year}>
-							{year}
-						</option>
-					))}
-				</Select>
+					<span> and </span>
+
+					<Select defaultValue={yearsRanges[0]}>
+						{mappedOptions}
+					</Select>
+				</details>
 			</section>
-		</div>
+
+		</>
 	);
 };

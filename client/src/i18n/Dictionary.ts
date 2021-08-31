@@ -55,4 +55,6 @@ export interface Dictionary {
 	"See an example": string;
 	"Recently viewed (adj, mult)": string;
 	Archive: string;
+	"Select wanted year": string;
+	latest: string;
 }

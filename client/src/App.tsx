@@ -5,6 +5,7 @@ import "./App.scss";
 
 import { SchedulePageDesktop } from "./components/studentSchedule/SchedulePageDesktop";
 import CurrentLangContextProvider from "./components/currentLangContext/CurrentLangContextProvider";
+import { CurrentYearCtxProvider } from "./pages/archive/currentYearContext";
 
 /** pages */
 import Landing from "./components/landing/Landing";
@@ -22,30 +23,32 @@ logCoolStuff();
 const App: FC = () => (
 	<>
 		<CurrentLangContextProvider>
-			<div className="App">
-				<div>
-					<Router history={history}>
-						<Switch>
-							<Route exact path="/" component={Landing} />
+			<CurrentYearCtxProvider>
+				<div className="App">
+					<div>
+						<Router history={history}>
+							<Switch>
+								<Route exact path="/" component={Landing} />
 
-							<Route exact path="/avail" component={Availability} />
+								<Route exact path="/avail" component={Availability} />
 
-							<Route exact path="/archive" component={Archive} />
+								<Route exact path="/archive" component={Archive} />
 
-							<Route exact path="/:studentName" component={StudentSchedule} />
-							<Route exact path="/:studentName/:dayIndex" component={StudentSchedule} />
-							<Route exact path="/:studentName/:dayIndex/:timeIndex" component={StudentSchedule} />
-							<Route exact path="/:studentName/:dayIndex/\*" component={StudentSchedule} />
-							<Route exact path="/:studentName/:dayIndex/:timeIndex/\*" component={StudentSchedule} />
+								<Route exact path="/:studentName" component={StudentSchedule} />
+								<Route exact path="/:studentName/:dayIndex" component={StudentSchedule} />
+								<Route exact path="/:studentName/:dayIndex/:timeIndex" component={StudentSchedule} />
+								<Route exact path="/:studentName/:dayIndex/\*" component={StudentSchedule} />
+								<Route exact path="/:studentName/:dayIndex/:timeIndex/\*" component={StudentSchedule} />
 
-							{/* BACKWARDS-COMPATIBILITY -- REMOVE LATER */}
-							<Route exact path="/student/:studentName" component={StudentSchedule} />
+								{/* BACKWARDS-COMPATIBILITY -- REMOVE LATER */}
+								<Route exact path="/student/:studentName" component={StudentSchedule} />
 
-							<Route exact path="/new/:participantHandle" component={SchedulePageDesktop} />
-						</Switch>
-					</Router>
+								<Route exact path="/new/:participantHandle" component={SchedulePageDesktop} />
+							</Switch>
+						</Router>
+					</div>
 				</div>
-			</div>
+			</CurrentYearCtxProvider>
 		</CurrentLangContextProvider>
 	</>
 
