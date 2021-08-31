@@ -44,7 +44,8 @@ export const useQueryFor = <T = string>(
 		encode: (value) => (value as unknown) as TQuery,
 		decode: (value) => (value as unknown) as T,
 	}
-): [T, TSetQuery<T>] => {
+	// ): [T, TSetQuery<T>] => {
+) => {
 	const history = useHistory();
 
 	const [_queryParams] = useState<URLSearchParams>(new URLSearchParams(history.location.search));
@@ -80,5 +81,5 @@ export const useQueryFor = <T = string>(
 		}
 	}, [valueOverrideOnceChanges, setQuery, decode]);
 
-	return [query, setQuery];
+	return [query, setQuery] as const;
 };
