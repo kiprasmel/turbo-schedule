@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.26.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.25.0...v2.26.0) (2021-08-31)
+
+
+### Bug Fixes
+
+* upgrade typescript & fix the pair types ([ef207cf](https://github.com/kiprasmel/turbo-schedule/commit/ef207cfb82c900fbbcee12c40ba208ea3af1056a))
+
+
+### Features
+
+* create participant picker hierarchy 🔥🔥🔥 ([92a289c](https://github.com/kiprasmel/turbo-schedule/commit/92a289c25d9079761ebefc727f39c0a89c7b9b7a))
+
+
+
+
+
 ## [2.23.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.23.0...v2.23.1) (2021-07-02)
 
 **Note:** Version bump only for package @turbo-schedule/common
