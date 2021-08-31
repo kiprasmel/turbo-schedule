@@ -40,15 +40,21 @@ export const useQueryFor = <T = string>(
 		valueOverrideOnceChanges,
 		encode,
 		decode,
-	}: EncoderDecoder<T> & { defaultValueFallback?: TQuery; valueOverrideOnceChanges?: TQuery } = {
+		dependencies,
+	}: EncoderDecoder<T> & {
+		defaultValueFallback?: TQuery; //
+		valueOverrideOnceChanges?: TQuery;
+		dependencies?: any[];
+	} = {
 		encode: (value) => (value as unknown) as TQuery,
 		decode: (value) => (value as unknown) as T,
+		dependencies: [],
 	}
 	// ): [T, TSetQuery<T>] => {
 ) => {
 	const history = useHistory();
 
-	const [_queryParams] = useState<URLSearchParams>(new URLSearchParams(history.location.search));
+	const _queryParams = new URLSearchParams(history.location.search);
 
 	const [query, _setQuery] = useState<T>(decode(_queryParams.get(key) ?? defaultValueFallback ?? ""));
 
@@ -80,6 +86,18 @@ export const useQueryFor = <T = string>(
 			setQuery(decode(valueOverrideOnceChanges));
 		}
 	}, [valueOverrideOnceChanges, setQuery, decode]);
+
+	/**
+	 * "re-run" on dependency change
+	 */
+	useEffect(() => {
+		_setQuery(decode(_queryParams.get(key) ?? ""));
+
+		/**
+		 * TODO verify fully that works properly
+		 */
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, dependencies);
 
 	return [query, setQuery] as const;
 };
