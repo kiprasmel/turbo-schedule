@@ -1,19 +1,21 @@
-import axios, { AxiosResponse } from "axios";
-import { Student, getDefaultStudent } from "@turbo-schedule/common";
+import { Student, getDefaultStudent, defaultYearRange, YearRange } from "@turbo-schedule/common";
 
 interface Response {
 	participant: Student;
 }
 
-export const fetchStudent = async (studentName: string): Promise<Student> => {
+export const fetchStudent = async (
+	studentName: string, //
+	signal?: AbortSignal,
+	yearRange: YearRange = defaultYearRange
+): Promise<Student> => {
 	try {
-		const response: AxiosResponse<Response> = await axios.get<Response>(
-			`/api/v1/participant/${encodeURIComponent(studentName)}`
-		);
+		const res = await fetch(`/api/v1/participant/${encodeURIComponent(studentName)}?yearRange=${yearRange}`, {
+			...(signal ? { signal } : {}),
+		});
+		const json: Response = await res.json();
 
-		const {
-			data: { participant: student },
-		} = response;
+		const { participant: student } = json;
 
 		return student;
 	} catch (err) {

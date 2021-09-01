@@ -2,6 +2,8 @@
  * This is pretty much identical to the `student` & `class` API
  */
 
+/* eslint-disable indent */
+
 import { Router } from "express";
 
 import { initDb, Db } from "@turbo-schedule/database";
@@ -18,6 +20,9 @@ import {
 	getDefaultParticipant,
 	createParticipantHierarchy,
 	ParticipantHierarchyManual,
+	Student,
+	uniq,
+	mergeBy2,
 } from "@turbo-schedule/common";
 
 import { WithErr, withSender } from "../../middleware/withSender";
@@ -296,47 +301,211 @@ router.get<any, ParticipantDuplicatesRes>("/debug/duplicates", withSender({ dupl
 	}
 });
 
+export type SimilarParticipant = { participant: Participant; foundInDbs: string[] };
+
 /**
  * get full schedule of single participant by it's name
  */
 export interface ParticipantScheduleByNameRes extends WithErr {
 	participant: Participant;
+	similarParticipants?: SimilarParticipant[];
 }
 
 router.get<any, ParticipantScheduleByNameRes>(
 	"/:participantName",
-	withSender({ participant: getDefaultParticipant() }),
+	withSender({ participant: getDefaultParticipant(), similarParticipants: undefined }),
 	async (req, res) => {
+		// TODO:
+		// const { sender: send, db } = res as any;
 		const send = res.sender;
 
+		let cancelled = false;
+
 		try {
-			const db: Db = await initDb();
+			// const db = await initDb(); // TODO FIXME
 
 			const participantName: string = decodeURIComponent(req.params.participantName);
 
 			console.log("name", participantName);
+
+			req.on("close", () => {
+				cancelled = true;
+				console.log("request (1) cancelled!", participantName);
+			});
+
+			req.connection.on("close", () => {
+				cancelled = true;
+				console.log("connection (2) cancelled!", participantName);
+			});
+
+			if (cancelled) {
+				return send(400, { err: `request cancelled (${participantName})` });
+				// throw new Error("b4 1 request cancelled " + participantName);
+			} else {
+				console.log("b4 0 getdb: not cancelled (3)", participantName);
+			}
+
+			const db: Db = await (res as any).getdb();
 
 			const participant: Participant = await db
 				.get("participants")
 				.find((p) => p.text.toLowerCase() === participantName.toLowerCase())
 				.value();
 
-			if (!participant) {
+			console.log("participant", participant?.text, !!participant);
+
+			if (participant) {
+				console.log("participant", participant);
+				// const stateBefore = db.getState().scrapeInfo;
+				// const stateAfter = await (await initDb()).getState().scrapeInfo;
+				// console.log("db", stateBefore, stateAfter);
+
+				const lessons: Lesson[] = await db
+					.get("lessons")
+					// .tap((tmplessons) => {
+					// 	console.log("lessons", tmplessons.length);
+					// 	console.log(tmplessons.map((l) => l.students));
+					// 	console.log(
+					// 		tmplessons.map((l) => l.students.length),
+					// 		tmplessons.map((l) => l.classes.length),
+					// 		tmplessons.map((l) => l.teachers.length),
+					// 		tmplessons.map((l) => l.rooms.length)
+					// 	);
+					// })
+					.filter(participantHasLesson(participant)) // TODO FIXME RE-ENABLE
+					.value();
+
+				if (!lessons?.length) {
+					return send(404, { participant, err: `Lessons for participant not found (were \`${lessons}\`)` });
+				}
+
+				const participantWithLessons: Participant = { ...participant, lessons };
+
+				return send(200, { participant: participantWithLessons });
+			}
+
+			/** attempt to find similar participants */
+
+			if (cancelled) {
+				return send(400, { err: `request cancelled (${participantName})` });
+				// throw new Error("b4 1 request cancelled " + participantName);
+			} else {
+				console.log("b4 1 not cancelled (3)", participantName);
+			}
+
+			// const otherDbs: Promise<Db>[] = await (res as any).initOtherDbsSequential();
+			const otherDbs: Db[] = await (res as any).initOtherDbsParallel();
+
+			if (cancelled) {
+				return send(400, { err: `request cancelled (${participantName})` });
+				// throw new Error("b4 1 request cancelled " + participantName);
+			} else {
+				console.log("after parallel dbs: not cancelled (3)", participantName);
+			}
+
+			let similarParticipants: SimilarParticipant[] = [];
+
+			for await (const otherDb of otherDbs) {
+				if (cancelled) {
+					return send(400, { err: `request cancelled (${participantName})` });
+					// throw new Error("request cancelled " + participantName);
+				} else {
+					console.log("not cancelled (3)", participantName);
+				}
+
+				// const otherParticipants = await (await otherDb).get("participants");
+				// const otherDb = await _otherDb;
+
+				const otherParticipants = await otherDb.get("participants");
+
+				const predicate = (p: Participant): boolean =>
+					p.text.toLowerCase().includes(participantName.toLowerCase()) || //
+					(p.labels[0] === "student" &&
+						!!(p as Student).fullName &&
+						(p as Student).fullName.toLowerCase().includes(
+							participantName
+								.toLowerCase()
+								.split(" ")
+								.slice(0, 2) // last + first name
+								.join(" ")
+						)) ||
+					(p.labels[0] === "student" &&
+						!!(p as Student).fullName &&
+						(p as Student).fullName.toLowerCase().includes(
+							participantName
+								.toLowerCase()
+								.split(" ")
+								.slice(0, 2)
+								.reverse() // first + last name
+								.join(" ")
+						)) ||
+					false;
+
+				const matchesInThisDb = otherParticipants.filter(predicate).value() ?? [];
+
+				const mergeStrat = <
+					T = Participant, //
+					U extends { participant: T; foundInDbs: string[] } = { participant: T; foundInDbs: string[] }
+				>(
+					left: U,
+					right: U
+				): U => ({
+					...left,
+					...right,
+					foundInDbs: uniq(left.foundInDbs, right.foundInDbs),
+				});
+
+				const merger = mergeBy2<SimilarParticipant, "participant", "text">(
+					"participant", //
+					"text",
+					mergeStrat
+				);
+
+				similarParticipants = merger([
+					...similarParticipants,
+					...matchesInThisDb.map(
+						(m): SimilarParticipant => ({
+							participant: m,
+							foundInDbs: [otherDb.get("scrapeInfo").value().pageVersionIdentifier],
+						})
+					),
+				]);
+
+				/** BEGIN INTENTIONALLY DISABLED - SEPARATE FOR SEPARETE GRADES A STUDENT HAS BEEN TO */
+
+				// type SimilarStudent = { participant: Student; foundInDbs: string[] };
+
+				// const additionalMergerForParticipantsWhoUpgradedClasses = mergeBy2<
+				// 	SimilarStudent, //
+				// 	"participant",
+				// 	"fullName"
+				// >("participant", "fullName", mergeStrat);
+
+				// similarParticipants = [
+				// 	/** ignore non-students */
+				// 	...similarParticipants.filter((sp) => sp.participant.labels[0] !== "student"),
+				// 	/** only merge students */
+				// 	...additionalMergerForParticipantsWhoUpgradedClasses([
+				// 		...(similarParticipants.filter(
+				// 			(sp) => sp.participant.labels[0] === "student"
+				// 		) as SimilarStudent[]),
+				// 	]),
+				// ];
+
+				/** END INTENTIONALLY DISABLED - SEPARATE FOR SEPARETE GRADES A STUDENT HAS BEEN TO */
+			}
+
+			if (!similarParticipants.length) {
 				return send(404, { err: `Participant not found (was \`${participant}\`)` });
 			}
 
-			const lessons: Lesson[] = await db
-				.get("lessons")
-				.filter(participantHasLesson(participant))
-				.value();
+			/** https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/300 */
+			const multipleChoiceResCode: number = 300;
 
-			if (!lessons?.length) {
-				return send(404, { participant, err: `Lessons for participant not found (were \`${lessons}\`)` });
-			}
-
-			const participantWithLessons: Participant = { ...participant, lessons };
-
-			return send(200, { participant: participantWithLessons });
+			return send(multipleChoiceResCode, {
+				participant: undefined,
+				similarParticipants: similarParticipants,
+			});
 		} catch (err) {
 			return send(500, { err });
 		}

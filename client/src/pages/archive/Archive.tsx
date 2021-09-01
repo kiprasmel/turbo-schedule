@@ -1,12 +1,13 @@
 import React, { FC, useContext } from "react";
 import { css } from "emotion";
 
+import { defaultYearRange, getYearRanges, YearRange } from "@turbo-schedule/common";
+
 import { Select } from "../../common/Select";
 import { Navbar } from "../../components/navbar/Navbar";
 import { useTranslation } from "../../i18n/useTranslation";
 
-import { defaultYearRange, getYearRanges, YearRange } from "./getYearRanges";
-import { CurrentYearCtx } from "./currentYearContext";
+import { CurrentYearRangeCtx } from "./currentYearRangeContext";
 
 export const Archive: FC<{}> = () => {
 	const t = useTranslation();
@@ -19,7 +20,7 @@ export const Archive: FC<{}> = () => {
 		</option>
 	));
 
-	const [currentYearRange, setCurrentYearRange] = useContext(CurrentYearCtx);
+	const [currentYearRange, setCurrentYearRange] = useContext(CurrentYearRangeCtx);
 
 	return (
 		<>

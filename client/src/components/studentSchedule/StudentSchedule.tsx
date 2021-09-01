@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { throttle } from "lodash";
 
 import { Lesson, Student, ParticipantLabel } from "@turbo-schedule/common";
@@ -17,6 +17,7 @@ import { fetchStudent } from "../../utils/fetchStudent";
 import DaySelector from "./DaySelector";
 import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
+import { CurrentYearRangeCtx } from "../../pages/archive/currentYearRangeContext";
 import { SchedulePageDesktop } from "./SchedulePageDesktop";
 import { LessonsList } from "./LessonsList";
 
@@ -26,6 +27,8 @@ export interface IStudentScheduleProps {
 
 const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const t = useTranslation();
+
+	const [currentYearRange] = useContext(CurrentYearRangeCtx);
 
 	/** scroll to top of page on mount */
 	useEffect(() => {
@@ -63,11 +66,12 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	useAddMostRecentParticipantOnPageChange(studentName, participantType);
 
 	useEffect(() => {
-		const wrapper = async () => {
-			try {
-				setIsLoading(true);
-				const { lessons, labels } = await fetchStudent(studentName);
+		const controller = new AbortController();
 
+		try {
+			setIsLoading(true);
+
+			fetchStudent(studentName, controller.signal, currentYearRange).then(({ lessons = [], labels = [] }) => {
 				setParticipantType(labels[0]);
 
 				if (!lessons || !lessons.length) {
@@ -93,15 +97,15 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 				setScheduleByDays(tempScheduleByDays);
 				setIsLoading(false);
-			} catch (err) {
-				console.error("Error!", err);
-				setScheduleByDays([[]]);
-				setIsLoading(false);
-			}
-		};
+			});
+		} catch (err) {
+			console.error("Error!", err);
+			setScheduleByDays([[]]);
+			setIsLoading(false);
+		}
 
-		wrapper();
-	}, [studentName]);
+		return (): void => controller.abort();
+	}, [studentName, currentYearRange]);
 
 	const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 

@@ -15,13 +15,14 @@ const StudentList = () => {
 	const [studentsList, setStudentsList] = useState<StudentFromList[]>([]);
 
 	useEffect(() => {
-		const wrapper = async () => {
-			const studentsList: StudentFromList[] = await fetchStudents();
+		const controller = new AbortController();
 
-			setStudentsList(studentsList);
+		fetchStudents(controller.signal).then((s) => setStudentsList(s));
+
+		return (): void => {
+			console.log("aborting!", controller.signal);
+			controller.abort();
 		};
-
-		wrapper();
 	}, []);
 
 	const handleAutoCompletionSelection = (autoCompletion: string) => {

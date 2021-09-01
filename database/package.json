@@ -7,7 +7,8 @@
 	"license": "UNLICENSED",
 	"scripts": {
 		"create-fake-data": "yarn ts-node-dev ./src/script/create-fake-data.ts",
-		"copy-prod-data": "bash ./copy-prod-data.sh"
+		"copy-prod-data": "bash ./copy-prod-data.sh",
+		"build": "tsc -b -v"
 	},
 	"dependencies": {
 		"@turbo-schedule/common": "^2.26.0",

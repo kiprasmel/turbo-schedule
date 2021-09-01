@@ -7,6 +7,7 @@ import { getSpecificScheduleURI } from "./Schedule";
 import { Lesson } from "./Lesson";
 
 import { mergeBy, MergeStrategy } from "../util/mergeBy";
+import { uniq } from "../util/uniq";
 
 export type ParticipantType = StudentFromList | Class | Teacher | Room;
 
@@ -47,16 +48,16 @@ export const getDefaultParticipant = (): Participant => ({
 
 const mergeStrat: MergeStrategy<ParticipantInLesson> = (left, right): ParticipantInLesson => ({
 	...left,
-	labels: [...new Set([...left.labels, ...right.labels])],
+	labels: uniq(left.labels, right.labels),
 });
 
 export const mergeDuplicateParticipantsInLessons = mergeBy("text", mergeStrat);
 
 export const participantHasLesson = (participant: Participant) => (lesson: Lesson): boolean =>
-	lesson.students.includes(participant.text) ||
-	lesson.classes.includes(participant.text) ||
-	lesson.teachers.includes(participant.text) ||
-	lesson.rooms.includes(participant.text);
+	lesson?.students?.includes(participant.text) ||
+	lesson?.classes?.includes(participant.text) ||
+	lesson?.teachers?.includes(participant.text) ||
+	lesson?.rooms?.includes(participant.text);
 
 type DayTimeId = string;
 type Duplicates = Record<Participant["text"], Record<DayTimeId, Lesson[]>>;

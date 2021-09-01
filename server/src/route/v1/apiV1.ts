@@ -8,8 +8,11 @@ import { roomRouter } from "./room";
 import { emailRouter } from "./email";
 import { openAPIDocsJSONHandler, openAPIDocsHTMLHandler } from "./openAPIDocs";
 import { redirectToApiDocs } from "../../util/redirectToApiDocs";
+import { withDb } from "../../middleware/withDb";
 
 const router: Router = Router();
+
+router.use("/", withDb);
 
 router.use("/participant", participantRouter);
 router.use("/class", classRouter);

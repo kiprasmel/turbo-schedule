@@ -5,7 +5,7 @@ import "./App.scss";
 
 import { SchedulePageDesktop } from "./components/studentSchedule/SchedulePageDesktop";
 import CurrentLangContextProvider from "./components/currentLangContext/CurrentLangContextProvider";
-import { CurrentYearCtxProvider } from "./pages/archive/currentYearContext";
+import { CurrentYearRangeCtxProvider } from "./pages/archive/currentYearRangeContext";
 
 /** pages */
 import Landing from "./components/landing/Landing";
@@ -23,7 +23,7 @@ logCoolStuff();
 const App: FC = () => (
 	<>
 		<CurrentLangContextProvider>
-			<CurrentYearCtxProvider>
+			<CurrentYearRangeCtxProvider>
 				<div className="App">
 					<div>
 						<Router history={history}>
@@ -48,7 +48,7 @@ const App: FC = () => (
 						</Router>
 					</div>
 				</div>
-			</CurrentYearCtxProvider>
+			</CurrentYearRangeCtxProvider>
 		</CurrentLangContextProvider>
 	</>
 

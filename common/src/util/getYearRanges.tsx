@@ -1,7 +1,10 @@
 
-export type YearRange = "latest" | `${number}-${number}`;
+export type YearRange = "latest" | "all" | `${number}-${number}`;
 
-export const defaultYearRange: YearRange = "latest";
+export const latestYearRange: YearRange = "latest";
+export const allYearsRange: YearRange = "all";
+
+export const defaultYearRange = allYearsRange; // TODO apply this where needed
 
 export const getYearRanges = (startYearIncl = 2019): YearRange[] => {
 	const years: YearRange[] = [];
@@ -14,7 +17,8 @@ export const getYearRanges = (startYearIncl = 2019): YearRange[] => {
 		years.push(range);
 	}
 
-	years.push("latest");
+	// years.push(allYearsRange); // TODO think about stuff
+	years.push(latestYearRange);
 
 	years.reverse();
 

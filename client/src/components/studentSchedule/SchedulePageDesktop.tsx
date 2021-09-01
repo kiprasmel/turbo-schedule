@@ -49,10 +49,9 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 	const [navbarHeight, setNavbarHeight] = useState<number>(0);
 
 	useEffect(() => {
-		(async () => {
-			const data = await fetchStudent(searchString);
-			setParticipant(data);
-		})();
+		const controller = new AbortController();
+		fetchStudent(searchString, controller.signal).then((s) => setParticipant(s));
+		return () => controller.abort();
 	}, [searchString]);
 
 	useLayoutEffect(() => {
