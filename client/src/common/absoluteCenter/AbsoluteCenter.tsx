@@ -2,29 +2,13 @@
  * https://css-tricks.com/centering-css-complete-guide/
  */
 
-import React from "react";
+import React, { FC } from "react";
 
-// export interface IAbsoluteCenterProps {
-// 	style
-// }
-
-/**
- * Issues with blurry borders
- */
-
-// const AbsoluteCenter = ({ children }: React.Props<any>) => {
-// 	return (
-// 		<div style={{ height: "100vh", position: "relative" }}>
-// 			<div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
-// 				{children}
-// 			</div>
-// 		</div>
-// 	);
-// };
-
-const AbsoluteCenter = ({ children }: React.Props<any>) => (
+const AbsoluteCenter: FC<{ className?: string }> = ({ children, className }) => (
 	<div style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-		<div style={{ overflow: "auto", resize: "both" }}>{children}</div>
+		<div style={{ overflow: "auto", resize: "both" }} className={className}>
+			{children}
+		</div>
 	</div>
 );
 

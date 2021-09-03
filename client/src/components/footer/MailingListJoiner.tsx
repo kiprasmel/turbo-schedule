@@ -1,111 +1,142 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { css } from "emotion";
 
-import "./MailingListJoiner.scss";
-
-import axios from "axios";
+import AbsoluteCenter from "../../common/absoluteCenter/AbsoluteCenter";
 import { useTranslation } from "../../i18n/useTranslation";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
-// import { useIntl } from "react-intl";
+export const joinMailingList = async (email: string): Promise<boolean> => {
+	try {
+		const res = await fetch("/api/v1/email", {
+			method: "POST",
+			body: JSON.stringify({ email }), //
+			headers: {
+				"content-type": "application/json",
+			},
+		});
 
-// const { formatMessage } = useIntl();
-
-// formatMessage({ id: "foo" }, {});
-
-export const joinMailingList = async (email: string) => {
-	// try {
-	const emailEntry = await axios.post("/api/v1/email", { email });
-	return emailEntry;
-	// } catch (err) {
-	// 	console.log("Error!", err);
-	// }
+		return !!res.ok;
+	} catch (e) {
+		return false;
+	}
 };
 
 const MailingListJoiner = () => {
 	const t = useTranslation();
 	const [email, setEmail] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [submitted, setSubmitted] = useState(false);
+	const [hasSubmitted, setHasSubmitted] = useLocalStorage("turbo-schedule.email.has-submitted", false);
+	const [hasClosed, setHasClosed] = useLocalStorage("turbo-schedule.email.has-closed", false);
 
-	const handleEmailSubmit = async (_e?: React.MouseEvent) => {
+	const closeWithTimeout = (ms = 4000): NodeJS.Timeout => setTimeout(() => setHasClosed(true), ms);
+
+	useEffect(() => {
+		if (hasSubmitted) closeWithTimeout();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const handleEmailSubmit = async (): Promise<void> => {
 		try {
-			if (isSubmitting || submitted) {
+			if (isSubmitting || hasSubmitted || hasClosed) {
 				return;
 			}
 
 			setIsSubmitting(true);
 
-			await joinMailingList(email);
+			if (await joinMailingList(email)) {
+				setHasSubmitted(true);
+				setEmail("");
 
-			setSubmitted(true);
-			setEmail("");
+				closeWithTimeout();
+			}
+
 			setIsSubmitting(false);
 		} catch (err) {
 			console.error("Error!", err);
 
-			setSubmitted(false);
+			setHasSubmitted(false);
 			setIsSubmitting(false);
 		}
 	};
 
-	const handleKeyDown = (e: React.KeyboardEvent) => {
+	const handleKeyDown = (e: React.KeyboardEvent): void => {
 		if (e.key === "Enter") {
 			handleEmailSubmit();
 		}
 	};
 
+	if (hasClosed) return null;
+
 	return (
-		<>
-			<h3>{t("Interested in what's coming next?")}</h3>
-			<p>{t("Enter email get notified")}</p>
-
-			<small>
-				({t("we promise to not spam!")}) ({t("you can cancel anytime")})
-			</small>
-
-			<div style={{ marginTop: "1em", marginBottom: "1em" }}>
-				<input
-					type="email"
-					placeholder={`${t("eg.")} kipras@kipras.org`}
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
-					onKeyDown={(e) => handleKeyDown(e)}
-					style={{
-						border: "1px solid rgb(238, 238, 238)",
-						outlineColor: "rgb(138, 138, 138)",
-
-						padding: "12px 16px",
-						margin: "auto",
-						display: "block",
-					}}
-				/>
-
-				<br />
-
-				{/* <input type="submit" value="Pranešti man apie atnaujinimus!"  /> */}
-				<button
-					type="submit"
-					className="btn btn--round"
-					style={{
-						cursor: isSubmitting || submitted ? "not-allowed" : "pointer",
-					}}
-					disabled={isSubmitting || submitted}
-					// 	color: "#fff",
-					// 	background: "dodgerBlue",
-					// 	border: "1px solid dodgerBlue",
-					// 	borderRadius: "10em",
-					// 	margin: "auto",
-					// 	display: "block",
-					onClick={(e) => handleEmailSubmit(e)}
-					// disabled={isSubmitting}
+		<AbsoluteCenter className={css``}>
+			<div
+				className={css`
+					vertical-align: middle;
+				`}
+			>
+				<h3
+					className={css`
+						margin: 0;
+						position: relative;
+					`}
 				>
-					{t("Notify me about the updates!")}
-				</button>
+					{t("Interested in what's coming next?")}
 
-				{submitted && <h3>{t("Email received successfully - thank You for trusting us:)")}</h3>}
+					<button
+						type="button"
+						onClick={(): void => setHasClosed(true)} //
+						className={css`
+							position: absolute;
+							top: -11px;
+							right: 0;
 
-				{/* <div style={{ marginBottom: "8em" }}></div> */}
+							margin: auto;
+
+							font-size: 2rem;
+						`}
+					>
+						&times;
+					</button>
+				</h3>{" "}
+				<p>{t("Enter email get notified")}</p>
+				<small>
+					({t("we promise to not spam!")}) ({t("you can cancel anytime")})
+				</small>
+				<div style={{ marginTop: "1em", marginBottom: "1em" }}>
+					<input
+						type="email"
+						placeholder={`${t("eg.")} kipras@kipras.org`}
+						value={email}
+						onChange={(e): void => setEmail(e.target.value)}
+						onKeyDown={(e): void => handleKeyDown(e)}
+						style={{
+							border: "1px solid rgb(238, 238, 238)",
+							outlineColor: "rgb(138, 138, 138)",
+
+							padding: "12px 16px",
+							margin: "auto",
+							display: "block",
+						}}
+					/>
+
+					<br />
+
+					<button
+						type="submit"
+						className="btn btn--round"
+						style={{
+							cursor: isSubmitting || hasSubmitted ? "not-allowed" : "pointer",
+						}}
+						disabled={isSubmitting || hasSubmitted}
+						onClick={handleEmailSubmit}
+					>
+						{t("Notify me about the updates!")}
+					</button>
+
+					{!hasSubmitted ? null : <h3>{t("Email received successfully - thank You for trusting us:)")}</h3>}
+				</div>
 			</div>
-		</>
+		</AbsoluteCenter>
 	);
 };
 

@@ -56,6 +56,7 @@ const Landing = () => {
 				<div
 					className={css`
 						margin-top: 2em;
+						margin-bottom: 1em;
 
 						& > * + * {
 							margin-top: 4em;
