@@ -1,3 +1,5 @@
+/* eslint-disable no-else-return */
+/* eslint-disable no-nested-ternary */
 /* eslint-disable indent, no-multi-str, flowtype/space-after-type-colon */
 
 import React, { FC, useState, useEffect, useRef, useReducer, useCallback, useMemo, startTransition } from "react";
@@ -128,10 +130,10 @@ export const Availability: FC = () => {
 		} else if (prevState.name === "red-blue") {
 			setColorMapperName(colorMapperEntrys[0].name);
 			return colorMapperEntrys[0];
+		} else {
+			setColorMapperName(colorMapperEntrys[0].name);
+			return colorMapperEntrys[0];
 		}
-
-		setColorMapperName(colorMapperEntrys[0].name);
-		return colorMapperEntrys[0];
 	}, colorMapperEntrys.filter((e) => e.name === colorMapperName)?.[0] ?? colorMapperEntrys[0]);
 	/** end bussy/available button indication */
 
@@ -276,6 +278,7 @@ export const Availability: FC = () => {
 						grid-template-rows: minmax(2em, autofit);
 
 						margin-top: 2em;
+						margin-bottom: 1em;
 
 						grid-template-areas:
 							"info info info"
