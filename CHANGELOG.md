@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.26.0...v2.27.0) (2021-09-04)
+
+
+### Features
+
+* **client:** make mailing list joiner closable; also close after joining, with some timeout ([9aa46e0](https://github.com/kiprasmel/turbo-schedule/commit/9aa46e04f8af588b768c8a579fab9daa682a8768))
+
+
+
+
+
 # [2.26.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.25.0...v2.26.0) (2021-08-31)
 
 
