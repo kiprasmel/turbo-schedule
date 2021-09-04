@@ -3,7 +3,6 @@
 /* eslint-disable indent, no-multi-str, flowtype/space-after-type-colon */
 
 import React, { FC, useState, useEffect, useRef, useReducer, useCallback, useMemo, startTransition } from "react";
-import axios from "axios";
 import { cx, css } from "emotion";
 
 import { Availability as IAvailability, Participant, WantedParticipant } from "@turbo-schedule/common";
@@ -243,18 +242,14 @@ export const Availability: FC = () => {
 
 		const url: string = `/api/v1/participant/common-availability?wanted-participants=${wantedParticipantsPrepared}`;
 
-		let isCancelled: boolean = false;
+		const controller = new AbortController();
 
-		axios
-			.get<{ availability: IAvailability[][] }>(url)
-			.then((res) => {
-				if (!isCancelled) setAvailability(res?.data?.availability ?? []);
-			})
-			.catch((e) => console.error(e));
+		fetch(url, { signal: controller.signal })
+			.then((res) => res.json())
+			.then((data) => setAvailability(data?.availability ?? []))
+			.catch(console.log);
 
-		return (): void => {
-			isCancelled = true;
-		};
+		return (): void => controller.abort();
 	}, [
 		wantedParticipants,
 		invalidEnDeVal,
@@ -598,14 +593,12 @@ export const Availability: FC = () => {
 						<button
 							type="button"
 							onClick={(): Promise<void> =>
-								axios
-									.get(`/api/v1/participant/random`)
-									.then((res: { data: { participants: Participant[] } }) =>
-										setWantedParticipants(res.data?.participants ?? [])
+								fetch(`/api/v1/participant/random`) //
+									.then((res) => res.json())
+									.then((data: { participants: Participant[] }) =>
+										setWantedParticipants(data?.participants ?? [])
 									)
-									.catch((err) => {
-										console.error(err);
-									})
+									.catch(console.error)
 							}
 							className={css`
 								font-family: inherit;
