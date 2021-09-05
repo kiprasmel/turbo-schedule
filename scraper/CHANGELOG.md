@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.27.0...v2.28.0) (2021-09-05)
+
+
+### Bug Fixes
+
+* **common:** ts & stuff ?? ([80a0d0f](https://github.com/kiprasmel/turbo-schedule/commit/80a0d0fcf3d54c5a0409b90a0e3d9984c3ab6de9))
+
+
+
+
+
 # [2.26.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.25.0...v2.26.0) (2021-08-31)
 
 

@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.27.0...v2.28.0) (2021-09-05)
+
+
+### Bug Fixes
+
+* **ci:** add `lerna.json` to bust yarn cache for new pkg additions ([61cb374](https://github.com/kiprasmel/turbo-schedule/commit/61cb3747587e363fe1a60cd452c9a5988cb782fc))
+* **ci:** attempt fixing lerna publish ([45b5e46](https://github.com/kiprasmel/turbo-schedule/commit/45b5e4635480aa4ee1b84decff5f1c0547306258))
+* **client:** cleanup & use the new `use-fetched-state` pkg! ([926249e](https://github.com/kiprasmel/turbo-schedule/commit/926249e4e3aa8644687a2f28192be85f1b02f53a))
+* **common:** ts & stuff ?? ([80a0d0f](https://github.com/kiprasmel/turbo-schedule/commit/80a0d0fcf3d54c5a0409b90a0e3d9984c3ab6de9))
+* dump axios - back to fetch bby 🌵 ([d4e4bd8](https://github.com/kiprasmel/turbo-schedule/commit/d4e4bd895b4d46f808ad3a46eb42c7a23c956f34))
+
+
+### Features
+
+* **ci:** login to npm to publish pkg ([a15ab4c](https://github.com/kiprasmel/turbo-schedule/commit/a15ab4cae480a683196f870610ac0ac0276ed406))
+* **ci:** try publishing packages to npm w/ lerna 🚀 ([6b56f6e](https://github.com/kiprasmel/turbo-schedule/commit/6b56f6ec38496961bb7ae4efa7435143bcb029f6))
+* create `use-fetched-state` package! 🔥🚀🔥 ([bd23221](https://github.com/kiprasmel/turbo-schedule/commit/bd232218c4b7221ebc281b3b48b7d51da52cc342))
+
+
+
+
+
 # [2.27.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.26.0...v2.27.0) (2021-09-04)
 
 
