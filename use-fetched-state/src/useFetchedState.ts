@@ -38,7 +38,7 @@ export function createUseFetchedState<FetchedData, CreateUrlContext = unknown>(
 	url: ((urlCtx: CreateUrlContext) => string) | string, //
 	getDataFromResponse: (data: any) => FetchedData
 ) {
-	return function useStateFetch<InitialData = FetchedData, State extends FetchedData | InitialData = FetchedData | InitialData>(
+	return function useFetchedState<InitialData = FetchedData, State extends FetchedData | InitialData = FetchedData | InitialData>(
 		defaultValue: InitialData,
 		dependencies: any[],
 		{

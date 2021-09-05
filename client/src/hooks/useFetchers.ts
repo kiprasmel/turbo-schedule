@@ -5,12 +5,12 @@ import { createUseFetchedState } from "use-fetched-state";
  * TODO: could be auto-generated from the express api :o
  */
 
-// export const useFetchStudentsShouldError = createUseStateFetch<StudentFromList[]>(
+// export const useFetchStudentsShouldError = createUseFetchedState<StudentFromList[]>(
 // 	"/api/v1/participant",
 // 	(data) => data.participants
 // )({ ctx: {} });
 
-// export const useFetchStudentShouldError = createUseStateFetch<StudentFromList[]>(
+// export const useFetchStudentShouldError = createUseFetchedState<StudentFromList[]>(
 // 	({ studentName }) => `/api/v1/participant/${encodeURIComponent(studentName)}`,
 // 	(data) => data.participants
 // )({});
