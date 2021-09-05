@@ -121,6 +121,9 @@ jobs:
                 ./node_modules/.bin/lerna version patch --force-publish
               if: ${{ contains(github.event.head_commit.message, '[force publish]') }}
 
+            - run: |
+                ./node_modules/.bin/lerna publish --skip-git --yes
+
             # get the latest tag
             # see https://github.com/actions/starter-workflows/issues/68#issuecomment-552074596
             - run: echo "LATEST_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
