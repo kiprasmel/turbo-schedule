@@ -7,7 +7,7 @@ import { cx, css } from "emotion";
 
 import { Availability as IAvailability, Participant, WantedParticipant } from "@turbo-schedule/common";
 
-import { useFetchParticipants } from "../../hooks/fetch/useFetchParticipants";
+import { useFetchAvailability, useFetchParticipants } from "../../hooks/useFetchers";
 import { ParticipantListItem } from "../../components/studentSchedule/ParticipantList";
 import { Dictionary } from "../../i18n/i18n";
 import { useWindow } from "../../hooks/useWindow";
@@ -75,27 +75,6 @@ export const Availability: FC = () => {
 
 	const [displayType] = useState<TDisplayType>("mapped ratio to HSL");
 
-	const [availability, setAvailability] = useState<IAvailability[][]>([]);
-
-	const selectedAvailability: IAvailability = useMemo(() => availability?.[selectedDay]?.[selectedTime] ?? null, [
-		availability,
-		selectedDay,
-		selectedTime,
-	]);
-	const setSelectedAvailability = useCallback(
-		(dayIndex: number, timeIndex: number): void => {
-			setSelectedDay(dayIndex);
-			setSelectedTime(timeIndex);
-		},
-		[setSelectedDay, setSelectedTime]
-	);
-	const unselectAvailability = useCallback(() => {
-		setSelectedDay(invalidEnDeVal);
-		setSelectedTime(invalidEnDeVal);
-	}, [setSelectedDay, setSelectedTime, invalidEnDeVal]);
-
-	const availabilityGridRef = useRef<HTMLDivElement>(null);
-
 	/** begin bussy/available button indication */
 	interface IColorMapperEntry {
 		name: string;
@@ -138,7 +117,7 @@ export const Availability: FC = () => {
 
 	const { desktop, notDesktop } = useWindow();
 
-	const [participants] = useFetchParticipants();
+	const [participants] = useFetchParticipants([], []);
 
 	const [wantedParticipants, __setWantedParticipants] = useQueryFor<WantedParticipant[]>("p", {
 		/**
@@ -206,59 +185,75 @@ export const Availability: FC = () => {
 		[__setWantedParticipants, wantedParticipants]
 	);
 
-	useEffect(() => {
-		if (!wantedParticipants?.length) {
-			/**
-			 * if the query was empty,
-			 * reset the time & date params (thus, the "hasSelectedExtraInfo" too),
-			 * freeing up screen space for a wider participant picker
-			 */
+	const [availability] = useFetchAvailability(
+		[],
+		[
+			wantedParticipants,
+			invalidEnDeVal,
+			setSelectedDay,
+			setSelectedTime,
+			participants,
+			hasHadAChanceToUpdateWantedParticipants,
+		],
+		{
+			urlCtx: {
+				wantedParticipantsString: wantedParticipants
+					.map((wp) => wp.text.trim())
+					.filter((wp) => !!wp)
+					.join(","),
+			},
+			shouldFetch: ({ setState }) => {
+				if (!wantedParticipants?.length) {
+					/**
+					 * if the query was empty,
+					 * reset the time & date params (thus, the "hasSelectedExtraInfo" too),
+					 * freeing up screen space for a wider participant picker
+					 */
 
-			if (hasHadAChanceToUpdateWantedParticipants) {
-				/**
-				 * only resets the params if it's not the first mount
-				 *
-				 * technically it's not the first/non-first mount,
-				 * the point is is that the `wantedParticipants` have had a chance by now
-				 * to get updated from the `ParticipantPicker`s url queries `students`, `teachers`, `classes` & `rooms`,
-				 * and thus if there were some selected participants - we do not want to remove
-				 * the selected day & time, and if there were 0 selected participants - we do want to remove,
-				 * which is what we're doing here:
-				 */
+					if (hasHadAChanceToUpdateWantedParticipants) {
+						/**
+						 * only resets the params if it's not the first mount
+						 *
+						 * technically it's not the first/non-first mount,
+						 * the point is is that the `wantedParticipants` have had a chance by now
+						 * to get updated from the `ParticipantPicker`s url queries `students`, `teachers`, `classes` & `rooms`,
+						 * and thus if there were some selected participants - we do not want to remove
+						 * the selected day & time, and if there were 0 selected participants - we do want to remove,
+						 * which is what we're doing here:
+						 */
 
-				setSelectedDay(invalidEnDeVal);
-				setSelectedTime(invalidEnDeVal);
-			}
+						setSelectedDay(invalidEnDeVal);
+						setSelectedTime(invalidEnDeVal);
+					}
 
-			setAvailability([]);
+					setState([]);
 
-			return;
+					return false;
+				}
+
+				return true;
+			},
 		}
+	);
 
-		const wantedParticipantsPrepared: string = wantedParticipants
-			.map((wp) => wp.text.trim())
-			.filter((wp) => !!wp)
-			.join(",");
-
-		const url: string = `/api/v1/participant/common-availability?wanted-participants=${wantedParticipantsPrepared}`;
-
-		const controller = new AbortController();
-
-		fetch(url, { signal: controller.signal })
-			.then((res) => res.json())
-			.then((data) => setAvailability(data?.availability ?? []))
-			.catch(console.log);
-
-		return (): void => controller.abort();
-	}, [
-		wantedParticipants,
-		invalidEnDeVal,
-		setSelectedDay,
-		setSelectedTime,
-		setAvailability,
-		participants,
-		hasHadAChanceToUpdateWantedParticipants,
+	const selectedAvailability: IAvailability = useMemo(() => availability?.[selectedDay]?.[selectedTime] ?? null, [
+		availability,
+		selectedDay,
+		selectedTime,
 	]);
+	const setSelectedAvailability = useCallback(
+		(dayIndex: number, timeIndex: number): void => {
+			setSelectedDay(dayIndex);
+			setSelectedTime(timeIndex);
+		},
+		[setSelectedDay, setSelectedTime]
+	);
+	const unselectAvailability = useCallback(() => {
+		setSelectedDay(invalidEnDeVal);
+		setSelectedTime(invalidEnDeVal);
+	}, [setSelectedDay, setSelectedTime, invalidEnDeVal]);
+
+	const availabilityGridRef = useRef<HTMLDivElement>(null);
 
 	return (
 		<>

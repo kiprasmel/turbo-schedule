@@ -28,16 +28,16 @@ const router: Router = Router();
  * get an array of schedule items (WITHOUT lessons)
  */
 export interface ParticipantsRes extends WithErr {
-	participants: Participant[];
+	participants: Omit<Participant, "lessons">[];
 }
 
-router.get<any, ParticipantsRes>("/", withSender({ participants: [] }), async (_req, res) => {
+router.get<never, ParticipantsRes>("/", withSender({ participants: [] }), async (_req, res) => {
 	const send = res.sender;
 
 	try {
 		const db: Db = await initDb();
 
-		const participants: Participant[] = await db.get("participants").value();
+		const participants: ParticipantsRes["participants"] = await db.get("participants").value();
 
 		if (!participants?.length) {
 			return send(404, { err: `Schedule items not found (were \`${participants}\`)` });
@@ -58,7 +58,7 @@ export interface ParticipantRandomRes extends WithErr {
 	participants: Participant[];
 }
 
-router.get<any, ParticipantRandomRes>("/random", withSender({ participants: [] }), async (req, res) => {
+router.get<never, ParticipantRandomRes>("/random", withSender({ participants: [] }), async (req, res) => {
 	const send = res.sender;
 
 	try {
@@ -89,7 +89,7 @@ export interface ParticipantHierarchyRes extends WithErr {
 	hierarchy: ParticipantHierarchyManual;
 }
 
-router.get<any, ParticipantHierarchyRes>(
+router.get<never, ParticipantHierarchyRes>(
 	"/hierarchy",
 	withSender({ hierarchy: createParticipantHierarchy([]) }), // TODO - is this even working?
 	async (_req, res) => {
@@ -124,7 +124,7 @@ const getDefaultParticipantCommonAvailRes = (): ParticipantCommonAvailabilityRes
 	availability: [],
 });
 
-router.get<any, ParticipantCommonAvailabilityRes>(
+router.get<never, ParticipantCommonAvailabilityRes>(
 	"/common-availability",
 	withSender(getDefaultParticipantCommonAvailRes()),
 	async (req, res) => {
@@ -249,7 +249,7 @@ export interface ParticipantClassifyRes extends WithErr {
 	participants: WantedParticipant[];
 }
 
-router.get<any, ParticipantClassifyRes>("/classify", withSender({ participants: [] }), async (req, res) => {
+router.get<never, ParticipantClassifyRes>("/classify", withSender({ participants: [] }), async (req, res) => {
 	const send = res.sender;
 
 	try {
@@ -281,7 +281,7 @@ export interface ParticipantDuplicatesRes extends WithErr {
 	duplicates: Record<string, Record<string, Lesson[]>>;
 }
 
-router.get<any, ParticipantDuplicatesRes>("/debug/duplicates", withSender({ duplicates: {} }), async (_req, res) => {
+router.get<never, ParticipantDuplicatesRes>("/debug/duplicates", withSender({ duplicates: {} }), async (_req, res) => {
 	try {
 		const db: Db = await initDb();
 
@@ -303,7 +303,7 @@ export interface ParticipantScheduleByNameRes extends WithErr {
 	participant: Participant;
 }
 
-router.get<any, ParticipantScheduleByNameRes>(
+router.get<{ participantName: string }, ParticipantScheduleByNameRes>(
 	"/:participantName",
 	withSender({ participant: getDefaultParticipant() }),
 	async (req, res) => {

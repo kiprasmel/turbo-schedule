@@ -13,7 +13,7 @@ import StudentListModal from "./StudentListModal";
 import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
 
-import { fetchStudent } from "../../utils/fetchStudent";
+import { useFetchParticipant } from "../../hooks/useFetchers";
 import DaySelector from "./DaySelector";
 import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
@@ -56,52 +56,36 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const { params } = match;
 	const { studentName } = params;
 
-	const [isLoading, setIsLoading] = useState(false);
 	const [scheduleByDays, setScheduleByDays] = useState([[]] as Array<Array<Lesson>>);
 
 	const [participantType, setParticipantType] = useState<ParticipantLabel | null>(null);
 	useAddMostRecentParticipantOnPageChange(studentName, participantType);
 
-	useEffect(() => {
-		const wrapper = async () => {
-			try {
-				setIsLoading(true);
-				const { lessons, labels } = await fetchStudent(studentName);
+	const [, , isLoading] = useFetchParticipant({}, [studentName], {
+		urlCtx: studentName, //
+		onError: () => setScheduleByDays([[]]),
+		onSuccess: ({ lessons, labels }) => {
+			setParticipantType(labels[0]);
 
-				setParticipantType(labels[0]);
+			if (!lessons?.length) {
+				setScheduleByDays([[]]);
+				return;
+			}
 
-				if (!lessons || !lessons.length) {
-					setScheduleByDays([[]]);
-					setIsLoading(false);
-					return;
+			const tempScheduleByDays: Array<Array<Lesson>> = [];
+
+			lessons.forEach((lesson) => {
+				/** make sure there's always an array inside an array */
+				if (!tempScheduleByDays[lesson.dayIndex]?.length) {
+					tempScheduleByDays[lesson.dayIndex] = [];
 				}
 
-				const tempScheduleByDays: Array<Array<Lesson>> = [];
+				tempScheduleByDays[lesson.dayIndex].push(lesson);
+			});
 
-				lessons.forEach((lesson) => {
-					/** make sure there's always an array inside an array */
-					if (!tempScheduleByDays[lesson.dayIndex]) {
-						/**
-						 * TODO FIXME! Not sure if this is correct :/
-						 */
-						// tempScheduleByDays.push([]);
-						tempScheduleByDays[lesson.dayIndex] = [];
-					}
-
-					tempScheduleByDays[lesson.dayIndex].push(lesson);
-				});
-
-				setScheduleByDays(tempScheduleByDays);
-				setIsLoading(false);
-			} catch (err) {
-				console.error("Error!", err);
-				setScheduleByDays([[]]);
-				setIsLoading(false);
-			}
-		};
-
-		wrapper();
-	}, [studentName]);
+			setScheduleByDays(tempScheduleByDays);
+		},
+	});
 
 	const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 

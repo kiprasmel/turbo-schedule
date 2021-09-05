@@ -11,13 +11,13 @@ import React, { FC, useState, useContext, useEffect, useRef, useLayoutEffect, Ke
 // import Select from "react-select";
 import { css } from "emotion";
 
-import { Lesson, Participant, getDefaultParticipant } from "@turbo-schedule/common";
+import { getDefaultParticipant, Lesson } from "@turbo-schedule/common";
 
 import { Navbar } from "../navbar/Navbar";
 import { LessonsList } from "./LessonsList";
 import { DaysList } from "./DaysList";
 import { LessonDisplay } from "./LessonDisplay";
-import { fetchStudent } from "../../utils/fetchStudent";
+import { useFetchParticipant } from "../../hooks/useFetchers";
 import { getTodaysScheduleDay, ScheduleDay } from "../../utils/selectSchedule";
 import { CurrentLangContext } from "../currentLangContext/currentLangContext";
 
@@ -39,7 +39,12 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 	const [searchString, setSearchString] = useState<string>(
 		(match.params.participantHandle || match.params.studentName) as string
 	);
-	const [participant, setParticipant] = useState<Participant>(() => getDefaultParticipant());
+
+	const [participant] = useFetchParticipant(
+		getDefaultParticipant(), //
+		[searchString],
+		{ urlCtx: searchString }
+	);
 
 	const [selectedDay, setSelectedDay] = useState<ScheduleDay>(() => getTodaysScheduleDay({ defaultToDay: 0 }));
 	const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
@@ -47,13 +52,6 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 
 	const navbarElement = useRef<HTMLElement>(null);
 	const [navbarHeight, setNavbarHeight] = useState<number>(0);
-
-	useEffect(() => {
-		(async () => {
-			const data = await fetchStudent(searchString);
-			setParticipant(data);
-		})();
-	}, [searchString]);
 
 	useLayoutEffect(() => {
 		const height = navbarElement?.current?.clientHeight || 0;

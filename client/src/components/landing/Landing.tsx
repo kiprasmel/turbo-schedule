@@ -3,7 +3,7 @@ import { css } from "emotion";
 
 import { Participant } from "@turbo-schedule/common";
 
-import { useFetchParticipants } from "../../hooks/fetch/useFetchParticipants";
+import { useFetchParticipants } from "../../hooks/useFetchers";
 import { history } from "../../utils/history";
 import { ParticipantListList } from "../studentSchedule/ParticipantList";
 import { Search } from "../navbar/Search";
@@ -14,7 +14,7 @@ import Footer from "../footer/Footer";
 const Landing = () => {
 	const [searchString, setSearchString] = useState<string>("");
 
-	const [participants] = useFetchParticipants();
+	const [participants] = useFetchParticipants([], []);
 	const [matchingParticipants, setMatchingParticipants] = useState<Participant[]>([]);
 
 	useEffect(() => {

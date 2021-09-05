@@ -1,35 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./StudentList.scss";
-import { StudentFromList } from "@turbo-schedule/common";
 
-import { fetchStudents } from "../../utils/fetchStudents";
 import AutoCompleteInput from "../../common/autocompleteInput/AutoCompleteInput";
 
 import { history } from "../../utils/history";
+import { useFetchParticipants } from "../../hooks/useFetchers";
 
 import { useTranslation } from "../../i18n/useTranslation";
 
 const StudentList = () => {
 	const t = useTranslation();
 
-	const [studentsList, setStudentsList] = useState<StudentFromList[]>([]);
+	const [studentsList] = useFetchParticipants([], []);
 
-	useEffect(() => {
-		const wrapper = async () => {
-			const studentsList: StudentFromList[] = await fetchStudents();
-
-			setStudentsList(studentsList);
-		};
-
-		wrapper();
-	}, []);
-
-	const handleAutoCompletionSelection = (autoCompletion: string) => {
-		console.log("autoCompletion", autoCompletion);
-		autoCompletion = encodeURIComponent(autoCompletion);
-
-		history.push(`/${autoCompletion}`);
-	};
+	const handleAutoCompletionSelection = (autoCompletion: string) =>
+		history.push("/" + encodeURIComponent(autoCompletion));
 
 	return (
 		<div className="wrapper">
