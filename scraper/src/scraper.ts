@@ -155,6 +155,6 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		return;
 	} catch (err) {
 		console.error("\nError! \n==> `@turbo-schedule/scraper`\n -> function `scrape`");
-		throw new Error(err);
+		throw new Error(err as any) as any;
 	}
 };

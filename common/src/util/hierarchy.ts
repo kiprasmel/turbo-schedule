@@ -257,7 +257,8 @@ export const createHierarchy = <
 	differentiators: D) => (
 	currentItems: T[]
 	// currentItems: ParseHierarchyFromDiff<[D]>[0]["currentItems"] // TODO
-): ParseHierarchyFromDiff<[D]>[0] | null => {
+// ): ParseHierarchyFromDiff<[D]>[0] | null => {
+): ParticipantHierarchyManual | null => {
 	if (!currentItems?.length) {
 		console.warn("createHierarchy: currentItems.length falsy")
 		return null;
@@ -296,8 +297,8 @@ export const createHierarchy = <
 		return {
 			debug: differentiators.debug,
 			groupName:  differentiators.getGroupName(currentItems[0]),
-			currentItems: currentItems
-		};
+			currentItems: currentItems as unknown as Participant[] // TODO FIXME
+		} as any; // TODO FIXME
 	}
 
 	const { children } = differentiators;
@@ -328,10 +329,11 @@ export const createHierarchy = <
 		groupName: differentiators.getGroupName(currentItems[0]),
 		children: parsedChildren,
 		currentItems
-	} as ParseHierarchyFromDiff<[D]>[0] | null; // `children` fix
+	// } as ParseHierarchyFromDiff<[D]>[0] | null; // `children` fix
+	} as unknown as (ParticipantHierarchyManual | null) // TODO FIXME
 };
 
-type ParticipantHierarchyArr = ParseHierarchyFromDiff<[ParticipantDiffHierarchy]>;
+// type ParticipantHierarchyArr = ParseHierarchyFromDiff<[ParticipantDiffHierarchy]>;
 /**
  * the only one that we actually need
  *
@@ -342,7 +344,7 @@ type ParticipantHierarchyArr = ParseHierarchyFromDiff<[ParticipantDiffHierarchy]
  * TODO FIXME HACK - temporarily using the manual value instead until this is resolved
  *
  */
-export type ParticipantHierarchy = ParticipantHierarchyArr[0] | null;
+// export type ParticipantHierarchy = ParticipantHierarchyArr[0] | null;
 // export type ParticipantHierarchy = ParticipantHierarchyManual;
 
 const createParticipantHierarchyArr = createHierarchy<Participant, ParticipantDiffHierarchy>(participantDifferenciators);
