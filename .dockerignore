@@ -16,7 +16,7 @@
 !scraper/dist
 !server/dist
 !client/build
-!use-fetched-state/build
+!use-fetched-state/dist
 
 !database/data/
 database/data/emails.json

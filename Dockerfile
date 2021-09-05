@@ -43,7 +43,7 @@ COPY database/dist ./database/dist
 COPY scraper/dist ./scraper/dist
 COPY server/dist ./server/dist
 COPY client/build ./client/build
-COPY use-fetched-state/build ./use-fetched-state/build
+COPY use-fetched-state/dist ./use-fetched-state/dist
 
 COPY database/data ./database/data
 
