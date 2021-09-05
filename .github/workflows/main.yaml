@@ -112,17 +112,14 @@ jobs:
                 # print what changed
                 ./node_modules/.bin/lerna changed
                 # create new version (& push to github) (skips ci to avoid an infinite loop)
-                ./node_modules/.bin/lerna version
+                ./node_modules/.bin/lerna publish --yes
               if: ${{ !contains(github.event.head_commit.message, '[force publish]') }}
 
             - name: lerna version patch (triggered by [force publish])
               run: |
                 # create new version (& push to github) (skips ci to avoid an infinite loop)
-                ./node_modules/.bin/lerna version patch --force-publish
+                ./node_modules/.bin/lerna publish patch --yes --force-publish
               if: ${{ contains(github.event.head_commit.message, '[force publish]') }}
-
-            - run: |
-                ./node_modules/.bin/lerna publish --skip-git --yes
 
             # get the latest tag
             # see https://github.com/actions/starter-workflows/issues/68#issuecomment-552074596
