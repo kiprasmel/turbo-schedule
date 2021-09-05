@@ -5,7 +5,8 @@
 		{ "path": "scraper" },
 		{ "path": "database" },
 		{ "path": "server" },
-		{ "path": "client" }
+		{ "path": "client" },
+		{ "path": "use-fetched-state" }
 	],
 	"compilerOptions": {
 		"skipLibCheck": true

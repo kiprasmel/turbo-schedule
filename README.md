@@ -137,7 +137,9 @@ https://github.com/lerna/lerna/issues/2542
 
 ## License
 
-[AGPL-3.0-only](./LICENSE) © 2019-present [Kipras Melnikovas](https://github.com/kiprasmel)
+[./use-fetched-state](./use-fetched-state) is [MIT](./use-fetched-state/LICENSE) © 2021-present [Kipras Melnikovas](https://github.com/kiprasmel)
+
+everything else is [AGPL-3.0-only](./LICENSE) © 2019-present [Kipras Melnikovas](https://github.com/kiprasmel)
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as published by

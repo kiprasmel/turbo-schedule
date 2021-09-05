@@ -7,6 +7,7 @@
 !scraper/package.json
 !server/package.json
 !client/package.json
+!use-fetched-state/package.json
 
 !node_modules
 
@@ -15,6 +16,7 @@
 !scraper/dist
 !server/dist
 !client/build
+!use-fetched-state/build
 
 !database/data/
 database/data/emails.json

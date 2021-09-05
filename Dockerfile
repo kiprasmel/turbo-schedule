@@ -28,6 +28,7 @@ COPY database/package.json ./database/
 COPY scraper/package.json ./scraper/
 COPY server/package.json ./server/
 COPY client/package.json ./client/
+COPY use-fetched-state/package.json ./use-fetched-state/
 
 # TODO - cannot use `--production`,
 # since `node-sass` won't get installed in react app
@@ -42,6 +43,7 @@ COPY database/dist ./database/dist
 COPY scraper/dist ./scraper/dist
 COPY server/dist ./server/dist
 COPY client/build ./client/build
+COPY use-fetched-state/build ./use-fetched-state/build
 
 COPY database/data ./database/data
 

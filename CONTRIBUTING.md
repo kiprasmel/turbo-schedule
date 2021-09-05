@@ -55,8 +55,8 @@ The following environment variables affect some parts of the functionality
 
 4. Inside the `Dockerfile`
 
-* Copy it's `package.json`
-* Copy it's `dist/`
+* Copy it's `package.json` (update both `from` & `to` paths!)
+* Copy it's `dist/` (update both `from` & `to` paths!)
 
 5. Create a sample `tsconfig.json`
 
@@ -77,6 +77,8 @@ The following environment variables affect some parts of the functionality
 }
 ```
 
-6. glhf!
+6. add package's name to `dependencies` @ packages you want to import it from.
 
-7. automate this?
+7. glhf!
+
+8. automate this?

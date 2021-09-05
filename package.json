@@ -11,7 +11,8 @@
 			"scraper",
 			"database",
 			"server",
-			"client"
+			"client",
+			"use-fetched-state"
 		],
 		"nohoist": [
 			"client/eslint",
