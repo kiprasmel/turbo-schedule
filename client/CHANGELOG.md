@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.28.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.28.0...v2.28.1) (2021-09-07)
+
+
+### Bug Fixes
+
+* remove old naming of "useStateFetch" ([ac601bf](https://github.com/kiprasmel/turbo-schedule/commit/ac601bf8f68dff00a8f44c2936b6825fc5e64854))
+
+
+
+
+
 # [2.28.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.27.0...v2.28.0) (2021-09-05)
 
 
