@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.28.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.28.2...v2.28.3) (2021-09-07)
+
+
+### Bug Fixes
+
+* **use-fetched-state:** set module to `CommonJS` (compile to w/ tsc) ([2c4a31b](https://github.com/kiprasmel/turbo-schedule/commit/2c4a31b5f2fdc80d00e5cad7df4b61bf7c842a14))
+
+
+
+
+
 ## [2.28.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.28.1...v2.28.2) (2021-09-07)
 
 
