@@ -4,7 +4,7 @@
 		"composite": false /** override the included tsconfig */,
 		"baseUrl": "src",
 		"outDir": "dist",
-		"module": "esnext",
+		"module": "CommonJS",
 		"target": "es5",
 		"sourceMap": true,
 		"allowJs": true,
