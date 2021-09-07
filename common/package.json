@@ -6,6 +6,7 @@
 	"typings": "dist/index.d.ts",
 	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
 	"license": "",
+	"private": true,
 	"scripts": {
 		"watch:ts": "tsc -b -w",
 		"test": "echo \"TODO: no test specified\" && exit 0",

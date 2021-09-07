@@ -1,12 +1,12 @@
 {
 	"name": "use-fetched-state",
 	"description": "A simple yet convenient `fetch` + `useState` wrapper. 100% TS. Less than 100 LOC. 0 dependencies.",
-	"private": false,
 	"version": "2.28.1",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
 	"license": "MIT",
+	"private": false,
 	"scripts": {
 		"build": "tsc -b -v",
 		"prepack": "yarn build"

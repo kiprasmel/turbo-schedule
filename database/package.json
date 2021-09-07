@@ -5,6 +5,7 @@
 	"typings": "dist/index.d.ts",
 	"author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
 	"license": "UNLICENSED",
+	"private": true,
 	"scripts": {
 		"create-fake-data": "yarn ts-node-dev ./src/script/create-fake-data.ts",
 		"copy-prod-data": "bash ./copy-prod-data.sh"

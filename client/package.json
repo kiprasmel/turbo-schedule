@@ -4,7 +4,7 @@
 	"description": "",
 	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
 	"license": "",
-	"private": false,
+	"private": true,
 	"proxy": "http://localhost:5000",
 	"homepage": "http://localhost:5000",
 	"scripts": {

@@ -6,6 +6,7 @@
 	"typings": "dist/src/index.d.ts",
 	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
 	"license": "",
+	"private": true,
 	"scripts": {
 		"start": "yarn dev",
 		"test": "yarn test:api --forceExit",
