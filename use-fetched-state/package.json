@@ -1,7 +1,7 @@
 {
 	"name": "use-fetched-state",
 	"description": "A simple yet convenient `fetch` + `useState` wrapper. 100% TS. Less than 100 LOC. 0 dependencies.",
-	"version": "2.28.1",
+	"version": "2.28.2",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",

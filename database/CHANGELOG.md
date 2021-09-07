@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.28.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.28.1...v2.28.2) (2021-09-07)
+
+
+### Bug Fixes
+
+* mark all packages as `private` (except use-fetched-state) to avoid trying to publish to npm ([9acb07b](https://github.com/kiprasmel/turbo-schedule/commit/9acb07b84af453b2020cf9d61462b8768ba385cb))
+
+
+
+
+
 # [2.28.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.27.0...v2.28.0) (2021-09-05)
 
 **Note:** Version bump only for package @turbo-schedule/database
