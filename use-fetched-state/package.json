@@ -8,8 +8,12 @@
 	"author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
 	"license": "MIT",
 	"scripts": {
-		"build": "tsc -b -v"
+		"build": "tsc -b -v",
+		"prepack": "yarn build"
 	},
+	"files": [
+		"dist"
+	],
 	"devDependencies": {
 		"typescript": "^4.4.2"
 	},
