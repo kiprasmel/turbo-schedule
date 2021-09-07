@@ -12,33 +12,33 @@ import React, { FC } from "react";
 import { createUseFetchedState } from "use-fetched-state";
 
 interface IUser {
-	name: string;
-	id: number;
+    name: string;
+    id: number;
 }
 
 const useFetchedUser = createUseFetchedState<IUser, number>(
-	(id) => `/api/v1/user/${id}` /** can also be just a string */,
-	(data) => data.user
+    (id) => `/api/v1/user/${id}` /** can also be just a string */,
+    (data) => data.user
 );
 
 const User: FC = () => {
-	const [user, setUser, isLoading] = useFetchedUser(
-		{ name: "", id: -1 } /**  initial state */,
-		[] /** dependencies to trigger re-fetch */,
-		{
-			/** option(s) for the URL creator: */
-			urlCtx: 1,
-			/** options: */
-			fetchOpts: {} /** AbortController setup & enabled by default */,
-			shouldFetch: (ctx) => true /** true by default, but controllable here */,
-			onError: (e, ctx) => console.error(e),
-			onSuccess: (u, ctx) => console.info(`fetched user ${u.name}`),
-		}
-	);
+    const [user, setUser, isLoading] = useFetchedUser(
+        { name: "", id: -1 } /**  initial state */,
+        [] /** dependencies to trigger re-fetch */,
+        {
+            /** option(s) for the URL creator: */
+            urlCtx: 1,
+            /** options: */
+            fetchOpts: {} /** AbortController setup & enabled by default */,
+            shouldFetch: (ctx) => true /** true by default, but controllable here */,
+            onError: (e, ctx) => console.error(e),
+            onSuccess: (u, ctx) => console.info(`fetched user ${u.name}`),
+        }
+    );
 
-	if (isLoading) return null;
+    if (isLoading) return null;
 
-	return <h1>hello, {user.name}</h1>;
+    return <h1>hello, {user.name}</h1>;
 };
 
 ```
