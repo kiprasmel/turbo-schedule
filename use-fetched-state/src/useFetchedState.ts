@@ -5,18 +5,33 @@ import { abc } from "./abortController";
 
 export type FetchOpts = Parameters<typeof fetch>[1];
 
+export type OnManualSetStateCtx<State> = {
+	prevState: State,
+	newState: State,
+	setIsLoading: Dispatch<SetStateAction<boolean>>
+};
+export type OnManualSetState<State> = undefined | ((ctx: OnManualSetStateCtx<State>) => any);
+
+export interface UseFetchedStateBaseOptions<
+	FetchedData,
+	InitialData,
+	State extends FetchedData | InitialData = FetchedData | InitialData
+> {
+	fetchOpts?: FetchOpts;
+	shouldFetch?: (ctx: { setState: Dispatch<SetStateAction<State>> }) => boolean;
+	onSuccess?: (data: FetchedData, ctx: null) => any;
+	onError?: (e: any, ctx: { defaultValue: InitialData }) => any;
+	onManualSetState?: OnManualSetState<State>;
+}
+
 export function createUseFetchedState<FetchedData, CreateUrlContext = unknown>(
 	url: (urlCtx: CreateUrlContext) => string, //
 	getDataFromResponse: (data: any) => FetchedData
 ): <InitialData = FetchedData, State extends FetchedData | InitialData = FetchedData | InitialData>(
 	defaultValue: InitialData, //
 	dependencies: any[],
-	opts?: {
+	opts: UseFetchedStateBaseOptions<FetchedData, InitialData, State> & {
 		urlCtx: CreateUrlContext;
-		fetchOpts?: FetchOpts;
-		shouldFetch?: (ctx: { setState: Dispatch<SetStateAction<State>> }) => boolean,
-		onSuccess?: (data: FetchedData, ctx: null) => any;
-		onError?: (e: any, ctx: { defaultValue: InitialData }) => any;
 	}
 ) => readonly [State, Dispatch<SetStateAction<State>>, boolean];
 
@@ -26,12 +41,7 @@ export function createUseFetchedState<FetchedData>(
 ): <InitialData = FetchedData, State extends FetchedData | InitialData = FetchedData | InitialData>(
 	defaultValue: InitialData, //
 	dependencies: any[],
-	opts?: {
-		fetchOpts?: FetchOpts;
-		shouldFetch?: (ctx: { setState: Dispatch<SetStateAction<State>> }) => boolean,
-		onSuccess?: (data: FetchedData, ctx: null) => any;
-		onError?: (e: any, ctx: { defaultValue: InitialData }) => any;
-	}
+	opts?: UseFetchedStateBaseOptions<FetchedData, InitialData, State>
 ) => readonly [State, Dispatch<SetStateAction<State>>, boolean];
 
 export function createUseFetchedState<FetchedData, CreateUrlContext = unknown>(
@@ -44,20 +54,12 @@ export function createUseFetchedState<FetchedData, CreateUrlContext = unknown>(
 		{
 			fetchOpts,
 			urlCtx,
-			shouldFetch,
-			onSuccess,
-			onError
-		}: {
-			fetchOpts?: Parameters<typeof fetch>[1];
+			shouldFetch = () => true,
+			onSuccess = () => {},
+			onError = () => {},
+			onManualSetState = () => {},
+		}: UseFetchedStateBaseOptions<FetchedData, InitialData, State> & {
 			urlCtx?: CreateUrlContext;
-			shouldFetch?: (ctx: { setState: Dispatch<SetStateAction<State>> }) => boolean,
-			onSuccess?: (data: FetchedData, ctx: null) => any;
-			onError?: (e: any, ctx: { defaultValue: InitialData }) => any;
-		} = {
-			fetchOpts: undefined, //
-			shouldFetch: () => true,
-			onSuccess: () => {},
-			onError: () => {}
 		}
 	): readonly [State, Dispatch<SetStateAction<State>>, boolean] {
 		const [state, setState__internal] = useState<State>(defaultValue as State); /** TODO FIXME */
