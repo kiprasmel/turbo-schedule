@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, Dispatch, SetStateAction, useCallback } from "react";
 
 import { abc } from "./abortController";
 
@@ -60,8 +60,22 @@ export function createUseFetchedState<FetchedData, CreateUrlContext = unknown>(
 			onError: () => {}
 		}
 	): readonly [State, Dispatch<SetStateAction<State>>, boolean] {
-		const [state, setState] = useState<State>(defaultValue as State); /** TODO FIXME */
+		const [state, setState__internal] = useState<State>(defaultValue as State); /** TODO FIXME */
 		const [isLoading, setIsLoading] = useState<boolean>(false);
+
+		const setStateManual: Dispatch<SetStateAction<State>> = useCallback((newStateOrFn: SetStateAction<State>): void => {
+			setState__internal((currState): State => {
+				const newState: State = newStateOrFn instanceof Function ? newStateOrFn(currState) : newStateOrFn;
+
+				onManualSetState?.({
+					prevState: currState, //
+					newState,
+					setIsLoading
+				});
+
+				return newState;
+			});
+		}, [setState__internal, onManualSetState, setIsLoading]);
 
 		const { signal, abort } = abc();
 
@@ -71,7 +85,7 @@ export function createUseFetchedState<FetchedData, CreateUrlContext = unknown>(
 		] as const;
 		const handleFetchErr = (res: Response) => { if (!res.ok) throw new Error(res.statusText); return res };
 		const toJson = (res: Response) => res.json();
-		const setStateAndReturn = (data: FetchedData) => { setState(data as State); return data }; // TODO FIXME
+		const setStateAndReturn = (data: FetchedData) => { setState__internal(data as State); return data }; // TODO FIXME
 		const handleSucc = (data: FetchedData) => onSuccess?.(data, null);
 		const handleErr = (e: any) => {
 			console.error(e);
@@ -103,7 +117,7 @@ export function createUseFetchedState<FetchedData, CreateUrlContext = unknown>(
 			*/
 	}, dependencies);
 
-		return [state, setState, isLoading] as const;
+		return [state, setStateManual, isLoading] as const;
 	};
 }
 
