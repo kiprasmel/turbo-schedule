@@ -79,23 +79,6 @@ export function createUseFetchedState<FetchedData, CreateUrlContext = unknown>(
 			});
 		}, [setState__internal, onManualSetState, setIsLoading]);
 
-		const { signal, abort } = abc();
-
-		const fetchArgs =  [
-			url instanceof Function ? url(urlCtx!) : url, //
-			{ signal, ...fetchOpts }
-		] as const;
-		const handleFetchErr = (res: Response) => { if (!res.ok) throw new Error(res.statusText); return res };
-		const toJson = (res: Response) => res.json();
-		const setStateAndReturn = (data: FetchedData) => { setState__internal(data as State); return data }; // TODO FIXME
-		const handleSucc = (data: FetchedData) => onSuccess?.(data, null);
-		const handleErr = (e: any) => {
-			console.error(e);
-			onError?.(e, { defaultValue });
-		}
-		const setLoadingTrue = () => setIsLoading(true);
-		const setLoadingFalse = () => setIsLoading(false);
-
 		useEffect(() => {
 			if (!(shouldFetch instanceof Function)) {
 				throw new Error("shouldFetch must be a function, got " + typeof shouldFetch);
@@ -105,6 +88,23 @@ export function createUseFetchedState<FetchedData, CreateUrlContext = unknown>(
 				console.info("not fetching");
 				return;
 			}
+
+			const { signal, abort } = abc();
+
+			const fetchArgs =  [
+				url instanceof Function ? url(urlCtx!) : url, //
+				{ signal, ...fetchOpts }
+			] as const;
+			const handleFetchErr = (res: Response) => { if (!res.ok) throw new Error(res.statusText); return res };
+			const toJson = (res: Response) => res.json();
+			const setStateAndReturn = (data: FetchedData) => { setState__internal(data as State); return data }; // TODO FIXME
+			const handleSucc = (data: FetchedData) => onSuccess?.(data, null);
+			const handleErr = (e: any) => {
+				console.error(e);
+				onError?.(e, { defaultValue });
+			}
+			const setLoadingTrue = () => setIsLoading(true);
+			const setLoadingFalse = () => setIsLoading(false);
 
 			setLoadingTrue();
 
