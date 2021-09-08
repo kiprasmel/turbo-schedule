@@ -97,7 +97,12 @@ export function createUseFetchedState<FetchedData, CreateUrlContext = unknown>(
 		const setLoadingFalse = () => setIsLoading(false);
 
 		useEffect(() => {
-			if (shouldFetch && !shouldFetch({setState})) {
+			if (!(shouldFetch instanceof Function)) {
+				throw new Error("shouldFetch must be a function, got " + typeof shouldFetch);
+			}
+
+			if (!shouldFetch({ setInternalState: setState__internal })) {
+				console.info("not fetching");
 				return;
 			}
 
