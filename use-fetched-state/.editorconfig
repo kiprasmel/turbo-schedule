@@ -1,0 +1,8 @@
+# Editor configuration, see http://editorconfig.org
+root = false
+
+[README.md]
+
+# npm's tabs are of size 8 so its ridiculous lol
+indent_size = 4
+indent_style = space

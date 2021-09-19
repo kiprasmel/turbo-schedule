@@ -202,7 +202,7 @@ export const Availability: FC = () => {
 					.filter((wp) => !!wp)
 					.join(","),
 			},
-			shouldFetch: ({ setState }) => {
+			shouldFetch: ({ setState__internal }) => {
 				if (!wantedParticipants?.length) {
 					/**
 					 * if the query was empty,
@@ -226,12 +226,18 @@ export const Availability: FC = () => {
 						setSelectedTime(invalidEnDeVal);
 					}
 
-					setState([]);
+					setState__internal([]);
 
 					return false;
 				}
 
 				return true;
+			},
+			onSetState: async ({ prevState, newState }) => {
+				console.log("onSetState", prevState === newState);
+				if (newState !== prevState) {
+					//
+				}
 			},
 		}
 	);

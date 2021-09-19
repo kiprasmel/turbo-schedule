@@ -6903,7 +6903,7 @@ eslint-config-react-app@^5.1.0:
 
 eslint-config-sarpik@0.2.4:
   version "0.2.4"
-  resolved "https://registry.npmjs.org/eslint-config-sarpik/-/eslint-config-sarpik-0.2.4.tgz#2dbf65701845f0ffb36ab908ccf51fd549ac2e84"
+  resolved "https://registry.yarnpkg.com/eslint-config-sarpik/-/eslint-config-sarpik-0.2.4.tgz#2dbf65701845f0ffb36ab908ccf51fd549ac2e84"
   integrity sha512-V1ioORlA7yQU7GDaaOPRFSbHTTVZ5YrbBGw0W0KQcw4hDnDrZc6uVrwCGUXPgXRFMJpy/FyjAD3NupwMpPYmHQ==
 
 eslint-import-resolver-node@^0.3.2:

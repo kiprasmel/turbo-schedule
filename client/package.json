@@ -49,7 +49,10 @@
 		"typescript": "4.3.5"
 	},
 	"eslintConfig": {
-		"extends": "eslint-config-sarpik"
+		"extends": "eslint-config-sarpik",
+		"rules": {
+			"@typescript-eslint/camelcase": 0
+		}
 	},
 	"browserslist": {
 		"production": [

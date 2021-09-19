@@ -3,7 +3,10 @@
 	"references": [
 		{
 			"path": "../common"
-		} //
+		}, //
+		{
+			"path": "../use-fetched-state"
+		}
 	],
 	"compilerOptions": {
 		"composite": false /** override the included tsconfig */,
