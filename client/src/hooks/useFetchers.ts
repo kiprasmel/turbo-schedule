@@ -5,6 +5,8 @@ import { createUseFetchedState } from "use-fetched-state";
  * TODO: could be auto-generated from the express api :o
  */
 
+// TODO FIXME
+// @ts-expect-error
 export const useFetchParticipant = createUseFetchedState<
 	{ participant: Participant }, //
 	Participant,
