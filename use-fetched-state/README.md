@@ -1,7 +1,13 @@
 # use-fetched-state
 
-A simple yet convenient `fetch` + `useState` wrapper. 100% TS. Less than 100 LOC. 0 dependencies.
+<a href="https://www.npmjs.com/package/use-fetched-state">
+    <img alt="npm package" src="https://img.shields.io/npm/v/use-fetched-state">
+</a>
+
+<p style="margin:1.5em 0;">
+A simple yet convenient `fetch` + `useState` wrapper. 100% TS. Less than 200 LOC. 0 dependencies.
 <!-- SLOC, ofc, but it doesn't sound as smooth -->
+</p>
 
 Please [submit PRs / create issues](https://github.com/kiprasmel/turbo-schedule/tree/master/use-fetched-state) if (simple) functionality missing.
 
@@ -16,14 +22,16 @@ interface IUser {
     id: number;
 }
 
-const useFetchedUser = createUseFetchedState<IUser, number>(
+const getDefaultUser = (): IUser => ({ name: "", id: -1 });
+
+const useFetchedUser = createUseFetchedState<{ user?: IUser }, IUser, number>(
     (id) => `/api/v1/user/${id}` /** can also be just a string */,
-    (data) => data.user
+    (data) => data.user ?? getDefaultUser()
 );
 
 const User: FC = () => {
     const [user, setUser, isLoading] = useFetchedUser(
-        { name: "", id: -1 } /**  initial state */,
+        () => getDefaultUser() /** (get) initial state */,
         [] /** dependencies to trigger re-fetch */,
         {
             /** option(s) for the URL creator: */
@@ -33,6 +41,7 @@ const User: FC = () => {
             shouldFetch: (ctx) => true /** true by default, but controllable here */,
             onError: (e, ctx) => console.error(e),
             onSuccess: (u, ctx) => console.info(`fetched user ${u.name}`),
+            onSetState: async (ctx) => {} /** potentially up-sync the new state to the API */
         }
     );
 

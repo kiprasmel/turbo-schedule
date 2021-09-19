@@ -1,4 +1,9 @@
 dist
-*.off
+**/dist
 client/build
+
+*.off
+**/*.off
+
 node_modules
+**/node_modules
