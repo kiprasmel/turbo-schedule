@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.30.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.30.1...v2.30.2) (2021-09-19)
+
+
+### Bug Fixes
+
+* **common:** add `directory` & `homepage` @ package.json ([2fc9857](https://github.com/kiprasmel/turbo-schedule/commit/2fc98579ae9cd428ae82157cef4c156c6c3d2ddb))
+
+
+
+
+
 ## [2.30.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.30.0...v2.30.1) (2021-09-19)
 
 **Note:** Version bump only for package @turbo-schedule/common
