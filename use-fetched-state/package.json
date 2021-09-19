@@ -7,6 +7,9 @@
 	"author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
 	"license": "MIT",
 	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"dev": "tsc -b -w -v",
 		"build": "tsc -b -v",
