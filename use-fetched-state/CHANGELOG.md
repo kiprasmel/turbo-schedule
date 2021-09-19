@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.29.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.28.3...v2.29.0) (2021-09-19)
+
+
+### Bug Fixes
+
+* **client:** use `use-fetched-state` @ tsconfig ([b3566fc](https://github.com/kiprasmel/turbo-schedule/commit/b3566fcccc7ef35a130b6339b7392b3ccaba7a3a))
+* **use-fetched-state:** fix `shouldFetch` checks ([9510b1f](https://github.com/kiprasmel/turbo-schedule/commit/9510b1fb8f96aa04bf72f29946d8b09a9b03f034))
+* **use-fetched-state:** move fetchArgs & handlers into useEffect ([76eee8e](https://github.com/kiprasmel/turbo-schedule/commit/76eee8eb2a8af91a1d1ecf9ba5bb1f6899d9508f))
+* **use-fetched-state:** use spaces @ README because npm tabsize=8 lmao ([913e413](https://github.com/kiprasmel/turbo-schedule/commit/913e4138a1d3859d125603bc72b165e282e957e6))
+
+
+### Features
+
+* improve use-fetched-state ([b5bfe7b](https://github.com/kiprasmel/turbo-schedule/commit/b5bfe7bea6b4897528877e56ac9f8c16b47b3a09))
+* **use-fetched-state:** `onManualSetState` handler! 🔥 ([d434966](https://github.com/kiprasmel/turbo-schedule/commit/d434966265cdc8a33355b11df1555357abe28180))
+* **use-fetched-state:** clean up & export types, set defaults properly ([a1f4a5e](https://github.com/kiprasmel/turbo-schedule/commit/a1f4a5ed94037951449bf792a7184caa8367b670))
+
+
+
+
+
 ## [2.28.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.28.2...v2.28.3) (2021-09-07)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.29.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.28.3...v2.29.0) (2021-09-19)
+
+
+### Features
+
+* improve use-fetched-state ([b5bfe7b](https://github.com/kiprasmel/turbo-schedule/commit/b5bfe7bea6b4897528877e56ac9f8c16b47b3a09))
+
+
+
+
+
 ## [2.28.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.28.1...v2.28.2) (2021-09-07)
 
 

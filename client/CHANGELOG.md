@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.29.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.28.3...v2.29.0) (2021-09-19)
+
+
+### Bug Fixes
+
+* **client:** stupid typescript error fix ([b939d34](https://github.com/kiprasmel/turbo-schedule/commit/b939d3464e23339b5960ac24cec356f2643cedf7))
+* **client:** use `use-fetched-state` @ tsconfig ([b3566fc](https://github.com/kiprasmel/turbo-schedule/commit/b3566fcccc7ef35a130b6339b7392b3ccaba7a3a))
+
+
+### Features
+
+* improve use-fetched-state ([b5bfe7b](https://github.com/kiprasmel/turbo-schedule/commit/b5bfe7bea6b4897528877e56ac9f8c16b47b3a09))
+
+
+
+
+
 ## [2.28.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.28.2...v2.28.3) (2021-09-07)
 
 **Note:** Version bump only for package @turbo-schedule/client
