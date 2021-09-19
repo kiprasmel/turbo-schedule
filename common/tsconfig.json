@@ -3,7 +3,8 @@
 	"compilerOptions": {
 		"rootDir": "./src",
 		"outDir": "dist",
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"module": "CommonJS"
 	},
 	"include": [
 		"src" //
