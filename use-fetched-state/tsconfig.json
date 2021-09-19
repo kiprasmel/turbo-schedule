@@ -6,7 +6,6 @@
 		} //
 	],
 	"compilerOptions": {
-		"composite": false /** override the included tsconfig */,
 		"baseUrl": "src",
 		"outDir": "dist",
 		"module": "CommonJS",
