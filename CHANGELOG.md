@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.30.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.29.0...v2.30.0) (2021-09-19)
+
+
+### Features
+
+* **common:** publish on npm as `@turbo-schedule/common`! 🎉 ([7c088c5](https://github.com/kiprasmel/turbo-schedule/commit/7c088c5059e6abfad612dd9a970f53364efbe098))
+
+
+
+
+
 # [2.29.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.28.3...v2.29.0) (2021-09-19)
 
 

@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/client",
-	"version": "2.29.0",
+	"version": "2.30.0",
 	"description": "",
 	"author": "Kipras Melnikovas <dev@kipras.org> (https://kipras.org)",
 	"license": "",
@@ -14,7 +14,7 @@
 		"eject": "react-scripts eject"
 	},
 	"dependencies": {
-		"@turbo-schedule/common": "^2.29.0",
+		"@turbo-schedule/common": "^2.30.0",
 		"@types/history": "4.7.3",
 		"@types/lodash": "4.14.147",
 		"@types/node": "12.12.7",
@@ -34,7 +34,7 @@
 		"react-modal": "3.11.1",
 		"react-router-dom": "5.1.2",
 		"react-scripts": "3.3.0",
-		"use-fetched-state": "^2.29.0",
+		"use-fetched-state": "^2.30.0",
 		"xstate": "4.10.0"
 	},
 	"devDependencies": {
