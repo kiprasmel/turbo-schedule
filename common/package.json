@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/common",
-	"version": "2.30.2",
+	"version": "2.30.3",
 	"description": "",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",

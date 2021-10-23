@@ -1,7 +1,7 @@
 {
 	"name": "use-fetched-state",
 	"description": "A simple yet convenient `fetch` + `useState` wrapper. 100% TS. Less than 100 LOC. 0 dependencies.",
-	"version": "2.30.2",
+	"version": "2.30.3",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
@@ -19,7 +19,7 @@
 		"dist"
 	],
 	"devDependencies": {
-		"@turbo-schedule/common": "^2.30.2",
+		"@turbo-schedule/common": "^2.30.3",
 		"typescript": "^4.4.2"
 	},
 	"peerDependencies": {

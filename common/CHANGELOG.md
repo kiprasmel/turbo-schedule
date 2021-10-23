@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.30.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.30.2...v2.30.3) (2021-10-23)
+
+
+### Bug Fixes
+
+* update upstream's website URL we scrape from ([2bbd5fe](https://github.com/kiprasmel/turbo-schedule/commit/2bbd5fed1036c78211eae10dbf575cbc445627cc))
+
+
+
+
+
 ## [2.30.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.30.1...v2.30.2) (2021-09-19)
 
 
