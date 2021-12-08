@@ -3,7 +3,7 @@
 import React, { Reducer, useReducer } from "react";
 import { css, cx } from "emotion";
 
-import { getDefaultHealth } from "@turbo-schedule/common";
+import { getDefaultHealth, noop } from "@turbo-schedule/common";
 
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useTranslation } from "../../i18n/useTranslation";
@@ -13,6 +13,7 @@ import { Divider } from "../studentSchedule/Divider";
 
 export function StickyWarningAboutOutdatedData(): ReturnType<React.FC> {
 	const [health, _setH, isLoading] = useFetchHealth(getDefaultHealth(), []);
+	noop(_setH);
 	const date = new Date(health.scrapeInfo.timeEndISO);
 
 	const [hasAcknowledgedWarning, setHasAcknowledgedWarning] = useLocalStorage(
