@@ -45,6 +45,7 @@ interface IUser {
 const getDefaultUser = (): IUser => ({ name: "", id: -1 });
 
 // TODO FIXME (works just fine in CI tho)
+// @ts-expect-error
 const useFetchedUser = createUseFetchedState<{ user?: IUser }, IUser, number>(
 	(id) => `/api/v1/user/${id}` /** can also be just a string */,
 	(data) => data.user ?? getDefaultUser()
