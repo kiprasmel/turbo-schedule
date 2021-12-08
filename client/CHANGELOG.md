@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.31.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.30.3...v2.31.0) (2021-12-08)
+
+
+### Features
+
+* **client:** create & show `StickyWarningAboutOutdatedData` to inform about current issues ([bf35ad4](https://github.com/kiprasmel/turbo-schedule/commit/bf35ad4995a980f06936254808abbbc8d064e7f3))
+
+
+
+
+
 ## [2.30.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.30.2...v2.30.3) (2021-10-23)
 
 **Note:** Version bump only for package @turbo-schedule/client

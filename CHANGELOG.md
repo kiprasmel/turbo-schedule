@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.31.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.30.3...v2.31.0) (2021-12-08)
+
+
+### Bug Fixes
+
+* **use-fetched-state:** set `isLoading` to `true` by default, to avoid layout flashing ([c02e7ea](https://github.com/kiprasmel/turbo-schedule/commit/c02e7ea0ef48e40a57781b185f744fb12aeeb962))
+
+
+### Features
+
+* **client:** create & show `StickyWarningAboutOutdatedData` to inform about current issues ([bf35ad4](https://github.com/kiprasmel/turbo-schedule/commit/bf35ad4995a980f06936254808abbbc8d064e7f3))
+* create /api/v1/health endpoint (more like info) ([f7ff0ca](https://github.com/kiprasmel/turbo-schedule/commit/f7ff0caa1f5ca10569619bd25330d9aad895eb5c))
+
+
+
+
+
 ## [2.30.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.30.2...v2.30.3) (2021-10-23)
 
 

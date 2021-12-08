@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.31.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.30.3...v2.31.0) (2021-12-08)
+
+
+### Features
+
+* create /api/v1/health endpoint (more like info) ([f7ff0ca](https://github.com/kiprasmel/turbo-schedule/commit/f7ff0caa1f5ca10569619bd25330d9aad895eb5c))
+
+
+
+
+
 ## [2.30.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.30.2...v2.30.3) (2021-10-23)
 
 **Note:** Version bump only for package @turbo-schedule/server
