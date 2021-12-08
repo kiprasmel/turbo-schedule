@@ -18,7 +18,7 @@ interface Props {
 	search?: SearchProps;
 }
 
-export const Navbar = forwardRef<HTMLElement, Props>((props, ref) => {
+export const Navbar = forwardRef<HTMLElement, Props>(function Navbar(props, ref) {
 	const isDesktop = window.innerWidth >= 1024; /** TODO FIXME WWidth */
 
 	const { search } = props;
@@ -43,7 +43,7 @@ export const Navbar = forwardRef<HTMLElement, Props>((props, ref) => {
 	return NavbarElement;
 });
 
-const NavbarDesktop = forwardRef<HTMLElement, { SearchElement?: JSX.Element }>((props, ref) => {
+const NavbarDesktop = forwardRef<HTMLElement, { SearchElement?: JSX.Element }>(function NavbarDesktop(props, ref) {
 	const { SearchElement } = props;
 
 	const t = useTranslation();

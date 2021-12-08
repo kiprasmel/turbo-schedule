@@ -55,7 +55,10 @@ const menuMachine = createMachine({
 });
 
 /** TODO FIXME no scrolling behind the scenes */
-export const NavbarMobile = forwardRef<HTMLElement, { SearchElement?: JSX.Element }>(({ SearchElement }, ref) => {
+export const NavbarMobile = forwardRef<HTMLElement, { SearchElement?: JSX.Element }>(function NavbarMobile(
+	{ SearchElement },
+	ref
+) {
 	const t = useTranslation();
 
 	const menuElementRef = useRef<HTMLElement>(null);
