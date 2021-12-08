@@ -1,4 +1,4 @@
-import { Availability, getDefaultParticipant, Participant } from "@turbo-schedule/common";
+import { Availability, getDefaultParticipant, Participant, Health } from "@turbo-schedule/common";
 import { createUseFetchedState } from "use-fetched-state";
 
 /**
@@ -51,3 +51,8 @@ export const useFetchJoinMailingList = createUseFetchedState<boolean>(
 // 	onSuccess: () => {},
 // 	onError: () => {},
 // });
+
+export const useFetchHealth = createUseFetchedState<{ health: Health }, Health>(
+	"/api/v1/health", //
+	(data) => data.health
+);

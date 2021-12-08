@@ -6,10 +6,13 @@ import { studentRouter } from "./student";
 import { teacherRouter } from "./teacher";
 import { roomRouter } from "./room";
 import { emailRouter } from "./email";
+import { healthRouter } from "./health";
 import { openAPIDocsJSONHandler, openAPIDocsHTMLHandler } from "./openAPIDocs";
 import { redirectToApiDocs } from "../../util/redirectToApiDocs";
 
 const router: Router = Router();
+
+router.use("/health", healthRouter);
 
 router.use("/participant", participantRouter);
 router.use("/class", classRouter);

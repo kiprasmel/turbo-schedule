@@ -1,4 +1,6 @@
 export interface Dictionary {
+	"intl-locale-string": string;
+
 	"Turbo Schedule": string;
 	Schedule: string;
 	Statistics: string;
@@ -54,4 +56,11 @@ export interface Dictionary {
 	"(to) clear": string;
 	"See an example": string;
 	"Recently viewed (adj, mult)": string;
+	/** */
+	"outdated-data-warning: Attention! For yet unclear reasons, turbo schedule fails to update (it fails to collect data from the original schedule).": string;
+	"outdated-data-warning: Thus, it's important to know that the schedule you see here might be outdated.": string;
+	"outdated-data-warning: turbo schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule. This is exactly the part that doesn't work properly right now.": string;
+	"outdated-data-warning: I understand.": string;
+	"outdated-data-warning: Last time the data collection succeeded: ": string;
+	// "outdated-data-warning: ": string;
 }

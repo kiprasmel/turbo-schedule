@@ -105,9 +105,9 @@ export function createUseFetchedState<
 		= {}
 	): UseFetchedStateReturn<State> {
 		const defaultValue: React.MutableRefObject<InitialData> = useRef(defaultValueOrGetIt instanceof Function ? defaultValueOrGetIt() : defaultValueOrGetIt);
-		
+
 		const [state, setState__internal] = useState<State>(defaultValue.current as State); /** TODO FIXME */
-		const [isLoading, setIsLoading] = useState<boolean>(false);
+		const [isLoading, setIsLoading] = useState<boolean>(true);
 
 		const setStateManual: Dispatch<SetStateAction<State>> = useCallback((newStateOrFn: SetStateAction<State>): void => {
 			setState__internal((currState): State => {

@@ -11,6 +11,7 @@ const weekdays: Array<string> = [
 ];
 
 export const en: Dictionary = {
+	"intl-locale-string": "en-US",
 	"Turbo Schedule": "Turbo Schedule",
 	Schedule: "Schedule",
 	Statistics: "Statistics",
@@ -70,4 +71,19 @@ export const en: Dictionary = {
 	"(to) clear": "clear",
 	"See an example": "See an example",
 	"Recently viewed (adj, mult)": "Recently viewed",
+	/**
+	 *
+	 */
+	"outdated-data-warning: Attention! For yet unclear reasons, turbo schedule fails to update (it fails to collect data from the original schedule).":
+		"Attention! For yet unclear reasons, Turbo Schedule fails to update (it fails to collect data from the original schedule).",
+
+	"outdated-data-warning: Thus, it's important to know that the schedule you see here might be outdated.":
+		"Thus, it's important to know that the schedule you see here might be outdated.",
+
+	"outdated-data-warning: turbo schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule. This is exactly the part that doesn't work properly right now.":
+		"Turbo Schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule. This is exactly the part that doesn't work properly right now.",
+
+	"outdated-data-warning: I understand.": "I understand.",
+
+	"outdated-data-warning: Last time the data collection succeeded: ": "Last time the data collection succeeded: ",
 };

@@ -18,6 +18,7 @@ import { useTranslation } from "../../i18n/useTranslation";
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import { ReactComponent as More } from "../../assets/more.svg";
 import { LangSelect } from "./LangSelect";
+import { StickyWarningAboutOutdatedData } from "./StickyWarningAboutOutdatedData";
 
 const menuMachine = createMachine({
 	id: "menu",
@@ -55,7 +56,13 @@ const menuMachine = createMachine({
 });
 
 /** TODO FIXME no scrolling behind the scenes */
-export const NavbarMobile = forwardRef<HTMLElement, { SearchElement?: JSX.Element }>(({ SearchElement }, ref) => {
+export const NavbarMobile = forwardRef<
+	HTMLElement,
+	{
+		SearchElement?: JSX.Element; //
+		disableWarningAboutOutdatedData?: boolean;
+	}
+>(function NavbarMobile({ SearchElement, ...props }, ref) {
 	const t = useTranslation();
 
 	const menuElementRef = useRef<HTMLElement>(null);
@@ -99,7 +106,7 @@ export const NavbarMobile = forwardRef<HTMLElement, { SearchElement?: JSX.Elemen
 	const nextMenuEvent = isOpenOrOpening ? "CLOSE" : "OPEN";
 
 	return (
-		<>
+		<div>
 			{/* TODO FIXME HEIGHT */}
 			{/* {isOpenOrOpening && (
 				<div
@@ -258,6 +265,8 @@ export const NavbarMobile = forwardRef<HTMLElement, { SearchElement?: JSX.Elemen
 					</a>
 				</footer>
 			</nav>
-		</>
+
+			{props.disableWarningAboutOutdatedData ? null : <StickyWarningAboutOutdatedData />}
+		</div>
 	);
 });

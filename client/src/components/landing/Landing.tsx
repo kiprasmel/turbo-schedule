@@ -51,7 +51,7 @@ const Landing = () => {
 					min-height: 100vh;
 				`}
 			>
-				<Navbar />
+				<Navbar disableWarningAboutOutdatedData />
 
 				<div
 					className={css`
