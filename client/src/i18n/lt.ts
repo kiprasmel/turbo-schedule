@@ -11,6 +11,7 @@ const weekdays: Array<string> = [
 ];
 
 export const lt: Dictionary = {
+	"intl-locale-string": "lt-LT",
 	"Turbo Schedule": "Turbo Tvarkaraštis",
 	Schedule: "Tvarkaraštis",
 	Statistics: "Statistika",
@@ -83,4 +84,20 @@ export const lt: Dictionary = {
 	"(to) clear": "išvalyti",
 	"See an example": "Pamatyti pavyzdį",
 	"Recently viewed (adj, mult)": "Neseniai peržiūrėti",
+	/**
+	 *
+	 */
+	// "outdated-data-warning: Attention! For yet unclear reasons, turbo schedule fails to update (it fails to collect data from the original schedule).": `Dėmesio! Dėl kol kas neaiškių priežasčių, <i>turbo tvarkaraščio</i> atnaujinti nepavyksta (duomenų surinkimas iš originalaus tvarkaraščio "feilina").`,
+	"outdated-data-warning: Attention! For yet unclear reasons, turbo schedule fails to update (it fails to collect data from the original schedule).": `Dėmesio! Dėl kol kas neaiškių priežasčių, Turbo Tvarkaraščio atnaujinti nepavyksta (duomenų surinkimas iš originalaus tvarkaraščio "feilina").`,
+
+	"outdated-data-warning: Thus, it's important to know that the schedule you see here might be outdated.":
+		"Todėl svarbu žinoti, jog čia matomas tvarkaraštis gali būti pasenęs.",
+
+	// "outdated-data-warning: turbo schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule. This is exactly the part that doesn't work properly right now.": `<i>turbo tvarkaraštis</i> kiekvieną minutę tikrina, ar originaliame tvarkaraštyje yra pakeitimų. Jeigu yra - bando iš naujo surinkti visą tvarkaraštį. Būtent surinkimas šiuo metu ir neveikia.`,
+	"outdated-data-warning: turbo schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule. This is exactly the part that doesn't work properly right now.":
+		"Turbo Tvarkaraštis kiekvieną minutę tikrina, ar originaliame tvarkaraštyje yra pakeitimų. Jeigu yra - bando iš naujo surinkti visą tvarkaraštį. Būtent surinkimas šiuo metu ir neveikia.",
+
+	"outdated-data-warning: I understand.": "Supratau.",
+
+	"outdated-data-warning: Last time the data collection succeeded: ": "Paskutinį kartą duomenų surinkimas pavyko: ",
 };

@@ -14,8 +14,11 @@ import { NavbarMobile } from "./NavbarMobile";
 import { CurrentLangContext } from "../currentLangContext/currentLangContext";
 import { BadgeBeta } from "../../common/Badge";
 
+import { StickyWarningAboutOutdatedData } from "./StickyWarningAboutOutdatedData";
+
 interface Props {
 	search?: SearchProps;
+	disableWarningAboutOutdatedData?: boolean;
 }
 
 export const Navbar = forwardRef<HTMLElement, Props>(function Navbar(props, ref) {
@@ -43,73 +46,83 @@ export const Navbar = forwardRef<HTMLElement, Props>(function Navbar(props, ref)
 	return NavbarElement;
 });
 
-const NavbarDesktop = forwardRef<HTMLElement, { SearchElement?: JSX.Element }>(function NavbarDesktop(props, ref) {
+const NavbarDesktop = forwardRef<
+	HTMLElement,
+	{
+		SearchElement?: JSX.Element; //
+		disableWarningAboutOutdatedData?: boolean;
+	}
+>(function NavbarDesktop(props, ref) {
 	const { SearchElement } = props;
 
 	const t = useTranslation();
 
 	return (
-		<nav
-			ref={ref}
-			className={css`
-				width: 100%;
-
-				max-height: 6rem;
-				height: 6rem;
-				font-size: 1.25em;
-
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-				justify-content: end;
-
-				padding-left: 2em;
-				padding-right: 2em;
-
-				& > * + * {
-					margin-left: 2em;
-				}
-			`}
-		>
-			<h1
+		<>
+			<nav
+				ref={ref}
 				className={css`
-					display: inline-block;
-				`}
-			>
-				<Link to="/">{t("Turbo Schedule")}</Link>
-				{/* <Link to="/">{window.innerWidth >= 1024 ? t("Turbo Schedule") : <Logo />}</Link> */}
-			</h1>
+					width: 100%;
 
-			{SearchElement}
-
-			<ul
-				className={css`
-					flex-grow: 1;
+					max-height: 6rem;
+					height: 6rem;
+					font-size: 1.25em;
 
 					display: flex;
+					flex-direction: row;
 					align-items: center;
-					justify-content: center;
+					justify-content: end;
+
+					padding-left: 2em;
+					padding-right: 2em;
 
 					& > * + * {
 						margin-left: 2em;
 					}
-
-					font-size: 1.2em;
 				`}
 			>
-				<NavbarLinksOne />
-
-				<NavbarLinksTwo
+				<h1
 					className={css`
-						margin-left: auto;
+						display: inline-block;
 					`}
-				/>
+				>
+					<Link to="/">{t("Turbo Schedule")}</Link>
+					{/* <Link to="/">{window.innerWidth >= 1024 ? t("Turbo Schedule") : <Logo />}</Link> */}
+				</h1>
 
-				<li>
-					<LangSelect />
-				</li>
-			</ul>
-		</nav>
+				{SearchElement}
+
+				<ul
+					className={css`
+						flex-grow: 1;
+
+						display: flex;
+						align-items: center;
+						justify-content: center;
+
+						& > * + * {
+							margin-left: 2em;
+						}
+
+						font-size: 1.2em;
+					`}
+				>
+					<NavbarLinksOne />
+
+					<NavbarLinksTwo
+						className={css`
+							margin-left: auto;
+						`}
+					/>
+
+					<li>
+						<LangSelect />
+					</li>
+				</ul>
+			</nav>
+
+			{props.disableWarningAboutOutdatedData ? null : <StickyWarningAboutOutdatedData />}
+		</>
 	);
 });
 
