@@ -56,7 +56,8 @@ export function StickyWarningAboutOutdatedData(): ReturnType<React.FC> {
 	/**
 	 * actually does "floor" since the comparison is reversed.
 	 */
-	let ago = date.getTime() - new Date().getTime();
+	const agoMs = new Date().getTime() - date.getTime();
+	let ago: number = -agoMs;
 
 	ago =
 		intervalOfTimeAgo === "minute"
@@ -87,7 +88,21 @@ export function StickyWarningAboutOutdatedData(): ReturnType<React.FC> {
 				css`
 					position: sticky;
 					width: 100%;
-					background-color: hsl(45, 100%, 50%);
+					background-color: ${!agoMs
+						? "hsl(0, 10%, 90%)"
+						: /**
+						 *
+						 * if > 1 day passed,
+						 * +1h for buffer for confirming
+						 * since we collect every 24h,
+						 *
+						 * show orange (warning);
+						 * otherwise, show light blue (info).
+						 *
+						 */
+						agoMs >= 1000 * 60 * 60 * (24 + 1)
+						? "hsl(45, 100%, 50%)"
+						: "hsl(210, 100%, 90%)"};
 				`,
 				{
 					[css`
