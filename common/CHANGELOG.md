@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.31.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.31.0...v2.31.1) (2021-12-29)
+
+
+### Bug Fixes
+
+* pool promises (lazily) @ scraper to avoid overloading upstream & succeed at scraping, even if takes longer ([caff790](https://github.com/kiprasmel/turbo-schedule/commit/caff790b6b23c146f74caaceb0cccc46e1dd37bc))
+
+
+
+
+
 # [2.31.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.30.3...v2.31.0) (2021-12-08)
 
 

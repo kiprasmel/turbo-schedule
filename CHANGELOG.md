@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.31.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.31.0...v2.31.1) (2021-12-29)
+
+
+### Bug Fixes
+
+* pool promises (lazily) @ scraper to avoid overloading upstream & succeed at scraping, even if takes longer ([caff790](https://github.com/kiprasmel/turbo-schedule/commit/caff790b6b23c146f74caaceb0cccc46e1dd37bc))
+* show "outdated data" warning as light blue if it's less than 1 day ([551ac2b](https://github.com/kiprasmel/turbo-schedule/commit/551ac2bcb01261cfa1d779dd36b0a23f29e7c49d))
+
+
+
+
+
 # [2.31.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.30.3...v2.31.0) (2021-12-08)
 
 
