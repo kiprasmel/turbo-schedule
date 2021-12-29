@@ -9,6 +9,9 @@ import {
 	Participant,
 	ParticipantLabel,
 	makeLessonsUnique,
+	NonUniqueLesson,
+	PromiseCreator,
+	poolPromises,
 } from "@turbo-schedule/common";
 import { DbSchema, setDbStateAndBackupCurrentOne } from "@turbo-schedule/database";
 
@@ -94,19 +97,21 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		 */
 		const participants: Participant[] = participants2D.flat();
 
-		const extractNonUniqueLessons = () =>
-			participants
-				.map(
-					async (p) =>
-						await extractLessonsFromIndividualHtmlPage(p.originalScheduleURI, {
-							text: p.text,
-							isActive: true,
-							labels: p.labels,
-						})
-				)
-				.flat();
+		const nonUniqueLessonsExtractors: PromiseCreator<NonUniqueLesson[]>[] = participants
+			.map((p) => () =>
+				extractLessonsFromIndividualHtmlPage(p.originalScheduleURI, {
+					text: p.text,
+					isActive: true,
+					labels: p.labels,
+				})
+			)
+			.flat();
 
-		const nonUniqueLessons = (await Promise.all(extractNonUniqueLessons())).flat();
+		const maxRequestsPerPool: number = Number(process.env.MAX_REQUESTS_PER_POOL) || 5;
+
+		const nonUniqueLessons = await poolPromises(1000, maxRequestsPerPool, nonUniqueLessonsExtractors).then((xs) =>
+			xs.flat()
+		);
 
 		const lessons: Lesson[] = await makeLessonsUnique(nonUniqueLessons);
 
@@ -155,6 +160,6 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		return;
 	} catch (err) {
 		console.error("\nError! \n==> `@turbo-schedule/scraper`\n -> function `scrape`");
-		throw new Error(err as any) as any;
+		throw err;
 	}
 };
