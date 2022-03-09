@@ -80,10 +80,16 @@ export const en: Dictionary = {
 	"outdated-data-warning: Thus, it's important to know that the schedule you see here might be outdated.":
 		"Thus, it's important to know that the schedule you see here might be outdated.",
 
-	"outdated-data-warning: turbo schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule. This is exactly the part that doesn't work properly right now.":
-		"Turbo Schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule. This is exactly the part that doesn't work properly right now.",
+	"outdated-data-warning: Turbo Schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule.":
+		"Turbo Schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule. This usually takes a few minutes.",
+
+	"outdated-data-warning: Additionally, Turbo Schedule collects data of the whole schedule every 24 hours.":
+		"Additionally, Turbo Schedule collects data of the whole schedule every 24 hours.",
+
+	"outdated-data-warning: This collection of data is what doesn't work properly right now.":
+		"This collection of data is what doesn't work properly right now.",
 
 	"outdated-data-warning: I understand.": "I understand.",
 
-	"outdated-data-warning: Last time the data collection succeeded: ": "Last time the data collection succeeded: ",
+	"outdated-data-warning: Last time the data collection happened: ": "Last time the data collection happened: ",
 };

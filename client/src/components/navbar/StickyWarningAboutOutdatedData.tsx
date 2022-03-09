@@ -1,9 +1,9 @@
 /* eslint-disable indent */
 
-import React, { Reducer, useReducer } from "react";
+import React, { FC, Reducer, useReducer } from "react";
 import { css, cx } from "emotion";
 
-import { getDefaultHealth, noop } from "@turbo-schedule/common";
+import { getDefaultHealth, Health } from "@turbo-schedule/common";
 
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useTranslation } from "../../i18n/useTranslation";
@@ -11,76 +11,106 @@ import { useFetchHealth } from "../../hooks/useFetchers";
 import { useWindow } from "../../hooks/useWindow";
 import { Divider } from "../studentSchedule/Divider";
 
-export function StickyWarningAboutOutdatedData(): ReturnType<React.FC> {
+export const StickyWarningAboutOutdatedData: FC = () => {
+	// eslint-disable-next-line no-unused-vars
 	const [health, _setH, isLoading] = useFetchHealth(getDefaultHealth(), []);
-	noop(_setH);
-	const date = new Date(health.scrapeInfo.timeEndISO);
 
-	const [hasAcknowledgedWarning, setHasAcknowledgedWarning] = useLocalStorage(
-		"turbo-schedule.outdated-data.ack", //
-		false
-	);
+	return isLoading ? null : <StickyWarningAboutOutdatedDataPure health={health} />;
+};
 
+type StickyWarningAboutOutdateDataProps = {
+	health: Health;
+};
+
+export function StickyWarningAboutOutdatedDataPure({ health }: StickyWarningAboutOutdateDataProps): ReturnType<FC> {
 	const { desktop } = useWindow();
 
 	const t = useTranslation();
 
 	/**
-	 * BEGIN formatting
+	 * [[you'll know it when it's right]]
 	 */
-	const [defaultIntervalOfTimeAgo, setDefaultIntervalOfTimeAgo] = useLocalStorage<Intl.RelativeTimeFormatUnit>(
-		"turbo-schedule.outdated-data.ago-interval",
-		"day"
+	enum AckLevel {
+		NOT_WARNING = -2,
+		NOT_INFO = -1,
+		NONE = 0,
+		INFO = 1,
+		WARNING = 2,
+	}
+	const [highestLevelUserHasEverAcknowledged, setHighestLevelUserHasEverAcknowledged] = useLocalStorage<AckLevel>(
+		"turbo-schedule.outdated-data.highest-level-user-has-ever-acknowledged", //
+		AckLevel.NONE
+	);
+	const acknowledge = (): void =>
+		setHighestLevelUserHasEverAcknowledged(
+			highestLevelUserHasEverAcknowledged < AckLevel.NONE
+				? -highestLevelUserHasEverAcknowledged // bring it back
+				: isDataConsideredOutdated
+				? AckLevel.WARNING
+				: AckLevel.INFO
+		);
+	const unAcknowledge = (): void => setHighestLevelUserHasEverAcknowledged(-highestLevelUserHasEverAcknowledged);
+	const currentlyNotAcknowledged = {
+		warning: highestLevelUserHasEverAcknowledged < AckLevel.WARNING,
+		info: highestLevelUserHasEverAcknowledged < AckLevel.INFO,
+	} as const;
+
+	/**
+	 * dates, timings & stuff
+	 */
+	const scrapeEndDate = new Date(health.scrapeInfo.timeEndISO);
+
+	const {
+		ago,
+		isDataConsideredOutdated, //
+		intervalOfTimeAgo,
+		nextIntervalOfTimeAgo,
+	} = useTimeAgo(scrapeEndDate);
+
+	const shouldShowCardThatNeedsAcknowledgement: boolean = isDataConsideredOutdated
+		? currentlyNotAcknowledged.warning
+		: currentlyNotAcknowledged.info;
+
+	const warningContent = (
+		<>
+			<p>
+				{t(
+					"outdated-data-warning: Attention! For yet unclear reasons, turbo schedule fails to update (it fails to collect data from the original schedule)."
+				)}
+			</p>
+			<p>
+				{t(
+					"outdated-data-warning: Thus, it's important to know that the schedule you see here might be outdated."
+				)}
+			</p>
+			<p>
+				{t(
+					"outdated-data-warning: Turbo Schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule."
+				)}
+			</p>
+			<p>
+				{t(
+					"outdated-data-warning: Additionally, Turbo Schedule collects data of the whole schedule every 24 hours."
+				)}
+			</p>
+			<p>{t("outdated-data-warning: This collection of data is what doesn't work properly right now.")}</p>
+		</>
 	);
 
-	const [intervalOfTimeAgo, nextIntervalOfTimeAgo] = useReducer<Reducer<Intl.RelativeTimeFormatUnit, void>>(
-		(curr) => {
-			const cycle = {
-				day: "hour",
-				hour: "minute",
-				minute: "day",
-			};
-
-			const ret = cycle[curr] || "day";
-
-			setDefaultIntervalOfTimeAgo(ret);
-			return ret;
-		},
-		defaultIntervalOfTimeAgo
+	const infoContent = (
+		<>
+			<p>
+				{t(
+					"outdated-data-warning: Turbo Schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule."
+				)}
+			</p>
+			<p>
+				{t(
+					"outdated-data-warning: Additionally, Turbo Schedule collects data of the whole schedule every 24 hours."
+				)}
+			</p>
+		</>
 	);
-
-	const toMin = (x: number): number => x / 1000 / 60;
-	const toH = (x: number): number => x / 60;
-	const toDay = (x: number): number => x / 24;
-
-	/**
-	 * actually does "floor" since the comparison is reversed.
-	 */
-	const agoMs = new Date().getTime() - date.getTime();
-	let ago: number = -agoMs;
-
-	ago =
-		intervalOfTimeAgo === "minute"
-			? [ago] //
-					.map(toMin)[0]
-			: intervalOfTimeAgo === "hour"
-			? [ago] //
-					.map(toMin)
-					.map(toH)[0]
-			: [ago] //
-					.map(toMin)
-					.map(toH)
-					.map(toDay)[0];
-
-	/**
-	 * -0.1 to avoid ever having an "after", rather than "before"
-	 */
-	ago = ago - 0.1;
-
-	ago = Math.ceil(ago);
-	/**
-	 * END formatting
-	 */
 
 	return (
 		<div
@@ -88,7 +118,7 @@ export function StickyWarningAboutOutdatedData(): ReturnType<React.FC> {
 				css`
 					position: sticky;
 					width: 100%;
-					background-color: ${!agoMs
+					background-color: ${Number.isNaN(ago)
 						? "hsl(0, 10%, 90%)"
 						: /**
 						 *
@@ -100,14 +130,14 @@ export function StickyWarningAboutOutdatedData(): ReturnType<React.FC> {
 						 * otherwise, show light blue (info).
 						 *
 						 */
-						agoMs >= 1000 * 60 * 60 * (24 + 1)
+						isDataConsideredOutdated
 						? "hsl(45, 100%, 50%)"
 						: "hsl(210, 100%, 90%)"};
 				`,
 				{
 					[css`
 						padding: 0.5rem;
-					`]: !hasAcknowledgedWarning || !isLoading,
+					`]: shouldShowCardThatNeedsAcknowledgement,
 				}
 			)}
 		>
@@ -119,38 +149,16 @@ export function StickyWarningAboutOutdatedData(): ReturnType<React.FC> {
 						max-width: 65ch;
 
 						font-size: 1.5rem;
-					`,
-
-					{
-						[css`
-							max-width: 100%;
-						`]: hasAcknowledgedWarning,
-					}
+					`
 				)}
 			>
-				{hasAcknowledgedWarning ? null : (
+				{!shouldShowCardThatNeedsAcknowledgement ? null : (
 					<>
-						<p>
-							{t(
-								"outdated-data-warning: Attention! For yet unclear reasons, turbo schedule fails to update (it fails to collect data from the original schedule)."
-							)}
-						</p>
-						<p>
-							{t(
-								"outdated-data-warning: Thus, it's important to know that the schedule you see here might be outdated."
-							)}
-						</p>
-						<p>
-							{t(
-								"outdated-data-warning: turbo schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule. This is exactly the part that doesn't work properly right now."
-							)}
-						</p>
+						{isDataConsideredOutdated ? warningContent : infoContent}
 
 						<button
 							type="button"
-							onClick={() => {
-								setHasAcknowledgedWarning(true);
-							}}
+							onClick={acknowledge}
 							className={css`
 								font-size: 2rem;
 								margin-bottom: 1rem;
@@ -163,7 +171,7 @@ export function StickyWarningAboutOutdatedData(): ReturnType<React.FC> {
 				)}
 				{!health.isDataFake && (
 					<>
-						{hasAcknowledgedWarning ? null : <Divider />}
+						{!shouldShowCardThatNeedsAcknowledgement ? null : <Divider />}
 
 						<div
 							className={css`
@@ -185,7 +193,8 @@ export function StickyWarningAboutOutdatedData(): ReturnType<React.FC> {
 							<p
 								title={health.scrapeInfo.timeEndISO} //
 							>
-								{t("outdated-data-warning: Last time the data collection succeeded: ")}
+								{t("outdated-data-warning: Last time the data collection happened: ")}
+
 								<span>
 									{Intl.DateTimeFormat(t("intl-locale-string"), {
 										year: "numeric",
@@ -195,8 +204,9 @@ export function StickyWarningAboutOutdatedData(): ReturnType<React.FC> {
 										minute: "numeric",
 										second: "numeric",
 										timeZoneName: "short",
-									}).format(date)}
+									}).format(scrapeEndDate)}
 								</span>
+
 								<br />
 								<button
 									type="button"
@@ -217,15 +227,14 @@ export function StickyWarningAboutOutdatedData(): ReturnType<React.FC> {
 									)
 								</button>
 							</p>
-							{!hasAcknowledgedWarning ? null : (
+
+							{shouldShowCardThatNeedsAcknowledgement ? null : (
 								<>
 									<Divider />
 
 									<button
 										type="button"
-										onClick={() => {
-											setHasAcknowledgedWarning(false);
-										}}
+										onClick={unAcknowledge}
 										className={css`
 											font-size: 1.7rem;
 											margin-top: -1rem;
@@ -248,4 +257,72 @@ export function StickyWarningAboutOutdatedData(): ReturnType<React.FC> {
 			</div>
 		</div>
 	);
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function useTimeAgo(scrapeEndDate: Date) {
+	const agoMs = new Date().getTime() - scrapeEndDate.getTime();
+
+	/**
+	 * we scrape regularly at least once every 24h,
+	 * and here we add an additional 1 hour for the scraping to happen
+	 * before we consider the data outdated (usually it takes a few minutes max).
+	 */
+	const isDataConsideredOutdated = agoMs >= 1000 * 60 * 60 * (24 + 1); // TODO FIXME
+
+	const defaultValueOfTimeAgo: "day" | "hour" = isDataConsideredOutdated ? "day" : "hour";
+
+	const [defaultIntervalOfTimeAgo, setDefaultIntervalOfTimeAgo] = useLocalStorage<Intl.RelativeTimeFormatUnit>(
+		"turbo-schedule.outdated-data.ago-interval",
+		defaultValueOfTimeAgo
+	);
+
+	const [intervalOfTimeAgo, nextIntervalOfTimeAgo] = useReducer<Reducer<Intl.RelativeTimeFormatUnit, void>>(
+		(curr) => {
+			const cycle = {
+				day: "hour",
+				hour: "minute",
+				minute: "day",
+			};
+
+			const ret = cycle[curr] || defaultValueOfTimeAgo;
+
+			setDefaultIntervalOfTimeAgo(ret);
+			return ret;
+		},
+		defaultIntervalOfTimeAgo
+	);
+
+	const toMin = (x: number): number => x / 1000 / 60;
+	const toH = (x: number): number => x / 60;
+	const toDay = (x: number): number => x / 24;
+
+	let ago: number = -agoMs;
+
+	ago =
+		intervalOfTimeAgo === "minute"
+			? [ago] //
+					.map(toMin)[0]
+			: intervalOfTimeAgo === "hour"
+			? [ago] //
+					.map(toMin)
+					.map(toH)[0]
+			: [ago] //
+					.map(toMin)
+					.map(toH)
+					.map(toDay)[0];
+
+	/**
+	 * -0.1 to avoid ever having an "after", rather than "before"
+	 */
+	ago = ago - 0.1;
+
+	ago = Math.ceil(ago);
+
+	return {
+		ago,
+		isDataConsideredOutdated,
+		intervalOfTimeAgo,
+		nextIntervalOfTimeAgo,
+	} as const;
 }
