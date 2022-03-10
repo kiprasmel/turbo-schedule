@@ -122,6 +122,7 @@ export function StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless({
 				css`
 					position: sticky;
 					width: 100%;
+					padding: 0.5rem;
 					background-color: ${Number.isNaN(ago)
 						? "hsl(0, 10%, 90%)"
 						: /**
@@ -137,12 +138,7 @@ export function StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless({
 						isDataConsideredOutdated
 						? "hsl(45, 100%, 50%)"
 						: "hsl(210, 100%, 90%)"};
-				`,
-				{
-					[css`
-						padding: 0.5rem;
-					`]: shouldShowCardThatNeedsAcknowledgement,
-				}
+				`
 			)}
 		>
 			<div
@@ -196,6 +192,9 @@ export function StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless({
 						>
 							<p
 								title={health.scrapeInfo.timeEndISO} //
+								className={css`
+									margin-bottom: 0.8rem;
+								`}
 							>
 								{t("outdated-data-warning: Last time the data collection happened: ")}
 
@@ -241,7 +240,8 @@ export function StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless({
 										onClick={unAcknowledge}
 										className={css`
 											font-size: 1.7rem;
-											margin-top: -1rem;
+											margin-top: -0.5rem;
+											margin-bottom: 0.2rem;
 
 											${desktop} {
 												font-size: 2rem;
