@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.32.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.31.1...v2.32.0) (2022-03-10)
+
+
+### Features
+
+* improve sticky warning into warning or info, based on fresh vs outdated data ([3695387](https://github.com/kiprasmel/turbo-schedule/commit/369538732f6dc17a615de294c87453c0d911f813))
+
+
+
+
+
 ## [2.31.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.31.0...v2.31.1) (2021-12-29)
 
 
