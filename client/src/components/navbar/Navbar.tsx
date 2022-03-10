@@ -14,7 +14,7 @@ import { NavbarMobile } from "./NavbarMobile";
 import { CurrentLangContext } from "../currentLangContext/currentLangContext";
 import { BadgeBeta } from "../../common/Badge";
 
-import { StickyWarningAboutOutdatedData } from "./StickyWarningAboutOutdatedData";
+import { StickyInfoOrWarningAboutFreshOrOutdatedData } from "./StickyInfoOrWarningAboutFreshOrOutdatedData";
 
 interface Props {
 	search?: SearchProps;
@@ -121,7 +121,7 @@ const NavbarDesktop = forwardRef<
 				</ul>
 			</nav>
 
-			{props.disableWarningAboutOutdatedData ? null : <StickyWarningAboutOutdatedData />}
+			{props.disableWarningAboutOutdatedData ? null : <StickyInfoOrWarningAboutFreshOrOutdatedData />}
 		</>
 	);
 });

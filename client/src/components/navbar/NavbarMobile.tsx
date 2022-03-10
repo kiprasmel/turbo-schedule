@@ -18,7 +18,7 @@ import { useTranslation } from "../../i18n/useTranslation";
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import { ReactComponent as More } from "../../assets/more.svg";
 import { LangSelect } from "./LangSelect";
-import { StickyWarningAboutOutdatedData } from "./StickyWarningAboutOutdatedData";
+import { StickyInfoOrWarningAboutFreshOrOutdatedData } from "./StickyInfoOrWarningAboutFreshOrOutdatedData";
 
 const menuMachine = createMachine({
 	id: "menu",
@@ -266,7 +266,7 @@ export const NavbarMobile = forwardRef<
 				</footer>
 			</nav>
 
-			{props.disableWarningAboutOutdatedData ? null : <StickyWarningAboutOutdatedData />}
+			{props.disableWarningAboutOutdatedData ? null : <StickyInfoOrWarningAboutFreshOrOutdatedData />}
 		</div>
 	);
 });

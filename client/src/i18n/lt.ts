@@ -94,10 +94,16 @@ export const lt: Dictionary = {
 		"Todėl svarbu žinoti, jog čia matomas tvarkaraštis gali būti pasenęs.",
 
 	// "outdated-data-warning: turbo schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule. This is exactly the part that doesn't work properly right now.": `<i>turbo tvarkaraštis</i> kiekvieną minutę tikrina, ar originaliame tvarkaraštyje yra pakeitimų. Jeigu yra - bando iš naujo surinkti visą tvarkaraštį. Būtent surinkimas šiuo metu ir neveikia.`,
-	"outdated-data-warning: turbo schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule. This is exactly the part that doesn't work properly right now.":
-		"Turbo Tvarkaraštis kiekvieną minutę tikrina, ar originaliame tvarkaraštyje yra pakeitimų. Jeigu yra - bando iš naujo surinkti visą tvarkaraštį. Būtent surinkimas šiuo metu ir neveikia.",
+	"outdated-data-warning: Turbo Schedule checks every minute if the original schedule has any updates. If has, it tries to collect the whole schedule.":
+		"Turbo Tvarkaraštis kiekvieną minutę tikrina, ar originalus tvarkaraštis pasikeitė. Jeigu pasikeitė - iš kart bando atsinaujinti surinkdamas duomenis. Dažniausiai tai trunka kelias minutes.",
+
+	"outdated-data-warning: Additionally, Turbo Schedule collects data of the whole schedule every 24 hours.":
+		"Taip pat, nors ir originalus tvarkaraštis nepasikeičia, Turbo Tvarkaraštis reguliariai surenka duomenis kas 24 valandas.",
+
+	"outdated-data-warning: This collection of data is what doesn't work properly right now.":
+		"Būtent atsinaujinimas / originalaus tvarkaraščio duomenų surinkimas šiuo metu ir neveikia.",
 
 	"outdated-data-warning: I understand.": "Supratau.",
 
-	"outdated-data-warning: Last time the data collection succeeded: ": "Paskutinį kartą duomenų surinkimas pavyko: ",
+	"outdated-data-warning: Last time the data collection happened: ": "Paskutinį kartą duomenų surinkimas įvyko: ",
 };
