@@ -113,9 +113,14 @@ jobs:
             #
             - name: lerna changed && lerna version
               run: |
-                # print what changed
-
-                ./node_modules/.bin/lerna changed
+                ## print what changed
+                #
+                #check_what_changed() {
+                #  ./node_modules/.bin/lerna changed
+                #}
+                #
+                ## run, but prevent from exiting
+                #trap check_what_changed EXIT
 
                 # create new version (& push to github) (skips ci to avoid an infinite loop)
                 #
