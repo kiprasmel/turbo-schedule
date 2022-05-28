@@ -91,7 +91,7 @@ export function StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless({
 					),
 					t("outdated-data-warning: This collection of data is what doesn't work properly right now."),
 				].map((paragraph) => (
-					<p>{paragraph}</p>
+					<p key={paragraph}>{paragraph}</p>
 				))}
 			</>
 		),
@@ -109,7 +109,7 @@ export function StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless({
 						"outdated-data-warning: Additionally, Turbo Schedule collects data of the whole schedule every 24 hours."
 					),
 				].map((paragraph) => (
-					<p>{paragraph}</p>
+					<p key={paragraph}>{paragraph}</p>
 				))}
 			</>
 		),
