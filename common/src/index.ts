@@ -12,6 +12,9 @@ export * from "./util/scraperSpecificParticipantClassifier"; /** TODO FIXME */
 export * from "./util/hierarchy"; /** TODO FIXME */
 export * from "./util/noop";
 export * from "./util/poolPromises";
+export * from "./util/throttle";
+export * from "./util/performance.now";
+export * from "./util/dynamicRequire";
 
 export * from "./model/Participant";
 export * from "./model/Schedule";

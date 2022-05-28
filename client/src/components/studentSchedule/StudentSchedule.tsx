@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { throttle } from "lodash";
 
 import { Lesson, Student, ParticipantLabel, getDefaultParticipant } from "@turbo-schedule/common";
 
 import "./StudentSchedule.scss";
 
+import { useWindow } from "../../hooks/useWindow";
 import { useAddMostRecentParticipantOnPageChange } from "../../hooks/useLRUCache";
 import Footer from "../footer/Footer";
 import { Navbar } from "../navbar/Navbar";
@@ -33,7 +33,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	}, []);
 
 	/** TODO week component */
-	const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+	const { windowWidth } = useWindow();
 
 	const isDesktop: boolean = windowWidth > 1024;
 
@@ -42,14 +42,6 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		...baseWeekStyles,
 		...(windowWidth > 777 ? { display: "inline-block" } : { display: "block" }),
 	};
-
-	const throttledWindowWidth = useRef(
-		throttle(() => {
-			setWindowWidth(window.innerWidth);
-		}, 1000)
-	);
-
-	window.addEventListener("resize", () => throttledWindowWidth.current());
 
 	/** END TODO week component */
 
