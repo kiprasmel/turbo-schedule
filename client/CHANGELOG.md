@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.32.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.32.2...v2.32.3) (2022-05-28)
+
+
+### Bug Fixes
+
+* **client:** expand not-yet-acknowledged warning only if high importance (warning, but not for info) ([07682ba](https://github.com/kiprasmel/turbo-schedule/commit/07682ba565574dd758f80770b7526787cc41874f))
+
+
+
+
+
 ## [2.32.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.32.1...v2.32.2) (2022-05-28)
 
 **Note:** Version bump only for package @turbo-schedule/client
