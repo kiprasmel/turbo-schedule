@@ -15,7 +15,9 @@ export const StickyInfoOrWarningAboutFreshOrOutdatedData: FC = () => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [health, _setH, isLoading] = useFetchHealth(getDefaultHealth(), []);
 
-	return isLoading ? null : <StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless health={health} />;
+	return isLoading || health.isDataFake ? null : (
+		<StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless health={health} />
+	);
 };
 
 type StickyWarningAboutOutdateDataProps = {
