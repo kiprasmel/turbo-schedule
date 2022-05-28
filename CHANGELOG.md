@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.32.2](https://github.com/kiprasmel/turbo-schedule/compare/v2.32.1...v2.32.2) (2022-05-28)
+
+**Note:** Version bump only for package turbo-schedule
+
+
+
+
+
 ## [2.32.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.32.0...v2.32.1) (2022-05-28)
 
 
