@@ -15,7 +15,9 @@ export const StickyInfoOrWarningAboutFreshOrOutdatedData: FC = () => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [health, _setH, isLoading] = useFetchHealth(getDefaultHealth(), []);
 
-	return isLoading ? null : <StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless health={health} />;
+	return isLoading || health.isDataFake ? null : (
+		<StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless health={health} />
+	);
 };
 
 type StickyWarningAboutOutdateDataProps = {
@@ -91,7 +93,7 @@ export function StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless({
 					),
 					t("outdated-data-warning: This collection of data is what doesn't work properly right now."),
 				].map((paragraph) => (
-					<p>{paragraph}</p>
+					<p key={paragraph}>{paragraph}</p>
 				))}
 			</>
 		),
@@ -109,7 +111,7 @@ export function StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless({
 						"outdated-data-warning: Additionally, Turbo Schedule collects data of the whole schedule every 24 hours."
 					),
 				].map((paragraph) => (
-					<p>{paragraph}</p>
+					<p key={paragraph}>{paragraph}</p>
 				))}
 			</>
 		),
