@@ -53,7 +53,14 @@ export function StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless({
 				? AckLevel.WARNING
 				: AckLevel.INFO
 		);
-	const unAcknowledge = (): void => setHighestLevelUserHasEverAcknowledged(-highestLevelUserHasEverAcknowledged);
+	const unAcknowledge = (): void =>
+		setHighestLevelUserHasEverAcknowledged(
+			highestLevelUserHasEverAcknowledged !== AckLevel.NONE
+				? -highestLevelUserHasEverAcknowledged
+				: isDataConsideredOutdated
+				? -AckLevel.WARNING
+				: -AckLevel.INFO
+		);
 	const currentlyNotAcknowledged = {
 		warning: highestLevelUserHasEverAcknowledged < AckLevel.WARNING,
 		info: highestLevelUserHasEverAcknowledged < AckLevel.INFO,
@@ -73,7 +80,7 @@ export function StickyInfoOrWarningAboutFreshOrOutdatedDataLoadingless({
 
 	const shouldShowCardThatNeedsAcknowledgement: boolean = isDataConsideredOutdated
 		? currentlyNotAcknowledged.warning
-		: currentlyNotAcknowledged.info;
+		: currentlyNotAcknowledged.info && highestLevelUserHasEverAcknowledged !== AckLevel.NONE; // should not show expanded by default if it's only info
 
 	const warningContent = useMemo(
 		() => (
