@@ -45,6 +45,10 @@ export function createClass(data: ParticipantInitData = getDefaultParticipant())
 }
 
 function parseClassCharOrig(fullClassOrig: string): string {
+	if (isClassWithoutChar(fullClassOrig)) {
+		return "";
+	}
+
 	const words = fullClassOrig.split(" ");
 
 	if (isClassWithTeacherNameAsChar(fullClassOrig)) {
@@ -55,6 +59,10 @@ function parseClassCharOrig(fullClassOrig: string): string {
 }
 
 function parseClassNumOrig(fullClassOrig: string): string {
+	if (isClassWithoutChar(fullClassOrig)) {
+		return fullClassOrig;
+	}
+
 	const words = fullClassOrig.split(" ");
 
 	if (isClassWithTeacherNameAsChar(fullClassOrig)) {
@@ -91,7 +99,9 @@ function parseClassNum(fullClassOrig: string): TClassNum {
 	const words = fullClassOrig.split(" ");
 	let classNumStr: string;
 
-	if (isClassWithTeacherNameAsChar(fullClassOrig)) {
+	if (isClassWithoutChar(fullClassOrig)) {
+		classNumStr = fullClassOrig;
+	} else if (isClassWithTeacherNameAsChar(fullClassOrig)) {
 		/**
 		 * relies on assumption that the teacher name is the only separator,
 		 * and that the class does not have a letter.
@@ -144,5 +154,12 @@ function isClassWithTeacherNameAsChar(fullClassOrig: string): boolean {
 	return (
 		words.length >= 2 /** has teacher name */ &&
 		words[1].length >= 2 /** is teacher name, because has more othan 1 letter */
+	);
+}
+
+function isClassWithoutChar(fullClassOrig: string): boolean {
+	return (
+		/** whole text does not include letters */ !Number.isNaN(Number(fullClassOrig)) ||
+		/** whole text matches specific letters */ fullClassOrig.toLowerCase() in retardedClassNumToNormalClassNumDict
 	);
 }
