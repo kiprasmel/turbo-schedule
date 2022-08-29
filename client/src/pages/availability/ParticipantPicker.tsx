@@ -198,15 +198,8 @@ function RecursiveParticipantHierarchy<T extends WantedParticipant = WantedParti
 			? (t((hierarchy.groupName as unknown) as keyof Dictionary) as string)
 			: hierarchy.groupName;
 
-	return (
-		<article>
-			<AllOrNothingCheckbox<T>
-				groupName={groupName}
-				areAllParticipantsSelected={areAllParticipantsSelected}
-				setWantedParticipants={setWantedParticipants}
-				fullParticipantSubset={hierarchy.currentItems as T[]} // TODO FIXME
-			/>
-
+	const content =
+		hierarchy.currentItems.length === 1 ? /** AllOrNothingChecbkox shows the 1 item */ null : (
 			<Indent>
 				{(hierarchy as any) /* TODO FIXME */?.children! ? (
 					(hierarchy as any) /* TODO FIXME */
@@ -234,6 +227,18 @@ function RecursiveParticipantHierarchy<T extends WantedParticipant = WantedParti
 					</section>
 				)}
 			</Indent>
+		);
+
+	return (
+		<article>
+			<AllOrNothingCheckbox<T>
+				groupName={groupName}
+				areAllParticipantsSelected={areAllParticipantsSelected}
+				setWantedParticipants={setWantedParticipants}
+				fullParticipantSubset={hierarchy.currentItems as T[]} // TODO FIXME
+			/>
+
+			{content}
 		</article>
 	);
 }

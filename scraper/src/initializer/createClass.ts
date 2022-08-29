@@ -45,10 +45,30 @@ export function createClass(data: ParticipantInitData = getDefaultParticipant())
 }
 
 function parseClassCharOrig(fullClassOrig: string): string {
+	if (isClassWithoutChar(fullClassOrig)) {
+		return "";
+	}
+
+	const words = fullClassOrig.split(" ");
+
+	if (isClassWithTeacherNameAsChar(fullClassOrig)) {
+		return words[1];
+	}
+
 	return fullClassOrig[fullClassOrig.length - 1];
 }
 
 function parseClassNumOrig(fullClassOrig: string): string {
+	if (isClassWithoutChar(fullClassOrig)) {
+		return fullClassOrig;
+	}
+
+	const words = fullClassOrig.split(" ");
+
+	if (isClassWithTeacherNameAsChar(fullClassOrig)) {
+		return words[0];
+	}
+
 	return fullClassOrig.slice(0, -1);
 }
 
@@ -76,8 +96,22 @@ function parseRetardedClassNum(fullClassNameOrig: string): number {
 function parseClassNum(fullClassOrig: string): TClassNum {
 	console.log("parseClassNum: fullClassOrig:", fullClassOrig);
 
-	const classNumStr: string = fullClassOrig /**  "6a" or "IIGc" */
-		.slice(0, -1); /**                         "6"  or "IIG"  */
+	const words = fullClassOrig.split(" ");
+	let classNumStr: string;
+
+	if (isClassWithoutChar(fullClassOrig)) {
+		classNumStr = fullClassOrig;
+	} else if (isClassWithTeacherNameAsChar(fullClassOrig)) {
+		/**
+		 * relies on assumption that the teacher name is the only separator,
+		 * and that the class does not have a letter.
+		 * (has not been the case otherwise (yet?)).
+		 */
+		classNumStr = words[0];
+	} else {
+		classNumStr = fullClassOrig /**  "6a" or "IIGc" */
+			.slice(0, -1); /**           "6"  or "IIG"  */
+	}
 
 	const classNumDangerous: number = classNumStr.toLowerCase().includes("i")
 		? parseRetardedClassNum(classNumStr)
@@ -112,4 +146,20 @@ provided = \`${classNumDangerous}\``
 
 function parseFullClass(fullClassOrig: string): string {
 	return parseClassNum(fullClassOrig) + parseClassChar(fullClassOrig);
+}
+
+function isClassWithTeacherNameAsChar(fullClassOrig: string): boolean {
+	const words: string[] = fullClassOrig.split(" ");
+
+	return (
+		words.length >= 2 /** has teacher name */ &&
+		words[1].length >= 2 /** is teacher name, because has more othan 1 letter */
+	);
+}
+
+function isClassWithoutChar(fullClassOrig: string): boolean {
+	return (
+		/** whole text does not include letters */ !Number.isNaN(Number(fullClassOrig)) ||
+		/** whole text matches specific letters */ fullClassOrig.toLowerCase() in retardedClassNumToNormalClassNumDict
+	);
 }
