@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.32.4](https://github.com/kiprasmel/turbo-schedule/compare/v2.32.3...v2.32.4) (2022-08-29)
+
+
+### Bug Fixes
+
+* **client:** do not show children in hierarchy if only 1 child ([ec41dc7](https://github.com/kiprasmel/turbo-schedule/commit/ec41dc7a42241d9dce12fa575e5356d1ee6ee53f))
+* **scraper:** classes with teacher name as their char ([102fdb2](https://github.com/kiprasmel/turbo-schedule/commit/102fdb259fc103a525e12eb047b4bb7d4ab8f7f6))
+* **scraper:** fix classes without char ([4573871](https://github.com/kiprasmel/turbo-schedule/commit/4573871624ee24f6b7dbcfcb12d6d22db2e2c02e))
+
+
+
+
+
 ## [2.32.3](https://github.com/kiprasmel/turbo-schedule/compare/v2.32.2...v2.32.3) (2022-05-28)
 
 

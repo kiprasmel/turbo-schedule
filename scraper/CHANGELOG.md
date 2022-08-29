@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.32.4](https://github.com/kiprasmel/turbo-schedule/compare/v2.32.3...v2.32.4) (2022-08-29)
+
+
+### Bug Fixes
+
+* **scraper:** classes with teacher name as their char ([102fdb2](https://github.com/kiprasmel/turbo-schedule/commit/102fdb259fc103a525e12eb047b4bb7d4ab8f7f6))
+* **scraper:** fix classes without char ([4573871](https://github.com/kiprasmel/turbo-schedule/commit/4573871624ee24f6b7dbcfcb12d6d22db2e2c02e))
+
+
+
+
+
 ## [2.32.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.32.0...v2.32.1) (2022-05-28)
 
 **Note:** Version bump only for package @turbo-schedule/scraper
