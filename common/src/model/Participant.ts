@@ -5,6 +5,7 @@ import { Teacher } from "./Teacher";
 import { Room } from "./Room";
 import { getSpecificScheduleURI } from "./Schedule";
 import { Lesson } from "./Lesson";
+import { Availability, MinimalLesson } from "./Availability";
 
 import { mergeBy, MergeStrategy } from "../util/mergeBy";
 
@@ -104,3 +105,97 @@ export const findParticipantsWithMultipleLessonsInSameTime = (
 
 	return dupes;
 };
+
+export type ParticipantCommonAvailability = {
+	minDayIndex: number;
+	maxDayIndex: number;
+	minTimeIndex: number;
+	maxTimeIndex: number;
+	availability: Availability[][];
+};
+
+export type AvailabilityParticipant = {
+	participant: Participant["text"];
+	lesson: MinimalLesson;
+};
+
+export function computeCommonAvailability(
+	lessons: Lesson[], //
+	wantedParticipants: Participant["text"][]
+): ParticipantCommonAvailability {
+	const minDayIndex = lessons.reduce((prevMin, curr) => Math.min(prevMin, curr.dayIndex), Infinity);
+	const maxDayIndex = lessons.reduce((prevMax, curr) => Math.max(prevMax, curr.dayIndex), 0);
+
+	const minTimeIndex = lessons.reduce((prevMin, curr) => Math.min(prevMin, curr.timeIndex), Infinity);
+	const maxTimeIndex = lessons.reduce((prevMax, curr) => Math.max(prevMax, curr.timeIndex), 0);
+
+	const availability: Availability[][] = [];
+
+	/**
+	 * O(fast enough)
+	 */
+	for (let i = minDayIndex; i <= maxDayIndex; i++) {
+		availability[i] = [];
+
+		for (let j = minTimeIndex; j <= maxTimeIndex; j++) {
+			const related: Lesson[] = lessons.filter((l) => l.dayIndex === i && l.timeIndex === j);
+
+			/**
+			 * there could be multiple participants in the same lesson,
+			 * thus account for them all, not once.
+			 */
+			const getParticipants = (filterPred: (l: Lesson) => boolean): AvailabilityParticipant[] => [
+				...new Set(
+					related.filter(filterPred).flatMap((l) =>
+						[l.students, l.teachers, l.classes, l.rooms].flatMap((participants) =>
+							participants
+								.filter((participant) => wantedParticipants.includes(participant))
+								.map(
+									(participant): AvailabilityParticipant => ({
+										participant,
+										lesson: {
+											id: l.id,
+											name: l.name,
+										},
+									})
+								)
+						)
+					)
+				),
+			];
+
+			let availableParticipants = getParticipants((l) => l.isEmpty);
+			const bussyParticipants = getParticipants((l) => !l.isEmpty);
+
+			/**
+			 * TODO FIXME HACK:
+			 *
+			 * The scraper is messed up for some edge cases (upstream -_-),
+			 * and there might be duplicate lessons, some not properly scraped.
+			 *
+			 * We know for a fact, though, that if a participant is bussy,
+			 * it cannot be available -- this fixes the issue (temporarily),
+			 * before we fix the underlying issue.
+			 *
+			 */
+			availableParticipants = availableParticipants.filter(
+				(p) => !bussyParticipants.some((bussyP) => p.participant === bussyP.participant)
+			);
+
+			availability[i][j] = {
+				dayIndex: i, //
+				timeIndex: j,
+				availableParticipants,
+				bussyParticipants,
+			};
+		}
+	}
+
+	return {
+		minDayIndex, //
+		maxDayIndex,
+		minTimeIndex,
+		maxTimeIndex,
+		availability,
+	};
+}

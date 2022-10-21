@@ -8,16 +8,16 @@ import { initDb, Db } from "@turbo-schedule/database";
 import {
 	Participant, //
 	Lesson,
-	Availability,
 	pickNPseudoRandomly,
 	pickSome,
 	participantHasLesson,
 	findParticipantsWithMultipleLessonsInSameTime,
-	MinimalLesson,
 	WantedParticipant,
 	getDefaultParticipant,
 	createParticipantHierarchy,
 	ParticipantHierarchyManual,
+	computeCommonAvailability,
+	ParticipantCommonAvailability,
 } from "@turbo-schedule/common";
 
 import { WithErr, withSender } from "../../middleware/withSender";
@@ -108,12 +108,8 @@ router.get<never, ParticipantHierarchyRes>(
 	}
 );
 
-export interface ParticipantCommonAvailabilityRes extends WithErr {
-	minDayIndex: number;
-	maxDayIndex: number;
-	minTimeIndex: number;
-	maxTimeIndex: number;
-	availability: Availability[][];
+export type ParticipantCommonAvailabilityRes = WithErr & ParticipantCommonAvailability & {
+	//
 }
 
 const getDefaultParticipantCommonAvailRes = (): ParticipantCommonAvailabilityRes => ({
@@ -160,85 +156,9 @@ router.get<never, ParticipantCommonAvailabilityRes>(
 				)
 				.value();
 
-			const minDayIndex = lessons.reduce((prevMin, curr) => Math.min(prevMin, curr.dayIndex), 1e9);
-			const maxDayIndex = lessons.reduce((prevMax, curr) => Math.max(prevMax, curr.dayIndex), 0);
+			const availability: ParticipantCommonAvailability = computeCommonAvailability(lessons, wantedParticipants);
 
-			const minTimeIndex = lessons.reduce((prevMin, curr) => Math.min(prevMin, curr.timeIndex), 1e9);
-			const maxTimeIndex = lessons.reduce((prevMax, curr) => Math.max(prevMax, curr.timeIndex), 0);
-
-			const availability: Availability[][] = [];
-
-			/**
-			 * O(fast enough)
-			 */
-			for (let i = minDayIndex; i <= maxDayIndex; i++) {
-				availability[i] = [];
-
-				for (let j = minTimeIndex; j <= maxTimeIndex; j++) {
-					const related: Lesson[] = lessons.filter((l) => l.dayIndex === i && l.timeIndex === j);
-
-					type Ret = {
-						participant: Participant["text"];
-						lesson: MinimalLesson;
-					};
-					/**
-					 * there could be multiple participants in the same lesson,
-					 * thus account for them all, not once.
-					 */
-					const getParticipants = (filterPred: (l: Lesson) => boolean): Ret[] => [
-						...new Set(
-							related.filter(filterPred).flatMap((l) =>
-								[l.students, l.teachers, l.classes, l.rooms].flatMap((participants) =>
-									participants
-										.filter((participant) => wantedParticipants.includes(participant))
-										.map(
-											(participant): Ret => ({
-												participant,
-												lesson: {
-													id: l.id,
-													name: l.name,
-												},
-											})
-										)
-								)
-							)
-						),
-					];
-
-					let availableParticipants = getParticipants((l) => l.isEmpty);
-					const bussyParticipants = getParticipants((l) => !l.isEmpty);
-
-					/**
-					 * TODO FIXME HACK:
-					 *
-					 * The scraper is messed up for some edge cases (upstream -_-),
-					 * and there might be duplicate lessons, some not properly scraped.
-					 *
-					 * We know for a fact, though, that if a participant is bussy,
-					 * it cannot be available -- this fixes the issue (temporarily),
-					 * before we fix the underlying issue.
-					 *
-					 */
-					availableParticipants = availableParticipants.filter(
-						(p) => !bussyParticipants.some((bussyP) => p.participant === bussyP.participant)
-					);
-
-					availability[i][j] = {
-						dayIndex: i, //
-						timeIndex: j,
-						availableParticipants,
-						bussyParticipants,
-					};
-				}
-			}
-
-			return send(200, {
-				minDayIndex, //
-				maxDayIndex,
-				minTimeIndex,
-				maxTimeIndex,
-				availability,
-			});
+			return send(200, availability);
 		} catch (err) {
 			return send(500, { err });
 		}
