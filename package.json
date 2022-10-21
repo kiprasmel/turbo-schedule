@@ -50,7 +50,7 @@
 		"build:client:prod": "cross-env NODE_ENV=production yarn --cwd ./client/ build",
 		"build:server": "     yarn --cwd ./server/ build",
 		"build:server:prod": "cross-env NODE_ENV=production yarn --cwd ./server/ build:prod",
-		"build:all": "yarn cross-env-shell USE_FAKE_DATA_INSTEAD_OF_SCRAPING=1 \"yarn build:ts && yarn build:server\"",
+		"build:all": "yarn cross-env-shell USE_FAKE_DATA_INSTEAD_OF_SCRAPING=1 \"yarn build:ts && yarn build:client:prod && yarn build:server\"",
 		"build:all:prod": "cross-env NODE_ENV=production yarn build:ts && yarn build:client:prod && yarn build:server:prod",
 		"docker:build": "cross-env USE_FAKE_DATA_INSTEAD_OF_SCRAPING=1 docker build -t kipras/turbo-schedule:latest .",
 		"docker:login": "echo \"$DOCKERHUB_PASSWORD\" | docker login --username \"$DOCKERHUB_USERNAME\" --password-stdin",
