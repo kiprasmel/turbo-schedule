@@ -65,21 +65,21 @@ router.get<never, ParticipantRandomRes>("/random", withSender({ participants: []
 		const db: Db = await initDb();
 		const participants: Participant[] = await db.get("participants").value();
 
-		if (!req.query["count"]) {
-			const maxCount: number = Number(req.query["max"]) || 32;
+		if (!req.query?.["count"]) {
+			const maxCount: number = Number(req.query?.["max"]) || 32;
 			return send(200, { participants: pickSome(participants, { maxCount }) });
-		} else {
-			const n = Number(req.query["count"]);
-
-			if (Number.isNaN(n)) {
-				return send(400, {
-					participants: [],
-					err: `req.query.count NaN (provided as \`${req.query["count"]}\`, parsed as ${n})`,
-				});
-			} else {
-				return send(200, { participants: pickNPseudoRandomly(n)(participants) });
-			}
 		}
+
+		const n = Number(req.query?.["count"]);
+
+		if (Number.isNaN(n)) {
+			return send(400, {
+				participants: [],
+				err: `req.query.count NaN (provided as \`${req.query?.["count"]}\`, parsed as ${n})`,
+			});
+		}
+
+		return send(200, { participants: pickNPseudoRandomly(n)(participants) });
 	} catch (err) {
 		return send(500, { err });
 	}
