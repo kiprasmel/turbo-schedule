@@ -2,7 +2,10 @@
  * This is pretty much identical to the `student` & `class` API
  */
 
+import path from "path";
+
 import { Router } from "express";
+import workerpool from "workerpool";
 
 import { initDb, Db } from "@turbo-schedule/database";
 import {
@@ -18,11 +21,18 @@ import {
 	ParticipantHierarchyManual,
 	computeCommonAvailability,
 	ParticipantCommonAvailability,
+	Perf,
+	getDefaultParticipantCommonAvail,
 } from "@turbo-schedule/common";
 
 import { WithErr, withSender } from "../../middleware/withSender";
+import { isProd } from "../../util/isProd";
+
 
 const router: Router = Router();
+
+const worker = workerpool.pool(path.join(__dirname, "participantWorker.js"), { workerType: "thread" });
+// const worker = workerpool.pool({workerType: "thread"});
 
 /**
  * get an array of schedule items (WITHOUT lessons)
@@ -33,11 +43,14 @@ export interface ParticipantsRes extends WithErr {
 
 router.get<never, ParticipantsRes>("/", withSender({ participants: [] }), async (_req, res) => {
 	const send = res.sender;
+	const perf = new Perf("participant-list");
 
 	try {
 		const db: Db = await initDb();
+		perf.track("init-db");
 
 		const participants: ParticipantsRes["participants"] = await db.get("participants").value();
+		perf.track("db-get-participants");
 
 		if (!participants?.length) {
 			return send(404, { err: `Schedule items not found (were \`${participants}\`)` });
@@ -46,6 +59,8 @@ router.get<never, ParticipantsRes>("/", withSender({ participants: [] }), async 
 		return send(200, { participants });
 	} catch (err) {
 		return send(500, { err });
+	} finally {
+		perf.end("send");
 	}
 });
 
@@ -60,10 +75,13 @@ export interface ParticipantRandomRes extends WithErr {
 
 router.get<never, ParticipantRandomRes>("/random", withSender({ participants: [] }), async (req, res) => {
 	const send = res.sender;
+	const perf = new Perf("participant-randoms");
 
 	try {
 		const db: Db = await initDb();
+		perf.track("init-db");
 		const participants: Participant[] = await db.get("participants").value();
+		perf.track("db-get-participants");
 
 		if (!req.query?.["count"]) {
 			const maxCount: number = Number(req.query?.["max"]) || 32;
@@ -82,6 +100,8 @@ router.get<never, ParticipantRandomRes>("/random", withSender({ participants: []
 		return send(200, { participants: pickNPseudoRandomly(n)(participants) });
 	} catch (err) {
 		return send(500, { err });
+	} finally {
+		perf.end("send");
 	}
 });
 
@@ -94,16 +114,23 @@ router.get<never, ParticipantHierarchyRes>(
 	withSender({ hierarchy: createParticipantHierarchy([]) }), // TODO - is this even working?
 	async (_req, res) => {
 		const send = res.sender;
+		const perf = new Perf("participant-hierarchy");
 
 		try {
 			const db: Db = await initDb();
+			perf.track("init-db");
+
 			const participants: Participant[] = await db.get("participants").value();
+			perf.track("db-get-participants");
 
 			const hierarchy: ParticipantHierarchyManual = createParticipantHierarchy(participants);
+			perf.trackCustom("participant-hierarchy");
 
 			return send(200, { hierarchy });
 		} catch (err) {
 			return send(500, { err });
+		} finally {
+			perf.end("send");
 		}
 	}
 );
@@ -112,32 +139,23 @@ export type ParticipantCommonAvailabilityRes = WithErr & ParticipantCommonAvaila
 	//
 }
 
-const getDefaultParticipantCommonAvailRes = (): ParticipantCommonAvailabilityRes => ({
-	minDayIndex: -1, //
-	maxDayIndex: -1,
-	minTimeIndex: -1,
-	maxTimeIndex: -1,
-	availability: [],
-});
-
 router.get<never, ParticipantCommonAvailabilityRes>(
 	"/common-availability",
-	withSender(getDefaultParticipantCommonAvailRes()),
+	withSender(getDefaultParticipantCommonAvail()),
 	async (req, res) => {
 		const send = res.sender;
+		const perf = new Perf("participant-common-avail");
 
 		try {
-			const db: Db = await initDb();
+			const db = await initDb();
+			perf.track("init-db");
 
-			const wantedParticipants: Participant["text"][] =
-				req.query?.["wanted-participants"]
-					?.split(",")
-					?.map((p: string | any) => p?.trim())
-					.filter((p: string | any) => !!p) ?? [];
+			const reqQueryWP = req.query?.["wanted-participants"];
 
-			const totalWantedParticipants: number = wantedParticipants.length;
-
-			console.log(wantedParticipants, totalWantedParticipants);
+			const wantedParticipants: Participant["text"][] = (reqQueryWP?.split?.(",") || [])
+				.map((p: string) => p.trim())
+				.filter((p: string) => !!p);
+			perf.trackCustom("wanted participants");
 
 			if (!wantedParticipants.length) {
 				return send(400, {
@@ -145,7 +163,7 @@ router.get<never, ParticipantCommonAvailabilityRes>(
 				});
 			}
 
-			const lessons: Lesson[] = await db
+			const lessons: Lesson[] = db
 				.get("lessons")
 				.filter(
 					(l) =>
@@ -155,12 +173,34 @@ router.get<never, ParticipantCommonAvailabilityRes>(
 						wantedParticipants.some((w) => l.rooms.includes(w))
 				)
 				.value();
+			perf.trackCustom("find lessons");
 
-			const availability: ParticipantCommonAvailability = computeCommonAvailability(lessons, wantedParticipants);
+			// const availability: ParticipantCommonAvailability = await worker.exec<typeof computeCommonAvailability>("computeCommonAvailability", [lessons, wantedParticipants]);
+			// const availability: ParticipantCommonAvailability = await worker.exec(computeCommonAvailability, [lessons, wantedParticipants]);
+			// const availability: ParticipantCommonAvailability = computeCommonAvailability(lessons, wantedParticipants);
+			// const availability: ParticipantCommonAvailability | null = await worker.exec(fullCompute, [db, reqQueryWP]);
+
+			// console.log("isProd:",isProd());
+
+			/**
+			 * the relative file will only be available once the project is built, thus in prod.
+			 * otherwise, using dynamic loading of functions is worse than calling the fn regularly.
+			 */
+			const availability: ParticipantCommonAvailability = isProd() ? await worker.exec(computeCommonAvailability, [lessons, wantedParticipants]) : computeCommonAvailability(lessons,wantedParticipants);
+			perf.trackCustom("compute avail");
+
+			if (!availability) {
+				return send(400, {
+					err: `Request query \`wanted-participants\` was empty (${wantedParticipants})`,
+					// err: `Request query \`wanted-participants\` was empty`,
+				});
+			}
 
 			return send(200, availability);
 		} catch (err) {
 			return send(500, { err });
+		} finally {
+			perf.end("send");
 		}
 	}
 );
@@ -171,29 +211,31 @@ export interface ParticipantClassifyRes extends WithErr {
 
 router.get<never, ParticipantClassifyRes>("/classify", withSender({ participants: [] }), async (req, res) => {
 	const send = res.sender;
+	const perf = new Perf("participant-classifier");
 
 	try {
-		const participants: string[] =
-			req.query?.["participants"]
-				?.split(",")
-				?.map((p: string) => p?.trim())
-				.filter((p: string) => !!p) ?? [];
+		const participants: string = req.query?.["participants"];
+		perf.trackCustom("req query participants", participants.length);
 
 		if (!participants.length) {
-			return send(400, { err: `No participants included in request.query (${participants})` });
+			return send(400, { err: `No participants included in request.query (${participants})`});
 		}
 
 		const db: Db = await initDb();
+		perf.track("init-db");
 
 		const classifiedParticipants: ParticipantClassifyRes["participants"] = await db
 			.get("participants")
 			.filter((p) => participants.includes(p.text))
 			.map((p) => ({ text: p.text, labels: p.labels }))
 			.value();
+		perf.trackCustom("db get participants & classify");
 
 		return send(200, { participants: classifiedParticipants });
 	} catch (err) {
 		return send(500, { err });
+	} finally {
+		perf.end("send");
 	}
 });
 
@@ -228,18 +270,20 @@ router.get<{ participantName: string }, ParticipantScheduleByNameRes>(
 	withSender({ participant: getDefaultParticipant() }),
 	async (req, res) => {
 		const send = res.sender;
+		const perf = new Perf("participant-with-lessons");
 
 		try {
-			const db: Db = await initDb();
-
 			const participantName: string = decodeURIComponent(req.params.participantName);
+			perf.trackCustom("participant name", participantName);
 
-			console.log("name", participantName);
+			const db: Db = await initDb();
+			perf.track("init-db");
 
 			const participant: Participant = await db
 				.get("participants")
 				.find((p) => p.text.toLowerCase() === participantName.toLowerCase())
 				.value();
+				perf.trackCustom("find participant");
 
 			if (!participant) {
 				return send(404, { err: `Participant not found (was \`${participant}\`)` });
@@ -249,6 +293,7 @@ router.get<{ participantName: string }, ParticipantScheduleByNameRes>(
 				.get("lessons")
 				.filter(participantHasLesson(participant))
 				.value();
+				perf.trackCustom("find lessons of participant");
 
 			if (!lessons?.length) {
 				return send(404, { participant, err: `Lessons for participant not found (were \`${lessons}\`)` });
@@ -259,6 +304,8 @@ router.get<{ participantName: string }, ParticipantScheduleByNameRes>(
 			return send(200, { participant: participantWithLessons });
 		} catch (err) {
 			return send(500, { err });
+		} finally {
+			perf.end("send");
 		}
 	}
 );

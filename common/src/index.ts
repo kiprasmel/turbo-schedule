@@ -14,7 +14,9 @@ export * from "./util/noop";
 export * from "./util/poolPromises";
 export * from "./util/throttle";
 export * from "./util/performance.now";
-export * from "./util/dynamicRequire";
+// export * from "./util/perf.core";
+export * from "./util/perf";
+export * from "./util/pad";
 
 export * from "./model/Participant";
 export * from "./model/Schedule";

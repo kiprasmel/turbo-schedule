@@ -1,4 +1,3 @@
-import { dynamicRequire } from "./dynamicRequire";
+import now from "performance-now";
 
-export const performanceNow = (): number =>
-	performance ? performance.now() : dynamicRequire("perf_hooks").performance.now();
+export const performanceNow = now;

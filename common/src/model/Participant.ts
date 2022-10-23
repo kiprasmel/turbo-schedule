@@ -114,6 +114,14 @@ export type ParticipantCommonAvailability = {
 	availability: Availability[][];
 };
 
+export const getDefaultParticipantCommonAvail = (): ParticipantCommonAvailability => ({
+	minDayIndex: -1, //
+	maxDayIndex: -1,
+	minTimeIndex: -1,
+	maxTimeIndex: -1,
+	availability: [],
+});
+
 export type AvailabilityParticipant = {
 	participant: Participant["text"];
 	lesson: MinimalLesson;
