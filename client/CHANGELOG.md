@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.32.5](https://github.com/kiprasmel/turbo-schedule/compare/v2.32.4...v2.32.5) (2023-01-17)
+
+
+### Bug Fixes
+
+* **client:** remove random/experimental bg color from desktop schedule page ([7fe5ecb](https://github.com/kiprasmel/turbo-schedule/commit/7fe5ecb552475386963144b2e0541f9a8090d750))
+
+
+
+
+
 ## [2.32.4](https://github.com/kiprasmel/turbo-schedule/compare/v2.32.3...v2.32.4) (2022-08-29)
 
 
