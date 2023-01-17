@@ -1,4 +1,8 @@
-import { Participant, Class, Student, Teacher, Room } from "..";
+import { Class } from "../model/Class";
+import { Participant } from "../model/Participant";
+import { Room } from "../model/Room";
+import { Student } from "../model/Student";
+import { Teacher } from "../model/Teacher";
 
 type Dictionary = Record<string, string>; // TODO FIXME
 
