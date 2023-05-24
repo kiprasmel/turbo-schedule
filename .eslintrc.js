@@ -4,5 +4,7 @@ module.exports = {
 	],
 	rules: {
 		"prefer-destructuring": 0,
+		"no-plusplus": 0,
+		"@typescript-eslint/camelcase": 0,
 	}
 }
