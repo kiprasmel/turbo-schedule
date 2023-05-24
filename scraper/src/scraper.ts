@@ -70,12 +70,9 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		/** TODO typescript should do this \/ automatically */
 		// let participants2D: OrderedParticipants2D = participantCollectors.map((collector) =>
 		let participants2D: Participant[][] = participantCollectors.map((collector) =>
-			scrapeScheduleItemListFactory(
-				collector.from,
-				collector.to,
-				collector.labels,
-				collector.initializer
-			)(frontPageHtml)
+			scrapeScheduleItemListFactory(collector.from, collector.to, collector.labels, collector.initializer)(
+				frontPageHtml
+			)
 		);
 
 		if (process.env.FAST !== undefined && process.env.FAST !== null && process.env.FAST !== "") {

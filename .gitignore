@@ -28,3 +28,8 @@ yarn-error.log*
 lerna-debug.log*
 
 .yarn-integrity
+
+/data*
+!/database
+
+NEXT.md
