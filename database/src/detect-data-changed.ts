@@ -138,13 +138,12 @@ export async function defaultRun(): Promise<void> {
 	 */
 	const RANGE_STEP = Math.ceil(FILES_PER_TASK / TASK_SPLIT_FACTOR);
 
-	const fileRanges = new Array(proc * TASK_SPLIT_FACTOR).fill(0).map((_, i) => {
-		const isLastProc = i === proc - 1;
+	const fileRanges = new Array(proc * TASK_SPLIT_FACTOR)
+		.fill(0)
+		.map((_, i) => [i * RANGE_STEP, (i + 1) * RANGE_STEP]);
 
-		return isLastProc
-			? ([i * RANGE_STEP, files.length - 1] as const) // last thread should take on leftover files, if any
-			: ([i * RANGE_STEP, (i + 1) * RANGE_STEP] as const);
-	});
+	// last thread should take on leftover files, if any
+	fileRanges[fileRanges.length - 1][1] = files.length - 1;
 
 	console.log({
 		nproc, //
