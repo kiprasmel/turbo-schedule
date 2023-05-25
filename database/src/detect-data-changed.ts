@@ -1,10 +1,13 @@
 #!/usr/bin/env ts-node-dev
 
+import os from "os";
 import fs from "fs-extra";
 import path from "path";
-import { exec } from "child_process";
+
+import * as thread from "threads";
 
 import { DbSchema } from "./config";
+// eslint-disable-next-line import/no-cycle
 
 export type DataChangedRet = {
 	changed: boolean;
@@ -104,65 +107,41 @@ export async function defaultRun(): Promise<void> {
 	const entries = fs.readdirSync(datadir).map((x) => path.join(datadir, x));
 	const files: string[] = entries.filter((x) => x.endsWith(".json") && fs.statSync(x).isFile());
 
+	const nproc: number = os.cpus().length;
+	let proc: number = Math.min(nproc, files.length);
+	let filesPerProc: number = Math.floor(files.length / proc);
+
+	if (filesPerProc < 2) {
+		proc /= 2;
+		filesPerProc = files.length / proc;
+	}
+
+	const fileRanges = new Array(proc).fill(0).map((_, i) =>
+		i === proc - 1
+			? ([i * filesPerProc, files.length - 1] as const) // last thread should take on leftover files, if any
+			: ([i * filesPerProc, (i + 1) * filesPerProc] as const)
+	);
+
+	console.log({ nproc, proc, fileCount: files.length, fileRanges });
+
+	/**
+	 * prep output dir
+	 */
 	const dataDiffDir = "data-diffs";
 	fs.ensureDirSync(dataDiffDir);
 
-	const rawFileContentPromises = files.map(async (fp) => {
-		const raw: string = await fs.readFile(fp, { encoding: "utf-8" });
+	const threadpool = thread.Pool(() => thread.spawn(new thread.Worker("./compare-db-files.ts")), proc);
+	const tasks = [];
 
-		const isEmpty = !raw.trim();
-		if (isEmpty) {
-			console.warn(`empty file: ${fp}`);
-		}
-
-		return [isEmpty, raw] as const;
-	});
-	const rawFileContents = await Promise.all(rawFileContentPromises);
-	const fileContents: DbSchema[] = rawFileContents
-		.filter(([isEmpty]) => !isEmpty)
-		.map(([, raw]): DbSchema => JSON.parse(raw));
-
-	console.log({ fileContents });
-
-	const fileStrLen: number = files.length.toString().length;
-	let n_changed: number = 0;
-	for (let i = 0; i < files.length - 1; i++) {
-		const fp1 = files[i];
-		const fp2 = files[i + 1];
-
-		const db1: DbSchema = fileContents[i];
-		const db2: DbSchema = fileContents[i + 1];
-
-		const changed: DataChangedRet = detectIfDataChanged(db1, db2);
-		if (changed.changed) {
-			++n_changed;
-
-			const info = [
-				padFor(n_changed, fileStrLen),
-				n_changed,
-				padFor(i, fileStrLen),
-				i,
-				"changed",
-				path.basename(fp1),
-				path.basename(fp2),
-				changed.reason,
-			];
-			console.log(...info);
-
-			const patchfile = `${basenameExtless(fp1)}...${basenameExtless(fp2)}.diff`;
-			const patchpath = path.join(dataDiffDir, patchfile);
-			/**
-			 * https://github.com/andreyvit/json-diff
-			 */
-			const cmd = `json-diff "${db1}" "${db2}" > "${patchpath}"`;
-			console.log(cmd);
-			try {
-				await exec(cmd);
-			} catch (e) {
-				// expected to exit 1
-			}
-		}
+	for (const [from, to] of fileRanges) {
+		const filepaths: string[] = files.slice(from, to + 1);
+		const task = threadpool.queue((compareDBFiles) => compareDBFiles(filepaths, dataDiffDir));
+		tasks.push(task);
 	}
+
+	// await threadpool.completed(); // TODO use this?
+	await Promise.all(tasks);
+	await threadpool.terminate();
 }
 
 if (!module.parent) {
