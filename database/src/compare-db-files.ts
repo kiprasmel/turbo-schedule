@@ -114,7 +114,7 @@ export function compareDBFiles({
 			/**
 			 * https://github.com/andreyvit/json-diff
 			 */
-			const cmd = `json-diff -n "${fp1}" "${fp1}" > "${patchpath}"`;
+			const cmd = `json-diff -n "${fp1}" "${fp2}" > "${patchpath}"`;
 			log(cmd);
 			try {
 				execSync(cmd);
