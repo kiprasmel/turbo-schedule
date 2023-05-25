@@ -6,5 +6,6 @@ module.exports = {
 		"prefer-destructuring": 0,
 		"no-plusplus": 0,
 		"@typescript-eslint/camelcase": 0,
+		"@typescript-eslint/no-use-before-define": 0,
 	}
 }
