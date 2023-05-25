@@ -34,6 +34,7 @@ lerna-debug.log*
 build-info.json
 
 /data*
+data-diffs
 !/database
 
 NEXT.md
