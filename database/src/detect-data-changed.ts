@@ -7,7 +7,9 @@ import path from "path";
 import * as thread from "threads";
 
 import { DbSchema } from "./config";
+
 // eslint-disable-next-line import/no-cycle
+import { CompareDBFiles } from "./compare-db-files";
 
 export type DataChangedRet = {
 	changed: boolean;
@@ -108,21 +110,52 @@ export async function defaultRun(): Promise<void> {
 	const files: string[] = entries.filter((x) => x.endsWith(".json") && fs.statSync(x).isFile());
 
 	const nproc: number = os.cpus().length;
-	let proc: number = Math.min(nproc, files.length);
-	let filesPerProc: number = Math.floor(files.length / proc);
+	let proc: number = Math.min(nproc - 2, files.length);
+	const calcFilesPerTask = () => Math.floor(files.length / proc);
+	let FILES_PER_TASK: number = calcFilesPerTask();
 
-	if (filesPerProc < 2) {
+	if (FILES_PER_TASK < 2) {
 		proc /= 2;
-		filesPerProc = files.length / proc;
+		FILES_PER_TASK = calcFilesPerTask();
 	}
 
-	const fileRanges = new Array(proc).fill(0).map((_, i) =>
-		i === proc - 1
-			? ([i * filesPerProc, files.length - 1] as const) // last thread should take on leftover files, if any
-			: ([i * filesPerProc, (i + 1) * filesPerProc] as const)
-	);
+	/**
+	 * usually, a thread would receive a single range,
+	 * and then would work on it the whole time,
+	 * and then the threadpool would finish.
+	 *
+	 * a more efficient solution is to split the work up into smaller tasks,
+	 * thus using smaller ranges & creating more tasks,
+	 * so that after a thread finishes, it can take up a new task,
+	 */
+	// // https://math.stackexchange.com/a/470107/1149004
+	// const RANGES_PER_THREAD = Math.ceil(Math.log2(files.length) - Math.log2(proc));
+	const TASK_SPLIT_FACTOR = Math.ceil(Math.log2(files.length / proc));
 
-	console.log({ nproc, proc, fileCount: files.length, fileRanges });
+	/**
+	 * ceil, because it's better to make it slightly harder for all (excl last) processors,
+	 * than to make it much harder for a single (the last) processor.
+	 */
+	const RANGE_STEP = Math.ceil(FILES_PER_TASK / TASK_SPLIT_FACTOR);
+
+	const fileRanges = new Array(proc * TASK_SPLIT_FACTOR).fill(0).map((_, i) => {
+		const isLastProc = i === proc - 1;
+
+		return isLastProc
+			? ([i * RANGE_STEP, files.length - 1] as const) // last thread should take on leftover files, if any
+			: ([i * RANGE_STEP, (i + 1) * RANGE_STEP] as const);
+	});
+
+	console.log({
+		nproc, //
+		proc,
+		file_count: files.length,
+		FILES_PER_TASK,
+		TASK_SPLIT_FACTOR,
+		RANGE_STEP,
+		fileRanges,
+		file_ranges_count: fileRanges.length,
+	});
 
 	/**
 	 * prep output dir
@@ -130,18 +163,28 @@ export async function defaultRun(): Promise<void> {
 	const dataDiffDir = "data-diffs";
 	fs.ensureDirSync(dataDiffDir);
 
-	const threadpool = thread.Pool(() => thread.spawn(new thread.Worker("./compare-db-files.ts")), proc);
+	const threadpool = thread.Pool(
+		() => thread.spawn<CompareDBFiles>(new thread.Worker("./compare-db-files.ts")),
+		proc
+	);
 	const tasks = [];
+	let done = 0;
+	const onDone = () => {
+		console.log("done", ++done, "total", tasks.length);
+	};
 
-	for (const [from, to] of fileRanges) {
+	for (let i = 0; i < fileRanges.length; i++) {
+		const [from, to] = fileRanges[i];
 		const filepaths: string[] = files.slice(from, to + 1);
-		const task = threadpool.queue((compareDBFiles) => compareDBFiles(filepaths, dataDiffDir));
+		const task = threadpool.queue((compareDBFiles) => compareDBFiles({ filepaths, dataDiffDir, threadId: i }));
+		task.then(onDone);
 		tasks.push(task);
 	}
 
-	// await threadpool.completed(); // TODO use this?
-	await Promise.all(tasks);
+	await threadpool.completed();
+	console.log("threadpool: all tasks completed.");
 	await threadpool.terminate();
+	console.log("threadpool: terminated.");
 }
 
 if (!module.parent) {
