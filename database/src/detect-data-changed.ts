@@ -110,7 +110,7 @@ export async function defaultRun(): Promise<void> {
 	const files: string[] = entries.filter((x) => x.endsWith(".json") && fs.statSync(x).isFile());
 
 	const nproc: number = os.cpus().length;
-	let proc: number = Math.min(nproc - 2, files.length);
+	let proc: number = Math.min(Math.max(1, nproc - 2), files.length);
 	const calcFilesPerTask = () => Math.floor(files.length / proc);
 	let FILES_PER_TASK: number = calcFilesPerTask();
 
