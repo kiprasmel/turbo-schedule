@@ -30,6 +30,7 @@ lerna-debug.log*
 .yarn-integrity
 
 /data*
+data-diffs
 !/database
 
 NEXT.md

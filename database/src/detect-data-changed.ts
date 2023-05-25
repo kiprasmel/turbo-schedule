@@ -2,6 +2,7 @@
 
 import fs from "fs-extra";
 import path from "path";
+import { exec } from "child_process";
 
 import { DbSchema } from "./config";
 
@@ -10,24 +11,9 @@ export type DataChangedRet = {
 	reason: string;
 };
 
-export function detectIfDataChanged(fp1: string, fp2: string): DataChangedRet {
-	// console.log({ fp1, fp2 });
-	const fr1: string = fs.readFileSync(fp1, { encoding: "utf-8" });
-	const fr2: string = fs.readFileSync(fp2, { encoding: "utf-8" });
-
-	if (!fr1.trim() || !fr2.trim()) {
-		// TODO
-		return {
-			changed: false,
-			reason: "error: empty file",
-		};
-	}
-
-	const f1: DbSchema = JSON.parse(fr1);
-	const f2: DbSchema = JSON.parse(fr2);
-
+export function detectIfDataChanged(db1: DbSchema, db2: DbSchema): DataChangedRet {
 	// TODO FIXME ASSUMPTION: assume latest db schema format (see NEXT.md)
-	if (!("scrapeInfo" in f1) || !("scrapeInfo" in f2)) {
+	if (!("scrapeInfo" in db1) || !("scrapeInfo" in db2)) {
 		// throw new Error("database schema older than implemented yet (did not find `scrapeInfo`).\n");
 		// TODO FIXME: throw error
 		return {
@@ -36,7 +22,7 @@ export function detectIfDataChanged(fp1: string, fp2: string): DataChangedRet {
 		};
 	}
 
-	if (!f1.participants || !f2.participants) {
+	if (!db1.participants || !db2.participants) {
 		// TODO
 		return {
 			changed: false,
@@ -52,22 +38,22 @@ export function detectIfDataChanged(fp1: string, fp2: string): DataChangedRet {
 	 * because then not a change (tho, should be overwritten as a new version..)
 	 */
 
-	if (f1.participants.length !== f2.participants.length) {
+	if (db1.participants.length !== db2.participants.length) {
 		return {
 			changed: true,
 			reason: "participant length mismatch" as const,
 		};
 	}
-	if (f1.lessons.length !== f2.lessons.length) {
+	if (db1.lessons.length !== db2.lessons.length) {
 		return {
 			changed: true,
 			reason: "lesson length mismatch" as const,
 		};
 	}
 
-	for (let i = 0; i < f1.participants.length; i++) {
-		const fs1 = JSON.stringify(f1.participants[i]);
-		const fs2 = JSON.stringify(f2.participants[i]);
+	for (let i = 0; i < db1.participants.length; i++) {
+		const fs1 = JSON.stringify(db1.participants[i]);
+		const fs2 = JSON.stringify(db2.participants[i]);
 
 		if (fs1 !== fs2) {
 			return {
@@ -77,9 +63,9 @@ export function detectIfDataChanged(fp1: string, fp2: string): DataChangedRet {
 		}
 	}
 
-	for (let i = 0; i < f1.lessons.length; i++) {
-		const fs1 = JSON.stringify(f1.lessons[i]);
-		const fs2 = JSON.stringify(f2.lessons[i]);
+	for (let i = 0; i < db1.lessons.length; i++) {
+		const fs1 = JSON.stringify(db1.lessons[i]);
+		const fs2 = JSON.stringify(db2.lessons[i]);
 
 		if (fs1 !== fs2) {
 			return {
@@ -95,34 +81,66 @@ export function detectIfDataChanged(fp1: string, fp2: string): DataChangedRet {
 	};
 }
 
-if (!module.parent) {
+export function basenameExtless(x: string): string {
+	return path
+		.basename(x)
+		.split(".")
+		.slice(0, -1)
+		.join(".");
+}
+
+export const padFor = (x: number, maxlen: number, pad = " "): string => {
+	const xlen = x.toString().length;
+	if (xlen > maxlen) throw new Error(`x len > maxlen`);
+	const delta = maxlen - xlen;
+	const padding = pad.repeat(delta);
+	return padding;
+};
+
+export async function defaultRun(): Promise<void> {
 	// const datadir = path.join(__dirname, "..", "data");
 	const datadir = path.join(__dirname, "..", "..", "data"); // DEBUG @ ROOT
 
 	const entries = fs.readdirSync(datadir).map((x) => path.join(datadir, x));
 	const files: string[] = entries.filter((x) => x.endsWith(".json") && fs.statSync(x).isFile());
 
-	const padFor = (x: number, maxlen: number = files.length.toString().length, pad = " "): string => {
-		const xlen = x.toString().length;
-		if (xlen > maxlen) throw new Error(`x len > maxlen`);
-		const delta = maxlen - xlen;
-		const padding = pad.repeat(delta);
-		return padding;
-	};
+	const dataDiffDir = "data-diffs";
+	fs.ensureDirSync(dataDiffDir);
 
+	const rawFileContentPromises = files.map(async (fp) => {
+		const raw: string = await fs.readFile(fp, { encoding: "utf-8" });
+
+		const isEmpty = !raw.trim();
+		if (isEmpty) {
+			console.warn(`empty file: ${fp}`);
+		}
+
+		return [isEmpty, raw] as const;
+	});
+	const rawFileContents = await Promise.all(rawFileContentPromises);
+	const fileContents: DbSchema[] = rawFileContents
+		.filter(([isEmpty]) => !isEmpty)
+		.map(([, raw]): DbSchema => JSON.parse(raw));
+
+	console.log({ fileContents });
+
+	const fileStrLen: number = files.length.toString().length;
 	let n_changed: number = 0;
 	for (let i = 0; i < files.length - 1; i++) {
 		const fp1 = files[i];
 		const fp2 = files[i + 1];
 
-		const changed: DataChangedRet = detectIfDataChanged(fp1, fp2);
+		const db1: DbSchema = fileContents[i];
+		const db2: DbSchema = fileContents[i + 1];
+
+		const changed: DataChangedRet = detectIfDataChanged(db1, db2);
 		if (changed.changed) {
 			++n_changed;
 
 			const info = [
-				padFor(n_changed),
+				padFor(n_changed, fileStrLen),
 				n_changed,
-				padFor(i),
+				padFor(i, fileStrLen),
 				i,
 				"changed",
 				path.basename(fp1),
@@ -130,6 +148,23 @@ if (!module.parent) {
 				changed.reason,
 			];
 			console.log(...info);
+
+			const patchfile = `${basenameExtless(fp1)}...${basenameExtless(fp2)}.diff`;
+			const patchpath = path.join(dataDiffDir, patchfile);
+			/**
+			 * https://github.com/andreyvit/json-diff
+			 */
+			const cmd = `json-diff "${db1}" "${db2}" > "${patchpath}"`;
+			console.log(cmd);
+			try {
+				await exec(cmd);
+			} catch (e) {
+				// expected to exit 1
+			}
 		}
 	}
+}
+
+if (!module.parent) {
+	defaultRun();
 }
