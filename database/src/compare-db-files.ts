@@ -119,8 +119,12 @@ export function compareDBFiles({
 			try {
 				execSync(cmd);
 			} catch (e) {
-				log("caught error with json-diff:", e);
-				// expected to exit 1
+				if ((e as any).status === 1) {
+					// expected to exit 1 since has diff
+				} else {
+					log(`caught error from json-diff, exit code != 1`, e);
+					throw e;
+				}
 			}
 		}
 	}
