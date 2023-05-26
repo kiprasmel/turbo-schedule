@@ -27,8 +27,6 @@ export function compareDBFiles({
 
 	const fileStrLen: number = filepaths.length.toString().length;
 
-	// let rawcurr: string = "";
-	// let rawnext: string = "";
 	const readDb = (k: number): DbSchema | null => {
 		const raw: string = fs.readFileSync(filepaths[k], { encoding: "utf-8" }).trim();
 
@@ -42,12 +40,8 @@ export function compareDBFiles({
 
 	let icurr: number = 0;
 	let inext: number = 1;
-
-	// let dbcurr: DbSchema;
-	// let dbnext: DbSchema;
-	const dbcache: Map<number, DbSchema> = new Map(); // TODO OPTIMIZE: keep only last 2
-
 	let n_changed: number = 0;
+	const dbcache: Map<number, DbSchema> = new Map();
 
 	for (let i = 0; i < filepaths.length - 1; i++) {
 		/** only set curr to next, if next was available. otherwise, stick to the existing `curr` */
@@ -57,7 +51,7 @@ export function compareDBFiles({
 		}
 		inext = i + 1;
 
-		log(`${threadId} comparing ${icurr} ${inext}`);
+		log(`comparing ${icurr} ${inext}`);
 
 		if (!dbcache.has(icurr)) {
 			const maybeDb = readDb(icurr);
@@ -71,23 +65,8 @@ export function compareDBFiles({
 			dbcache.set(inext, maybeDb);
 		}
 
-		// if (i === 0) {
-		// 	const maybeNext = readDB(i);
-		// 	if (!maybeNext) continue;
-		// 	dbnext = maybeNext;
-		// }
-
-		// icurr = inext;
-		// inext = i + 1;
-
-		// dbcurr = dbnext!;
-		// const maybeNext2 = readDB(i);
-		// if (!maybeNext2) continue;
-		// dbnext = maybeNext2;
-
 		const db1 = dbcache.get(icurr)!;
 		const db2 = dbcache.get(inext)!;
-		log("db1 length:", JSON.stringify(db1).length, "db2 length:", JSON.stringify(db2).length);
 		const changed: DataChangedRet = detectIfDataChanged(db1, db2);
 		if (changed.changed) {
 			++n_changed;
@@ -111,23 +90,20 @@ export function compareDBFiles({
 
 			const patchfile = `${basenameExtless(fp1)}...${basenameExtless(fp2)}.diff`;
 			const patchpath = path.join(dataDiffDir, patchfile);
-			/**
-			 * https://github.com/andreyvit/json-diff
-			 */
+			/** https://github.com/andreyvit/json-diff */
 			const cmd = `json-diff -n "${fp1}" "${fp2}" > "${patchpath}"`;
-			log(cmd);
 			try {
 				execSync(cmd);
 			} catch (e) {
 				if ((e as any).status === 1) {
 					// expected to exit 1 since has diff
 				} else {
-					log(`caught error from json-diff, exit code != 1`, e);
+					log(`caught error from json-diff, exit code != 1, throwing.`, e);
 					throw e;
 				}
 			}
 		}
 	}
 
-	log("done. n_changed =", n_changed);
+	log("done.", n_changed, "changed.");
 }
