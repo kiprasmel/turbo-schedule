@@ -109,52 +109,7 @@ export async function defaultRun(): Promise<void> {
 	const entries = fs.readdirSync(datadir).map((x) => path.join(datadir, x));
 	const files: string[] = entries.filter((x) => x.endsWith(".json") && fs.statSync(x).isFile());
 
-	const nproc: number = os.cpus().length;
-	let proc: number = Math.min(Math.max(1, nproc - 2), files.length);
-	const calcFilesPerTask = () => Math.floor(files.length / proc);
-	let FILES_PER_TASK: number = calcFilesPerTask();
-
-	if (FILES_PER_TASK < 2) {
-		proc /= 2;
-		FILES_PER_TASK = calcFilesPerTask();
-	}
-
-	/**
-	 * usually, a thread would receive a single range,
-	 * and then would work on it the whole time,
-	 * and then the threadpool would finish.
-	 *
-	 * a more efficient solution is to split the work up into smaller tasks,
-	 * thus using smaller ranges & creating more tasks,
-	 * so that after a thread finishes, it can take up a new task,
-	 */
-	// // https://math.stackexchange.com/a/470107/1149004
-	// const RANGES_PER_THREAD = Math.ceil(Math.log2(files.length) - Math.log2(proc));
-	const TASK_SPLIT_FACTOR = Math.ceil(Math.log2(files.length / proc));
-
-	/**
-	 * ceil, because it's better to make it slightly harder for all (excl last) processors,
-	 * than to make it much harder for a single (the last) processor.
-	 */
-	const RANGE_STEP = Math.ceil(FILES_PER_TASK / TASK_SPLIT_FACTOR);
-
-	const fileRanges = new Array(proc * TASK_SPLIT_FACTOR)
-		.fill(0)
-		.map((_, i) => [i * RANGE_STEP, (i + 1) * RANGE_STEP]);
-
-	// last thread should take on leftover files, if any
-	fileRanges[fileRanges.length - 1][1] = files.length - 1;
-
-	console.log({
-		nproc, //
-		proc,
-		file_count: files.length,
-		FILES_PER_TASK,
-		TASK_SPLIT_FACTOR,
-		RANGE_STEP,
-		fileRanges,
-		file_ranges_count: fileRanges.length,
-	});
+	const { proc, itemRanges: fileRanges } = splitItemsIntoNGroupsBasedOnCPUCores(files.length);
 
 	/**
 	 * prep output dir
@@ -184,6 +139,58 @@ export async function defaultRun(): Promise<void> {
 	console.log("threadpool: all tasks completed.");
 	await threadpool.terminate();
 	console.log("threadpool: terminated.");
+}
+
+export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number): { proc: number; itemRanges: number[][] } {
+	const nproc: number = os.cpus().length;
+	let proc: number = Math.min(Math.max(1, nproc - 2), itemCount);
+
+	const calcItemsPerTask = () => Math.floor(itemCount / proc);
+	let ITEMS_PER_TASK: number = calcItemsPerTask();
+
+	if (ITEMS_PER_TASK < 2) {
+		proc /= 2;
+		ITEMS_PER_TASK = calcItemsPerTask();
+	}
+
+	/**
+	 * usually, a thread would receive a single range,
+	 * and then would work on it the whole time,
+	 * and then the threadpool would finish.
+	 *
+	 * a more efficient solution is to split the work up into smaller tasks,
+	 * thus using smaller ranges & creating more tasks,
+	 * so that after a thread finishes, it can take up a new task,
+	 */
+	// // https://math.stackexchange.com/a/470107/1149004
+	// const RANGES_PER_THREAD = Math.ceil(Math.log2(itemCount) - Math.log2(proc));
+	const TASK_SPLIT_FACTOR = Math.ceil(Math.log2(itemCount / proc));
+
+	/**
+	 * ceil, because it's better to make it slightly harder for all (excl last) processors,
+	 * than to make it much harder for a single (the last) processor.
+	 */
+	const RANGE_STEP = Math.ceil(ITEMS_PER_TASK / TASK_SPLIT_FACTOR);
+
+	const itemRanges = new Array(proc * TASK_SPLIT_FACTOR)
+		.fill(0)
+		.map((_, i) => [i * RANGE_STEP, (i + 1) * RANGE_STEP]);
+
+	// last thread should take on leftover items, if any
+	itemRanges[itemRanges.length - 1][1] = itemCount - 1;
+
+	console.log({
+		nproc,
+		proc,
+		item_count: itemCount,
+		ITEMS_PER_TASK,
+		TASK_SPLIT_FACTOR,
+		RANGE_STEP,
+		itemRanges,
+		item_ranges_count: itemRanges.length,
+	});
+
+	return { proc, itemRanges };
 }
 
 if (!module.parent) {
