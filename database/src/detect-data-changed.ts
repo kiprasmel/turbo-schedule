@@ -102,7 +102,7 @@ export const padFor = (x: number, maxlen: number, pad = " "): string => {
 	return padding;
 };
 
-export async function defaultRun(): Promise<void> {
+export async function defaultRun(): Promise<string[]> {
 	// const datadir = path.join(__dirname, "..", "data");
 	const datadir = path.join(__dirname, "..", "..", "data"); // DEBUG @ ROOT
 
@@ -121,10 +121,14 @@ export async function defaultRun(): Promise<void> {
 		() => thread.spawn<CompareDBFiles>(new thread.Worker("./compare-db-files.ts")),
 		proc
 	);
+
+	const meaningfulFiles: string[] = [files[0] /** add very first file */];
+
 	const tasks = [];
 	let done = 0;
-	const onDone = () => {
+	const onDone = (meaningfulFilesThatChangedFromPrev: ReturnType<CompareDBFiles>): void => {
 		console.log("done", ++done, "total", tasks.length);
+		meaningfulFiles.push(...meaningfulFilesThatChangedFromPrev);
 	};
 
 	for (let i = 0; i < fileRanges.length; i++) {
@@ -137,9 +141,20 @@ export async function defaultRun(): Promise<void> {
 
 	await threadpool.completed();
 	console.log("threadpool: all tasks completed.");
+
+	meaningfulFiles.sort((A, B) => path2date(A) - path2date(B));
+
+	console.log({ meaningfulFiles, meaningful_file_count: meaningfulFiles.length });
+
 	await threadpool.terminate();
 	console.log("threadpool: terminated.");
+
+	return meaningfulFiles;
 }
+
+export const last = <T = any>(xs: T[]): T => xs[xs.length - 1];
+export const path2date = (pathToFileWithDateFormatName: string): number =>
+	new Date(last(pathToFileWithDateFormatName.split(path.sep))).getTime();
 
 export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number): { proc: number; itemRanges: number[][] } {
 	const nproc: number = os.cpus().length;

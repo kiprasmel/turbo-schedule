@@ -22,7 +22,7 @@ export function compareDBFiles({
 	filepaths,
 	dataDiffDir, //
 	threadId = 0,
-}: CompareDBFilesOpts): void {
+}: CompareDBFilesOpts): string[] {
 	const log = (...msgs: any[]): void => console.log(threadId, ...msgs);
 
 	const fileStrLen: number = filepaths.length.toString().length;
@@ -40,7 +40,7 @@ export function compareDBFiles({
 
 	let icurr: number = 0;
 	let inext: number = 1;
-	let n_changed: number = 0;
+	const meaningfulFilesThatChangedFromPrev: string[] = [];
 	const dbcache: Map<number, DbSchema> = new Map();
 
 	for (let i = 0; i < filepaths.length - 1; i++) {
@@ -69,14 +69,14 @@ export function compareDBFiles({
 		const db2 = dbcache.get(inext)!;
 		const changed: DataChangedRet = detectIfDataChanged(db1, db2);
 		if (changed.changed) {
-			++n_changed;
-
 			const fp1 = filepaths[icurr];
 			const fp2 = filepaths[inext];
 
+			meaningfulFilesThatChangedFromPrev.push(fp2);
+
 			const info = [
-				padFor(n_changed, fileStrLen),
-				n_changed,
+				padFor(meaningfulFilesThatChangedFromPrev.length, fileStrLen),
+				meaningfulFilesThatChangedFromPrev.length,
 				padFor(icurr, fileStrLen),
 				icurr,
 				padFor(inext, fileStrLen),
@@ -105,5 +105,7 @@ export function compareDBFiles({
 		}
 	}
 
-	log("done.", n_changed, "changed.");
+	log("done.", meaningfulFilesThatChangedFromPrev.length, "changed.");
+
+	return meaningfulFilesThatChangedFromPrev;
 }
