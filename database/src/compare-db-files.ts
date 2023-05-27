@@ -91,7 +91,7 @@ export function compareDBFiles({
 			const patchfile = `${basenameExtless(fp1)}...${basenameExtless(fp2)}.diff`;
 			const patchpath = path.join(dataDiffDir, patchfile);
 			/** https://github.com/andreyvit/json-diff */
-			const cmd = `json-diff -n "${fp1}" "${fp2}" > "${patchpath}"`;
+			const cmd = `json-diff --raw-json --max-elisions 0 "${fp1}" "${fp2}" > "${patchpath}"`;
 			try {
 				execSync(cmd);
 			} catch (e) {
