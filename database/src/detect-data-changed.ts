@@ -164,7 +164,7 @@ export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number): { proc:
 	let ITEMS_PER_TASK: number = calcItemsPerTask();
 
 	if (ITEMS_PER_TASK < 2) {
-		proc /= 2;
+		proc = Math.ceil(proc / 2);
 		ITEMS_PER_TASK = calcItemsPerTask();
 	}
 
@@ -179,7 +179,7 @@ export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number): { proc:
 	 */
 	// // https://math.stackexchange.com/a/470107/1149004
 	// const RANGES_PER_THREAD = Math.ceil(Math.log2(itemCount) - Math.log2(proc));
-	const TASK_SPLIT_FACTOR = Math.ceil(Math.log2(itemCount / proc));
+	const TASK_SPLIT_FACTOR = Math.ceil(Math.log2(Math.max(2, itemCount / proc)));
 
 	/**
 	 * ceil, because it's better to make it slightly harder for all (excl last) processors,
