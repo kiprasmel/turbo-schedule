@@ -1,6 +1,7 @@
 export * from "./config";
 export * from "./initDb";
 export * from "./setDbState";
+export * from "./try-find-data-in-archive";
 
 /** @deprecated */
 export * from "./setNewDbState";

@@ -1,13 +1,13 @@
 import path from "path";
 import { execSync } from "child_process";
 
-import fs from "fs-extra";
 import { expose } from "threads/worker";
 
 import { DbSchema } from "./config";
 
 // eslint-disable-next-line import/no-cycle
 import { DataChangedRet, detectIfDataChanged, padFor, basenameExtless } from "./detect-data-changed";
+import { readRawDb } from "./find-needle-in-db";
 
 export type CompareDBFiles = typeof compareDBFiles;
 
@@ -27,16 +27,8 @@ export function compareDBFiles({
 
 	const fileStrLen: number = filepaths.length.toString().length;
 
-	const readDb = (k: number): DbSchema | null => {
-		const raw: string = fs.readFileSync(filepaths[k], { encoding: "utf-8" }).trim();
-
-		if (!raw) {
-			log(`empty file: ${k} ${filepaths[k]}`);
-			return null;
-		}
-
-		return JSON.parse(raw);
-	};
+	const readDb = (k: number): DbSchema | null =>
+		readRawDb(filepaths[k], ({ filepath }) => log(`empty db file: ${filepath}`));
 
 	let icurr: number = 0;
 	let inext: number = 1;

@@ -10,6 +10,7 @@ import { DbSchema } from "./config";
 
 // eslint-disable-next-line import/no-cycle
 import { CompareDBFiles } from "./compare-db-files";
+import { getDatabaseSnapshotFiles } from "./try-find-data-in-archive";
 
 export type DataChangedRet = {
 	changed: boolean;
@@ -103,11 +104,7 @@ export const padFor = (x: number, maxlen: number, pad = " "): string => {
 };
 
 export async function defaultRun(): Promise<string[]> {
-	// const datadir = path.join(__dirname, "..", "data");
-	const datadir = path.join(__dirname, "..", "..", "data"); // DEBUG @ ROOT
-
-	const entries = fs.readdirSync(datadir).map((x) => path.join(datadir, x));
-	const files: string[] = entries.filter((x) => x.endsWith(".json") && fs.statSync(x).isFile());
+	const files: string[] = getDatabaseSnapshotFiles();
 
 	const { proc, itemRanges: fileRanges } = splitItemsIntoNGroupsBasedOnCPUCores(files.length);
 
@@ -117,10 +114,7 @@ export async function defaultRun(): Promise<string[]> {
 	const dataDiffDir = "data-diffs";
 	fs.ensureDirSync(dataDiffDir);
 
-	const threadpool = thread.Pool(
-		() => thread.spawn<CompareDBFiles>(new thread.Worker("./compare-db-files.ts")),
-		proc
-	);
+	const threadpool = thread.Pool(() => thread.spawn<CompareDBFiles>(new thread.Worker("./compare-db-files")), proc);
 
 	const meaningfulFiles: string[] = [files[0] /** add very first file */];
 

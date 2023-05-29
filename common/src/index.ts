@@ -28,3 +28,4 @@ export * from "./model/ScrapeInfo";
 export * from "./model/Availability";
 export * from "./model/Health";
 export * from "./model/BuildInfo";
+export * from "./model/Archive";
