@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { Lesson, Student, ParticipantLabel, getDefaultParticipant } from "@turbo-schedule/common";
+import { Lesson, Student, ParticipantLabel, getDefaultParticipant, ArchiveLostFound } from "@turbo-schedule/common";
 
 import "./StudentSchedule.scss";
 
@@ -52,9 +52,30 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const [participantType, setParticipantType] = useState<ParticipantLabel | null>(null);
 	useAddMostRecentParticipantOnPageChange(studentName, participantType);
 
+	//
+
 	const [, , isLoading] = useFetchParticipant(getDefaultParticipant, [studentName], {
 		urlCtx: studentName, //
-		onError: () => setScheduleByDays([[]]),
+		onError: async () => {
+			console.log("error fetching participant");
+			setScheduleByDays([[]]);
+
+			const res = await fetch(`/api/v1/archive/lost-found?participantName=${encodeURIComponent(studentName)}`);
+
+			if (res.ok) {
+				const { found, snapshots }: ArchiveLostFound = await res.json();
+
+				console.log({found, snapshots});
+
+				if (found) {
+					// TODO
+				} else {
+					// TODO
+				}
+			}
+
+
+		},
 		onSuccess: ({ lessons, labels }) => {
 			setParticipantType(labels[0]);
 
@@ -150,13 +171,23 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		);
 	}
 
-	if (!scheduleByDays || !scheduleByDays.length || !scheduleByDays[0] /* || !scheduleByDays[0].length */) {
+	if (!scheduleByDays || !scheduleByDays.length || !scheduleByDays[0] || scheduleByDays.every(x => !x.length)) {
+
 		return (
 			<>
-				<BackBtn />
+				<Navbar />
 
 				<h1>{t("Student not found")(studentName)}</h1>
-				<p>{t("Go back and search for a different one")}</p>
+				<p>
+					(naujausioje duomenų bazės versijoje).
+				</p>
+
+				{/*  */}
+				<h2>ieškome archyve...</h2>
+
+
+				{/* TODO: only show if not found in archive */}
+				<BackBtn />
 			</>
 		);
 	}
@@ -178,7 +209,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 							navigateToDesiredPath({
 								studentName,
-								day: day,
+								day,
 								timeIndex: selectedLesson?.timeIndex,
 								shouldShowTheLesson: !!selectedLesson || isDesktop,
 							});
