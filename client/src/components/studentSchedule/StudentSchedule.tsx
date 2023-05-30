@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import { createMachine } from "xstate";
+import { useMachine } from "@xstate/react";
 
 import { Lesson, Student, ParticipantLabel, getDefaultParticipant, ArchiveLostFound } from "@turbo-schedule/common";
 
@@ -24,7 +26,61 @@ export interface IStudentScheduleProps {
 	match: any /** TODO */;
 }
 
+const studentScheduleMachine = createMachine({
+	id: "student-schedule",
+	initial: "idle",
+	context: {
+		// TODO
+	},
+	states: {
+		idle: {
+			"on": {
+				FETCH_PARTICIPANT: "loading-participant"
+			}
+		},
+		"loading-participant": {
+			on: {
+				FETCH_SUCCESS: "loading-success",
+				FETCH_FAILURE: "loading-failure"
+			}
+		},
+		"loading-success": {
+			on: {}
+		},
+		"loading-failure": {
+			on: {
+				SEARCH_ARCHIVE_SUCCESS: "search-archive-success",
+				SEARCH_ARCHIVE_FAILURE: "search-archive-failure",
+			}
+		},
+		"search-archive-success": {
+			on: {
+				ARCHIVE_SNAPSHOT_SELECTED: "fetch-from-archive-snapshot"
+			}
+		},
+		"search-archive-failure": {
+			on: {}
+		},
+		"fetch-from-archive-snapshot": {
+			on: {
+				FETCH_ARCHIVE_SNASPHOT_SUCCESS: "loading-from-archive-success",
+				FETCH_ARCHIVE_SNAPSHOT_FAILURE: "loading-from-archive-failure",
+			}
+		},
+		"loading-from-archive-success": {
+			on: {}
+		},
+		"loading-from-archive-failure": {
+			on: {
+				ARCHIVE_SNAPSHOT_SELECTED: "fetch-from-archive-snapshot"
+			}
+		}
+	}
+});
+
 const StudentSchedule = ({ match }: IStudentScheduleProps) => {
+	const [state, send] = useMachine(studentScheduleMachine);
+
 	const t = useTranslation();
 
 	/** scroll to top of page on mount */
@@ -73,9 +129,9 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 				} else {
 					// TODO
 				}
+			} else {
+				console.error("failed to fetch participant from archive...");
 			}
-
-
 		},
 		onSuccess: ({ lessons, labels }) => {
 			setParticipantType(labels[0]);
