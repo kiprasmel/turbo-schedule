@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { createMachine } from "xstate";
+import { assign, createMachine } from "xstate";
 import { useMachine } from "@xstate/react";
 
 import { Lesson, Student, ParticipantLabel, getDefaultParticipant, ArchiveLostFound } from "@turbo-schedule/common";
@@ -26,12 +26,43 @@ export interface IStudentScheduleProps {
 	match: any /** TODO */;
 }
 
-const studentScheduleMachine = createMachine({
+type MachineContext = {
+	scheduleByDays: Lesson[][];
+	snapshots?: string[]
+}
+
+const defaultContext: MachineContext = {
+	scheduleByDays: [[]]
+};
+
+type MachineEvent = {
+	type: "FETCH_PARTICIPANT"
+} | {
+	type: "FETCH_SUCCESS",
+	scheduleByDays: Lesson[][]
+} | {
+	type: "FETCH_FAILURE"
+} | {
+	type: "SEARCH_ARCHIVE_SUCCESS",
+	snapshots: string[];
+} | {
+	type: "SEARCH_ARCHIVE_FAILURE"
+} | {
+	type: "SELECT_ARCHIVE_SNAPSHOT",
+	snapshot: string
+} | {
+	type: "FETCH_ARCHIVE_SNASPHOT_SUCCESS";
+	snapshot: string
+	scheduleByDays: Lesson[][]
+} | {
+	type: "FETCH_ARCHIVE_SNAPSHOT_FAILURE";
+	snapshot: string
+}
+
+const studentScheduleMachine = createMachine<MachineContext, MachineEvent>({
 	id: "student-schedule",
 	initial: "idle",
-	context: {
-		// TODO
-	},
+	context: defaultContext,
 	states: {
 		idle: {
 			"on": {
@@ -40,8 +71,18 @@ const studentScheduleMachine = createMachine({
 		},
 		"loading-participant": {
 			on: {
-				FETCH_SUCCESS: "loading-success",
-				FETCH_FAILURE: "loading-failure"
+				FETCH_SUCCESS: {
+					target: "loading-success",
+					actions: assign({
+						scheduleByDays: (_, event) => event.scheduleByDays
+					})
+				},
+				FETCH_FAILURE: {
+					target: "loading-failure",
+					actions: assign({
+						scheduleByDays: () => [[]]
+					})
+				}
 			}
 		},
 		"loading-success": {
@@ -49,13 +90,18 @@ const studentScheduleMachine = createMachine({
 		},
 		"loading-failure": {
 			on: {
-				SEARCH_ARCHIVE_SUCCESS: "search-archive-success",
+				SEARCH_ARCHIVE_SUCCESS: {
+					target: "search-archive-success",
+					actions: assign({
+						snapshots: (_, event) => event.snapshots
+					})
+				},
 				SEARCH_ARCHIVE_FAILURE: "search-archive-failure",
 			}
 		},
 		"search-archive-success": {
 			on: {
-				ARCHIVE_SNAPSHOT_SELECTED: "fetch-from-archive-snapshot"
+				SELECT_ARCHIVE_SNAPSHOT: "fetch-from-archive-snapshot"
 			}
 		},
 		"search-archive-failure": {
@@ -72,14 +118,15 @@ const studentScheduleMachine = createMachine({
 		},
 		"loading-from-archive-failure": {
 			on: {
-				ARCHIVE_SNAPSHOT_SELECTED: "fetch-from-archive-snapshot"
+				SELECT_ARCHIVE_SNAPSHOT: "fetch-from-archive-snapshot"
 			}
 		}
 	}
 });
 
 const StudentSchedule = ({ match }: IStudentScheduleProps) => {
-	const [state, send] = useMachine(studentScheduleMachine);
+	const [stateM, sendM] = useMachine(studentScheduleMachine);
+	// const scheduleByDays = useSelector() // TODO
 
 	const t = useTranslation();
 
@@ -104,8 +151,6 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const { params } = match;
 	const { studentName } = params;
 
-	const [scheduleByDays, setScheduleByDays] = useState([[]] as Array<Array<Lesson>>);
-
 	const [participantType, setParticipantType] = useState<ParticipantLabel | null>(null);
 	useAddMostRecentParticipantOnPageChange(studentName, participantType);
 
@@ -115,7 +160,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		urlCtx: studentName, //
 		onError: async () => {
 			console.log("error fetching participant");
-			setScheduleByDays([[]]);
+			sendM({ type: "FETCH_FAILURE" });
 
 			const res = await fetch(`/api/v1/archive/lost-found?participantName=${encodeURIComponent(studentName)}`);
 
@@ -125,19 +170,20 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 				console.log({found, snapshots});
 
 				if (found) {
-					// TODO
+					sendM({ type: "SEARCH_ARCHIVE_SUCCESS", snapshots });
 				} else {
-					// TODO
+					sendM({ type: "SEARCH_ARCHIVE_FAILURE" });
 				}
 			} else {
 				console.error("failed to fetch participant from archive...");
+				sendM({ type: "SEARCH_ARCHIVE_FAILURE" });
 			}
 		},
 		onSuccess: ({ lessons, labels }) => {
 			setParticipantType(labels[0]);
 
 			if (!lessons?.length) {
-				setScheduleByDays([[]]);
+				sendM({ type: "FETCH_FAILURE" });
 				return;
 			}
 
@@ -152,7 +198,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 				tempScheduleByDays[lesson.dayIndex].push(lesson);
 			});
 
-			setScheduleByDays(tempScheduleByDays);
+			sendM({ type: "FETCH_SUCCESS", scheduleByDays: tempScheduleByDays });
 		},
 	});
 
@@ -184,12 +230,12 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	}, [params.dayIndex, params.timeIndex, studentName, isDesktop, selectedLesson]);
 
 	useEffect(() => {
-		if (params.timeIndex === undefined || !scheduleByDays?.[selectedDay]?.length) {
+		if (params.timeIndex === undefined || !stateM.context.scheduleByDays?.[selectedDay]?.length) {
 			setSelectedLesson(null);
 			return;
 		}
 
-		const lesson: Lesson = scheduleByDays[selectedDay].find(
+		const lesson: Lesson = stateM.context.scheduleByDays[selectedDay].find(
 			(l: Lesson) => l.dayIndex === selectedDay && l.timeIndex === decodeTimeIndex(params.timeIndex)
 		);
 
@@ -200,7 +246,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		}
 
 		setSelectedLesson(lesson);
-	}, [params.timeIndex, scheduleByDays, selectedDay]);
+	}, [params.timeIndex, selectedDay, stateM.context.scheduleByDays]);
 
 	/**
 	 * used to handle cases where a user comes to a URL with the `timeIndex` already set,
@@ -216,22 +262,14 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	 */
 	const canGoBackInHistory = useRef<boolean>(params.timeIndex === undefined);
 
-	if (isLoading) {
-		return (
-			<>
-				<BackBtn />
+	switch (stateM.value) {
+		case "foo": {
+			break;
+		}
+		case "idle": {
+			sendM({ type: "FETCH_PARTICIPANT" });
 
-				<h1>{studentName}</h1>
-
-				<Loading />
-			</>
-		);
-	}
-
-	if (!scheduleByDays || !scheduleByDays.length || !scheduleByDays[0] || scheduleByDays.every(x => !x.length)) {
-
-		return (
-			<>
+			return <>
 				<Navbar />
 
 				<h1>{t("Student not found")(studentName)}</h1>
@@ -245,9 +283,63 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 				{/* TODO: only show if not found in archive */}
 				<BackBtn />
-			</>
-		);
+			</>;
+		}
+		case "loading-participant": {
+			return (
+				<>
+					<h1>{studentName}</h1>
+					<Loading />
+				</>
+			);
+		}
+		case "loading-failure": {
+			sendM({ type: "FETCH_FAILURE" });
+
+			return <>
+				<Navbar />
+
+				<h1>{t("Student not found")(studentName)}</h1>
+				<p>
+					(naujausioje duomenų bazės versijoje).
+				</p>
+
+				<h2>ieškome archyve...</h2>
+
+				{/* <BackBtn /> */}
+			</>;
+		}
+		case "search-archive-failure": {
+			return <>
+				<Navbar />
+
+				<h1>{t("Student not found")(studentName)}</h1>
+
+				<h2>archyve irgi nerasta...</h2>
+				{/* TODO suggest searching for similar / do automatically */}
+
+				<BackBtn />
+			</>;
+		}
+		case "search-archive-success": {
+			return <>
+				<h1>
+					TODO: found in archive:
+				</h1>
+				<ul>
+					{stateM.}
+				</ul>
+			</>;
+		}
+		default: {
+			throw new Error(`unhandled state: ${stateM.value}`);
+		}
 	}
+
+	// if (!stateM.context.scheduleByDays?.length || !stateM.context.scheduleByDays[0] || stateM.context.scheduleByDays.every(x => !x.length)) {
+	// 	return (
+	// 	);
+	// }
 
 	return (
 		<>
