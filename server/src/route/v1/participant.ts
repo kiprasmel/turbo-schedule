@@ -314,7 +314,7 @@ router.get<{ participantName: string }, ParticipantScheduleByNameRes>(
 
 			const participantName: string = decodeURIComponent(req.params.participantName);
 
-			console.log("name", participantName);
+			console.log("name", participantName, "snapshot", snapshot);
 
 			const participant: Participant = await db
 				.get("participants")

@@ -3,7 +3,7 @@ import { css } from "emotion";
 import { assign, createMachine } from "xstate";
 import { useMachine } from "@xstate/react";
 
-import { Lesson, Student, ParticipantLabel, getDefaultParticipant, ArchiveLostFound, Participant } from "@turbo-schedule/common";
+import { Lesson, Student, ParticipantLabel, ArchiveLostFound, Participant } from "@turbo-schedule/common";
 
 import "./StudentSchedule.scss";
 
@@ -15,7 +15,7 @@ import StudentListModal from "./StudentListModal";
 import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
 
-import { fetchParticipantCore, useFetchParticipant } from "../../hooks/useFetchers";
+import { fetchParticipantCore } from "../../hooks/useFetchers";
 import DaySelector from "./DaySelector";
 import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
@@ -155,7 +155,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	//
 
-	const searchIfParticipantExistsInArchive = async () => {
+	const searchIfParticipantExistsInArchive = async (): Promise<void> => {
 			const res = await fetch(`/api/v1/archive/lost-found?participantName=${encodeURIComponent(studentName)}`);
 
 			if (res.ok) {
@@ -172,6 +172,13 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 				console.error("failed to fetch participant from archive...");
 				sendM({ type: "SEARCH_ARCHIVE_FAILURE" });
 			}
+	};
+
+	const onFetchParticipantFailure = async () => {
+		console.log("error fetching participant");
+		sendM({ type: "FETCH_FAILURE" });
+
+		await searchIfParticipantExistsInArchive();
 	};
 
 	const onFetchParticipantSuccess = ({ lessons, labels }: Participant, snapshot?: string): void => {
@@ -195,6 +202,15 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 			sendM({ type: "FETCH_SUCCESS", scheduleByDays: tempScheduleByDays, snapshot });
 	};
+
+	const fetchParticipant = (snapshot?: string): Promise<void> => fetch(fetchParticipantCore[0](studentName, snapshot))
+		.then((res) =>  res.json())
+		.then(data => {
+			console.log("fetch participant succ, data:", data);
+			onFetchParticipantSuccess(data.participant, snapshot);
+		})
+		.catch(onFetchParticipantFailure);
+
 
 	// const [, , isLoading] = useFetchParticipant(getDefaultParticipant, [studentName], {
 
@@ -284,6 +300,9 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	 */
 	const canGoBackInHistory = useRef<boolean>(params.timeIndex === undefined);
 
+	console.log("stateM.value", stateM.value);
+
+
 	switch (stateM.value) {
 		case "idle": {
 			sendM({ type: "FETCH_PARTICIPANT" });
@@ -291,6 +310,8 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 			return <></>;
 		}
 		case "loading-participant": {
+			fetchParticipant();
+
 			return (
 				<>
 					<h1>{studentName}</h1>
@@ -300,6 +321,8 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		}
 		case "loading-failure": {
 			sendM({ type: "FETCH_FAILURE" });
+
+			searchIfParticipantExistsInArchive();
 
 			return <>
 				<Navbar />
@@ -351,12 +374,8 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		}
 		case "fetch-from-archive-snapshot": {
 			const snapshot: string = stateM.context.snapshot!;
-			fetch(fetchParticipantCore[0](studentName, snapshot))
-				.then((res) =>  res.json())
-				.then(data => {
-					console.log("fetch participant succ, data:", data);
-					onFetchParticipantSuccess(data.participant, snapshot);
-			});
+
+			fetchParticipant(snapshot);
 
 			return <>
 				<h1>Siurbiame moksleivio "{studentName}" duomenis iš archyvo...</h1>
