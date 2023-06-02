@@ -1,9 +1,14 @@
 import { Availability, getDefaultParticipant, Participant, Health } from "@turbo-schedule/common";
-import { createUseFetchedState } from "use-fetched-state";
+import { UseFetchedStateReturn, createUseFetchedState } from "use-fetched-state";
 
 /**
  * TODO: could be auto-generated from the express api :o
  */
+
+export const fetchParticipantCore = [
+	(participantName: string, snapshot?: string) => `/api/v1/participant/${encodeURIComponent(participantName)}${  !snapshot ? "" : `?snapshot=${snapshot}`}`,
+	(data: UseFetchedStateReturn<{ participant: Participant }>[0]) => data.participant ?? getDefaultParticipant()
+] as const;
 
 // TODO FIXME
 // @ts-expect-error
@@ -12,8 +17,9 @@ export const useFetchParticipant = createUseFetchedState<
 	Participant,
 	string
 >(
-	(participantName) => `/api/v1/participant/${encodeURIComponent(participantName)}`,
-	(data) => data.participant ?? getDefaultParticipant()
+	...fetchParticipantCore
+	// (participantName) => `/api/v1/participant/${encodeURIComponent(participantName)}`,
+	// (data) => data.participant ?? getDefaultParticipant()
 );
 
 type LessonlessP = Omit<Participant, "lessons">;

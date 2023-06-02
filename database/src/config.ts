@@ -19,11 +19,9 @@ export const defaultDatabaseDataDirPath: string =
 		: path.join(__dirname, "..", "data"); // "database/data/"
 
 export const databaseFileName: string = "latest.json";
-/**
- * Always up to date - `latest.json` is a symlink to the actually latest file,
- * and we update it internally so that the end user does not have to worry about it.
- */
-export const databaseFile: string = path.join(defaultDatabaseDataDirPath, databaseFileName);
+
+export const getDatabaseFilepath = (snapshot: string = databaseFileName): string =>
+	path.join(defaultDatabaseDataDirPath, snapshot);
 
 export interface DbSchema {
 	participants: Participant[];

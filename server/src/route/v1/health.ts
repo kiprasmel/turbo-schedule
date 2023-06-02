@@ -20,10 +20,10 @@ export interface HealthRes extends WithErr {
 }
 
 router.get<never, HealthRes>("/", withSender({ health: getDefaultHealth() }), async (_req, res) => {
-	const send = res.sender;
+	const { sender: send, snapshot } = res;
 
 	try {
-		const db: Db = await initDb();
+		const db: Db = await initDb(snapshot);
 
 		/**
 		 * TODO DB - put both into a `health` object

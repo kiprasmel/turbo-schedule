@@ -3,7 +3,7 @@
 import fs from "fs-extra";
 import path from "path";
 
-import { DbSchema, Db, defaultDbState, databaseFile } from "./config";
+import { DbSchema, Db, defaultDbState, getDatabaseFilepath, databaseFileName } from "./config";
 import { initDb } from "./initDb";
 
 /** TODO get rid of this & have it here */
@@ -17,13 +17,15 @@ const debug = require("debug")("turbo-schedule:database:setDbState");
  */
 export async function setDbState(
 	newState: Partial<DbSchema> = {},
-	databaseFilePath: string = databaseFile
+	snapshotFile: string = databaseFileName
 ): Promise<DbStateReturn> {
 	const fullNewState: DbSchema = { ...defaultDbState, ...newState };
 
-	const db: Db = await initDb(databaseFilePath);
+	const db: Db = await initDb(snapshotFile);
 
 	await db.setState(fullNewState).write();
+
+	const databaseFilePath: string = getDatabaseFilepath(snapshotFile);
 
 	return {
 		db,
@@ -37,7 +39,7 @@ export async function setDbState(
  * backs up the current database file into a filename
  * that's name composed of the state's `timeStartISO`
  */
-export async function backupDbState(currentDatabaseFilePath: string = databaseFile): Promise<void> {
+export async function backupDbState(currentDatabaseFilePath: string = getDatabaseFilepath()): Promise<void> {
 	const currentFileExists: boolean = await fs.pathExists(currentDatabaseFilePath);
 	debug("backupDbState: currentFileExists =", currentFileExists);
 
@@ -96,13 +98,13 @@ export async function backupDbState(currentDatabaseFilePath: string = databaseFi
  */
 export async function setDbStateAndBackupCurrentOne(
 	newState: Partial<DbSchema> = {},
-	currentDatabaseFilePath: string = databaseFile
+	currentDatabaseFileName: string = databaseFileName
 ): Promise<DbStateReturn> {
 	/** make a backup to a different file */
-	await backupDbState(currentDatabaseFilePath);
+	await backupDbState(currentDatabaseFileName);
 
 	/** override the state in the current file */
-	const result: DbStateReturn = await setDbState(newState, currentDatabaseFilePath);
+	const result: DbStateReturn = await setDbState(newState, currentDatabaseFileName);
 
 	return result;
 }

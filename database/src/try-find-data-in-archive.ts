@@ -51,12 +51,9 @@ export async function tryFindParticipantInArchive(
  * TODO filter out if valid data.
  * to not give some other .json file..
  */
-export function getDatabaseSnapshotFiles(/** TODO use */ _databaseDir: string = defaultDatabaseDataDirPath): string[] {
-	// const datadir = path.join(__dirname, "..", "data");
-	const datadir = path.join(__dirname, "..", "..", "data"); // DEBUG @ ROOT
-
+export function getDatabaseSnapshotFiles(datadir: string = defaultDatabaseDataDirPath): string[] {
 	const entries = fs.readdirSync(datadir).map((x) => path.join(datadir, x));
-	const files: string[] = entries.filter((x) => x.endsWith(".json") && fs.statSync(x).isFile());
+	const filepaths: string[] = entries.filter((x) => x.endsWith(".json") && fs.statSync(x).isFile());
 
-	return files;
+	return filepaths;
 }
