@@ -13,7 +13,7 @@ import fs from "fs-extra";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 
-import { defaultDatabaseDataDirPath, databaseFile, DbSchema, defaultDbState, Db } from "./config";
+import { defaultDatabaseDataDirPath, getDatabaseFilepath, DbSchema, defaultDbState, Db } from "./config";
 import { initDb } from "./initDb";
 
 const debug = require("debug")("turbo-schedule:database:setNewDbState");
@@ -27,7 +27,7 @@ export interface DbStateReturn {
 
 export async function overrideDbState(
 	newDbState: Partial<DbSchema> = {},
-	dbStorageFilePath: string = databaseFile
+	dbStorageFilePath: string = getDatabaseFilepath()
 ): Promise<DbStateReturn> {
 	return setNewDbState(newDbState, { databaseFilePath: dbStorageFilePath });
 }
@@ -39,7 +39,7 @@ export interface NewStateOpts {
 }
 
 export const defaultNewStateOpts: NewStateOpts = {
-	databaseFilePath: databaseFile,
+	databaseFilePath: getDatabaseFilepath(),
 	shouldUseCurrentDatabaseFile: false /** create a new one & backup the current by default. Disable this if there isn't anything new and you just want to use the already existing file, for example once starting the server. */,
 	shouldHashDataDirPath: false,
 };
@@ -84,9 +84,9 @@ export async function setNewDbState(
 	// await fs.ensureDir(dbStorageFilePath);
 
 	debug("dbStorageFilePath", dbStorageFilePath);
-	debug("databaseFile", databaseFile);
+	debug("databaseFile", getDatabaseFilepath);
 
-	const db: Db = await initDb(databaseFile); /** TODO `databaseFile` */
+	const db: Db = await initDb(newStateOptsRef.databaseFilePath);
 	const fullNewDbState: DbSchema = { ...defaultDbState, ...newDbState };
 
 	/**
@@ -144,13 +144,13 @@ export function createNewDatabaseFilePathSync(
 
 	if (shouldPutTheNewDatabaseFileToAction) {
 		try {
-			fs.unlinkSync(databaseFile);
-			fs.removeSync(databaseFile);
+			fs.unlinkSync(getDatabaseFilepath());
+			fs.removeSync(getDatabaseFilepath());
 		} catch (err) {
 			/** ignore - the symlink just didn't exist previously */
 		}
 
-		fs.symlinkSync(newFilePath, databaseFile);
+		fs.symlinkSync(newFilePath, getDatabaseFilepath());
 	}
 
 	return newFilePath;
