@@ -32,10 +32,10 @@ export interface ParticipantsRes extends WithErr {
 }
 
 router.get<never, ParticipantsRes>("/", withSender({ participants: [] }), async (_req, res) => {
-	const send = res.sender;
+	const { sender: send, snapshot } = res;
 
 	try {
-		const db: Db = await initDb();
+		const db: Db = await initDb(snapshot);
 
 		const participants: ParticipantsRes["participants"] = await db.get("participants").value();
 
@@ -59,10 +59,10 @@ export interface ParticipantRandomRes extends WithErr {
 }
 
 router.get<never, ParticipantRandomRes>("/random", withSender({ participants: [] }), async (req, res) => {
-	const send = res.sender;
+	const { sender: send, snapshot } = res;
 
 	try {
-		const db: Db = await initDb();
+		const db: Db = await initDb(snapshot);
 		const participants: Participant[] = await db.get("participants").value();
 
 		if (!req.query.count) {
@@ -93,10 +93,10 @@ router.get<never, ParticipantHierarchyRes>(
 	"/hierarchy",
 	withSender({ hierarchy: createParticipantHierarchy([]) }), // TODO - is this even working?
 	async (_req, res) => {
-		const send = res.sender;
+		const { sender: send, snapshot } = res;
 
 		try {
-			const db: Db = await initDb();
+			const db: Db = await initDb(snapshot);
 			const participants: Participant[] = await db.get("participants").value();
 
 			const hierarchy: ParticipantHierarchyManual = createParticipantHierarchy(participants);
@@ -128,10 +128,10 @@ router.get<never, ParticipantCommonAvailabilityRes>(
 	"/common-availability",
 	withSender(getDefaultParticipantCommonAvailRes()),
 	async (req, res) => {
-		const send = res.sender;
+		const { sender: send, snapshot } = res;
 
 		try {
-			const db: Db = await initDb();
+			const db: Db = await initDb(snapshot);
 
 			const wantedParticipants: Participant["text"][] =
 				req.query?.["wanted-participants"]
@@ -250,7 +250,7 @@ export interface ParticipantClassifyRes extends WithErr {
 }
 
 router.get<never, ParticipantClassifyRes>("/classify", withSender({ participants: [] }), async (req, res) => {
-	const send = res.sender;
+	const { sender: send, snapshot } = res;
 
 	try {
 		const participants: string[] =
@@ -263,7 +263,7 @@ router.get<never, ParticipantClassifyRes>("/classify", withSender({ participants
 			return send(400, { err: `No participants included in request.query (${participants})` });
 		}
 
-		const db: Db = await initDb();
+		const db: Db = await initDb(snapshot);
 
 		const classifiedParticipants: ParticipantClassifyRes["participants"] = await db
 			.get("participants")
@@ -307,10 +307,10 @@ router.get<{ participantName: string }, ParticipantScheduleByNameRes>(
 	"/:participantName",
 	withSender({ participant: getDefaultParticipant() }),
 	async (req, res) => {
-		const send = res.sender;
+		const { sender: send, snapshot } = res;
 
 		try {
-			const db: Db = await initDb();
+			const db: Db = await initDb(snapshot);
 
 			const participantName: string = decodeURIComponent(req.params.participantName);
 
