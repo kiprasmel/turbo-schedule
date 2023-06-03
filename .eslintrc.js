@@ -8,5 +8,6 @@ module.exports = {
 		"@typescript-eslint/camelcase": 0,
 		"@typescript-eslint/no-use-before-define": 0,
 		"no-continue": 0,
+		"no-void": 0,
 	}
 }
