@@ -2,7 +2,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable indent, no-multi-str, flowtype/space-after-type-colon */
 
-import React, { FC, useState, useEffect, useRef, useReducer, useCallback, useMemo, startTransition } from "react";
+import React, { FC, useState, useEffect, useRef, useReducer, useCallback, useMemo } from "react";
 import { cx, css } from "emotion";
 
 import { Availability as IAvailability, Participant, WantedParticipant } from "@turbo-schedule/common";
@@ -175,13 +175,13 @@ export const Availability: FC = () => {
 				| WantedParticipant[]
 				| ((currentlyWantedParticipants: WantedParticipant[]) => WantedParticipant[])
 		): void => {
-			startTransition(() => {
+			// startTransition(() => {
 				if (typeof newWantedParticipants === "function") {
 					__setWantedParticipants(newWantedParticipants(wantedParticipants));
 				} else {
 					__setWantedParticipants(newWantedParticipants);
 				}
-			});
+			// });
 		},
 		[__setWantedParticipants, wantedParticipants]
 	);
