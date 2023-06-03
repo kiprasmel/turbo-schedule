@@ -77,7 +77,8 @@ const studentScheduleMachine = createMachine<MachineContext, MachineEvent>({
 				FETCH_SUCCESS: {
 					target: "loading-success",
 					actions: assign({
-						scheduleByDays: (_, event) => event.scheduleByDays
+						scheduleByDays: (_, e) => e.scheduleByDays,
+						snapshot: (c, e) => e.snapshot || c.snapshot
 					})
 				},
 				FETCH_FAILURE: {
@@ -117,7 +118,13 @@ const studentScheduleMachine = createMachine<MachineContext, MachineEvent>({
 		},
 		"fetch-from-archive-snapshot": {
 			on: {
-				FETCH_SUCCESS: "loading-success",
+				FETCH_SUCCESS: {
+					target: "loading-success",
+					actions: assign({
+						scheduleByDays: (_, e) => e.scheduleByDays,
+						snapshot: (c, e) => e.snapshot || c.snapshot,
+					})
+				},
 				FETCH_FAILURE: "loading-failure",
 			}
 		},
