@@ -69,10 +69,11 @@ const studentScheduleMachine = createMachine<MachineContext, MachineEvent>({
 	states: {
 		idle: {
 			"on": {
-				FETCH_PARTICIPANT: "loading-participant"
+				FETCH_PARTICIPANT: "fetch-participant"
 			}
 		},
-		"loading-participant": {
+		"fetch-participant": {
+			entry: "fetchParticipant",
 			on: {
 				FETCH_SUCCESS: {
 					target: "loading-success",
@@ -93,6 +94,7 @@ const studentScheduleMachine = createMachine<MachineContext, MachineEvent>({
 			on: {}
 		},
 		"loading-failure": {
+			entry: "searchIfParticipantExistsInArchive",
 			on: {
 				SEARCH_ARCHIVE_SUCCESS: {
 					target: "search-archive-success",
@@ -117,6 +119,7 @@ const studentScheduleMachine = createMachine<MachineContext, MachineEvent>({
 			on: {}
 		},
 		"fetch-from-archive-snapshot": {
+			entry: "fetchParticipantWithSnapshot",
 			on: {
 				FETCH_SUCCESS: {
 					target: "loading-success",
@@ -132,7 +135,13 @@ const studentScheduleMachine = createMachine<MachineContext, MachineEvent>({
 });
 
 const StudentSchedule = ({ match }: IStudentScheduleProps) => {
-	const [stateM, sendM] = useMachine(studentScheduleMachine);
+	const [stateM, sendM] = useMachine(studentScheduleMachine, {
+		actions: {
+			fetchParticipant: (): Promise<void> => fetchParticipant(),
+			fetchParticipantWithSnapshot: (ctx): Promise<void> => fetchParticipant(ctx.snapshot),
+			searchIfParticipantExistsInArchive: (): Promise<void> => searchIfParticipantExistsInArchive(),
+		}
+	});
 	// const scheduleByDays = useSelector() // TODO
 
 	const t = useTranslation();
@@ -167,9 +176,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 			const res = await fetch(`/api/v1/archive/lost-found?participantName=${encodeURIComponent(studentName)}`);
 
 			if (res.ok) {
-			const { found, snapshots }: ArchiveLostFound = await res.json();
-
-				console.log({found, snapshots});
+				const { found, snapshots }: ArchiveLostFound = await res.json();
 
 				if (found) {
 					sendM({ type: "SEARCH_ARCHIVE_SUCCESS", snapshots });
@@ -177,19 +184,11 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 					sendM({ type: "SEARCH_ARCHIVE_FAILURE" });
 				}
 			} else {
-				console.error("failed to fetch participant from archive...");
 				sendM({ type: "SEARCH_ARCHIVE_FAILURE" });
 			}
 	};
 
-	const onFetchParticipantFailure = async () => {
-		console.log("error fetching participant");
-		sendM({ type: "FETCH_FAILURE" });
-
-		await searchIfParticipantExistsInArchive();
-	};
-
-	const onFetchParticipantSuccess = ({ lessons, labels }: Participant, snapshot?: string): void => {
+	const onFetchParticipantResponse = ({ lessons, labels }: Participant, snapshot?: string): void => {
 			setParticipantType(labels[0]);
 
 			if (!lessons?.length) {
@@ -211,13 +210,12 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 			sendM({ type: "FETCH_SUCCESS", scheduleByDays: tempScheduleByDays, snapshot });
 	};
 
-	const fetchParticipant = (snapshot?: string): Promise<void> => fetch(fetchParticipantCore[0](studentName, snapshot))
-		.then((res) =>  res.json())
-		.then(data => {
-			console.log("fetch participant succ, data:", data);
-			onFetchParticipantSuccess(data.participant, snapshot);
-		})
-		.catch(onFetchParticipantFailure);
+	function fetchParticipant(snapshot?: string): Promise<void> {
+		return fetch(fetchParticipantCore[0](studentName, snapshot))
+			.then((res) =>  res.json())
+			.then(data => onFetchParticipantResponse(data.participant, snapshot))
+			.catch(() => void sendM({ type: "FETCH_FAILURE" }));
+	}
 
 	const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 
@@ -287,8 +285,8 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 			return <></>;
 		}
-		case "loading-participant": {
-			fetchParticipant();
+		case "fetch-participant": {
+			// fetchParticipant();
 
 			return (
 				<>
@@ -299,8 +297,6 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		}
 		case "loading-failure": {
 			sendM({ type: "FETCH_FAILURE" });
-
-			searchIfParticipantExistsInArchive();
 
 			return <>
 				<Navbar />
@@ -351,9 +347,9 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 			</>;
 		}
 		case "fetch-from-archive-snapshot": {
-			const snapshot: string = stateM.context.snapshot!;
+			// const snapshot: string = stateM.context.snapshot!;
 
-			fetchParticipant(snapshot);
+			// fetchParticipant(snapshot);
 
 			return <>
 				<h1>Siurbiame moksleivio "{studentName}" duomenis iš archyvo...</h1>
