@@ -134,7 +134,11 @@ const studentScheduleMachine = createMachine<MachineContext, MachineEvent>({
 	}
 });
 
-const StudentSchedule = ({ match }: IStudentScheduleProps) => {
+type UseStudentScheduleMachineOpts = {
+	studentName: string;
+	setParticipantType: React.Dispatch<React.SetStateAction<ParticipantLabel | null>>;
+}
+function useStudentScheduleMachine({ studentName, setParticipantType }: UseStudentScheduleMachineOpts) {
 	const [stateM, sendM] = useMachine(studentScheduleMachine, {
 		actions: {
 			fetchParticipant: (): Promise<void> => fetchParticipant(),
@@ -142,8 +146,56 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 			searchIfParticipantExistsInArchive: (): Promise<void> => searchIfParticipantExistsInArchive(),
 		}
 	});
-	// const scheduleByDays = useSelector() // TODO
 
+	async function searchIfParticipantExistsInArchive(): Promise<void> {
+		const res = await fetch(`/api/v1/archive/lost-found?participantName=${encodeURIComponent(studentName)}`);
+
+		if (res.ok) {
+			const { found, snapshots }: ArchiveLost = await res.json();
+
+			if (found) {
+				sendM({ type: "SEARCH_ARCHIVE_SUCCESS", snapshots });
+			} else {
+				sendM({ type: "SEARCH_ARCHIVE_FAILURE" });
+			}
+		} else {
+			sendM({ type: "SEARCH_ARCHIVE_FAILURE" });
+		}
+	};
+
+	function onFetchParticipantResponse({ lessons, labels }: Participant, snapshot?: string): void {
+		setParticipantType(labels[0]);
+
+		if (!lessons?.length) {
+			sendM({ type: "FETCH_FAILURE" });
+			return;
+		}
+
+		const tempScheduleByDays: Array<Array<Lesson>> = [];
+
+		lessons.forEach((lesson) => {
+			/** make sure there's always an array inside an array */
+			if (!tempScheduleByDays[lesson.dayIndex]?.length) {
+				tempScheduleByDays[lesson.dayIndex] = [];
+			}
+
+			tempScheduleByDays[lesson.dayIndex].push(lesson);
+		});
+
+		sendM({ type: "FETCH_SUCCESS", scheduleByDays: tempScheduleByDays, snapshot });
+	};
+
+	function fetchParticipant(snapshot?: string): Promise<void> {
+		return fetch(fetchParticipantCore[0](studentName, snapshot))
+			.then((res) =>  res.json())
+			.then(data => onFetchParticipantResponse(data.participant, snapshot))
+			.catch(() => void sendM({ type: "FETCH_FAILURE" }));
+	}
+
+	return [stateM, sendM] as const;
+}
+
+const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const t = useTranslation();
 
 	/** scroll to top of page on mount */
@@ -170,54 +222,9 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const [participantType, setParticipantType] = useState<ParticipantLabel | null>(null);
 	useAddMostRecentParticipantOnPageChange(studentName, participantType);
 
-	//
-
-	const searchIfParticipantExistsInArchive = async (): Promise<void> => {
-			const res = await fetch(`/api/v1/archive/lost-found?participantName=${encodeURIComponent(studentName)}`);
-
-			if (res.ok) {
-				const { found, snapshots }: ArchiveLostFound = await res.json();
-
-				if (found) {
-					sendM({ type: "SEARCH_ARCHIVE_SUCCESS", snapshots });
-				} else {
-					sendM({ type: "SEARCH_ARCHIVE_FAILURE" });
-				}
-			} else {
-				sendM({ type: "SEARCH_ARCHIVE_FAILURE" });
-			}
-	};
-
-	const onFetchParticipantResponse = ({ lessons, labels }: Participant, snapshot?: string): void => {
-			setParticipantType(labels[0]);
-
-			if (!lessons?.length) {
-				sendM({ type: "FETCH_FAILURE" });
-				return;
-			}
-
-			const tempScheduleByDays: Array<Array<Lesson>> = [];
-
-			lessons.forEach((lesson) => {
-				/** make sure there's always an array inside an array */
-				if (!tempScheduleByDays[lesson.dayIndex]?.length) {
-					tempScheduleByDays[lesson.dayIndex] = [];
-				}
-
-				tempScheduleByDays[lesson.dayIndex].push(lesson);
-			});
-
-			sendM({ type: "FETCH_SUCCESS", scheduleByDays: tempScheduleByDays, snapshot });
-	};
-
-	function fetchParticipant(snapshot?: string): Promise<void> {
-		return fetch(fetchParticipantCore[0](studentName, snapshot))
-			.then((res) =>  res.json())
-			.then(data => onFetchParticipantResponse(data.participant, snapshot))
-			.catch(() => void sendM({ type: "FETCH_FAILURE" }));
-	}
-
 	const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
+
+	const [stateM, sendM] = useStudentScheduleMachine({ studentName, setParticipantType });
 
 	/**
 	 * mimic the selectedDay
@@ -277,8 +284,6 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	 */
 	const canGoBackInHistory = useRef<boolean>(params.timeIndex === undefined);
 
-	console.log("stateM.value", stateM.value);
-
 	switch (stateM.value) {
 		case "idle": {
 			sendM({ type: "FETCH_PARTICIPANT" });
@@ -286,8 +291,6 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 			return <></>;
 		}
 		case "fetch-participant": {
-			// fetchParticipant();
-
 			return (
 				<>
 					<h1>{studentName}</h1>
@@ -307,8 +310,6 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 				</p>
 
 				<h2>ieškome archyve...</h2>
-
-				{/* <BackBtn /> */}
 			</>;
 		}
 		case "search-archive-failure": {
@@ -347,10 +348,6 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 			</>;
 		}
 		case "fetch-from-archive-snapshot": {
-			// const snapshot: string = stateM.context.snapshot!;
-
-			// fetchParticipant(snapshot);
-
 			return <>
 				<h1>Siurbiame moksleivio "{studentName}" duomenis iš archyvo...</h1>
 			</>;
