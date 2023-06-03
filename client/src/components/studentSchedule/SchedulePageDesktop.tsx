@@ -11,13 +11,12 @@ import React, { FC, useState, useContext, useEffect, useRef, useLayoutEffect, Ke
 // import Select from "react-select";
 import { css } from "emotion";
 
-import { getDefaultParticipant, Lesson } from "@turbo-schedule/common";
+import { Lesson } from "@turbo-schedule/common";
 
 import { Navbar } from "../navbar/Navbar";
 import { LessonsList } from "./LessonsList";
 import { DaysList } from "./DaysList";
 import { LessonDisplay } from "./LessonDisplay";
-import { useFetchParticipant } from "../../hooks/useFetchers";
 import { getTodaysScheduleDay, ScheduleDay } from "../../utils/selectSchedule";
 import { CurrentLangContext } from "../currentLangContext/currentLangContext";
 
@@ -25,9 +24,10 @@ import { CurrentLangContext } from "../currentLangContext/currentLangContext";
 
 interface Props {
 	match: any; // match; /** TODO */
+	lessons: Lesson[]
 }
 
-export const SchedulePageDesktop: FC<Props> = ({ match }) => {
+export const SchedulePageDesktop: FC<Props> = ({ match, lessons }) => {
 	const { currentLang } = useContext(CurrentLangContext);
 
 	useEffect(() => {
@@ -38,12 +38,6 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 	// const [searchString, setSearchString] = useState<string>(participant.text || "");
 	const [searchString, setSearchString] = useState<string>(
 		(match.params.participantHandle || match.params.studentName) as string
-	);
-
-	const [participant] = useFetchParticipant(
-		getDefaultParticipant(), //
-		[searchString],
-		{ urlCtx: searchString }
 	);
 
 	const [selectedDay, setSelectedDay] = useState<ScheduleDay>(() => getTodaysScheduleDay({ defaultToDay: 0 }));
@@ -68,7 +62,7 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 			return;
 		}
 
-		const lesson: Lesson | undefined = participant?.lessons?.find(
+		const lesson: Lesson | undefined = lessons?.find(
 			(l) => l.dayIndex === selectedDay && l.timeIndex === selectedLessonTimeIndex
 		);
 
@@ -77,7 +71,7 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 		}
 
 		setSelectedLesson(lesson);
-	}, [/** must */ selectedDay, /** secondary */ participant, selectedLessonTimeIndex]);
+	}, [/** must */ selectedDay, /** secondary */ lessons, selectedLessonTimeIndex]);
 
 	const handleOnKeyDown = (_e: KeyboardEvent) => {
 		// e.preventDefault();
@@ -158,7 +152,7 @@ export const SchedulePageDesktop: FC<Props> = ({ match }) => {
 
 				{/* 2nd - lessons of the day list */}
 				<LessonsList
-					lessons={participant?.lessons ?? []}
+					lessons={lessons}
 					selectedDay={selectedDay}
 					selectedLesson={selectedLesson}
 					handleClick={(_e, lesson) => {

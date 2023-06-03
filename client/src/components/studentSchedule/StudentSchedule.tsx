@@ -212,35 +212,6 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		})
 		.catch(onFetchParticipantFailure);
 
-
-	// const [, , isLoading] = useFetchParticipant(getDefaultParticipant, [studentName], {
-
-	/**
-	 * TODO: get rid of this hook,
-	 * and instead perform the fetch upon entering emitting the `FETCH_PARTICIPANT` event.
-	 *
-	 * - do as xstate service/fn call upon enter (`invoke`?)
-	 * - handle `snapshot` if given
-	 */
-
-	/*
-	useFetchParticipant(getDefaultParticipant, [studentName], {
-		urlCtx: studentName, //
-		shouldFetch: () => {
-			const should = !stateM.context.snapshot;
-			console.log("should fetch?", should);
-			return should;
-		},
-		onError: async () => {
-			console.log("error fetching participant");
-			sendM({ type: "FETCH_FAILURE" });
-
-			await searchIfParticipantExistsInArchive();
-		},
-		onSuccess: (participant) => onFetchParticipantSuccess(participant)
-	});
-	*/
-
 	const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 
 	/**
@@ -302,7 +273,6 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	const canGoBackInHistory = useRef<boolean>(params.timeIndex === undefined);
 
 	console.log("stateM.value", stateM.value);
-
 
 	switch (stateM.value) {
 		case "idle": {
@@ -386,7 +356,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	return (
 		<>
 			{isDesktop ? (
-				<SchedulePageDesktop match={match} />
+				<SchedulePageDesktop match={match} lessons={stateM.context.scheduleByDays.flat()} />
 			) : (
 				<>
 					<Navbar />
