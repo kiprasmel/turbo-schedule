@@ -1,5 +1,7 @@
 import React from "react";
-import ReactDOM from "react-dom";
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+import ReactDOM from "react-dom/client";
 import "./index.scss";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
