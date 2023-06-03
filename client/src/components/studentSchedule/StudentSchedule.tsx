@@ -81,19 +81,19 @@ const studentScheduleMachine = createMachine<MachineContext, MachineEvent>({
 						snapshot: (c, e) => e.snapshot || c.snapshot
 					})
 				},
-				FETCH_FAILURE: {
-					target: "loading-failure",
-					actions: assign({
-						scheduleByDays: (): Lesson[][] => [[]]
-					})
-				}
+				FETCH_FAILURE: "loading-failure"
 			}
 		},
 		"loading-success": {
-			on: {}
+			on: {
+				FETCH_PARTICIPANT: "fetch-participant"
+			}
 		},
 		"loading-failure": {
-			entry: "searchIfParticipantExistsInArchive",
+			entry: [
+				assign({ scheduleByDays: [[]] }),
+				"searchIfParticipantExistsInArchive"
+			],
 			on: {
 				SEARCH_ARCHIVE_SUCCESS: {
 					target: "search-archive-success",
@@ -118,7 +118,7 @@ const studentScheduleMachine = createMachine<MachineContext, MachineEvent>({
 			on: {}
 		},
 		"fetch-from-archive-snapshot": {
-			entry: "fetchParticipantWithSnapshot",
+			entry: "fetchParticipant",
 			on: {
 				FETCH_SUCCESS: {
 					target: "loading-success",
@@ -140,11 +140,14 @@ type UseStudentScheduleMachineOpts = {
 function useStudentScheduleMachine({ studentName, setParticipantType }: UseStudentScheduleMachineOpts) {
 	const [stateM, sendM] = useMachine(studentScheduleMachine, {
 		actions: {
-			fetchParticipant: (): Promise<void> => fetchParticipant(),
-			fetchParticipantWithSnapshot: (ctx): Promise<void> => fetchParticipant(ctx.snapshot),
+			fetchParticipant: (ctx): Promise<void> => ctx.snapshot ? fetchParticipant(ctx.snapshot) : fetchParticipant(),
 			searchIfParticipantExistsInArchive: (): Promise<void> => searchIfParticipantExistsInArchive(),
 		}
 	});
+
+	useEffect(() => {
+		sendM({ type: "FETCH_PARTICIPANT" });
+	}, [sendM, stateM.context.snapshot, studentName]);
 
 	async function searchIfParticipantExistsInArchive(): Promise<void> {
 		const res = await fetch(`/api/v1/archive/lost-found?participantName=${encodeURIComponent(studentName)}`);
@@ -285,7 +288,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	switch (stateM.value) {
 		case "idle": {
-			sendM({ type: "FETCH_PARTICIPANT" });
+			sendM("FETCH_PARTICIPANT");
 
 			return <></>;
 		}
@@ -298,8 +301,6 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 			);
 		}
 		case "loading-failure": {
-			sendM({ type: "FETCH_FAILURE" });
-
 			return <>
 				<Navbar />
 
