@@ -21,6 +21,7 @@ import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
 import { SchedulePageDesktop } from "./SchedulePageDesktop";
 import { LessonsList } from "./LessonsList";
+import { useQueryFor } from "../../hooks/useQueryFor";
 
 export interface IStudentScheduleProps {
 	match: any /** TODO */;
@@ -68,7 +69,13 @@ const studentScheduleMachine = createMachine<MachineContext, MachineEvent>({
 	states: {
 		idle: {
 			"on": {
-				FETCH_PARTICIPANT: "fetch-participant"
+				FETCH_PARTICIPANT: "fetch-participant",
+				SELECT_ARCHIVE_SNAPSHOT: {
+					target: "fetch-from-archive-snapshot",
+					actions: assign({
+						snapshot: (_, event) => event.snapshot,
+					})
+				}
 			}
 		},
 		"fetch-participant": {
@@ -86,7 +93,13 @@ const studentScheduleMachine = createMachine<MachineContext, MachineEvent>({
 		},
 		"loading-success": {
 			on: {
-				FETCH_PARTICIPANT: "fetch-participant"
+				FETCH_PARTICIPANT: "fetch-participant",
+				SELECT_ARCHIVE_SNAPSHOT: {
+					target: "fetch-from-archive-snapshot",
+					actions: assign({
+						snapshot: (_, event) => event.snapshot,
+					})
+				}
 			}
 		},
 		"loading-failure": {
@@ -140,14 +153,26 @@ type UseStudentScheduleMachineOpts = {
 function useStudentScheduleMachine({ studentName, setParticipantType }: UseStudentScheduleMachineOpts) {
 	const [stateM, sendM] = useMachine(studentScheduleMachine, {
 		actions: {
-			fetchParticipant: (ctx): Promise<void> => ctx.snapshot ? fetchParticipant(ctx.snapshot) : fetchParticipant(),
+			fetchParticipant: (ctx): Promise<void> => ctx.snapshot ? fetchParticipant(studentName, ctx.snapshot) : fetchParticipant(studentName),
 			searchIfParticipantExistsInArchive: (): Promise<void> => searchIfParticipantExistsInArchive(),
 		}
 	});
 
+	const [snapshotParam] = useQueryFor("snapshot", {
+		encode: (x) => x,
+		decode: (x) => x,
+		dependencies: [stateM.context.snapshot],
+		valueOverrideOnceChanges: stateM.context.snapshot
+	});
+	console.log({snapshotParam});
+
 	useEffect(() => {
-		sendM({ type: "FETCH_PARTICIPANT" });
-	}, [sendM, stateM.context.snapshot, studentName]);
+		if (snapshotParam && snapshotParam !== stateM.context.snapshot) {
+			sendM({ type: "SELECT_ARCHIVE_SNAPSHOT", snapshot: snapshotParam });
+		} else {
+			sendM({ type: "FETCH_PARTICIPANT" });
+		}
+	}, [sendM, snapshotParam, stateM.context.snapshot]);
 
 	async function searchIfParticipantExistsInArchive(): Promise<void> {
 		const res = await fetch(`/api/v1/archive/lost-found?participantName=${encodeURIComponent(studentName)}`);
@@ -187,8 +212,9 @@ function useStudentScheduleMachine({ studentName, setParticipantType }: UseStude
 		sendM({ type: "FETCH_SUCCESS", scheduleByDays: tempScheduleByDays, snapshot });
 	};
 
-	function fetchParticipant(snapshot?: string): Promise<void> {
-		return fetch(fetchParticipantCore[0](studentName, snapshot))
+	function fetchParticipant(participant: string, snapshot?: string): Promise<void> {
+		console.log("fetching participant", participant);
+		return fetch(fetchParticipantCore[0](participant, snapshot))
 			.then((res) =>  res.json())
 			.then(data => onFetchParticipantResponse(data.participant, snapshot))
 			.catch(() => void sendM({ type: "FETCH_FAILURE" }));
@@ -220,6 +246,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	const { params } = match;
 	const { studentName } = params;
+	console.log({match});
 
 	const [participantType, setParticipantType] = useState<ParticipantLabel | null>(null);
 	useAddMostRecentParticipantOnPageChange(studentName, participantType);
@@ -247,11 +274,12 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 				timeIndex: params.timeIndex,
 				shouldShowTheLesson: !!selectedLesson || isDesktop,
 				replaceInsteadOfPush: true,
+				snapshot: stateM.context.snapshot,
 			});
 		}
 
 		__setSelectedDay(dayIdx);
-	}, [params.dayIndex, params.timeIndex, studentName, isDesktop, selectedLesson]);
+	}, [params.dayIndex, params.timeIndex, studentName, isDesktop, selectedLesson, stateM.context.snapshot]);
 
 	useEffect(() => {
 		if (params.timeIndex === undefined || !stateM.context.scheduleByDays?.[selectedDay]?.length) {
@@ -286,9 +314,11 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	 */
 	const canGoBackInHistory = useRef<boolean>(params.timeIndex === undefined);
 
+	console.log("stateM.value", stateM.value, studentName, stateM.context);
+
 	switch (stateM.value) {
 		case "idle": {
-			sendM("FETCH_PARTICIPANT");
+			// sendM("FETCH_PARTICIPANT");
 
 			return <></>;
 		}
@@ -356,7 +386,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	return (
 		<>
 			{isDesktop ? (
-				<SchedulePageDesktop match={match} lessons={stateM.context.scheduleByDays.flat()} />
+				<SchedulePageDesktop match={match} lessons={stateM.context.scheduleByDays.flat()} snapshot={stateM.context.snapshot} />
 			) : (
 				<>
 					<Navbar />
@@ -373,6 +403,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 								day,
 								timeIndex: selectedLesson?.timeIndex,
 								shouldShowTheLesson: !!selectedLesson || isDesktop,
+								snapshot: stateM.context.snapshot,
 							});
 						}}
 					/>
@@ -395,6 +426,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 											day: selectedDay,
 											timeIndex: lesson?.timeIndex,
 											shouldShowTheLesson: !!lesson || isDesktop,
+											snapshot: stateM.context.snapshot,
 										});
 
 										setSelectedLesson(lesson);
@@ -415,6 +447,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 										day: selectedDay,
 										timeIndex: lesson?.timeIndex,
 										shouldShowTheLesson: !!lesson || isDesktop,
+										snapshot: stateM.context.snapshot,
 									});
 
 									setSelectedLesson(lesson);
@@ -425,6 +458,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 					<StudentListModal
 						isOpen={!!selectedLesson}
+						snapshot={stateM.context.snapshot}
 						handleClose={() => {
 							/**
 							 * if we've been navigating normally, this will pop the current history
@@ -489,12 +523,13 @@ const decodeDay = (day: number | "*"): ScheduleDay => (day === "*" ? "*" : ((day
 const encodeTimeIndex = (time: number): number => time + 1;
 const decodeTimeIndex = (time: number | string): number => Number(time) - 1;
 
-const navigateToDesiredPath = (data: {
+export const navigateToDesiredPath = (data: {
 	studentName: Student["text"];
 	day?: ScheduleDay;
 	timeIndex?: number;
 	shouldShowTheLesson: boolean;
 	replaceInsteadOfPush?: boolean /** should be used on the initial page load */;
+	snapshot?: string;
 }): void => {
 	const path: string | undefined = getDesiredPath(data);
 
@@ -512,30 +547,38 @@ const navigateToDesiredPath = (data: {
 	history.push(path);
 };
 
-const getDesiredPath = ({
+export const getDesiredPath = ({
 	studentName,
 	day,
 	timeIndex,
 	shouldShowTheLesson /** shall be `false` on mobile unless the lesson was selected; always `true` on desktop */,
+	snapshot,
 }: {
 	studentName: Student["text"];
 	day?: ScheduleDay;
 	timeIndex?: number;
 	shouldShowTheLesson: boolean;
+	snapshot?: string;
 }): string | undefined => {
-	if (!studentName?.trim() || day === undefined) {
+	if (!studentName?.trim()) {
 		return undefined;
+	}
+
+	const snapshotParam = !snapshot ? "" : `?snapshot=${snapshot}`;
+
+	if (!day && day !== 0) {
+		return `/${studentName}${snapshotParam}`;
 	}
 
 	const encodedDay = encodeDay(day);
 
 	if (timeIndex === undefined || !shouldShowTheLesson) {
 		// history.push(`/${studentName}/${encodedDay}`);
-		return `/${studentName}/${encodedDay}`;
+		return `/${studentName}/${encodedDay}${snapshotParam}`;
 	}
 
 	const encodedTimeIndex = encodeTimeIndex(timeIndex);
 
 	// history.push(`/${studentName}/${encodedDay}/${encodedTimeIndex}`);
-	return `/${studentName}/${encodedDay}/${encodedTimeIndex}`;
+	return `/${studentName}/${encodedDay}/${encodedTimeIndex}${snapshotParam}`;
 };

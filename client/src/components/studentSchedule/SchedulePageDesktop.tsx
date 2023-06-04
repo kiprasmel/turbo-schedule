@@ -23,11 +23,12 @@ import { CurrentLangContext } from "../currentLangContext/currentLangContext";
 // const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
 
 interface Props {
-	match: any; // match; /** TODO */
-	lessons: Lesson[]
+	match: any;
+	lessons: Lesson[];
+	snapshot?: string;
 }
 
-export const SchedulePageDesktop: FC<Props> = ({ match, lessons }) => {
+export const SchedulePageDesktop: FC<Props> = ({ match, lessons, snapshot }) => {
 	const { currentLang } = useContext(CurrentLangContext);
 
 	useEffect(() => {
@@ -129,7 +130,7 @@ export const SchedulePageDesktop: FC<Props> = ({ match, lessons }) => {
 			<Navbar
 				ref={navbarElement}
 				search={{
-					searchElementRef: searchElementRef,
+					searchElementRef,
 					searchString,
 					setSearchString,
 				}}
@@ -172,7 +173,7 @@ export const SchedulePageDesktop: FC<Props> = ({ match, lessons }) => {
 						overflow-y: auto;
 					`}
 				>
-					<LessonDisplay lesson={selectedLesson} />
+					<LessonDisplay lesson={selectedLesson} snapshot={snapshot} />
 				</article>
 			</main>
 		</div>

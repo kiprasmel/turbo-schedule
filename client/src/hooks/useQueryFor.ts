@@ -82,10 +82,10 @@ export const useQueryFor = <T = string>(
 	);
 
 	useEffect(() => {
-		if (valueOverrideOnceChanges) {
+		if (valueOverrideOnceChanges && encode(query) !== valueOverrideOnceChanges) {
 			setQuery(decode(valueOverrideOnceChanges));
 		}
-	}, [valueOverrideOnceChanges, setQuery, decode]);
+	}, [valueOverrideOnceChanges, setQuery, decode, query, encode]);
 
 	/**
 	 * "re-run" on dependency change

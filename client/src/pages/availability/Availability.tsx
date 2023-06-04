@@ -54,19 +54,17 @@ const mapRatioToHSBThroughBrightness = (ratio: number, start: number = 0, end: n
 	return `hsla(${hue}, ${saturation}%, ${lightness}%, ${Math.max(0.05, 1 - alpha)})`;
 };
 
+const invalidEnDeVal = -1;
+const defaultNumberEnde: EncoderDecoder<number> = {
+	encode: (x) => (x === invalidEnDeVal ? "" : x.toString()), //
+	decode: (x) => (!x ? invalidEnDeVal : Number(x)),
+};
+
 export const Availability: FC = () => {
 	const t = useTranslation();
 
-	const invalidEnDeVal = -1;
-	const ende: EncoderDecoder<number> = useMemo(
-		() => ({
-			encode: (x) => (x === invalidEnDeVal ? "" : x.toString()), //
-			decode: (x) => (!x ? invalidEnDeVal : Number(x)),
-		}),
-		[invalidEnDeVal]
-	);
-	const [selectedDay, setSelectedDay] = useQueryFor("day", ende);
-	const [selectedTime, setSelectedTime] = useQueryFor("time", ende);
+	const [selectedDay, setSelectedDay] = useQueryFor("day", defaultNumberEnde);
+	const [selectedTime, setSelectedTime] = useQueryFor("time", defaultNumberEnde);
 
 	const hasSelectedExtraInfo: boolean =
 		/* wantedParticipants.length === 0 ? false : */
@@ -258,7 +256,7 @@ export const Availability: FC = () => {
 	const unselectAvailability = useCallback(() => {
 		setSelectedDay(invalidEnDeVal);
 		setSelectedTime(invalidEnDeVal);
-	}, [setSelectedDay, setSelectedTime, invalidEnDeVal]);
+	}, [setSelectedDay, setSelectedTime]);
 
 	const availabilityGridRef = useRef<HTMLDivElement>(null);
 
@@ -797,6 +795,7 @@ export const Availability: FC = () => {
 											participant={p.participant}
 											dayIndex={selectedAvailability.dayIndex}
 											timeIndex={selectedAvailability.timeIndex}
+											snapshot="" // TODO SNAPSHOT
 										/>
 									))}
 								</ul>
@@ -813,6 +812,7 @@ export const Availability: FC = () => {
 											participant={p.participant}
 											dayIndex={selectedAvailability.dayIndex}
 											timeIndex={selectedAvailability.timeIndex}
+											snapshot="" // TODO SNAPSHOT
 										>
 											{" "}
 											({p.lesson.name})
