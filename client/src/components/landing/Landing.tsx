@@ -64,7 +64,7 @@ const Landing = () => {
 					`}
 				>
 					<Search searchString={searchString} setSearchString={setSearchString} onKeyDown={handleOnKeyDown} />
-					<ParticipantListList participants={matchingParticipants} />
+					<ParticipantListList participants={matchingParticipants} snapshot="" /** TODO SNAPSHOT */ />
 				</div>
 			</div>
 
