@@ -42,10 +42,9 @@ interface Props {
 	handleClose: () => any;
 	lesson: Lesson | null;
 	isOpen: boolean;
-	snapshot?: string;
 }
 
-const StudentListModal: FC<Props> = ({ handleClose, lesson, isOpen, snapshot, ...rest }) => {
+const StudentListModal: FC<Props> = ({ handleClose, lesson, isOpen, ...rest }) => {
 	const t = useTranslation();
 
 	if (!lesson?.students) {
@@ -81,7 +80,6 @@ const StudentListModal: FC<Props> = ({ handleClose, lesson, isOpen, snapshot, ..
 
 				<ParticipantListList
 					participants={lesson}
-					snapshot={snapshot}
 					className={css`
 						grid-template-columns: none !important;
 					`}

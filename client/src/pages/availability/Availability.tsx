@@ -793,9 +793,6 @@ export const Availability: FC = () => {
 										<ParticipantListItem
 											key={p.participant}
 											participant={p.participant}
-											dayIndex={selectedAvailability.dayIndex}
-											timeIndex={selectedAvailability.timeIndex}
-											snapshot="" // TODO SNAPSHOT
 										/>
 									))}
 								</ul>
@@ -810,9 +807,6 @@ export const Availability: FC = () => {
 										<ParticipantListItem
 											key={`${p.participant}/${p.lesson.id}`}
 											participant={p.participant}
-											dayIndex={selectedAvailability.dayIndex}
-											timeIndex={selectedAvailability.timeIndex}
-											snapshot="" // TODO SNAPSHOT
 										>
 											{" "}
 											({p.lesson.name})

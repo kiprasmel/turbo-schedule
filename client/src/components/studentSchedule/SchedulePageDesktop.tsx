@@ -23,12 +23,11 @@ import { CurrentLangContext } from "../currentLangContext/currentLangContext";
 // const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
 
 interface Props {
-	match: any;
+	studentName: string;
 	lessons: Lesson[];
-	snapshot?: string;
 }
 
-export const SchedulePageDesktop: FC<Props> = ({ match, lessons, snapshot }) => {
+export const SchedulePageDesktop: FC<Props> = ({ studentName, lessons }) => {
 	const { currentLang } = useContext(CurrentLangContext);
 
 	useEffect(() => {
@@ -37,9 +36,7 @@ export const SchedulePageDesktop: FC<Props> = ({ match, lessons, snapshot }) => 
 
 	const searchElementRef = useRef<HTMLInputElement>(null);
 	// const [searchString, setSearchString] = useState<string>(participant.text || "");
-	const [searchString, setSearchString] = useState<string>(
-		(match.params.participantHandle || match.params.studentName) as string
-	);
+	const [searchString, setSearchString] = useState<string>(studentName);
 
 	const [selectedDay, setSelectedDay] = useState<ScheduleDay>(() => getTodaysScheduleDay({ defaultToDay: 0 }));
 	const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
@@ -173,7 +170,7 @@ export const SchedulePageDesktop: FC<Props> = ({ match, lessons, snapshot }) => 
 						overflow-y: auto;
 					`}
 				>
-					<LessonDisplay lesson={selectedLesson} snapshot={snapshot} />
+					<LessonDisplay lesson={selectedLesson} />
 				</article>
 			</main>
 		</div>
