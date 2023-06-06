@@ -19,9 +19,21 @@ export const defaultContext: MachineContext = {
 	scheduleByDays: [[]]
 };
 
-export type MachineEvent = {
+export type MachineEventFetchParticipant = {
 	type: "FETCH_PARTICIPANT"
-} | {
+	participant: string;
+}
+
+export type MachineEventSelectArchiveSnapshot = {
+	type: "SELECT_ARCHIVE_SNAPSHOT",
+	participant: string;
+	snapshot: string
+}
+
+export type MachineEvent =
+	MachineEventFetchParticipant
+|	MachineEventSelectArchiveSnapshot
+| {
 	type: "FETCH_SUCCESS",
 	scheduleByDays: Lesson[][]
 	snapshot?: string;
@@ -35,16 +47,9 @@ export type MachineEvent = {
 } | {
 	type: "SEARCH_ARCHIVE_FAILURE"
 } | {
-	type: "SELECT_ARCHIVE_SNAPSHOT",
-	snapshot: string
-} /* | {
-	type: "FETCH_ARCHIVE_SNAPSHOT_SUCCESS";
-	snapshot: string
-	scheduleByDays: Lesson[][]
-} | {
-	type: "FETCH_ARCHIVE_SNAPSHOT_FAILURE";
-	snapshot: string
-} */
+	type: "SELECT_DAY";
+	day: number
+}
 
 export type SMActor = Actor<unknown, MachineEvent>["send"];
 
@@ -80,6 +85,7 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 			}
 		},
 		"loading-success": {
+			entry: "syncStateToURL",
 			on: {
 				FETCH_PARTICIPANT: "fetch-participant",
 				SELECT_ARCHIVE_SNAPSHOT: {
@@ -161,18 +167,22 @@ export const StudentScheduleMachineContext = React.createContext({} as Interpret
 
 export type StudentScheduleMachineProviderProps = {
 	studentName: string;
+	syncStateToURL: Function
 }
 
-export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderProps> = ({ studentName, children }) => {
+export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderProps> = ({ studentName, syncStateToURL, children }) => {
 	const studentScheduleService = useInterpret(studentScheduleMachine,{
 		actions: {
-			fetchParticipant: (ctx): Promise<void> => ctx.snapshot ? fetchParticipant(studentName, ctx.snapshot) : fetchParticipant(studentName),
+			fetchParticipant: (ctx, event): Promise<void> => fetchParticipant((event as MachineEventFetchParticipant | MachineEventSelectArchiveSnapshot).participant, ctx.snapshot),
 			searchIfParticipantExistsInArchive: (): Promise<void> => searchIfParticipantExistsInArchive(studentName, studentScheduleService.send),
+			syncStateToURL: () => syncStateToURL({ }),
 		}
 	});
 
-	function onFetchParticipantResponse({ lessons, labels, text }: Participant, snapshot?: string): void {
-		console.log("on participant response", lessons, labels);
+	function onFetchParticipantResponse(participant: Participant, snapshot?: string): void {
+		const { lessons, labels, text } = participant;
+		console.log("on participant response", participant);
+
 		if (!lessons?.length) {
 			studentScheduleService.send({ type: "FETCH_FAILURE" });
 			return;
@@ -194,6 +204,7 @@ export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderPr
 
 	async function fetchParticipant(participant: string, snapshot?: string): Promise<void> {
 		console.log("fetching participant!", participant, snapshot);
+
 		return fetch(fetchParticipantCore[0](participant, snapshot))
 			.then((res) =>  res.json())
 			.then(data => onFetchParticipantResponse(data.participant, snapshot))
@@ -216,11 +227,11 @@ export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderPr
 	useEffect(() => {
 		console.log("syncing snapshot", {snapshotParam}, studentScheduleService.machine.context.snapshot);
 		if (snapshotParam && snapshotParam !== studentScheduleService.machine.context.snapshot) {
-			studentScheduleService.send({ type: "SELECT_ARCHIVE_SNAPSHOT", snapshot: snapshotParam });
+			studentScheduleService.send({ type: "SELECT_ARCHIVE_SNAPSHOT", participant: studentName, snapshot: snapshotParam }); // TODO `participant` name
 		} else {
-			studentScheduleService.send({ type: "FETCH_PARTICIPANT" });
+			studentScheduleService.send({ type: "FETCH_PARTICIPANT", participant: studentName });
 		}
-	}, [snapshotParam, studentScheduleService, studentScheduleService.machine.context.snapshot]);
+	}, [snapshotParam, studentName, studentScheduleService, studentScheduleService.machine.context.snapshot]);
 
 	useEffect(() => {
 		studentScheduleService.subscribe(({ event }) => {
