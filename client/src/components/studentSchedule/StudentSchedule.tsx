@@ -61,8 +61,13 @@ export const StudentSchedulePage: FC<StudentSchedulePageProps> = (props) => {
 
 	console.log("props.match.params", props.match.params, {parsed});
 
+	navigateToDesiredPath({
+		//
+
+	});
+
 	return <>
-		<StudentScheduleMachineProvider studentName={studentName}>
+		<StudentScheduleMachineProvider studentName={studentName} syncStateToURL={}>
 			<StudentSchedule studentName={studentName} dayIndex={dayIndex} timeIndex={timeIndex} />
 		</StudentScheduleMachineProvider>
 	</>;
@@ -120,7 +125,6 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ studentName, dayIndex, time
 				studentName,
 				day: dayIdx,
 				timeIndex,
-				shouldShowTheLesson: !!selectedLesson || isDesktop,
 				replaceInsteadOfPush: true,
 				snapshot: stateM.context.snapshot,
 			});
@@ -218,7 +222,7 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ studentName, dayIndex, time
 							text-align: left;
 						`}>
 							<button type="button" onClick={() => {
-								sendM({ type: "SELECT_ARCHIVE_SNAPSHOT", snapshot: s });
+								sendM({ type: "SELECT_ARCHIVE_SNAPSHOT", participant: studentName, snapshot: s });
 							}}>{s}</button>
 						</li>
 					))}
@@ -250,7 +254,6 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ studentName, dayIndex, time
 								studentName,
 								day,
 								timeIndex: selectedLesson?.timeIndex,
-								shouldShowTheLesson: !!selectedLesson || isDesktop,
 								snapshot: stateM.context.snapshot,
 							});
 						}}
@@ -273,7 +276,6 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ studentName, dayIndex, time
 											studentName,
 											day: selectedDay,
 											timeIndex: lesson?.timeIndex,
-											shouldShowTheLesson: !!lesson || isDesktop,
 											snapshot: stateM.context.snapshot,
 										});
 
@@ -294,7 +296,6 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ studentName, dayIndex, time
 										studentName,
 										day: selectedDay,
 										timeIndex: lesson?.timeIndex,
-										shouldShowTheLesson: !!lesson || isDesktop,
 										snapshot: stateM.context.snapshot,
 									});
 
@@ -372,7 +373,6 @@ export const navigateToDesiredPath = (data: {
 	studentName: Student["text"];
 	day?: ScheduleDay;
 	timeIndex?: number;
-	shouldShowTheLesson: boolean;
 	replaceInsteadOfPush?: boolean /** should be used on the initial page load */;
 	snapshot?: string;
 }): void => {
@@ -396,13 +396,11 @@ export const getDesiredPath = ({
 	studentName,
 	day,
 	timeIndex,
-	shouldShowTheLesson /** shall be `false` on mobile unless the lesson was selected; always `true` on desktop */,
 	snapshot,
 }: {
 	studentName: Student["text"];
 	day?: ScheduleDay;
 	timeIndex?: number;
-	shouldShowTheLesson: boolean;
 	snapshot?: string;
 }): string | undefined => {
 	if (!studentName?.trim()) {
@@ -417,13 +415,11 @@ export const getDesiredPath = ({
 
 	const encodedDay = encodeDay(day);
 
-	if (timeIndex === undefined || !shouldShowTheLesson) {
-		// history.push(`/${studentName}/${encodedDay}`);
+	if (!timeIndex && timeIndex !== 0) {
 		return `/${studentName}/${encodedDay}${snapshotParam}`;
 	}
 
 	const encodedTimeIndex = encodeTimeIndex(timeIndex);
 
-	// history.push(`/${studentName}/${encodedDay}/${encodedTimeIndex}`);
 	return `/${studentName}/${encodedDay}/${encodedTimeIndex}${snapshotParam}`;
 };

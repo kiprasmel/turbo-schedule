@@ -212,7 +212,7 @@ export const ParticipantListItem: FC<{
 				${isOnlyOneMatchingParticipant && "border-bottom: 3px solid #000;"}
 			`}
 		>
-			<button type="button" onClick={() => SSM.send({ type: "FETCH_PARTICIPANT" })}>
+			<button type="button" onClick={() => SSM.send({ type: "FETCH_PARTICIPANT", participant })}>
 				{participant}
 				{(children as unknown) as any}
 			</button>
