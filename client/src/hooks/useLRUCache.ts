@@ -124,7 +124,7 @@ export const useMostRecentlyViewedParticipantsSplit = () => {
 
 export const useAddMostRecentParticipantOnPageChange = (
 	participantName: string,
-	participantType: ParticipantLabel | null
+	participantType?: ParticipantLabel
 ): void => {
 	const { addMostRecent } = useMostRecentlyViewedParticipantsSplit();
 

@@ -91,8 +91,6 @@ export const createLinkToLesson = (
 		}
 	}
 
-	console.log({link});
-
 	return link;
 };
 

@@ -13,10 +13,9 @@ import { ParticipantListList } from "./ParticipantList";
 
 interface Props {
 	lesson: Lesson | null;
-	snapshot?: string;
 }
 
-export const LessonDisplay: FC<Props> = ({ lesson, snapshot }) => {
+export const LessonDisplay: FC<Props> = ({ lesson }) => {
 	if (!lesson) {
 		return null;
 	}
@@ -132,7 +131,7 @@ export const LessonDisplay: FC<Props> = ({ lesson, snapshot }) => {
 			</div>
 
 			{/* 3rd - Lesson's participants */}
-			<ParticipantListList participants={{ students, teachers, rooms, classes }} snapshot={snapshot} />
+			<ParticipantListList participants={{ students, teachers, rooms, classes }} />
 		</section>
 	);
 };
