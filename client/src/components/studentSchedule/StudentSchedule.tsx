@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, FC } from "react";
+import { match as Match } from "react-router-dom";
 import { css } from "emotion";
 
-import { Lesson, Student, ParticipantLabel } from "@turbo-schedule/common";
+import { Lesson, Student } from "@turbo-schedule/common";
 
 import "./StudentSchedule.scss";
 
@@ -19,13 +20,62 @@ import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
 import { SchedulePageDesktop } from "./SchedulePageDesktop";
 import { LessonsList } from "./LessonsList";
-import { useStudentScheduleMachine } from "./student-schedule-machine";
+import { StudentScheduleMachineProvider, useStudentScheduleMachine } from "./student-schedule-machine";
 
-export interface IStudentScheduleProps {
-	match: any /** TODO */;
+export type StudentSchedulePageProps = {
+	match: Match<{
+		studentName: string;
+		dayIndex?: string;
+		timeIndex?: string;
+	}>
 }
 
-const StudentSchedule = ({ match }: IStudentScheduleProps) => {
+const parseMaybeNum = (maybeNum: string | undefined): number | undefined => {
+	if (!maybeNum) {
+		return undefined;
+	}
+
+	const num: number | undefined = Number(maybeNum);
+
+	if (Number.isNaN(num)) {
+		return undefined;
+	}
+
+	return num;
+};
+
+const parseParams = (params: StudentSchedulePageProps["match"]["params"]): StudentScheduleProps => {
+	const { studentName } = params;
+	const dayIndex = parseMaybeNum(params.dayIndex);
+	const timeIndex = parseMaybeNum(params.timeIndex);
+
+	return {
+		studentName,
+		dayIndex,
+		timeIndex,
+	};
+};
+
+export const StudentSchedulePage: FC<StudentSchedulePageProps> = (props) => {
+	const parsed = parseParams(props.match.params);
+	const { studentName, dayIndex, timeIndex } = parsed;
+
+	console.log("props.match.params", props.match.params, {parsed});
+
+	return <>
+		<StudentScheduleMachineProvider studentName={studentName}>
+			<StudentSchedule studentName={studentName} dayIndex={dayIndex} timeIndex={timeIndex} />
+		</StudentScheduleMachineProvider>
+	</>;
+};
+
+export type StudentScheduleProps = {
+	studentName: string;
+	dayIndex?: number;
+	timeIndex?: number;
+}
+
+const StudentSchedule: FC<StudentScheduleProps> = ({ studentName, dayIndex, timeIndex }) => {
 	const t = useTranslation();
 
 	/** scroll to top of page on mount */
@@ -46,16 +96,13 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	/** END TODO week component */
 
-	const { params } = match;
-	const { studentName } = params;
-	console.log({match});
-
-	const [participantType, setParticipantType] = useState<ParticipantLabel | null>(null);
-	useAddMostRecentParticipantOnPageChange(studentName, participantType);
-
 	const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 
-	const [stateM, sendM] = useStudentScheduleMachine({ studentName, setParticipantType });
+	const { state: stateM, send: sendM } = useStudentScheduleMachine();
+
+	console.log("stateM", stateM.context);
+
+	useAddMostRecentParticipantOnPageChange(studentName, stateM.context.participantType);
 
 	/**
 	 * mimic the selectedDay
@@ -65,7 +112,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	 */
 	const [selectedDay, __setSelectedDay] = useState<ScheduleDay>(getTodaysScheduleDay({ defaultToDay: 0 }));
 	useEffect(() => {
-		let dayIdx: ScheduleDay | undefined = decodeDay(params.dayIndex);
+		let dayIdx: ScheduleDay | undefined = decodeDay(dayIndex);
 
 		if (!dayIdx && dayIdx !== 0) {
 			dayIdx = getTodaysScheduleDay({ defaultToDay: 0 });
@@ -73,7 +120,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 			navigateToDesiredPath({
 				studentName,
 				day: dayIdx,
-				timeIndex: params.timeIndex,
+				timeIndex,
 				shouldShowTheLesson: !!selectedLesson || isDesktop,
 				replaceInsteadOfPush: true,
 				snapshot: stateM.context.snapshot,
@@ -81,16 +128,16 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		}
 
 		__setSelectedDay(dayIdx);
-	}, [params.dayIndex, params.timeIndex, studentName, isDesktop, selectedLesson, stateM.context.snapshot]);
+	}, [studentName, isDesktop, selectedLesson, stateM.context.snapshot, dayIndex, timeIndex]);
 
 	useEffect(() => {
-		if (params.timeIndex === undefined || !stateM.context.scheduleByDays?.[selectedDay]?.length) {
+		if (timeIndex === undefined || !stateM.context.scheduleByDays?.[selectedDay]?.length) {
 			setSelectedLesson(null);
 			return;
 		}
 
 		const lesson: Lesson = stateM.context.scheduleByDays[selectedDay].find(
-			(l: Lesson) => l.dayIndex === selectedDay && l.timeIndex === decodeTimeIndex(params.timeIndex)
+			(l: Lesson) => l.dayIndex === selectedDay && l.timeIndex === decodeTimeIndex(timeIndex)
 		);
 
 		console.log("lesson", lesson);
@@ -100,7 +147,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		}
 
 		setSelectedLesson(lesson);
-	}, [params.timeIndex, selectedDay, stateM.context.scheduleByDays]);
+	}, [selectedDay, stateM.context.scheduleByDays, timeIndex]);
 
 	/**
 	 * used to handle cases where a user comes to a URL with the `timeIndex` already set,
@@ -114,7 +161,7 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	 * & thus the handling will be slightly incorrect,
 	 * but it's better & worth it either way.
 	 */
-	const canGoBackInHistory = useRef<boolean>(params.timeIndex === undefined);
+	const canGoBackInHistory = useRef<boolean>(timeIndex === undefined);
 
 	console.log("stateM.value", stateM.value, studentName, stateM.context);
 
@@ -181,14 +228,14 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 		}
 		case "fetch-from-archive-snapshot": {
 			return <>
-				<h1>Siurbiame moksleivio "{studentName}" duomenis iš archyvo...</h1>
+				<h1>Siurbiame moksleivio "{studentName}" duomenis iš archyvo "{stateM.context.snapshot}"...</h1>
 			</>;
 		}
 		case "loading-success": {
 	return (
 		<>
 			{isDesktop ? (
-				<SchedulePageDesktop match={match} lessons={stateM.context.scheduleByDays.flat()} snapshot={stateM.context.snapshot} />
+				<SchedulePageDesktop studentName={studentName} lessons={stateM.context.scheduleByDays.flat()} />
 			) : (
 				<>
 					<Navbar />
@@ -260,7 +307,6 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 					<StudentListModal
 						isOpen={!!selectedLesson}
-						snapshot={stateM.context.snapshot}
 						handleClose={() => {
 							/**
 							 * if we've been navigating normally, this will pop the current history
@@ -318,11 +364,9 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	}
 };
 
-export default StudentSchedule;
-
 /** TODO architect in such a way that we won't need this */
 const encodeDay = (day: ScheduleDay) => (day === "*" ? "*" : Number(day) + 1);
-const decodeDay = (day: number | "*"): ScheduleDay => (day === "*" ? "*" : ((day - 1) as ScheduleDay));
+const decodeDay = (day: number | "*" | undefined): ScheduleDay => day === undefined ? 0 : (day === "*" ? "*" : ((Number(day) - 1) as ScheduleDay));
 
 const encodeTimeIndex = (time: number): number => time + 1;
 const decodeTimeIndex = (time: number | string): number => Number(time) - 1;

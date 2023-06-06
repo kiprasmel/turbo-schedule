@@ -8,9 +8,7 @@ import { Student, Teacher, Room, Class, Participant, parseParticipants } from "@
 import { useMostRecentlyViewedParticipantsSplit } from "../../hooks/useLRUCache";
 import { Dictionary } from "../../i18n/i18n";
 import { useTranslation } from "../../i18n/useTranslation";
-import { createLinkToLesson } from "./LessonsList";
-import { getDesiredPath, navigateToDesiredPath } from "./StudentSchedule";
-import { IScheduleDays } from "../../utils/selectSchedule";
+import { useStudentScheduleMachine } from "./student-schedule-machine";
 
 type MehParticipants = {
 	students: Student["text"][];
@@ -22,13 +20,10 @@ type MehParticipants = {
 interface Props {
 	participants: Participant[] | MehParticipants;
 	className?: string;
-	snapshot?: string;
 }
 
-export const ParticipantListList: FC<Props> = ({ participants, className, snapshot, ...rest }) => {
+export const ParticipantListList: FC<Props> = ({ participants, className, ...rest }) => {
 	const t = useTranslation();
-
-	console.log("participants", participants);
 
 	const { students, teachers, rooms, classes } = Array.isArray(participants)
 		? parseParticipants(participants)
@@ -97,7 +92,6 @@ export const ParticipantListList: FC<Props> = ({ participants, className, snapsh
 					mostRecentParticipants={recent}
 					summary={`${t(summary)  } (${participantStrings.length})`}
 					isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant}
-					snapshot={snapshot}
 				/>
 			))}
 		</div>
@@ -110,14 +104,12 @@ const ParticipantList: FC<{
 	summary?: string;
 	open?: boolean;
 	isOnlyOneMatchingParticipant?: boolean;
-	snapshot?: string;
 }> = ({
 	participants = [], //
 	mostRecentParticipants = [],
 	summary = "",
 	open = true,
 	isOnlyOneMatchingParticipant = false,
-	snapshot,
 }) => (
 	<details
 		className={css`
@@ -170,7 +162,6 @@ const ParticipantList: FC<{
 						key={p} //
 						participant={p}
 						isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant}
-						snapshot={snapshot}
 					/>
 				))}
 			</ol>
@@ -197,7 +188,6 @@ const ParticipantList: FC<{
 					key={p} //
 					participant={p}
 					isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant}
-					snapshot={snapshot}
 				/>
 			))}
 		</ol>
@@ -207,31 +197,14 @@ const ParticipantList: FC<{
 export const ParticipantListItem: FC<{
 	participant: string;
 	isOnlyOneMatchingParticipant?: boolean;
-	dayIndex?: number;
-	timeIndex?: number;
-	highlightInsteadOfOpen?: boolean;
-	snapshot?: string;
 }> = ({
 	participant, //
 	isOnlyOneMatchingParticipant = false,
-	dayIndex,
-	timeIndex,
-	highlightInsteadOfOpen = true,
-	snapshot,
 	children,
 }) => {
-	const linkOld: string = createLinkToLesson(participant, dayIndex, timeIndex, highlightInsteadOfOpen);
-	const linkNew: string = getDesiredPath({
-		studentName: participant,
-		day: dayIndex as keyof IScheduleDays,
-		timeIndex,
-		shouldShowTheLesson: true,
-		snapshot,
-	})!;
+	const SSM = useStudentScheduleMachine();
 
-	console.log({linkOld, linkNew, snapshot, participant});
-
-	return(
+	return (
 		<li
 			key={participant}
 			className={css`
@@ -239,16 +212,7 @@ export const ParticipantListItem: FC<{
 				${isOnlyOneMatchingParticipant && "border-bottom: 3px solid #000;"}
 			`}
 		>
-			{/* <Link to={linkNew} onClick={() => { */}
-			<button type="button" onClick={() => {
-				navigateToDesiredPath({
-					studentName: participant,
-					day: dayIndex as keyof IScheduleDays,
-					timeIndex,
-					shouldShowTheLesson: false,
-					snapshot,
-				});
-			}}>
+			<button type="button" onClick={() => SSM.send({ type: "FETCH_PARTICIPANT" })}>
 				{participant}
 				{(children as unknown) as any}
 			</button>
