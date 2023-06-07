@@ -30,7 +30,7 @@ export type StudentSchedulePageProps = {
 export const StudentSchedulePage: FC<StudentSchedulePageProps> = ({ match }) => {
 	const { participant } = match.params;
 
-	 return <>
+	return <>
 		<StudentScheduleMachineProvider participant={participant} >
 			<StudentSchedule participant={participant} />
 		</StudentScheduleMachineProvider>
