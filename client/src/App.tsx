@@ -28,11 +28,12 @@ const App: FC = () => (
 
 							<Route exact path="/avail" component={Availability} />
 
-							<Route exact path="/:studentName" component={StudentSchedulePage} />
-							<Route exact path="/:studentName/:dayIndex" component={StudentSchedulePage} />
+							<Route path="/:participant" component={StudentSchedulePage} />
+
+							{/* <Route exact path="/:studentName/:dayIndex" component={StudentSchedulePage} />
 							<Route exact path="/:studentName/:dayIndex/:timeIndex" component={StudentSchedulePage} />
 							<Route exact path="/:studentName/:dayIndex/\*" component={StudentSchedulePage} />
-							<Route exact path="/:studentName/:dayIndex/:timeIndex/\*" component={StudentSchedulePage} />
+							<Route exact path="/:studentName/:dayIndex/:timeIndex/\*" component={StudentSchedulePage} /> */}
 						</Switch>
 					</Router>
 				</div>

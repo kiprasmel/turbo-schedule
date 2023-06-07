@@ -1,22 +1,33 @@
-import React, { FC, useContext, useEffect } from "react";
+import React, { FC, useContext } from "react";
 import { Actor, InterpreterFrom, assign, createMachine } from "xstate";
 import { useActor, useInterpret } from "@xstate/react";
 
 import { Lesson, ParticipantLabel, ArchiveLostFound, Participant } from "@turbo-schedule/common";
 
 import { fetchParticipantCore } from "../../hooks/useFetchers";
-import { useQueryFor } from "../../hooks/useQueryFor";
+import { IScheduleDays } from "../../utils/selectSchedule";
+
+import { StudentScheduleParams, parseStudentScheduleParams, syncStudentScheduleStateToURL } from "./url";
 
 export type MachineContext = {
-	scheduleByDays: Lesson[][];
-	snapshots?: string[]
-	snapshot?: string;
-	participantType?: ParticipantLabel;
-	text?: string;
+	participant: {
+		scheduleByDays: Lesson[][];
+		snapshots?: string[]
+		snapshot?: string;
+		participantType?: ParticipantLabel;
+		text?: string;
+	};
+	ui: {
+		day?: keyof IScheduleDays;
+		time?: number;
+	};
 }
 
 export const defaultContext: MachineContext = {
-	scheduleByDays: [[]]
+	participant: {
+		scheduleByDays: [[]],
+	},
+	ui: {},
 };
 
 export type MachineEventFetchParticipant = {
@@ -34,6 +45,10 @@ export type MachineEvent =
 	MachineEventFetchParticipant
 |	MachineEventSelectArchiveSnapshot
 | {
+	type: "INTAKE_STATE";
+	data: StudentScheduleParams;
+}
+| {
 	type: "FETCH_SUCCESS",
 	scheduleByDays: Lesson[][]
 	snapshot?: string;
@@ -48,97 +63,186 @@ export type MachineEvent =
 	type: "SEARCH_ARCHIVE_FAILURE"
 } | {
 	type: "SELECT_DAY";
-	day: number
+	day: number | undefined;
+} | {
+	type: "SELECT_TIME";
+	time: number | undefined;
 }
 
-export type SMActor = Actor<unknown, MachineEvent>["send"];
+export type MachineParticipantState =
+	| "init"
+	| "fetch-participant"
+	| "loading-success"
+	| "loading-failure"
+	| "search-archive-success"
+	| "search-archive-failure"
+	| "fetch-from-archive-snapshot";
 
-export const studentScheduleMachine = createMachine<MachineContext, MachineEvent>({
+export type MachineUIState = "listening";
+
+export type SSMachineState = {
+	participant: MachineParticipantState;
+	ui: MachineUIState;
+}
+
+export type SMActor = Actor<MachineContext, MachineEvent>["send"];
+
+const assignAllFor = (submachine: keyof MachineContext, extra?: MachineContext[typeof submachine]) => assign((ctx, event) => ({
+	...ctx,
+	[submachine]: {
+		...ctx[submachine],
+		...event,
+		...extra,
+	}
+}));
+
+export type SSMachine = typeof studentScheduleMachine;
+
+export const studentScheduleMachine = createMachine<MachineContext, MachineEvent, { value: SSMachineState, context: MachineContext }>({
 	id: "student-schedule",
-	initial: "idle",
+	type: "parallel",
 	context: defaultContext,
 	states: {
-		idle: {
-			"on": {
-				FETCH_PARTICIPANT: "fetch-participant",
-				SELECT_ARCHIVE_SNAPSHOT: {
-					target: "fetch-from-archive-snapshot",
-					actions: assign({
-						snapshot: (_, event) => event.snapshot,
-					})
+		participant: {
+			initial: "init",
+			states: {
+				init: {
+					entry: "intakeStateFromURL",
+					"on": {
+
+
+						INTAKE_STATE: {
+							actions: assign((ctx, { data }) => ({
+								...ctx,
+								participant: {
+									...ctx.participant,
+									snapshot: data.snapshot,
+								},
+								ui: {
+									...ctx.ui,
+									day: data.day,
+									time: data.time,
+								}
+							}))
+						},
+						FETCH_PARTICIPANT: "fetch-participant",
+						SELECT_ARCHIVE_SNAPSHOT: {
+							target: "fetch-from-archive-snapshot",
+							actions: assignAllFor("participant"),
+							// assign((ctx, event) => ({
+							// 	...ctx,
+							// 	...
+							// }))
+							// assign({
+							// 	participant: (_, event) => ({
+							// 		snapshot: event.snapshot
+							// 	})
+							// })
+						}
+					}
+				},
+				"fetch-participant": {
+					entry: "fetchParticipant",
+					on: {
+						FETCH_SUCCESS: {
+							target: "loading-success",
+							actions: assignAllFor("participant"),
+							// assign({
+							// 	scheduleByDays: (_, e) => e.scheduleByDays,
+							// 	snapshot: (c, e) => e.snapshot || c.snapshot,
+							// 	participantType: (c, e) => e.participantType || c.participantType,
+							// 	text: (_, e) => e.text,
+							// })
+						},
+						FETCH_FAILURE: "loading-failure"
+					}
+				},
+				"loading-success": {
+					entry: "syncStateToURL",
+					on: {
+						FETCH_PARTICIPANT: "fetch-participant",
+						SELECT_ARCHIVE_SNAPSHOT: {
+							target: "fetch-from-archive-snapshot",
+							actions: assignAllFor("participant"),
+							// assign({
+							// 	snapshot: (_, event) => event.snapshot,
+							// })
+						}
+					}
+				},
+				"loading-failure": {
+					entry: [
+						// assign({ participant: { scheduleByDays: [[]] as Lesson[][] } }),
+						assignAllFor("participant", { scheduleByDays: [[]] }),
+						"searchIfParticipantExistsInArchive"
+					],
+					on: {
+						SEARCH_ARCHIVE_SUCCESS: {
+							target: "search-archive-success",
+							actions: assignAllFor("participant"),
+							// assign({
+							// 	snapshots: (_, event) => event.snapshots
+							// })
+						},
+						SEARCH_ARCHIVE_FAILURE: "search-archive-failure",
+					}
+				},
+				"search-archive-success": {
+					on: {
+						SELECT_ARCHIVE_SNAPSHOT: {
+							target: "fetch-from-archive-snapshot",
+							actions: [
+								assignAllFor("participant"),
+								"syncStateToURL",
+							],
+							// actions: assign({
+							// 	snapshot: (_, event) => event.snapshot,
+							// })
+						}
+					}
+				},
+				"search-archive-failure": {
+					on: {}
+				},
+				"fetch-from-archive-snapshot": {
+					entry: "fetchParticipant",
+					on: {
+						FETCH_SUCCESS: {
+							target: "loading-success",
+							actions: assignAllFor("participant"),
+							// actions: assign({
+							// 	scheduleByDays: (_, e) => e.scheduleByDays,
+							// 	snapshot: (c, e) => e.snapshot || c.snapshot,
+							// 	participantType: (c, e) => e.participantType || c.participantType,
+							// 	text: (_, e) => e.text,
+							// })
+						},
+						FETCH_FAILURE: "loading-failure",
+					}
+				},
+			}
+		},
+		ui: {
+			initial: "listening",
+			states: {
+				"listening": {
+					on: {
+						SELECT_DAY: {
+							actions: [
+								assign({ ui: (_, e)  => ({ day: e.day as keyof IScheduleDays /** TODO TS */ }) }),
+								"syncStateToURL",
+							]
+						},
+						SELECT_TIME: {
+							actions: [
+								assign({ ui: (_, e) => ({ time: e.time }) }),
+								"syncStateToURL",
+							]
+						},
+					}
 				}
 			}
-		},
-		"fetch-participant": {
-			entry: "fetchParticipant",
-			on: {
-				FETCH_SUCCESS: {
-					target: "loading-success",
-					actions: assign({
-						scheduleByDays: (_, e) => e.scheduleByDays,
-						snapshot: (c, e) => e.snapshot || c.snapshot,
-						participantType: (c, e) => e.participantType || c.participantType,
-						text: (_, e) => e.text,
-					})
-				},
-				FETCH_FAILURE: "loading-failure"
-			}
-		},
-		"loading-success": {
-			entry: "syncStateToURL",
-			on: {
-				FETCH_PARTICIPANT: "fetch-participant",
-				SELECT_ARCHIVE_SNAPSHOT: {
-					target: "fetch-from-archive-snapshot",
-					actions: assign({
-						snapshot: (_, event) => event.snapshot,
-					})
-				}
-			}
-		},
-		"loading-failure": {
-			entry: [
-				assign({ scheduleByDays: [[]] }),
-				"searchIfParticipantExistsInArchive"
-			],
-			on: {
-				SEARCH_ARCHIVE_SUCCESS: {
-					target: "search-archive-success",
-					actions: assign({
-						snapshots: (_, event) => event.snapshots
-					})
-				},
-				SEARCH_ARCHIVE_FAILURE: "search-archive-failure",
-			}
-		},
-		"search-archive-success": {
-			on: {
-				SELECT_ARCHIVE_SNAPSHOT: {
-					target: "fetch-from-archive-snapshot",
-					actions: assign({
-						snapshot: (_, event) => event.snapshot,
-					})
-				}
-			}
-		},
-		"search-archive-failure": {
-			on: {}
-		},
-		"fetch-from-archive-snapshot": {
-			entry: "fetchParticipant",
-			on: {
-				FETCH_SUCCESS: {
-					target: "loading-success",
-					actions: assign({
-						scheduleByDays: (_, e) => e.scheduleByDays,
-						snapshot: (c, e) => e.snapshot || c.snapshot,
-						participantType: (c, e) => e.participantType || c.participantType,
-						text: (_, e) => e.text,
-					})
-				},
-				FETCH_FAILURE: "loading-failure",
-			}
-		},
+		}
 	}
 });
 
@@ -164,24 +268,39 @@ async function searchIfParticipantExistsInArchive(studentName: string, sendM: SM
 };
 
 export const StudentScheduleMachineContext = React.createContext({} as InterpreterFrom<typeof studentScheduleMachine>);
+// export const StudentScheduleMachineContextTEMP = React.createContext<Interpreter<>>({});
 
 export type StudentScheduleMachineProviderProps = {
-	studentName: string;
-	syncStateToURL: Function
+	participant: Participant["text"];
 }
 
-export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderProps> = ({ studentName, syncStateToURL, children }) => {
+export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderProps> = ({ participant, children }) => {
 	const studentScheduleService = useInterpret(studentScheduleMachine,{
 		actions: {
-			fetchParticipant: (ctx, event): Promise<void> => fetchParticipant((event as MachineEventFetchParticipant | MachineEventSelectArchiveSnapshot).participant, ctx.snapshot),
-			searchIfParticipantExistsInArchive: (): Promise<void> => searchIfParticipantExistsInArchive(studentName, studentScheduleService.send),
-			syncStateToURL: () => syncStateToURL({ }),
+			fetchParticipant: (ctx, event): Promise<void> => fetchParticipant((event as MachineEventFetchParticipant | MachineEventSelectArchiveSnapshot).participant, ctx.participant.snapshot),
+			searchIfParticipantExistsInArchive: (): Promise<void> => searchIfParticipantExistsInArchive(participant, studentScheduleService.send),
+			intakeStateFromURL,
+			syncStateToURL,
 		}
 	});
 
-	function onFetchParticipantResponse(participant: Participant, snapshot?: string): void {
-		const { lessons, labels, text } = participant;
-		console.log("on participant response", participant);
+	function intakeStateFromURL(): void {
+		const params = parseStudentScheduleParams(participant);
+		studentScheduleService.send({ type: "INTAKE_STATE", data: params });
+	};
+
+	function syncStateToURL(): void {
+		syncStudentScheduleStateToURL({
+			participant: studentScheduleService.machine.context.participant.text || participant,
+			day: studentScheduleService.machine.context.ui.day,
+			time: studentScheduleService.machine.context.ui.time,
+			snapshot: studentScheduleService.machine.context.participant.snapshot,
+		});
+	}
+
+	function onFetchParticipantResponse(participantData: Participant, snapshot?: string): void {
+		const { lessons, labels, text } = participantData;
+		console.log("on participant response", participantData);
 
 		if (!lessons?.length) {
 			studentScheduleService.send({ type: "FETCH_FAILURE" });
@@ -210,36 +329,6 @@ export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderPr
 			.then(data => onFetchParticipantResponse(data.participant, snapshot))
 			.catch(() => void studentScheduleService.send({ type: "FETCH_FAILURE" }));
 	}
-
-	/**
-	 * TODO: move into a "global syncable values" context
-	 */
-	const [snapshotParam, setSnapshotParam] = useQueryFor("snapshot", {
-		encode: (x) => x,
-		decode: (x) => x,
-		// dependencies: [studentScheduleService.machine.context.snapshot],
-		// valueOverrideOnceChanges: studentScheduleService.machine.context.snapshot
-	});
-
-	/**
-	 * 2-way sync
-	 */
-	useEffect(() => {
-		console.log("syncing snapshot", {snapshotParam}, studentScheduleService.machine.context.snapshot);
-		if (snapshotParam && snapshotParam !== studentScheduleService.machine.context.snapshot) {
-			studentScheduleService.send({ type: "SELECT_ARCHIVE_SNAPSHOT", participant: studentName, snapshot: snapshotParam }); // TODO `participant` name
-		} else {
-			studentScheduleService.send({ type: "FETCH_PARTICIPANT", participant: studentName });
-		}
-	}, [snapshotParam, studentName, studentScheduleService, studentScheduleService.machine.context.snapshot]);
-
-	useEffect(() => {
-		studentScheduleService.subscribe(({ event }) => {
-			if (event.type === "SELECT_ARCHIVE_SNAPSHOT" && event.snapshot !== snapshotParam) {
-				setSnapshotParam(event.snapshot);
-			}
-		});
-	}, [setSnapshotParam, snapshotParam, studentScheduleService]);
 
 	return <StudentScheduleMachineContext.Provider value={studentScheduleService}>
 		{children}
