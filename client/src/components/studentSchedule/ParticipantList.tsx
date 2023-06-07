@@ -8,7 +8,7 @@ import { Student, Teacher, Room, Class, Participant, parseParticipants } from "@
 import { useMostRecentlyViewedParticipantsSplit } from "../../hooks/useLRUCache";
 import { Dictionary } from "../../i18n/i18n";
 import { useTranslation } from "../../i18n/useTranslation";
-import { useStudentScheduleMachine } from "./student-schedule-machine";
+import { parseStudentScheduleParams, syncStudentScheduleStateToURL } from "./url";
 
 type MehParticipants = {
 	students: Student["text"][];
@@ -201,10 +201,7 @@ export const ParticipantListItem: FC<{
 	participant, //
 	isOnlyOneMatchingParticipant = false,
 	children,
-}) => {
-	const SSM = useStudentScheduleMachine();
-
-	return (
+}) => (
 		<li
 			key={participant}
 			className={css`
@@ -212,10 +209,17 @@ export const ParticipantListItem: FC<{
 				${isOnlyOneMatchingParticipant && "border-bottom: 3px solid #000;"}
 			`}
 		>
-			<button type="button" onClick={() => SSM.send({ type: "FETCH_PARTICIPANT", participant })}>
+			<button
+				type="button"
+				onClick={() => syncStudentScheduleStateToURL({
+					participant,
+					snapshot: parseStudentScheduleParams(participant).snapshot,
+					day: undefined,
+					time: undefined,
+				})}
+			>
 				{participant}
 				{(children as unknown) as any}
 			</button>
 		</li>
 	);
-};

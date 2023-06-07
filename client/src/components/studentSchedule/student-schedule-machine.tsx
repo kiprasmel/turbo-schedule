@@ -1,4 +1,4 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useEffect } from "react";
 import { Actor, InterpreterFrom, assign, createMachine } from "xstate";
 import { useActor, useInterpret } from "@xstate/react";
 
@@ -15,7 +15,7 @@ export type MachineContext = {
 		snapshots?: string[]
 		snapshot?: string;
 		participantType?: ParticipantLabel;
-		text?: string;
+		participant?: Participant["text"];
 	};
 	ui: {
 		day?: keyof IScheduleDays;
@@ -45,7 +45,7 @@ export type MachineEvent =
 	MachineEventFetchParticipant
 |	MachineEventSelectArchiveSnapshot
 | {
-	type: "INTAKE_STATE";
+	type: "INIT";
 	data: StudentScheduleParams;
 }
 | {
@@ -53,7 +53,7 @@ export type MachineEvent =
 	scheduleByDays: Lesson[][]
 	snapshot?: string;
 	participantType: ParticipantLabel;
-	text: string;
+	participant: Participant["text"];
 } | {
 	type: "FETCH_FAILURE"
 } | {
@@ -107,15 +107,18 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 			initial: "init",
 			states: {
 				init: {
-					entry: "intakeStateFromURL",
-					"on": {
-
-
-						INTAKE_STATE: {
+					on: {
+						FETCH_PARTICIPANT: {
+							target: "fetch-participant",
+							actions: assignAllFor("participant"),
+						},
+						INIT: {
+							target: "fetch-participant",
 							actions: assign((ctx, { data }) => ({
 								...ctx,
 								participant: {
 									...ctx.participant,
+									participant: data.participant,
 									snapshot: data.snapshot,
 								},
 								ui: {
@@ -124,22 +127,8 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 									time: data.time,
 								}
 							}))
-						},
-						FETCH_PARTICIPANT: "fetch-participant",
-						SELECT_ARCHIVE_SNAPSHOT: {
-							target: "fetch-from-archive-snapshot",
-							actions: assignAllFor("participant"),
-							// assign((ctx, event) => ({
-							// 	...ctx,
-							// 	...
-							// }))
-							// assign({
-							// 	participant: (_, event) => ({
-							// 		snapshot: event.snapshot
-							// 	})
-							// })
 						}
-					}
+					},
 				},
 				"fetch-participant": {
 					entry: "fetchParticipant",
@@ -160,7 +149,10 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 				"loading-success": {
 					entry: "syncStateToURL",
 					on: {
-						FETCH_PARTICIPANT: "fetch-participant",
+						FETCH_PARTICIPANT: {
+							target: "fetch-participant",
+							actions: assignAllFor("participant"),
+						},
 						SELECT_ARCHIVE_SNAPSHOT: {
 							target: "fetch-from-archive-snapshot",
 							actions: assignAllFor("participant"),
@@ -277,21 +269,24 @@ export type StudentScheduleMachineProviderProps = {
 export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderProps> = ({ participant, children }) => {
 	const studentScheduleService = useInterpret(studentScheduleMachine,{
 		actions: {
-			fetchParticipant: (ctx, event): Promise<void> => fetchParticipant((event as MachineEventFetchParticipant | MachineEventSelectArchiveSnapshot).participant, ctx.participant.snapshot),
+			// fetchParticipant: (ctx, event): Promise<void> => fetchParticipant((event as MachineEventFetchParticipant | MachineEventSelectArchiveSnapshot).participant || ctx.participant.participant, ctx.participant.snapshot),
+			fetchParticipant: (ctx): Promise<void> => fetchParticipant(ctx.participant.participant!, ctx.participant.snapshot),
 			searchIfParticipantExistsInArchive: (): Promise<void> => searchIfParticipantExistsInArchive(participant, studentScheduleService.send),
-			intakeStateFromURL,
 			syncStateToURL,
 		}
 	});
 
-	function intakeStateFromURL(): void {
-		const params = parseStudentScheduleParams(participant);
-		studentScheduleService.send({ type: "INTAKE_STATE", data: params });
-	};
+	useEffect(() => {
+		if ((studentScheduleService.getSnapshot().value as SSMachineState).participant === "init") {
+			studentScheduleService.send({ type: "INIT", data: parseStudentScheduleParams(participant) });
+		} else {
+			studentScheduleService.send({ type: "FETCH_PARTICIPANT", participant });
+		}
+	}, [participant, studentScheduleService]);
 
 	function syncStateToURL(): void {
 		syncStudentScheduleStateToURL({
-			participant: studentScheduleService.machine.context.participant.text || participant,
+			participant: studentScheduleService.machine.context.participant.participant || participant,
 			day: studentScheduleService.machine.context.ui.day,
 			time: studentScheduleService.machine.context.ui.time,
 			snapshot: studentScheduleService.machine.context.participant.snapshot,
@@ -318,7 +313,7 @@ export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderPr
 			tempScheduleByDays[lesson.dayIndex].push(lesson);
 		});
 
-		studentScheduleService.send({ type: "FETCH_SUCCESS", scheduleByDays: tempScheduleByDays, snapshot, participantType: labels[0], text });
+		studentScheduleService.send({ type: "FETCH_SUCCESS", scheduleByDays: tempScheduleByDays, snapshot, participantType: labels[0], participant: text });
 	};
 
 	async function fetchParticipant(participant: string, snapshot?: string): Promise<void> {
@@ -337,6 +332,11 @@ export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderPr
 
 export function useStudentScheduleMachine() {
 	const studentScheduleService = useContext(StudentScheduleMachineContext);
+
+	if (!studentScheduleMachine) {
+		const msg = `you forgot to wrap the component tree in StudentScheduleMachineProvider.`;
+		throw new Error(msg);
+	}
 
 	const [state, send] = useActor(studentScheduleService);
 

@@ -81,11 +81,11 @@ export function generateURLForStudentScheduleState({
 
 	const base = `/${participant}`;
 
-	const search = new URLSearchParams({
+	const search = new URLSearchParams(removeFalsyProperties({
 		day: encodeDay(day),
 		time: encodeTime(time),
 		snapshot: snapshot || "",
-	});
+	}));
 
 	const URL = base + (search ? `?${search}` : "");
 
@@ -93,3 +93,7 @@ export function generateURLForStudentScheduleState({
 
 	return URL;
 };
+
+export function removeFalsyProperties(obj: {}): typeof obj {
+	return Object.fromEntries(Object.entries(obj).filter(([_, val]) => !!val));
+}
