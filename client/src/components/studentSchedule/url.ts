@@ -55,8 +55,6 @@ export const syncStudentScheduleStateToURL = (
 ): void => {
 	const path: string | undefined = generateURLForStudentScheduleState(params);
 
-	console.log("path", `"${path}"`);
-
 	if (!path) {
 		return;
 	}
@@ -81,15 +79,14 @@ export function generateURLForStudentScheduleState({
 
 	const base = `/${participant}`;
 
-	const search = new URLSearchParams(removeFalsyProperties({
+	const searchProps = {
 		day: encodeDay(day),
 		time: encodeTime(time),
 		snapshot: snapshot || "",
-	}));
+	};
+	const search: string = new URLSearchParams(removeFalsyProperties(searchProps)).toString();
 
 	const URL = base + (search ? `?${search}` : "");
-
-	console.log({ base, search, URL });
 
 	return URL;
 };
