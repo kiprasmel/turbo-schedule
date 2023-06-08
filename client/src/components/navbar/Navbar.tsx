@@ -159,8 +159,6 @@ export const NavbarLinksOne: FC<React.HTMLProps<HTMLLIElement>> = (firstElementP
 		setGapWidth(calcGapWidth());
 	}, [calcGapWidth, currentLang]);
 
-	console.log("gapWidth", gapWidth, "currLang", currentLang);
-
 	return (
 		<>
 			<li {...firstElementProps}>
