@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect } from "react";
+import React, { FC, useCallback, useContext, useEffect } from "react";
 import { Actor, InterpreterFrom, assign, createMachine } from "xstate";
 import { useActor, useInterpret } from "@xstate/react";
 
@@ -101,6 +101,7 @@ export type SSMachine = typeof studentScheduleMachine;
 export const studentScheduleMachine = createMachine<MachineContext, MachineEvent, { value: SSMachineState, context: MachineContext }>({
 	id: "student-schedule",
 	type: "parallel",
+	predictableActionArguments: true,
 	context: defaultContext,
 	states: {
 		participant: {
@@ -147,7 +148,6 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 					}
 				},
 				"loading-success": {
-					entry: "syncStateToURL",
 					on: {
 						FETCH_PARTICIPANT: {
 							target: "fetch-participant",
@@ -155,7 +155,9 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 						},
 						SELECT_ARCHIVE_SNAPSHOT: {
 							target: "fetch-from-archive-snapshot",
-							actions: assignAllFor("participant"),
+							actions: [
+								assignAllFor("participant"),
+							],
 							// assign({
 							// 	snapshot: (_, event) => event.snapshot,
 							// })
@@ -185,7 +187,6 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 							target: "fetch-from-archive-snapshot",
 							actions: [
 								assignAllFor("participant"),
-								"syncStateToURL",
 							],
 							// actions: assign({
 							// 	snapshot: (_, event) => event.snapshot,
@@ -222,13 +223,11 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 						SELECT_DAY: {
 							actions: [
 								assign({ ui: (_, e)  => ({ day: e.day as keyof IScheduleDays /** TODO TS */ }) }),
-								"syncStateToURL",
 							]
 						},
 						SELECT_TIME: {
 							actions: [
 								assign({ ui: (_, e) => ({ time: e.time }) }),
-								"syncStateToURL",
 							]
 						},
 					}
@@ -272,26 +271,35 @@ export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderPr
 			// fetchParticipant: (ctx, event): Promise<void> => fetchParticipant((event as MachineEventFetchParticipant | MachineEventSelectArchiveSnapshot).participant || ctx.participant.participant, ctx.participant.snapshot),
 			fetchParticipant: (ctx): Promise<void> => fetchParticipant(ctx.participant.participant!, ctx.participant.snapshot),
 			searchIfParticipantExistsInArchive: (): Promise<void> => searchIfParticipantExistsInArchive(participant, studentScheduleService.send),
-			syncStateToURL,
 		}
 	});
 
+	const syncStateToURL = useCallback((context: MachineContext = studentScheduleService.getSnapshot().context): void => {
+		return syncStudentScheduleStateToURL({
+			participant: context.participant.participant || participant,
+			day: context.ui.day,
+			time: context.ui.time,
+			snapshot: context.participant.snapshot,
+		});
+	}, [participant, studentScheduleService]);
+
 	useEffect(() => {
+		const urlSyncSub = studentScheduleService.subscribe((next) => {
+			if (next.changed) {
+				syncStateToURL(next.context);
+			}
+		});
+
 		if ((studentScheduleService.getSnapshot().value as SSMachineState).participant === "init") {
 			studentScheduleService.send({ type: "INIT", data: parseStudentScheduleParams(participant) });
 		} else {
 			studentScheduleService.send({ type: "FETCH_PARTICIPANT", participant });
 		}
-	}, [participant, studentScheduleService]);
 
-	function syncStateToURL(): void {
-		syncStudentScheduleStateToURL({
-			participant: studentScheduleService.machine.context.participant.participant || participant,
-			day: studentScheduleService.machine.context.ui.day,
-			time: studentScheduleService.machine.context.ui.time,
-			snapshot: studentScheduleService.machine.context.participant.snapshot,
-		});
-	}
+		return () => {
+			urlSyncSub.unsubscribe();
+		}
+	}, [participant, studentScheduleService, syncStateToURL]);
 
 	function onFetchParticipantResponse(participantData: Participant, snapshot?: string): void {
 		const { lessons, labels, text } = participantData;
