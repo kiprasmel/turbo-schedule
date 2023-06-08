@@ -7,40 +7,22 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import React, { FC, useState, useContext, useEffect, useRef, useLayoutEffect, KeyboardEvent } from "react";
-// import Select from "react-select";
+import React, { FC, useState, useRef, useLayoutEffect } from "react";
 import { css } from "emotion";
-
-import { Lesson } from "@turbo-schedule/common";
 
 import { Navbar } from "../navbar/Navbar";
 import { LessonsList } from "./LessonsList";
 import { DaysList } from "./DaysList";
 import { LessonDisplay } from "./LessonDisplay";
-import { getTodaysScheduleDay, ScheduleDay } from "../../utils/selectSchedule";
-import { CurrentLangContext } from "../currentLangContext/currentLangContext";
+import { getStuffFromSSM, useStudentScheduleMachine } from "./student-schedule-machine";
+import { ScheduleDay } from "../../utils/selectSchedule";
 
-// const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
-
-interface Props {
-	studentName: string;
-	lessons: Lesson[];
-}
-
-export const SchedulePageDesktop: FC<Props> = ({ studentName, lessons }) => {
-	const { currentLang } = useContext(CurrentLangContext);
-
-	useEffect(() => {
-		console.log("currentLang", currentLang);
-	}, [currentLang]);
+export const SchedulePageDesktop: FC = () => {
+	const SSM = useStudentScheduleMachine();
+	const { selectedDay, selectedLessons, selectedLesson } = getStuffFromSSM(SSM.state)
 
 	const searchElementRef = useRef<HTMLInputElement>(null);
-	// const [searchString, setSearchString] = useState<string>(participant.text || "");
-	const [searchString, setSearchString] = useState<string>(studentName);
-
-	const [selectedDay, setSelectedDay] = useState<ScheduleDay>(() => getTodaysScheduleDay({ defaultToDay: 0 }));
-	const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
-	const [selectedLessonTimeIndex, setSelectedLessonTimeIndex] = useState<number | undefined>(undefined);
+	const [searchString, setSearchString] = useState<string>(SSM.state.context.participant.participant || "");
 
 	const navbarElement = useRef<HTMLElement>(null);
 	const [navbarHeight, setNavbarHeight] = useState<number>(0);
@@ -50,68 +32,8 @@ export const SchedulePageDesktop: FC<Props> = ({ studentName, lessons }) => {
 		setNavbarHeight(height);
 	}, [setNavbarHeight]);
 
-	/**
-	 * once the user selects a new day - this updates the selected lesson --
-	 * it keeps the same time index, and just selects the lesson
-	 * from the appropriate day.
-	 */
-	useEffect(() => {
-		if (selectedLessonTimeIndex === null) {
-			return;
-		}
-
-		const lesson: Lesson | undefined = lessons?.find(
-			(l) => l.dayIndex === selectedDay && l.timeIndex === selectedLessonTimeIndex
-		);
-
-		if (!lesson) {
-			return;
-		}
-
-		setSelectedLesson(lesson);
-	}, [/** must */ selectedDay, /** secondary */ lessons, selectedLessonTimeIndex]);
-
-	const handleOnKeyDown = (_e: KeyboardEvent) => {
-		// e.preventDefault();
-		// if (e.key === "s" || e.key === "S") {
-		// 	console.log("day down");
-		// 	setSelectedDay(
-		// 		(d) =>
-		// 			(d === "*"
-		// 				? scheduleDaysArray[1]
-		// 				: d === scheduleDaysArray[scheduleDaysArray.length - 1]
-		// 					? d
-		// 					: d + 1) as ScheduleDay
-		// 	);
-		// } else if (e.key === "d" || e.key === "D") {
-		// 	console.log("day up");
-		// 	setSelectedDay(
-		// 		(d) =>
-		// 			(d === "*"
-		// 				? scheduleDaysArray[0]
-		// 				: d === scheduleDaysArray[1]
-		// 				? scheduleDaysArray[0]
-		// 				: d - 1) as ScheduleDay
-		// 	);
-		// }
-		// else if (e.key === "j" || e.key === "J") {
-		// 	setSelectedLessonTimeIndex(
-		// 		(i) => (i !== undefined && participant?.lessons?.length && i + 1) || undefined
-		// 		// clamp(i + 1, 0, participant.lessons.filter((l) => l.dayIndex === selectedDay).length - 1)
-		// 	);
-		// 	console.log("time down", selectedLessonTimeIndex);
-		// } else if (e.key === "k" || e.key === "K") {
-		// 	setSelectedLessonTimeIndex(
-		// 		(i) => (i !== undefined && participant?.lessons?.length && i - 1) || undefined
-		// 		// clamp(i - 1, 0, participant.lessons.filter((l) => l.dayIndex === selectedDay).length - 1)
-		// 	);
-		// 	console.log("time up", selectedLessonTimeIndex);
-		// }
-	};
-
 	return (
 		<div
-			onKeyUp={(e) => handleOnKeyDown(e)}
 			className={css`
 				display: flex;
 				flex-direction: column;
@@ -145,21 +67,10 @@ export const SchedulePageDesktop: FC<Props> = ({ studentName, lessons }) => {
 					justify-content: space-between;
 				`}
 			>
-				{/* 1st */}
-				<DaysList selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
+				<DaysList selectedDay={selectedDay! /** TODO TS */} onSelectDay={(day) => SSM.send({ type: "SELECT_DAY", day: day === "*" ? day : (day) as ScheduleDay })} />
 
-				{/* 2nd - lessons of the day list */}
-				<LessonsList
-					lessons={lessons}
-					selectedDay={selectedDay}
-					selectedLesson={selectedLesson}
-					handleClick={(_e, lesson) => {
-						setSelectedLesson(lesson);
-						setSelectedLessonTimeIndex(lesson.timeIndex);
-					}}
-				/>
+				<LessonsList lessons={selectedLessons} />
 
-				{/* 3rd */}
 				<article
 					className={css`
 						/* background: lightskyblue; */

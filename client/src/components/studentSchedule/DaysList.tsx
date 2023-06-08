@@ -7,10 +7,10 @@ import { scheduleDaysArray, ScheduleDay } from "../../utils/selectSchedule";
 
 interface Props {
 	selectedDay: ScheduleDay;
-	setSelectedDay: React.Dispatch<React.SetStateAction<ScheduleDay>>;
+	onSelectDay: (day: ScheduleDay) => void
 }
 
-export const DaysList: FC<Props> = ({ selectedDay, setSelectedDay }) => (
+export const DaysList: FC<Props> = ({ selectedDay, onSelectDay }) => (
 	<nav
 		className={css`
 			/* background: lightcyan; */
@@ -73,7 +73,7 @@ export const DaysList: FC<Props> = ({ selectedDay, setSelectedDay }) => (
 
 					<button
 						type="button"
-						onClick={(_e) => setSelectedDay(dayIndex)}
+						onClick={(_e) => onSelectDay(dayIndex)}
 						className={css`
 										display: flex;
 										align-items: center;

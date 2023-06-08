@@ -80,9 +80,9 @@ export function generateURLForStudentScheduleState({
 	const base = `/${participant}`;
 
 	const searchProps = {
+		snapshot: snapshot || "",
 		day: encodeDay(day),
 		time: encodeTime(time),
-		snapshot: snapshot || "",
 	};
 	const search: string = new URLSearchParams(removeFalsyProperties(searchProps)).toString();
 
