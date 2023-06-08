@@ -8,59 +8,58 @@ import { Lesson, Participant } from "@turbo-schedule/common";
 import { useHighlightElementById } from "../../hooks/useHighlightElementById";
 import { StrikeThrough } from "./StrikeThrough";
 import { useTranslation } from "../../i18n/useTranslation";
-import { ScheduleDay } from "../../utils/selectSchedule";
 import { toNiceTimeIndex } from "../../utils/toNiceTimeIndex";
 import { getLessonStartTime, getLessonEndTime } from "../../utils/getLessonTimes";
 import { Fraction } from "../../common/Fraction";
+import { getStuffFromSSM, useStudentScheduleMachine } from "./student-schedule-machine";
 
-export const LessonsList: FC<{
+export type LessonsListProps = {
 	lessons: Lesson[];
-	selectedDay: ScheduleDay;
-	selectedLesson: Lesson | null;
-	handleClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, lesson: Lesson) => any;
-}> = ({ lessons = [], selectedLesson, handleClick, selectedDay }) => (
-	<nav
-		className={css`
-			flex: 2;
-			flex-shrink: 1;
+}
 
-			min-width: 20em;
+export const LessonsList: FC<LessonsListProps> = ({ lessons }) => {
+	const SSM = useStudentScheduleMachine();
 
-			overflow-y: auto;
-		`}
-	>
-		<ul
+	const { selectedDay } = getStuffFromSSM(SSM.state);
+
+	return (
+		<nav
 			className={css`
-				display: flex;
-				flex-direction: column;
+				flex: 2;
+				flex-shrink: 1;
 
-				max-width: 100%;
-				width: 100%;
-				max-height: 100%;
-				height: 100%;
+				min-width: 20em;
 
-				& > * + * {
-					border-top: 1px solid #000;
-				}
-
-				& > * {
-					flex: 1;
-				}
+				overflow-y: auto;
 			`}
 		>
-			{lessons
-				.filter((l) => l.dayIndex === selectedDay || selectedDay === "*")
-				.map((lesson) => (
-					<LessonsListItem
-						key={lesson.id}
-						lesson={lesson}
-						selectedLesson={selectedLesson}
-						handleClick={handleClick}
-					/>
-				))}
-		</ul>
-	</nav>
-);
+			<ul
+				className={css`
+					display: flex;
+					flex-direction: column;
+
+					max-width: 100%;
+					width: 100%;
+					max-height: 100%;
+					height: 100%;
+
+					& > * + * {
+						border-top: 1px solid #000;
+					}
+
+					& > * {
+						flex: 1;
+					}
+				`}
+			>
+				{lessons
+					.filter((l) => l.dayIndex === selectedDay || selectedDay === "*")
+					.map((lesson) => <LessonsListItem key={lesson.id} lesson={lesson} />)
+				}
+			</ul>
+		</nav>
+	);
+}
 
 export const createLessonHtmlId = (dayIndex: Lesson["dayIndex"], timeIndex: Lesson["timeIndex"]): string =>
 	`lesson-${dayIndex}-${timeIndex}`;
@@ -96,9 +95,10 @@ export const createLinkToLesson = (
 
 const LessonsListItem: FC<{
 	lesson: Lesson;
-	selectedLesson: Lesson | null;
-	handleClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, lesson: Lesson) => any;
-}> = ({ lesson, selectedLesson, handleClick }) => {
+}> = ({ lesson }) => {
+	const SSM = useStudentScheduleMachine();
+	const { selectedTime } = getStuffFromSSM(SSM.state);
+
 	const t = useTranslation();
 
 	const { id, name, dayIndex, timeIndex, teachers, rooms, isEmpty } = lesson;
@@ -119,9 +119,7 @@ const LessonsListItem: FC<{
 			<button
 				key={id}
 				type="button"
-				onClick={(e) => {
-					handleClick(e, lesson);
-				}}
+				onClick={() => SSM.send({ type: "SELECT_TIME", time: lesson.timeIndex })}
 				className={css`
 					padding: 1em 2em;
 
@@ -129,7 +127,7 @@ const LessonsListItem: FC<{
 					height: 100%;
 				`}
 			>
-				{timeIndex === selectedLesson?.timeIndex && (
+				{timeIndex === selectedTime && (
 					<div
 						className={css`
 							position: absolute;

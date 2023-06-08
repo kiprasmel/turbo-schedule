@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useRef, FC } from "react";
+import React, { useEffect, useRef, FC } from "react";
 import { match as Match } from "react-router-dom";
 import { css } from "emotion";
-
-import { Lesson } from "@turbo-schedule/common";
 
 import "./StudentSchedule.scss";
 
@@ -16,12 +14,10 @@ import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
 
 import DaySelector from "./DaySelector";
-import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
 import { SchedulePageDesktop } from "./SchedulePageDesktop";
 import { LessonsList } from "./LessonsList";
-import { SSMachineState, StudentScheduleMachineProvider, useStudentScheduleMachine } from "./student-schedule-machine";
-import { syncStudentScheduleStateToURL } from "./url";
+import { SSMachineState, StudentScheduleMachineProvider, getStuffFromSSM, useStudentScheduleMachine } from "./student-schedule-machine";
 
 export type StudentSchedulePageProps = {
 	match: Match<{
@@ -63,57 +59,9 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 
 	/** END TODO week component */
 
-	const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
-
 	const { state: stateM, send: sendM } = useStudentScheduleMachine();
 
-	console.log("stateM", stateM.context);
-
 	useAddMostRecentParticipantOnPageChange(participant, stateM.context.participant.participantType);
-
-	/**
-	 * mimic the selectedDay
-	 *
-	 * TODO FIXME PARAMS - everything that comes from the route params, SHALL BE the single source of truth
-	 * without any additional bs states, because we have to sync them & bugs come real quick
-	 */
-	const [selectedDay, __setSelectedDay] = useState<ScheduleDay>(getTodaysScheduleDay({ defaultToDay: 0 })); // TODO FIXME
-	// useEffect(() => {
-	// 	let dayIdx: ScheduleDay | undefined = decodeDay(dayIndex);
-
-	// 	if (!dayIdx && dayIdx !== 0) {
-	// 		dayIdx = getTodaysScheduleDay({ defaultToDay: 0 });
-
-	// 		navigateToDesiredPath({
-	// 			studentName,
-	// 			day: dayIdx,
-	// 			timeIndex,
-	// 			replaceInsteadOfPush: true,
-	// 			snapshot: stateM.context.participant.snapshot,
-	// 		});
-	// 	}
-
-	// 	__setSelectedDay(dayIdx);
-	// }, [studentName, isDesktop, selectedLesson, stateM.context.participant.snapshot, dayIndex, timeIndex]);
-
-	// useEffect(() => {
-	// 	if (timeIndex === undefined || !stateM.context.participant.scheduleByDays?.[selectedDay]?.length) {
-	// 		setSelectedLesson(null);
-	// 		return;
-	// 	}
-
-	// 	const lesson: Lesson = stateM.context.participant.scheduleByDays[selectedDay].find(
-	// 		(l: Lesson) => l.dayIndex === selectedDay && l.timeIndex === decodeTimeIndex(timeIndex)
-	// 	);
-
-	// 	console.log("lesson", lesson);
-
-	// 	if (!lesson) {
-	// 		return;
-	// 	}
-
-	// 	setSelectedLesson(lesson);
-	// }, [selectedDay, stateM.context.participant.scheduleByDays, timeIndex]);
 
 	/**
 	 * used to handle cases where a user comes to a URL with the `timeIndex` already set,
@@ -130,7 +78,7 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 	// const canGoBackInHistory = useRef<boolean>(timeIndex === undefined);
 	const canGoBackInHistory = useRef<boolean>(true); // TODO FIXME
 
-	console.log("stateM.value", stateM.value, participant, stateM.context);
+	const { selectedDay, selectedLessons, selectedLesson } = getStuffFromSSM(stateM);
 
 	switch ((stateM.value as SSMachineState).participant) {
 		case "init": {
@@ -200,7 +148,7 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 	return (
 		<>
 			{isDesktop ? (
-				<SchedulePageDesktop studentName={participant} lessons={stateM.context.participant.scheduleByDays.flat()} />
+				<SchedulePageDesktop />
 			) : (
 				<>
 					<Navbar />
@@ -209,61 +157,24 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 
 					<DaySelector
 						selectedDay={selectedDay}
-						handleClick={(_e, day) => {
-							// dispatchSelectedDayState({ day, causedBy: "daySelection" });
-
-							syncStudentScheduleStateToURL({
-								participant,
-								day,
-								time: selectedLesson?.timeIndex,
-								snapshot: stateM.context.participant.snapshot,
-							});
-						}}
+						handleClick={(_e, day) => sendM({ type: "SELECT_DAY", day })}
 					/>
 
 					<br />
 
-					{/* {selectedDayState.day === "*" ? ( */}
-					{selectedDay === "*" ? (
-								stateM.context.participant.scheduleByDays.map((lessonsArray, index) => (
+					{(!selectedDay && selectedDay !== 0)
+						? null :
+						selectedDay === "*" ? (
+						stateM.context.participant.scheduleByDays.map((lessonsArray, index) => (
 							<div key={index} style={weekStyles}>
 								<h3 style={{ padding: "1em 2em" }}>{t("weekday")(index)}</h3>
 
-								<LessonsList
-									lessons={lessonsArray}
-									selectedDay={selectedDay}
-									selectedLesson={null}
-									handleClick={(_e, lesson) => {
-										syncStudentScheduleStateToURL({
-											participant,
-											day: selectedDay,
-											time: lesson?.timeIndex,
-											snapshot: stateM.context.participant.snapshot,
-										});
-
-										setSelectedLesson(lesson);
-									}}
-								/>
+								<LessonsList lessons={lessonsArray} />
 							</div>
 						))
 					) : (
 						<>
-							<LessonsList
-										lessons={stateM.context.participant.scheduleByDays[selectedDay]}
-								selectedDay={selectedDay}
-								// selectedLesson={null}
-								selectedLesson={selectedLesson}
-								handleClick={(_e, lesson) => {
-									syncStudentScheduleStateToURL({
-										participant,
-										day: selectedDay,
-										time: lesson?.timeIndex,
-										snapshot: stateM.context.participant.snapshot,
-									});
-
-									setSelectedLesson(lesson);
-								}}
-							/>
+							<LessonsList lessons={selectedLessons} />
 						</>
 					)}
 
@@ -312,7 +223,7 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 								history.goBack();
 							}
 
-							setSelectedLesson(null);
+							sendM({ type: "SELECT_TIME", time: undefined });
 						}}
 						lesson={selectedLesson}
 					/>

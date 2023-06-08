@@ -3,7 +3,7 @@ import { css } from "emotion";
 import { scheduleDaysArray, ScheduleDay } from "../../utils/selectSchedule";
 
 export interface DaySelectorProps {
-	selectedDay: ScheduleDay;
+	selectedDay: ScheduleDay | undefined;
 	handleClick: (e: React.MouseEvent, day: ScheduleDay) => any;
 }
 

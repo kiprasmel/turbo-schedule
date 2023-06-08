@@ -5,7 +5,7 @@ import { useActor, useInterpret } from "@xstate/react";
 import { Lesson, ParticipantLabel, ArchiveLostFound, Participant } from "@turbo-schedule/common";
 
 import { fetchParticipantCore } from "../../hooks/useFetchers";
-import { IScheduleDays } from "../../utils/selectSchedule";
+import { IScheduleDays, ScheduleDay } from "../../utils/selectSchedule";
 
 import { StudentScheduleParams, parseStudentScheduleParams, syncStudentScheduleStateToURL } from "./url";
 
@@ -63,7 +63,7 @@ export type MachineEvent =
 	type: "SEARCH_ARCHIVE_FAILURE"
 } | {
 	type: "SELECT_DAY";
-	day: number | undefined;
+	day: ScheduleDay | undefined;
 } | {
 	type: "SELECT_TIME";
 	time: number | undefined;
@@ -221,14 +221,10 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 				"listening": {
 					on: {
 						SELECT_DAY: {
-							actions: [
-								assign({ ui: (_, e)  => ({ day: e.day as keyof IScheduleDays /** TODO TS */ }) }),
-							]
+							actions: assignAllFor("ui"),
 						},
 						SELECT_TIME: {
-							actions: [
-								assign({ ui: (_, e) => ({ time: e.time }) }),
-							]
+							actions: assignAllFor("ui"),
 						},
 					}
 				}
@@ -352,4 +348,24 @@ export function useStudentScheduleMachine() {
 		state,
 		send,
 	} as const;
+}
+
+export const getStuffFromSSM = (state: ReturnType<typeof useStudentScheduleMachine>["state"]) => {
+	const lessons2D: Lesson[][] = state.context.participant.scheduleByDays;
+	const lessons: Lesson[] = lessons2D.flat();
+
+	const selectedDay = state.context.ui.day
+	const selectedTime = state.context.ui.time
+	const selectedLessons: Lesson[] = selectedDay === "*" ? lessons : ((selectedDay || selectedDay === 0) && lessons2D.length >= selectedDay) ? lessons2D[selectedDay] : []
+	const selectedLesson: Lesson | null = (selectedDay || selectedDay === 0) && (selectedTime || selectedTime === 0) && selectedLessons.length ? selectedLessons[selectedTime] : null
+
+	return {
+		lessons2D,
+		lessons,
+		//
+		selectedDay,
+		selectedTime,
+		selectedLessons,
+		selectedLesson,
+	}
 }
