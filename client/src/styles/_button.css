@@ -1,0 +1,51 @@
+.btn {
+	box-sizing: border-box;
+	font-size: 1.25rem;
+
+	--col: #fff;
+	--col-bg: hsla(240, 50%, 10%, 1);
+	--col-bg-lighter: var(--col-bg);
+
+	padding: 8px 16px;
+	margin: auto;
+	display: block;
+
+	padding: 12px 16px;
+
+	color: var(--col-bg);
+	background: var(--col);
+	border: 1px solid var(--col-bg);
+
+	transition: all 0.2s ease-out;
+
+}
+
+.btn:hover,
+.btn:focus,
+.btn.selected {
+	outline: none;
+
+	color: var(--col);
+
+	transition: all 0.2s ease-in;
+}
+
+.btn:hover,
+.btn:focus {
+	background: var(--col-bg-lighter);
+	border: 1px solid var(--col-bg-lighter);
+}
+
+.btn.selected {
+	background: var(--col-bg);
+	border: 1px solid var(--col-bg);
+}
+
+.btn--round {
+	border-radius: 100em;
+}
+
+.btn--big {
+	min-width: 6em;
+	min-height: 3em;
+}
