@@ -12,7 +12,7 @@
 		"test": "yarn test:api --forceExit",
 		"build": "     yarn build:ts && yarn build:content      && yarn build:docs",
 		"build:prod": "cross-env NODE_ENV=production yarn build:ts && yarn build:content:prod && yarn build:docs:prod",
-		"serve": "cross-env NODE_ENV=production node --max-http-header-size 64000 dist/script/start-server.js",
+		"serve": "cross-env NODE_ENV=production node --max-http-header-size=262144 dist/script/start-server.js",
 		"-----": "-----",
 		"watch:ts": "tsc -b -w",
 		"watch:server": "ts-node-dev ./src/script/start-server.ts",
@@ -51,17 +51,19 @@
 		"node-fetch": "2.6.0",
 		"openapi-types": "1.3.5",
 		"redoc": "2.0.0-rc.18",
-		"rotating-file-stream": "1.4.6"
+		"rotating-file-stream": "1.4.6",
+		"workerpool": "6.2.1"
 	},
 	"devDependencies": {
 		"@types/jest": "24.0.23",
 		"@types/supertest": "2.0.8",
+		"@types/workerpool": "6.1.0",
 		"concurrently": "5.0.0",
 		"cross-env": "6.0.3",
 		"jest": "24.9.0",
 		"supertest": "4.0.2",
 		"ts-jest": "24.1.0",
-		"ts-node-dev": "1.0.0-pre.44",
+		"ts-node-dev": "1.1.8",
 		"typescript": "4.3.5"
 	},
 	"resolutions": {

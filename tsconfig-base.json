@@ -8,11 +8,13 @@
 		"target": "es6",
 		"module": "commonjs",
 		"strict": true,
+		"skipLibCheck": true,
 		"lib": [
 			"dom", //
 			"es6",
 			"es2020" /** [].flatMap() */,
-			"esnext.asynciterable"
+			"esnext.asynciterable",
+			"esnext.bigint"
 		],
 		"outDir": "dist",
 		"moduleResolution": "node",

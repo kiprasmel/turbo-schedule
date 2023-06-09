@@ -12,13 +12,13 @@
  *
  */
 
+import http from "http";
 import express, { Express } from "express";
 // import jsonServer from "json-server";
 import fs from "fs-extra";
 import { handleResponses, handleRequests, OpenAPIV2 } from "express-oas-generator";
 import helmet from "helmet";
 import cors from "cors";
-import { Server } from "http";
 
 import { initDb } from "@turbo-schedule/database";
 
@@ -101,11 +101,30 @@ export function startServer({
 	portOverride = undefined, //
 	enableScraping = !process.env.NO_SCRAPE &&
 		(!!process.env.FORCE_ENABLE_SCRAPING || process.env.NODE_ENV === "production" || false),
-}: StartServerOptions = {}): Server {
+}: StartServerOptions = {}): http.Server {
 	const PORT: number | string = portOverride ?? process.env.PORT ?? 5000;
 
-	/** serving */
-	const server: Server = app.listen(PORT, async () => {
+	/**
+	 * - https://github.com/expressjs/express/issues/4131#issuecomment-565655526
+	 *   - https://nodejs.org/api/http.html#http_http_createserver_options_requestlistener
+	 *   - https://expressjs.com/en/api.html#app.listen_path_callback
+	 */
+	const server = http.createServer(
+		{
+			/**
+			 * default 2**14 (16kb), we increase to 2**18 (256kb),
+			 * because the GET request of participants' common availability
+			 * has a very long query param for the participants' names.
+			 *
+			 * REQUIRES: node >= v13.3.0
+			 * see "History" in https://nodejs.org/api/http.html#httpcreateserveroptions-requestlistener
+			 */
+			maxHeaderSize: 2 ** 18,
+		} as any,
+		app
+	);
+
+	server.listen(PORT, async () => {
 		console.log(
 			`~ Server listening on PORT \`${PORT}\` @ NODE_ENV \`${process.env.NODE_ENV}\`, scraping \`${
 				enableScraping ? "enabled" : "disabled"
