@@ -22,7 +22,7 @@
 		]
 	},
 	"engines": {
-		"node": ">= 11 < 14"
+		"node": ">= 11"
 	},
 	"scripts": {
 		"postinstall": "patch-package",
