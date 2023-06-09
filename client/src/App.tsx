@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Router, Switch, Route } from "react-router-dom";
 
-import "./App.scss";
+import "./App.css";
 
 import CurrentLangContextProvider from "./components/currentLangContext/CurrentLangContextProvider";
 

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, FC } from "react";
 import { match as Match } from "react-router-dom";
 import { css } from "emotion";
 
-import "./StudentSchedule.scss";
+import "./StudentSchedule.css";
 
 import { useWindow } from "../../hooks/useWindow";
 import { useAddMostRecentParticipantOnPageChange } from "../../hooks/useLRUCache";
