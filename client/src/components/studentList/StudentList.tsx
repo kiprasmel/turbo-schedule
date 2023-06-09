@@ -1,5 +1,5 @@
 import React from "react";
-import "./StudentList.scss";
+import "./StudentList.css";
 
 import AutoCompleteInput from "../../common/autocompleteInput/AutoCompleteInput";
 
