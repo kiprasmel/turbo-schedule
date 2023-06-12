@@ -265,7 +265,7 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 		}
 		default: {
 			console.error(stateM.value);
-			throw new Error(`unhandled state value "${stateM.value}"`);
+			throw new Error(`unhandled state value "${(stateM.value as SSMachineState).participant}"`);
 			// assertNever(stateM.value); // TODO TS
 		}
 	}
