@@ -166,7 +166,7 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 							text-align: left;
 						`}>
 							<button type="button" onClick={() => {
-								sendM({ type: "SELECT_ARCHIVE_SNAPSHOT", participant, snapshot: s });
+								sendM({ type: "FETCH_PARTICIPANT", participant, snapshot: s });
 							}}>{s}</button>
 						</li>
 					))}
