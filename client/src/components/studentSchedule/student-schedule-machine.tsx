@@ -5,7 +5,7 @@ import { useActor, useInterpret } from "@xstate/react";
 import { Lesson, ParticipantLabel, ArchiveLostFound, Participant } from "@turbo-schedule/common";
 
 import { fetchParticipantCore } from "../../hooks/useFetchers";
-import { IScheduleDays, ScheduleDay } from "../../utils/selectSchedule";
+import { IScheduleDays, ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 
 import { StudentScheduleParams, parseStudentScheduleParams, syncStudentScheduleStateToURL } from "./url";
 
@@ -27,7 +27,9 @@ export const defaultContext: MachineContext = {
 	participant: {
 		scheduleByDays: [[]],
 	},
-	ui: {},
+	ui: {
+		day: getTodaysScheduleDay(),
+	},
 };
 
 export type MachineEventFetchParticipant = {
@@ -56,6 +58,8 @@ export type MachineEvent =
 	participant: Participant["text"];
 } | {
 	type: "FETCH_FAILURE"
+} | {
+	type: "SEARCH_ARCHIVE";
 } | {
 	type: "SEARCH_ARCHIVE_SUCCESS",
 	snapshots: string[];
@@ -111,6 +115,10 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 					on: {
 						FETCH_PARTICIPANT: {
 							target: "fetch-participant",
+							actions: assignAllFor("participant"),
+						},
+						SELECT_ARCHIVE_SNAPSHOT: {
+							target: "fetch-from-archive-snapshot",
 							actions: assignAllFor("participant"),
 						},
 						INIT: {
@@ -171,6 +179,9 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 						"searchIfParticipantExistsInArchive"
 					],
 					on: {
+						SEARCH_ARCHIVE: {
+							actions: "searchIfParticipantExistsInArchive",
+						},
 						SEARCH_ARCHIVE_SUCCESS: {
 							target: "search-archive-success",
 							actions: assignAllFor("participant"),
@@ -299,30 +310,26 @@ export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderPr
 
 	function onFetchParticipantResponse(participantData: Participant, snapshot?: string): void {
 		const { lessons, labels, text } = participantData;
-		console.log("on participant response", participantData);
 
 		if (!lessons?.length) {
 			studentScheduleService.send({ type: "FETCH_FAILURE" });
 			return;
 		}
 
-		const tempScheduleByDays: Array<Array<Lesson>> = [];
+		const scheduleByDays: Lesson[][] = [];
+		for (const lesson of lessons) {
+			const { dayIndex } = lesson;
 
-		lessons.forEach((lesson) => {
-			/** make sure there's always an array inside an array */
-			if (!tempScheduleByDays[lesson.dayIndex]?.length) {
-				tempScheduleByDays[lesson.dayIndex] = [];
+			if (!scheduleByDays[dayIndex]) {
+				scheduleByDays[dayIndex] = [];
 			}
+			scheduleByDays[dayIndex].push(lesson);
+		}
 
-			tempScheduleByDays[lesson.dayIndex].push(lesson);
-		});
-
-		studentScheduleService.send({ type: "FETCH_SUCCESS", scheduleByDays: tempScheduleByDays, snapshot, participantType: labels[0], participant: text });
+		studentScheduleService.send({ type: "FETCH_SUCCESS", scheduleByDays, snapshot, participantType: labels[0], participant: text });
 	};
 
 	async function fetchParticipant(participant: string, snapshot?: string): Promise<void> {
-		console.log("fetching participant!", participant, snapshot);
-
 		return fetch(fetchParticipantCore[0](participant, snapshot))
 			.then((res) =>  res.json())
 			.then(data => onFetchParticipantResponse(data.participant, snapshot))
@@ -351,12 +358,14 @@ export function useStudentScheduleMachine() {
 }
 
 export const getStuffFromSSM = (state: ReturnType<typeof useStudentScheduleMachine>["state"]) => {
-	const lessons2D: Lesson[][] = state.context.participant.scheduleByDays;
+	console.log({state})
+	const lessons2D: Lesson[][] = state.context.participant.scheduleByDays || [[]];
 	const lessons: Lesson[] = lessons2D.flat();
 
 	const selectedDay = state.context.ui.day
 	const selectedTime = state.context.ui.time
-	const selectedLessons: Lesson[] = selectedDay === "*" ? lessons : ((selectedDay || selectedDay === 0) && lessons2D.length >= selectedDay) ? lessons2D[selectedDay] : []
+	const selectedLessons: Lesson[] = selectedDay === "*" ? lessons : ((selectedDay || selectedDay === 0) && lessons2D.length > selectedDay) ? lessons2D[selectedDay] : []
+	console.log({lessons, lessons2D, selectedLessons})
 	const selectedLesson: Lesson | null = (selectedDay || selectedDay === 0) && (selectedTime || selectedTime === 0) && selectedLessons.length ? selectedLessons[selectedTime] : null
 
 	return {

@@ -84,6 +84,14 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 			return <></>;
 		}
 		case "fetch-participant": {
+			const { snapshot } = stateM.context.participant;
+
+			if (snapshot) {
+				return <>
+					<h1>Siurbiame moksleivio "{participant}" duomenis iš archyvo "{stateM.context.participant.snapshot}"...</h1>
+				</>;
+			}
+
 			return (
 				<>
 					<h1>{participant}</h1>
@@ -92,6 +100,21 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 			);
 		}
 		case "loading-failure": {
+			const { snapshot } = stateM.context.participant;
+
+			if (snapshot) {
+				return <>
+					<Navbar />
+
+					<h1>{t("Student not found")(participant)}</h1>
+					<p>
+						(archyve {snapshot})
+					</p>
+
+					<BackBtn />
+				</>;
+			}
+
 			return <>
 				<Navbar />
 
@@ -109,7 +132,7 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 
 				<h1>{t("Student not found")(participant)}</h1>
 
-				<h2>archyve irgi nerasta...</h2>
+				<h2>archyvuose irgi nerasta...</h2>
 				{/* TODO suggest searching for similar / do automatically */}
 
 				<BackBtn />
@@ -136,11 +159,6 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 						</li>
 					))}
 				</ul>
-			</>;
-		}
-		case "fetch-from-archive-snapshot": {
-			return <>
-				<h1>Siurbiame moksleivio "{participant}" duomenis iš archyvo "{stateM.context.participant.snapshot}"...</h1>
 			</>;
 		}
 		case "loading-success": {
