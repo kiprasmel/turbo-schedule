@@ -110,8 +110,7 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 					<p>
 						(archyve {snapshot})
 					</p>
-
-					<BackBtn />
+					<h2>ieškome kituose archyvuose...</h2>
 				</>;
 			}
 
@@ -123,17 +122,29 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 					(naujausioje duomenų bazės versijoje).
 				</p>
 
-				<h2>ieškome archyve...</h2>
+				<h2>ieškome archyvuose...</h2>
 			</>;
 		}
 		case "search-archive-failure": {
+			const { snapshot } = stateM.context.participant;
+
+			const notFoundInArchivesText: string = !!snapshot ? `Nei archyve "${snapshot}", nei kituose archyvuose irgi nerasta...` : "Archyvuose irgi nerasta...";
+
 			return <>
 				<Navbar />
 
 				<h1>{t("Student not found")(participant)}</h1>
 
-				<h2>archyvuose irgi nerasta...</h2>
-				{/* TODO suggest searching for similar / do automatically */}
+				<h2>{notFoundInArchivesText}</h2>
+
+				{/*
+					TODO: fuzzy search similar names in archyves.
+
+					"Maybe you meant:"
+					- "Similar Name 1 (found in X archyves in years A, B, C)"
+					- "Similar Name 2 (found in Y archyves in years B, C, D)"
+					...
+				*/}
 
 				<BackBtn />
 			</>;
