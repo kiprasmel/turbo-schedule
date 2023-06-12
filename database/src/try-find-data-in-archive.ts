@@ -9,6 +9,8 @@ import { CheckIfNeedleExistsInDb /* checkIfNeedleExistsInDb */ } from "./find-ne
 // eslint-disable-next-line import/no-cycle
 // import { splitItemsIntoNGroupsBasedOnCPUCores } from "./detect-data-changed";
 
+const dotJsonLen = ".json".length;
+
 /**
  * will prolly need a threadpool to go thru all db files
  * (they will all be relevant at this point),
@@ -17,7 +19,8 @@ import { CheckIfNeedleExistsInDb /* checkIfNeedleExistsInDb */ } from "./find-ne
  */
 export async function tryFindParticipantInArchive(
 	needle: string, //
-	databaseSnapshotDir: string = defaultDatabaseDataDirPath
+	databaseSnapshotDir: string = defaultDatabaseDataDirPath,
+	removeDotJson: boolean = true,
 ): Promise<string[]> {
 	const snapshots: string[] = [];
 
@@ -43,6 +46,10 @@ export async function tryFindParticipantInArchive(
 	await threadpool.terminate();
 
 	console.log({ needle, snapshots });
+
+	if (removeDotJson) {
+		return snapshots.map(s => s.slice(0, -dotJsonLen))
+	}
 
 	return snapshots;
 }
