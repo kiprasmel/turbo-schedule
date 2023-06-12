@@ -1,7 +1,7 @@
 import { Participant } from "@turbo-schedule/common";
 
 import { history } from "../../utils/history";
-import { ScheduleDay } from "../../utils/selectSchedule";
+import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 
 export type StudentScheduleParams = {
 	participant: Participant["text"];
@@ -19,7 +19,7 @@ export const decodeTime = (time: number | string | null): number | undefined => 
 export function parseStudentScheduleParams(participant: string): StudentScheduleParams {
 	const search = new URLSearchParams(history.location.search);
 
-	const day = decodeDay(search.get("day"));
+	const day = decodeDay(search.get("day")) || getTodaysScheduleDay();
 	const time = decodeTime(search.get("time"));
 	const snapshot = search.get("snapshot") || undefined;
 
