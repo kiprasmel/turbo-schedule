@@ -35,17 +35,11 @@ export const defaultContext: MachineContext = {
 export type MachineEventFetchParticipant = {
 	type: "FETCH_PARTICIPANT"
 	participant: string;
-}
-
-export type MachineEventSelectArchiveSnapshot = {
-	type: "SELECT_ARCHIVE_SNAPSHOT",
-	participant: string;
-	snapshot: string
+	snapshot?: string;
 }
 
 export type MachineEvent =
 	MachineEventFetchParticipant
-|	MachineEventSelectArchiveSnapshot
 | {
 	type: "INIT";
 	data: StudentScheduleParams;
@@ -79,8 +73,7 @@ export type MachineParticipantState =
 	| "loading-success"
 	| "loading-failure"
 	| "search-archive-success"
-	| "search-archive-failure"
-	| "fetch-from-archive-snapshot";
+	| "search-archive-failure";
 
 export type MachineUIState = "listening";
 
@@ -117,12 +110,7 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 							target: "fetch-participant",
 							actions: assignAllFor("participant"),
 						},
-						SELECT_ARCHIVE_SNAPSHOT: {
-							target: "fetch-from-archive-snapshot",
-							actions: assignAllFor("participant"),
-						},
 						INIT: {
-							target: "fetch-participant",
 							actions: assign((ctx, { data }) => ({
 								...ctx,
 								participant: {
@@ -161,15 +149,6 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 							target: "fetch-participant",
 							actions: assignAllFor("participant"),
 						},
-						SELECT_ARCHIVE_SNAPSHOT: {
-							target: "fetch-from-archive-snapshot",
-							actions: [
-								assignAllFor("participant"),
-							],
-							// assign({
-							// 	snapshot: (_, event) => event.snapshot,
-							// })
-						}
 					}
 				},
 				"loading-failure": {
@@ -194,35 +173,14 @@ export const studentScheduleMachine = createMachine<MachineContext, MachineEvent
 				},
 				"search-archive-success": {
 					on: {
-						SELECT_ARCHIVE_SNAPSHOT: {
-							target: "fetch-from-archive-snapshot",
-							actions: [
-								assignAllFor("participant"),
-							],
-							// actions: assign({
-							// 	snapshot: (_, event) => event.snapshot,
-							// })
+						FETCH_PARTICIPANT: {
+							target: "fetch-participant",
+							actions: assignAllFor("participant"),
 						}
 					}
 				},
 				"search-archive-failure": {
 					on: {}
-				},
-				"fetch-from-archive-snapshot": {
-					entry: "fetchParticipant",
-					on: {
-						FETCH_SUCCESS: {
-							target: "loading-success",
-							actions: assignAllFor("participant"),
-							// actions: assign({
-							// 	scheduleByDays: (_, e) => e.scheduleByDays,
-							// 	snapshot: (c, e) => e.snapshot || c.snapshot,
-							// 	participantType: (c, e) => e.participantType || c.participantType,
-							// 	text: (_, e) => e.text,
-							// })
-						},
-						FETCH_FAILURE: "loading-failure",
-					}
 				},
 			}
 		},
@@ -299,9 +257,9 @@ export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderPr
 
 		if ((studentScheduleService.getSnapshot().value as SSMachineState).participant === "init") {
 			studentScheduleService.send({ type: "INIT", data: parseStudentScheduleParams(participant) });
-		} else {
-			studentScheduleService.send({ type: "FETCH_PARTICIPANT", participant });
 		}
+
+		studentScheduleService.send({ type: "FETCH_PARTICIPANT", participant });
 
 		return () => {
 			urlSyncSub.unsubscribe();
