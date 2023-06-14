@@ -45,7 +45,7 @@
 		"dev": "concurrently --raw --kill-others --names \"0: tsc,1: server,2: client\" \"yarn watch:ts\" \"yarn watch:server\" \"yarn watch:client\"",
 		"deve": "cross-env DEBUG=turbo-schedule* yarn dev",
 		"build:ts:normal": "yarn tsc -b -v",
-		"build:ts:fallback": "npx --package typescript@latest tsc -b -v && echo \"\nUsed build:ts:fallback!\n\"",
+		"build:ts:fallback": "npx --package typescript@4.3.5 tsc -b -v && echo \"\nUsed build:ts:fallback!\n\"",
 		"build:ts": "yarn build:ts:normal || yarn build:ts:fallback",
 		"build:client:prod": "cross-env NODE_ENV=production yarn --cwd ./client/ build",
 		"build:server": "     yarn --cwd ./server/ build",
