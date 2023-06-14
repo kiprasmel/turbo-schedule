@@ -1,9 +1,9 @@
-import fs from "fs-extra";
 import path from "path";
 
 import * as thread from "threads";
 
 import { defaultDatabaseDataDirPath } from "./config";
+import { getDatabaseSnapshotFiles } from "./get-db-snapshot-files";
 // eslint-disable-next-line import/no-cycle
 import { CheckIfNeedleExistsInDb /* checkIfNeedleExistsInDb */ } from "./find-needle-in-db";
 // eslint-disable-next-line import/no-cycle
@@ -45,15 +45,4 @@ export async function tryFindParticipantInArchive(
 	console.log({ needle, snapshots });
 
 	return snapshots;
-}
-
-/**
- * TODO filter out if valid data.
- * to not give some other .json file..
- */
-export function getDatabaseSnapshotFiles(datadir: string = defaultDatabaseDataDirPath): string[] {
-	const entries = fs.readdirSync(datadir).map((x) => path.join(datadir, x));
-	const filepaths: string[] = entries.filter((x) => x.endsWith(".json") && fs.statSync(x).isFile());
-
-	return filepaths;
 }
