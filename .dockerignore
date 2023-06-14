@@ -19,7 +19,7 @@
 !client/build
 !use-fetched-state/dist
 
-!database/data/
+!database/data/latest.json
 database/data/emails.json
 
 #### this sucks

@@ -114,6 +114,7 @@ yarn docker:deploy:my-current-workspace
 #### Requirements:
   - dockerhub login and access to the `kipras/turbo-schedule` image
   - ssh access to the production server
+  - (optional) ssh deploy key `turbo-schedule-archive-deploy-bot` for `turbo-schedule-archive`.
 
 #### It will:
   - build the project from your current workspace (note - uncommited changes **will be** included),
