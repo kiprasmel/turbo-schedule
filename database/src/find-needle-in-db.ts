@@ -1,8 +1,9 @@
-import fs from "fs-extra";
+import fs from "fs";
 
 import { expose } from "threads/worker";
 
 import { DbSchema } from "./config";
+import { readRawDb } from "./read-raw-db";
 
 export type CheckIfNeedleExistsInDb = typeof checkIfNeedleExistsInDb;
 
@@ -32,18 +33,4 @@ export function checkIfNeedleExistsInDb(needle: string, filepath: string): boole
 	const hasNeedle = db.participants.some((x) => x.text === needle);
 
 	return hasNeedle;
-}
-
-export function readRawDb(
-	filepath: string,
-	onEmpty: (opts: { filepath: string }) => void = (): void => {}
-): DbSchema | null {
-	const raw: string = fs.readFileSync(filepath, { encoding: "utf-8" }).trim();
-
-	if (!raw) {
-		onEmpty({ filepath });
-		return null;
-	}
-
-	return JSON.parse(raw);
 }

@@ -5,9 +5,8 @@ import { expose } from "threads/worker";
 
 import { DbSchema } from "./config";
 
-// eslint-disable-next-line import/no-cycle
 import { DataChangedRet, detectIfDataChanged, padFor, basenameExtless } from "./detect-data-changed";
-import { readRawDb } from "./find-needle-in-db";
+import { readRawDb } from "./read-raw-db";
 
 export type CompareDBFiles = typeof compareDBFiles;
 

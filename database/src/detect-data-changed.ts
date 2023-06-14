@@ -8,9 +8,8 @@ import * as thread from "threads";
 
 import { DbSchema } from "./config";
 
-// eslint-disable-next-line import/no-cycle
 import { CompareDBFiles } from "./compare-db-files";
-import { getDatabaseSnapshotFiles } from "./try-find-data-in-archive";
+import { getDatabaseSnapshotFiles } from "./get-db-snapshot-files";
 
 export type DataChangedRet = {
 	changed: boolean;
