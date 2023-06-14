@@ -149,9 +149,9 @@ export const last = <T = any>(xs: T[]): T => xs[xs.length - 1];
 export const path2date = (pathToFileWithDateFormatName: string): number =>
 	new Date(last(pathToFileWithDateFormatName.split(path.sep))).getTime();
 
-export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number): { proc: number; itemRanges: number[][] } {
+export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number, reduceProcCountBy: number = process.env.NODE_ENV === "production" ? 0 : 2): { proc: number; itemRanges: number[][] } {
 	const nproc: number = os.cpus().length;
-	let proc: number = Math.min(Math.max(1, nproc - 2), itemCount);
+	let proc: number = Math.min(Math.max(1, nproc - reduceProcCountBy), itemCount);
 
 	const calcItemsPerTask = () => Math.floor(itemCount / proc);
 	let ITEMS_PER_TASK: number = calcItemsPerTask();
