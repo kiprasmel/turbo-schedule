@@ -33,7 +33,7 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
-		"types": ["react/next", "react-dom/next", "jest"]
+		"types": ["jest"]
 	},
 	"exclude": [
 		"node_modules", //
