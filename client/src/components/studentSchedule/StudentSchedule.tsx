@@ -159,6 +159,8 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 				</p>
 				<ul className={css`
 					display: inline-block;
+
+					margin-bottom: 2em;
 				`}>
 					{stateM.context.participant.snapshots!.map(s => (
 						<li key={s} className={css`
