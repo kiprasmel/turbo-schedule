@@ -102,8 +102,8 @@ async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: Scrape
 		await execInDataDir(`git config --unset core.bare`);
 	}
 
-	await execInDataDir(`git config user.email ${process.env.ARCHIVE_GIT_EMAIL || "bot@tvarkarastis.com"}`);
-	await execInDataDir(`git config user.name ${process.env.ARCHIVE_GIT_NAME || "Turbo Schedule BOT"}`);
+	await execInDataDir(`git config user.email "${process.env.ARCHIVE_GIT_EMAIL || "bot@tvarkarastis.com"}"`);
+	await execInDataDir(`git config user.name "${process.env.ARCHIVE_GIT_NAME || "Turbo Schedule BOT"}"`);
 
 	if (databaseHasChanged) {
 		await execInDataDir(`git add "${newDbFilepath}"`);
@@ -111,7 +111,7 @@ async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: Scrape
 	}
 
 	await execInDataDir(`git pull --rebase`);
-	await execInDataDir(`git push origin ${process.env.ARCHIVE_GIT_BRANCH || "master"}`);
+	await execInDataDir(`git push origin "${process.env.ARCHIVE_GIT_BRANCH || "master"}"`);
 
 	return;
 }
