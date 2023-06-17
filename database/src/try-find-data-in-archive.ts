@@ -6,6 +6,7 @@ import { defaultDatabaseDataDirPath } from "./config";
 import { getDatabaseSnapshotFiles } from "./get-db-snapshot-files";
 // eslint-disable-next-line import/no-cycle
 import { CheckIfNeedleExistsInDb /* checkIfNeedleExistsInDb */ } from "./find-needle-in-db";
+import { path2dateSort } from "./detect-data-changed";
 // eslint-disable-next-line import/no-cycle
 // import { splitItemsIntoNGroupsBasedOnCPUCores } from "./detect-data-changed";
 
@@ -21,7 +22,7 @@ export async function tryFindParticipantInArchive(
 ): Promise<string[]> {
 	const snapshots: string[] = [];
 
-	const filepaths: string[] = getDatabaseSnapshotFiles(databaseSnapshotDir);
+	const filepaths: string[] = await getDatabaseSnapshotFiles({ datadir: databaseSnapshotDir, onlyMeaningful: true });
 
 	const threadpool = thread.Pool(() =>
 		thread.spawn<CheckIfNeedleExistsInDb>(new thread.Worker("./find-needle-in-db"))
@@ -41,6 +42,8 @@ export async function tryFindParticipantInArchive(
 
 	await threadpool.completed();
 	await threadpool.terminate();
+
+	snapshots.sort(path2dateSort);
 
 	console.log({ needle, snapshots });
 
