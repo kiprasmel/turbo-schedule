@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import cp from "child_process";
+import cp, { ExecOptions } from "child_process";
 import util from "util";
 import os from "os";
 
@@ -79,11 +79,20 @@ async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: Scrape
 	 * or has everything (repo url + repo deploy key) to set it up.
 	 */
 
-	const execInDataDir = (cmd: string) => execAsync(cmd, { cwd: dbDirPath });
-	const withDeployKey: string = !repoDeployKey ? "" : await writeAndGetDeployKeyCmdForGit(repoDeployKey);
+	const sshKeyFilepath: string = !repoDeployKey ? "" : await writeAndGetSSHKeyFilepath(repoDeployKey);
+	const gitSSHCommand: string = !repoDeployKey ? "" : `ssh -i "${sshKeyFilepath}`;
+
+	const execInDataDir = (cmd: string, extra: ExecOptions = {}) => execAsync(cmd, {
+		...extra,
+		cwd: dbDirPath,
+		env: {
+			...extra["env"],
+			...(!repoDeployKey ? {} : { GIT_SSH_COMMAND: gitSSHCommand }),
+		}
+	});
 
 	if (!hasGitDir) {
-		await execInDataDir(`git ${withDeployKey} clone --bare ${repoURL} .git`);
+		await execInDataDir(`git clone --bare ${repoURL} .git`);
 		await execInDataDir(`git config --unset core.bare`);
 	}
 
@@ -95,19 +104,19 @@ async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: Scrape
 		await execInDataDir(`git commit -m "add ${path.basename(newDbFilepath)}"`);
 	}
 
-	await execInDataDir(`git ${withDeployKey} pull --rebase`);
-	await execInDataDir(`git ${withDeployKey} push origin ${process.env.ARCHIVE_GIT_BRANCH || "master"}`);
+	await execInDataDir(`git pull --rebase`);
+	await execInDataDir(`git push origin ${process.env.ARCHIVE_GIT_BRANCH || "master"}`);
 
 	return;
 }
 
-async function writeAndGetDeployKeyCmdForGit(repoDeployKey: string) {
+async function writeAndGetSSHKeyFilepath(repoDeployKey: string) {
 	const homedir: string = os.homedir();
 	const sshdir: string = path.join(homedir, ".ssh")
 	const sshFilepath: string = path.join(sshdir, "turbo-schedule-archive-deploy")
 	await mkdirAsync(sshdir, { recursive: true });
 	await writeAsync(sshFilepath, repoDeployKey);
-	return `-c core.sshCommand "ssh -i ${sshFilepath} -F /dev/null"`;
+	return sshFilepath;
 }
 
 export const runScraperIfUpdatesAvailable = async (): Promise<void> => {
