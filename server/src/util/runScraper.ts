@@ -74,6 +74,12 @@ async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: Scrape
 		mode: "600"
 	});
 
+	/**
+	 * add github.com to known_hosts.
+	 * https://superuser.com/a/1111974/1012390
+	 */
+	await execAsync(`ssh-keyscan -t rsa -H github.com >> ~/.ssh/known_hosts`);
+
 	const newDbFilepath: string = getDatabaseFilepath(scrapeInfo.timeStartISO);
 	const dbDirPath: string = path.dirname(newDbFilepath);
 
