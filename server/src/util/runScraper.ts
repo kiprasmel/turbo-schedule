@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import cp from "child_process";
+import cp, { ExecOptions } from "child_process";
 import util from "util";
 import os from "os";
 
@@ -73,16 +73,25 @@ async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: Scrape
 	const newDbFilepath: string = getDatabaseFilepath(scrapeInfo.timeStartISO);
 	const dbDirPath: string = path.dirname(newDbFilepath);
 
-	// https://superuser.com/a/912281/1012390
-	const withDeployKey: string = `-c core.sshCommand "ssh -i ${sshFilepath} -F /dev/null"`;
-	const execInDataDir = (cmd: string) => execAsync(cmd, { cwd: dbDirPath });
+	const execInDataDir = (cmd: string, extra: ExecOptions = {}) => execAsync(cmd, {
+		...extra,
+		cwd: dbDirPath,
+		env: {
+			...extra["env"],
+			/**
+			 * https://superuser.com/a/912281/1012390
+			 * other approaches, such as -c core.sshCommand, didn't work.
+			 */
+			GIT_SSH_COMMAND: `ssh -i "${sshFilepath}"`
+		}
+	});
 
 	const hasGitDir: boolean = await existsAsync(path.join(dbDirPath, ".git"));
 	if (!hasGitDir) {
 		const repoURL: string = `git@github.com:kiprasmel/turbo-schedule-archive.git`;
 
 		// https://stackoverflow.com/a/28180781/9285308
-		await execInDataDir(`git ${withDeployKey} clone --bare ${repoURL} .git`);
+		await execInDataDir(`git clone --bare ${repoURL} .git`);
 		await execInDataDir(`git config --unset core.bare`);
 	}
 
@@ -94,8 +103,8 @@ async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: Scrape
 		await execInDataDir(`git commit -m "add ${path.basename(newDbFilepath)}"`);
 	}
 
-	await execInDataDir(`git ${withDeployKey} pull --rebase`);
-	await execInDataDir(`git ${withDeployKey} push origin ${process.env.ARCHIVE_GIT_BRANCH || "master"}`);
+	await execInDataDir(`git pull --rebase`);
+	await execInDataDir(`git push origin ${process.env.ARCHIVE_GIT_BRANCH || "master"}`);
 
 	return;
 }
