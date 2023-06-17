@@ -121,7 +121,7 @@ async function writeAndGetSSHKeyFilepath(repoDeployKey: string) {
 	const sshdir: string = path.join(homedir, ".ssh")
 	const sshFilepath: string = path.join(sshdir, "turbo-schedule-archive-deploy")
 	await mkdirAsync(sshdir, { recursive: true });
-	await writeAsync(sshFilepath, repoDeployKey, {
+	await writeAsync(sshFilepath, repoDeployKey + "\n", {
 		mode: "600"
 	});
 	return sshFilepath;
