@@ -103,7 +103,7 @@ export const padFor = (x: number, maxlen: number, pad = " "): string => {
 };
 
 export async function defaultRun(): Promise<string[]> {
-	const files: string[] = getDatabaseSnapshotFiles();
+	const files: string[] = await getDatabaseSnapshotFiles({ onlyMeaningful: false });
 
 	const { proc, itemRanges: fileRanges } = splitItemsIntoNGroupsBasedOnCPUCores(files.length);
 
@@ -135,7 +135,7 @@ export async function defaultRun(): Promise<string[]> {
 	await threadpool.completed();
 	console.log("threadpool: all tasks completed.");
 
-	meaningfulFiles.sort((A, B) => path2date(A) - path2date(B));
+	meaningfulFiles.sort(path2dateSort);
 
 	console.log({ meaningfulFiles, meaningful_file_count: meaningfulFiles.length });
 
@@ -148,6 +148,8 @@ export async function defaultRun(): Promise<string[]> {
 export const last = <T = any>(xs: T[]): T => xs[xs.length - 1];
 export const path2date = (pathToFileWithDateFormatName: string): number =>
 	new Date(last(pathToFileWithDateFormatName.split(path.sep))).getTime();
+
+export const path2dateSort = (A: string, B: string) => path2date(A) - path2date(B);
 
 export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number, reduceProcCountBy: number = process.env.NODE_ENV === "production" ? 0 : 2): { proc: number; itemRanges: number[][] } {
 	const nproc: number = os.cpus().length;

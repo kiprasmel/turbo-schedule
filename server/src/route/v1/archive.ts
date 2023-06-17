@@ -1,9 +1,7 @@
-import path from "path";
-
 import { Router } from "express";
 
 import { ArchiveLostFound, getDefaultArchiveLostFound } from "@turbo-schedule/common";
-import { getDatabaseSnapshotFiles, tryFindParticipantInArchive } from "@turbo-schedule/database";
+import { tryFindParticipantInArchive } from "@turbo-schedule/database";
 
 import { WithErr, withSender } from "../../middleware/withSender";
 
@@ -36,14 +34,5 @@ router.get<{ participantName: string }, ArchiveLostFoundRes>(
 		}
 	}
 );
-
-export function checkDatabaseSnapshotIsValid(snapshot: string): false | string {
-	// TODO OPTIMIZE - only try to check if provided snapshot exists, don't try to check all files:
-	const wantedSnapshotPath: string | undefined = getDatabaseSnapshotFiles().find(
-		(x) => path.basename(x) === snapshot
-	);
-
-	return !wantedSnapshotPath ? false : wantedSnapshotPath;
-}
 
 export { router as archiveRouter };

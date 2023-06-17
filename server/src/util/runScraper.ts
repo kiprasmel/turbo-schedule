@@ -1,21 +1,11 @@
 #!/usr/bin/env ts-node-dev
 
-import fs from "fs";
-import path from "path";
-import cp, { ExecOptions } from "child_process";
-import util from "util";
-import os from "os";
-
 import scraper, { wasScheduleUpdated } from "@turbo-schedule/scraper";
 import { ScrapeInfo } from "@turbo-schedule/common";
-import { databaseFileName, getDatabaseFilepath, initDb } from "@turbo-schedule/database";
+import { databaseFileName, initDb } from "@turbo-schedule/database";
 
 import { scrapedDataDirPath } from "../config";
-
-const execAsync = util.promisify(cp.exec);
-const writeAsync = util.promisify(fs.writeFile);
-const mkdirAsync = util.promisify(fs.mkdir);
-const existsAsync = util.promisify(fs.exists);
+import { commitDatabaseDataIntoArchiveIfChanged } from "@turbo-schedule/database";
 
 export const runScraper = async (): Promise<void> => {
 	const previousScrapeInfo: ScrapeInfo = await initDb(databaseFileName).then(x => x.get("scrapeInfo").value())
@@ -49,78 +39,6 @@ export const runScraper = async (): Promise<void> => {
 	 *
 	 */
 };
-
-async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: ScrapeInfo, scrapeInfo: ScrapeInfo): Promise<void> {
-	const databaseHasChanged: boolean = previousScrapeInfo.pageVersionIdentifier !== scrapeInfo.pageVersionIdentifier;
-
-	if (!process.env.ARCHIVE_DEPLOY_KEY) {
-		if (databaseHasChanged) {
-			console.warn(`database has new changes. We cannot commit nor push to the archive, because 'ARCHIVE_DEPLOY_KEY' not set/falsy.`);
-		} else {
-			console.warn(`even though database does NOT have new changes, we cannot pull/clone the archive, because 'ARCHIVE_DEPLOY_KEY' not set/falsy.`);
-		}
-
-		return;
-	}
-
-	/**
-	 * prepare ssh deploy key
-	 */
-	const homedir: string = os.homedir();
-	const sshdir: string = path.join(homedir, ".ssh")
-	const sshFilepath: string = path.join(sshdir, "turbo-schedule-archive-deploy-bot")
-
-	await mkdirAsync(sshdir, { recursive: true });
-
-	// https://superuser.com/a/1565830/1012390
-	await writeAsync(sshFilepath, process.env.ARCHIVE_DEPLOY_KEY + "\n", {
-		mode: "600"
-	});
-
-	/**
-	 * add github.com to known_hosts.
-	 * https://superuser.com/a/1111974/1012390
-	 */
-	await execAsync(`ssh-keyscan -t rsa -H github.com >> ~/.ssh/known_hosts`);
-
-	const newDbFilepath: string = getDatabaseFilepath(scrapeInfo.timeStartISO);
-	const dbDirPath: string = path.dirname(newDbFilepath);
-
-	const execInDataDir = (cmd: string, extra: ExecOptions = {}) => execAsync(cmd, {
-		...extra,
-		cwd: dbDirPath,
-		env: {
-			...extra["env"],
-			/**
-			 * https://superuser.com/a/912281/1012390
-			 * other approaches, such as -c core.sshCommand, didn't work.
-			 */
-			GIT_SSH_COMMAND: `ssh -i "${sshFilepath}"`
-		}
-	});
-
-	const hasGitDir: boolean = await existsAsync(path.join(dbDirPath, ".git"));
-	if (!hasGitDir) {
-		const repoURL: string = `git@github.com:kiprasmel/turbo-schedule-archive.git`;
-
-		// https://stackoverflow.com/a/28180781/9285308
-		await execInDataDir(`git clone --bare ${repoURL} .git`);
-		await execInDataDir(`git config --unset core.bare`);
-	}
-
-	await execInDataDir(`git config user.email "${process.env.ARCHIVE_GIT_EMAIL || "bot@tvarkarastis.com"}"`);
-	await execInDataDir(`git config user.name "${process.env.ARCHIVE_GIT_NAME || "Turbo Schedule BOT"}"`);
-
-	if (databaseHasChanged) {
-		await execInDataDir(`git add "${newDbFilepath}"`);
-		await execInDataDir(`git commit -m "add ${path.basename(newDbFilepath)}"`);
-	}
-
-	await execInDataDir(`git pull --rebase`);
-	await execInDataDir(`git push origin "${process.env.ARCHIVE_GIT_BRANCH || "master"}"`);
-
-	return;
-}
 
 export const runScraperIfUpdatesAvailable = async (): Promise<void> => {
 	const updatesAvailable: boolean = await wasScheduleUpdated();
