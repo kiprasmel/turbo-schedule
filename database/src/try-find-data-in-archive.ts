@@ -6,7 +6,7 @@ import { defaultDatabaseDataDirPath } from "./config";
 import { getDatabaseSnapshotFiles } from "./get-db-snapshot-files";
 // eslint-disable-next-line import/no-cycle
 import { CheckIfNeedleExistsInDb /* checkIfNeedleExistsInDb */ } from "./find-needle-in-db";
-import { path2dateSort } from "./detect-data-changed";
+import { timedJsonFileSort } from "./detect-data-changed";
 // eslint-disable-next-line import/no-cycle
 // import { splitItemsIntoNGroupsBasedOnCPUCores } from "./detect-data-changed";
 
@@ -43,9 +43,7 @@ export async function tryFindParticipantInArchive(
 	await threadpool.completed();
 	await threadpool.terminate();
 
-	snapshots.sort(path2dateSort);
-
-	console.log({ needle, snapshots });
+	snapshots.sort(timedJsonFileSort);
 
 	return snapshots;
 }

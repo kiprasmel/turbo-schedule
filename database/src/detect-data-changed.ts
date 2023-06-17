@@ -10,6 +10,7 @@ import { DbSchema } from "./config";
 
 import { CompareDBFiles } from "./compare-db-files";
 import { getDatabaseSnapshotFiles } from "./get-db-snapshot-files";
+import { file2iso } from "./iso2file";
 
 export type DataChangedRet = {
 	changed: boolean;
@@ -135,7 +136,7 @@ export async function defaultRun(): Promise<string[]> {
 	await threadpool.completed();
 	console.log("threadpool: all tasks completed.");
 
-	meaningfulFiles.sort(path2dateSort);
+	meaningfulFiles.sort(lastPath2dateSort);
 
 	console.log({ meaningfulFiles, meaningful_file_count: meaningfulFiles.length });
 
@@ -145,11 +146,12 @@ export async function defaultRun(): Promise<string[]> {
 	return meaningfulFiles;
 }
 
-export const last = <T = any>(xs: T[]): T => xs[xs.length - 1];
-export const path2date = (pathToFileWithDateFormatName: string): number =>
-	new Date(last(pathToFileWithDateFormatName.split(path.sep))).getTime();
+export const timedJsonFilename2UnixMillis = (jsonFilename: string): number => new Date(file2iso(jsonFilename.replace(".json", ""))).getTime();
+export const timedJsonFileSort = (A: string, B: string) => timedJsonFilename2UnixMillis(A) - timedJsonFilename2UnixMillis(B);
 
-export const path2dateSort = (A: string, B: string) => path2date(A) - path2date(B);
+export const last = <T = any>(xs: T[]): T => xs[xs.length - 1];
+export const getTimeStrFromJsonFilepath = (pathToFileWithDateFormatName: string): string => last(pathToFileWithDateFormatName.split(path.sep))
+export const lastPath2dateSort = (A: string, B: string) => timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(A)) - timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(B));
 
 export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number, reduceProcCountBy: number = process.env.NODE_ENV === "production" ? 0 : 2): { proc: number; itemRanges: number[][] } {
 	const nproc: number = os.cpus().length;

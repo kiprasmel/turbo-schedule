@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { defaultDatabaseDataDirPath, getDatabaseFilepath, DbSchema, defaultDbState, Db } from "./config";
 import { initDb } from "./initDb";
+import { iso2file } from "./iso2file";
 
 const debug = require("debug")("turbo-schedule:database:setNewDbState");
 
@@ -116,19 +117,13 @@ export async function setNewDbState(
 export function createNewDatabaseFilePathSync(
 	shouldPutTheNewDatabaseFileToAction: boolean,
 	uniqueDataDirHash: string = "",
-	newFileNameRef: string = `${new Date().toISOString()}.json`.replace(
-		/:/g,
-		"_"
-	) /** replace invalid chars (see https://stackoverflow.com/a/45403355/9285308) */,
+	newFileName: string = iso2file(new Date().toISOString()) + ".json",
 	newFilePath: string = path.join(
 		path.resolve(defaultDatabaseDataDirPath) /** make sure no trailing slashes etc. for safe concatenation */ +
 			uniqueDataDirHash,
-		newFileNameRef
+		newFileName
 	)
 ): string {
-	/** replace the invalid chars here too in case some args were provided & others weren't. */
-	const newFileName: string = newFileNameRef.replace(/:/g, "_");
-
 	debug(
 		"shouldPutTheNewDatabaseFileToAction",
 		shouldPutTheNewDatabaseFileToAction,

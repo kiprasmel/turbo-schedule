@@ -9,6 +9,7 @@ import { initDb } from "./initDb";
 /** TODO get rid of this & have it here */
 // eslint-disable-next-line import/no-cycle
 import { DbStateReturn } from "./setNewDbState";
+import { iso2file } from "./iso2file";
 
 const debug = require("debug")("turbo-schedule:database:setDbState");
 
@@ -49,17 +50,13 @@ export async function backupDbState(currentDatabaseFilePath: string = getDatabas
 
 	const db: Db = await initDb();
 
-	const filenameExt: string = "json";
+	const { dir } = path.parse(currentDatabaseFilePath);
 
-	let backupDestinationPath: string = path.join(
-		path.parse(currentDatabaseFilePath).dir,
-		`${
-			((await db.get("scrapeInfo").value()?.timeStartISO) || new Date().toISOString()).replace(
-				/:/g,
-				"_"
-			) /** replace invalid chars (see https://stackoverflow.com/a/45403355/9285308) */
-		}.${filenameExt}`
-	);
+	const filenameExt: string = "json";
+	const { timeStartISO } = await db.get("scrapeInfo").value() || new Date();
+	const filename = iso2file(timeStartISO + "." + filenameExt);
+
+	let backupDestinationPath: string = path.join(dir, filename);
 
 	/**
 	 * it's possible that a collision could happen (the backup file with the same name already exists),
