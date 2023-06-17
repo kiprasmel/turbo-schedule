@@ -71,7 +71,9 @@ async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: Scrape
 	const sshFilepath: string = path.join(sshdir, "turbo-schedule-archive-deploy-bot")
 
 	await mkdirAsync(sshdir, { recursive: true });
-	await writeAsync(sshFilepath, process.env.ARCHIVE_DEPLOY_KEY, {
+
+	// https://superuser.com/a/1565830/1012390
+	await writeAsync(sshFilepath, process.env.ARCHIVE_DEPLOY_KEY + "\n", {
 		mode: "600"
 	});
 
