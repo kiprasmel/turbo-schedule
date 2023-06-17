@@ -93,6 +93,10 @@ async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: Scrape
 		}
 	});
 
+	if (!!repoURL && repoURL.includes("github.com")) {
+		await execAsync(`ssh-keyscan -t rsa -H github.com >> ~/.ssh/known_hosts`);
+	}
+
 	if (!hasGitDir) {
 		await execInDataDir(`git clone --bare ${repoURL} .git`);
 		await execInDataDir(`git config --unset core.bare`);
