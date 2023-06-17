@@ -1,3 +1,5 @@
+#!/usr/bin/env ts-node-dev
+
 import fs from "fs";
 import path from "path";
 import cp, { ExecOptions } from "child_process";
@@ -127,3 +129,7 @@ export const runScraperIfUpdatesAvailable = async (): Promise<void> => {
 		await runScraper();
 	}
 };
+
+if (!module.parent) {
+	runScraper();
+}
