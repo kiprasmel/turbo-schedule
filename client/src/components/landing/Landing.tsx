@@ -1,33 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { css } from "emotion";
+import fuzzysort from "fuzzysort";
+import { deburr } from "lodash";
 
-import { Participant } from "@turbo-schedule/common";
 
-import { useFetchParticipants } from "../../hooks/useFetchers";
+import { PreparedLessolessP, useFetchParticipants } from "../../hooks/useFetchers";
 import { history } from "../../utils/history";
 import { ParticipantListList } from "../studentSchedule/ParticipantList";
 import { Search } from "../navbar/Search";
 import { Navbar } from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 
+export const simplifyStrForSearching = (str: string): string => deburr(str.toLowerCase());
+
 /** TODO FIXME WWidth - this bad boy ain't even re-sizing */
 const Landing = () => {
 	const [searchString, setSearchString] = useState<string>("");
 
 	const [participants] = useFetchParticipants([], []);
-	const [matchingParticipants, setMatchingParticipants] = useState<Participant[]>([]);
+
+	const participantsForSearching = useMemo<PreparedLessolessP[]>(
+		() => participants.map((p): PreparedLessolessP => ({ ...p, textPrepared: fuzzysort.prepare(simplifyStrForSearching(p.text)) })),
+		[participants]
+	);
+	const [matchingParticipants, setMatchingParticipants] = useState<PreparedLessolessP[]>([]);
 
 	useEffect(() => {
 		if (!searchString || !searchString.trim()) {
-			setMatchingParticipants(participants);
+			setMatchingParticipants(participantsForSearching);
+			return;
 		}
 
-		const newParticipants: Participant[] = participants.filter(
-			({ text }) => !!text.toLowerCase().match(searchString.toLowerCase())
+		const searchStringSimplified = simplifyStrForSearching(searchString);
+
+		const newParticipants: Fuzzysort.KeyResults<PreparedLessolessP> = fuzzysort.go(
+			searchStringSimplified,
+			participantsForSearching,
+			{
+				key: "textPrepared",
+			}
 		);
 
-		setMatchingParticipants(newParticipants);
-	}, [searchString, participants]);
+		const newParticipantsReady: PreparedLessolessP[] = newParticipants.map(p => p.obj);
+
+		setMatchingParticipants(newParticipantsReady);
+	}, [searchString, participantsForSearching, setMatchingParticipants]);
 
 	/**
 	 *  select first autoCompletion
