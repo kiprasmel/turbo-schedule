@@ -77,7 +77,7 @@ export const ParticipantListList: FC<Props> = ({ participants, className, ...res
 					grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 					font-size: 0.75em;
 
-					& > * + * {
+					& > * {
 						margin-top: 2rem;
 					}
 				`,
