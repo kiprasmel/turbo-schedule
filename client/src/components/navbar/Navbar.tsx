@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
 
-import React, { FC, forwardRef, useRef, useState, useEffect, useContext, useCallback } from "react";
+import React, { FC, forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { css } from "emotion";
 
@@ -11,8 +11,6 @@ import { LangSelect } from "./LangSelect";
 import { useTranslation } from "../../i18n/useTranslation";
 // eslint-disable-next-line import/no-cycle
 import { NavbarMobile } from "./NavbarMobile";
-import { CurrentLangContext } from "../currentLangContext/currentLangContext";
-import { BadgeBeta } from "../../common/Badge";
 
 import { StickyInfoOrWarningAboutFreshOrOutdatedData } from "./StickyInfoOrWarningAboutFreshOrOutdatedData";
 
@@ -129,35 +127,6 @@ const NavbarDesktop = forwardRef<
 /** left / top */
 export const NavbarLinksOne: FC<React.HTMLProps<HTMLLIElement>> = (firstElementProps) => {
 	const t = useTranslation();
-	const { currentLang } = useContext(CurrentLangContext);
-
-	const line1Ref = useRef<HTMLSpanElement>(null);
-	const line2Ref = useRef<HTMLSpanElement>(null);
-
-	// const gapWidth: number =	Math.abs((line1Ref.current?.clientWidth ?? 0) - (line2Ref.current?.clientWidth ?? 0))
-
-	const calcGapWidth = useCallback<() => number>(
-		// eslint-disable-next-line arrow-body-style
-		() => {
-			return (
-				Math.round(
-					Math.abs(
-						(line1Ref.current?.getBoundingClientRect().width ?? 0) -
-							(line2Ref.current?.getBoundingClientRect().width ?? 0)
-					) / 2
-				) ||
-				{ lt: 32, en: 7 }[currentLang] ||
-				0
-			);
-		},
-		[currentLang] // eslint-disable-line indent
-	);
-
-	const [gapWidth, setGapWidth] = useState<number>(calcGapWidth());
-
-	useEffect(() => {
-		setGapWidth(calcGapWidth());
-	}, [calcGapWidth, currentLang]);
 
 	return (
 		<>
@@ -175,10 +144,8 @@ export const NavbarLinksOne: FC<React.HTMLProps<HTMLLIElement>> = (firstElementP
 								position: relative;
 							`}
 						>
-							{/* {isDesktop ? ( */}
 							<>
 								<span
-									ref={line1Ref}
 									className={css`
 										display: inline-block;
 										width: auto;
@@ -188,24 +155,34 @@ export const NavbarLinksOne: FC<React.HTMLProps<HTMLLIElement>> = (firstElementP
 									{t("Common")}
 								</span>
 								<span
-									ref={line2Ref}
 									className={css`
 										text-transform: lowercase;
 									`}
 								>
-									{/* {t("Common")} */}
 									{t("Availability")}
 								</span>
 							</>
-							{/* ) : (
-								<span>{t("Common Availability")}</span>
-							)} */}
-
-							<BadgeBeta gapWidth={gapWidth} />
 						</span>
 					</div>
 				</Link>
 			</li>
+			{/* <li>
+				<Link to="/archive">
+					<span
+						className={css`
+							display: inline-flex;
+							flex-direction: column;
+
+							position: relative;
+						`}
+					>
+						<span>
+							Archyvai
+						</span>
+						<BadgeBeta gapWidth={-8} />
+					</span>
+				</Link>
+			</li> */}
 			{/* SOON™ */}
 			{/* <li>
 						<Link
