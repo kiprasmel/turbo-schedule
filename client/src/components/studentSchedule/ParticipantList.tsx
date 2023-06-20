@@ -4,6 +4,7 @@ import React, { FC } from "react";
 import { css } from "emotion";
 
 import { Student, Teacher, Room, Class, Participant, parseParticipants } from "@turbo-schedule/common";
+import { ParticipantLabelToTextToSnapshotObj } from "@turbo-schedule/database";
 
 import { useMostRecentlyViewedParticipantsSplit } from "../../hooks/useLRUCache";
 import { Dictionary } from "../../i18n/i18n";
@@ -18,15 +19,18 @@ type MehParticipants = {
 };
 
 interface Props {
-	participants: Participant[] | MehParticipants;
+	participants: Participant[] | MehParticipants | ParticipantLabelToTextToSnapshotObj;
+	doNotShowMostRecents?: boolean;
 	className?: string;
 }
 
-export const ParticipantListList: FC<Props> = ({ participants, className, ...rest }) => {
+export const ParticipantListList: FC<Props> = ({ participants, doNotShowMostRecents = false, className, ...rest }) => {
 	const t = useTranslation();
 
 	const { students, teachers, rooms, classes } = Array.isArray(participants)
 		? parseParticipants(participants)
+		: ("student" in participants)
+		? { students: Object.keys(participants.student), teachers: Object.keys(participants.teacher), rooms: Object.keys(participants.room), classes: Object.keys(participants.class) }
 		: participants;
 
 	const isOnlyOneMatchingParticipant: boolean =
@@ -49,22 +53,22 @@ export const ParticipantListList: FC<Props> = ({ participants, className, ...res
 		{
 			summary: "Students",
 			participantStrings: students,
-			recent: mostRecentStudents.filter(filter),
+			recent: doNotShowMostRecents ? [] : mostRecentStudents.filter(filter),
 		},
 		{
 			summary: "Teachers",
 			participantStrings: teachers,
-			recent: mostRecentTeachers.filter(filter),
+			recent: doNotShowMostRecents ? [] : mostRecentTeachers.filter(filter),
 		},
 		{
 			summary: "Rooms",
 			participantStrings: rooms,
-			recent: mostRecentRooms.filter(filter),
+			recent: doNotShowMostRecents ? [] : mostRecentRooms.filter(filter),
 		},
 		{
 			summary: "Classes",
 			participantStrings: classes,
-			recent: mostRecentClasses.filter(filter),
+			recent: doNotShowMostRecents ? [] : mostRecentClasses.filter(filter),
 		},
 	];
 
@@ -90,6 +94,7 @@ export const ParticipantListList: FC<Props> = ({ participants, className, ...res
 					key={summary}
 					participants={participantStrings}
 					mostRecentParticipants={recent}
+					doNotShowMostRecents={doNotShowMostRecents}
 					summary={`${t(summary)  } (${participantStrings.length})`}
 					isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant}
 				/>
@@ -101,12 +106,14 @@ export const ParticipantListList: FC<Props> = ({ participants, className, ...res
 const ParticipantList: FC<{
 	participants: string[];
 	mostRecentParticipants?: string[];
+	doNotShowMostRecents?: boolean;
 	summary?: string;
 	open?: boolean;
 	isOnlyOneMatchingParticipant?: boolean;
 }> = ({
 	participants = [], //
 	mostRecentParticipants = [],
+	doNotShowMostRecents = false,
 	summary = "",
 	open = true,
 	isOnlyOneMatchingParticipant = false,
@@ -141,7 +148,7 @@ const ParticipantList: FC<{
 			disabled if there's only one match,
 			since there'd be a duplicate
 		*/}
-		{isOnlyOneMatchingParticipant || participants.length <= 1 ? null : (
+		{doNotShowMostRecents || isOnlyOneMatchingParticipant || participants.length <= 1 ? null : (
 			<ol
 				type="1"
 				className={css`

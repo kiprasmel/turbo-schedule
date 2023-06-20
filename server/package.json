@@ -51,6 +51,7 @@
 		"morgan": "1.9.1",
 		"node-fetch": "2.6.0",
 		"openapi-types": "1.3.5",
+		"recursive-groupby": "0.1.0",
 		"redoc": "2.0.0-rc.18",
 		"rotating-file-stream": "1.4.6"
 	},

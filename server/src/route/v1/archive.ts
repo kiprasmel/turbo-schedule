@@ -1,7 +1,9 @@
 import { Router } from "express";
 
+import { recursiveGroupBy } from "recursive-groupby"
+
 import { ArchiveLostFound, getDefaultArchiveLostFound } from "@turbo-schedule/common";
-import { tryFindParticipantInArchive } from "@turbo-schedule/database";
+import { ArchiveSnapshotsByYear, ArchiveYearToParticipantLabelToTextToSnapshotObj, ParticipantInSnapshotItem, getArchiveSnapshotsByYear, getArchivedParticipantsInSnapshots, getParticipantsInSnapshots, tryFindParticipantInArchive } from "@turbo-schedule/database";
 
 import { WithErr, withSender } from "../../middleware/withSender";
 
@@ -31,6 +33,81 @@ router.get<{ participantName: string }, ArchiveLostFoundRes>(
 		} catch (err) {
 			console.log({ err });
 			return send(500, { err });
+		}
+	}
+);
+
+export type ArchiveSnapshotsByYearRes = WithErr & {
+	archiveSnapshotsByYear: ArchiveSnapshotsByYear;
+}
+
+router.get<{}, ArchiveSnapshotsByYearRes>(
+	"/snapshots-by-year",
+	withSender({ archiveSnapshotsByYear: {} }),
+	async (_req, res) => {
+		const send = res.sender;
+
+		try {
+			const archiveSnapshotsByYear: ArchiveSnapshotsByYear = await getArchiveSnapshotsByYear();
+
+			console.log({ archiveSnapshotsByYear });
+
+			return send(200, { archiveSnapshotsByYear });
+		} catch (err) {
+			return send(500, { err })
+		}
+	}
+);
+
+export type ArchivedParticipantsInSnapshotsRes = WithErr & {
+	data: ArchiveYearToParticipantLabelToTextToSnapshotObj;
+}
+
+router.get<{}, ArchivedParticipantsInSnapshotsRes>(
+	"/participants-in-snapshots-deepgroup",
+	withSender({ data: {} }),
+	async (_req, res) => {
+		const send = res.sender;
+
+		try {
+			const data: ArchiveYearToParticipantLabelToTextToSnapshotObj = await getArchivedParticipantsInSnapshots();
+
+			return send(200, { data });
+		} catch (err) {
+			return send(500, { err })
+		}
+	}
+);
+
+export type ParticipantsInSnapshotsRes = WithErr & {
+	data: ParticipantInSnapshotItem[]; // TODO TS - grouped case (impossible accuratelly tho)
+}
+
+export type ParticipantsInSnapshotsParams = {
+	group?: string;
+	leafItemKey?: string;
+}
+
+router.get<ParticipantsInSnapshotsParams, ParticipantsInSnapshotsRes>(
+	"/participants-in-snapshots",
+	withSender({ data: [] }),
+	async (req, res) => {
+		const send = res.sender;
+		const { group, leafItemKey } = req.query;
+
+		try {
+			const participantsInSnapshots: ParticipantInSnapshotItem[] = await getParticipantsInSnapshots();
+
+			if (!group) {
+				return send(200, { data: participantsInSnapshots });
+			}
+
+			const groupingKeys = group.split(",");
+			const dataGrouped = recursiveGroupBy(participantsInSnapshots, groupingKeys, leafItemKey);
+
+			return send(200, { data: dataGrouped as any /** TODO TS */ })
+		} catch (err) {
+			return send(500, { err })
 		}
 	}
 );

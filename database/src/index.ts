@@ -7,6 +7,10 @@ export * from "./read-raw-db";
 export * from "./commit-database-data-into-archive-if-changed";
 export * from "./get-meaningful-snapshots";
 
+export * from "./archive/snapshots-by-year";
+export * from "./archive/participants-in-snapshots";
+export * from "./archive/participants-in-snapshots-raw";
+
 /** @deprecated */
 export * from "./setNewDbState";
 
