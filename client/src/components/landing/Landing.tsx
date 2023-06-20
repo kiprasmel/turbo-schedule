@@ -7,9 +7,10 @@ import { deburr } from "lodash";
 import { PreparedLessolessP, useFetchParticipants } from "../../hooks/useFetchers";
 import { history } from "../../utils/history";
 import { ParticipantListList } from "../studentSchedule/ParticipantList";
-import { Search } from "../navbar/Search";
+import { FancyStickyBackgroundForSearch, Search } from "../navbar/Search";
 import { Navbar } from "../navbar/Navbar";
 import Footer from "../footer/Footer";
+import { Archive } from "../../pages/archive/Archive";
 
 export const simplifyStrForSearching = (str: string): string => deburr(str.toLowerCase());
 
@@ -70,18 +71,28 @@ const Landing = () => {
 			>
 				<Navbar disableWarningAboutOutdatedData />
 
+				{/* TODO: extract into "reusables" `CompleteParticipantSearch` */}
 				<div
 					className={css`
-						margin-top: 2em;
+						margin-top: 1em;
 						margin-bottom: 1em;
 
 						& > * + * {
-							margin-top: 4em;
+							margin-top: 2.7em;
 						}
+
+						margin-bottom: 3rem;
+
+						position: relative;
 					`}
 				>
-					<Search searchString={searchString} setSearchString={setSearchString} onKeyDown={handleOnKeyDown} />
+					<FancyStickyBackgroundForSearch>
+						<Search searchString={searchString} setSearchString={setSearchString} onKeyDown={handleOnKeyDown} />
+					</FancyStickyBackgroundForSearch>
+
 					<ParticipantListList participants={matchingParticipants} />
+
+					<Archive />
 				</div>
 			</div>
 

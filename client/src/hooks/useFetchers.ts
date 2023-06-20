@@ -1,4 +1,5 @@
 import { Availability, getDefaultParticipant, Participant, Health } from "@turbo-schedule/common";
+import { ArchiveYearToParticipantLabelToTextToSnapshotObj } from "@turbo-schedule/database";
 import { UseFetchedStateReturn, createUseFetchedState } from "use-fetched-state";
 
 /**
@@ -62,4 +63,10 @@ export const useFetchJoinMailingList = createUseFetchedState<boolean>(
 export const useFetchHealth = createUseFetchedState<{ health: Health }, Health>(
 	"/api/v1/health", //
 	(data) => data.health
+);
+
+export const useFetchArchiveParticipantsInSnapshots = createUseFetchedState<{ data: ArchiveYearToParticipantLabelToTextToSnapshotObj }, ArchiveYearToParticipantLabelToTextToSnapshotObj>(
+	// "/api/v1/archive/participants-in-snapshots-deepgroup", //
+	"/api/v1/archive/participants-in-snapshots?group=snapshotYear,label,text&leafItemKey=snapshot", // TODO `schoolYear` instead of `snapshotYear`
+	(data) => data.data
 );

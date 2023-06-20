@@ -90,3 +90,32 @@ export const Search: FC<SearchProps> = ({ searchString, setSearchString, onKeyDo
 		</span>
 	);
 };
+
+/**
+ * expects parent tag with `position: relative;`
+ */
+export const FancyStickyBackgroundForSearch: FC = ({ children }) => {
+	return (
+		<div
+			className={css`
+			position: sticky;
+			top: 0;
+			z-index: 1;
+
+			padding: 1rem;
+			width: fit-content;
+			margin: auto;
+
+			background: white;
+			border-radius: 0.5rem;
+
+			/* TODO: add box-shadow, but only if already scrolled, not if default */
+			/*
+			box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+			*/
+		`}
+		>
+			{children}
+		</div>
+	)
+}
