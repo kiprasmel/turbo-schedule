@@ -11,5 +11,15 @@ export type ParticipantInSnapshot = [Participant["text"], ParticipantLabel];
  */
 export type Month = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
+export const MONTH_OF_NEW_SCHOOL_YEAR = 7 as const; // satisfies Month;
+
+export const inferSchoolYear = (snapshot: Snapshot): SchoolYear => {
+	const isNewYear: boolean = getMonthOfSnapshot(snapshot) >= MONTH_OF_NEW_SCHOOL_YEAR;
+
+	const snapshotYear: SnapshotYear = getYearOfSnapshot(snapshot);
+
+	return isNewYear ? `${snapshotYear}-${snapshotYear + 1}` : `${snapshotYear - 1}-${snapshotYear}`;
+}
+
 export const getYearOfSnapshot = (snapshot: Snapshot): SnapshotYear => Number(snapshot.split("-")[0])
 export const getMonthOfSnapshot = (snapshot: Snapshot): Month => (Number(snapshot.split("-")[1]) - 1) as Month;
