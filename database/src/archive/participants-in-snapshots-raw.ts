@@ -5,7 +5,7 @@ import { Participant, ParticipantLabel } from "@turbo-schedule/common";
 import { getDatabaseSnapshotFiles } from "../get-db-snapshot-files";
 
 import { GetParticipantsInSnapshot } from "./participants-in-snapshots-worker";
-import { ParticipantInSnapshot, Snapshot, SchoolYear, SnapshotYear, getYearOfSnapshot  } from "./Snapshot";
+import { ParticipantInSnapshot, Snapshot, SchoolYear, SnapshotYear, getYearOfSnapshot, inferSchoolYear  } from "./Snapshot";
 
 /**
  * TODO recursive grouping
@@ -38,7 +38,7 @@ export async function getParticipantsInSnapshots(): Promise<ParticipantInSnapsho
 				label,
 				snapshot,
 				snapshotYear,
-				schoolYear: "0-0", // TODO FIXME
+				schoolYear: inferSchoolYear(snapshot),
 			});
 		}
 	}
