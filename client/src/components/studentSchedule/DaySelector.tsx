@@ -2,6 +2,8 @@ import React, { FC } from "react";
 import { css } from "emotion";
 import { scheduleDaysArray, ScheduleDay } from "../../utils/selectSchedule";
 
+import { dayIndexPrettyRoman } from "./day-index";
+
 export interface DaySelectorProps {
 	selectedDay: ScheduleDay | undefined;
 	handleClick: (e: React.MouseEvent, day: ScheduleDay) => any;
@@ -38,7 +40,7 @@ const DaySelector: FC<DaySelectorProps> = ({ selectedDay, handleClick }) => (
 					` + ` btn${dayIndex === selectedDay ? " selected" : ""}`
 				}
 			>
-				<span>{dayIndex === "*" ? dayIndex : dayIndex + 1}</span>
+				<span>{dayIndexPrettyRoman(dayIndex)}</span>
 			</button>
 		))}
 	</div>

@@ -5,6 +5,8 @@ import React, { FC } from "react";
 import { css } from "emotion";
 import { scheduleDaysArray, ScheduleDay } from "../../utils/selectSchedule";
 
+import { dayIndexPretty } from "./day-index";
+
 interface Props {
 	selectedDay: ScheduleDay;
 	onSelectDay: (day: ScheduleDay) => void
@@ -86,7 +88,7 @@ export const DaysList: FC<Props> = ({ selectedDay, onSelectDay }) => (
 										/* ${dayIndex === selectedDay && "font-weight: 700; background: #000; color: lightcyan;"} */
 									`}
 					>
-						<span>{dayIndex === "*" ? dayIndex : dayIndex + 1}</span>
+						<span>{dayIndexPretty(dayIndex)}</span>
 					</button>
 				</li>
 			))}
