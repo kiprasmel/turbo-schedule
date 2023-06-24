@@ -3,35 +3,27 @@
 import React, { FC } from "react";
 import { css } from "emotion";
 
-import { Student, Teacher, Room, Class, Participant, parseParticipants } from "@turbo-schedule/common";
-import { ParticipantLabelToTextToSnapshotObj } from "@turbo-schedule/database";
-
 import { useMostRecentlyViewedParticipantsSplit } from "../../hooks/useLRUCache";
 import { Dictionary } from "../../i18n/i18n";
 import { useTranslation } from "../../i18n/useTranslation";
 import { parseStudentScheduleParams, syncStudentScheduleStateToURL } from "./url";
 
-type MehParticipants = {
-	students: Student["text"][];
-	teachers: Teacher["text"][];
-	rooms: Room["text"][];
-	classes: Class["text"][];
-};
+import { GroupedParticipants, ParticipantMix } from "./participant-search/participant-mix";
+import { Participant } from "@turbo-schedule/common";
+import { useSearchableParticipantGroups } from "./participant-search/searchable-participant-groups";
 
 interface Props {
-	participants: Participant[] | MehParticipants | ParticipantLabelToTextToSnapshotObj;
+	participants: ParticipantMix;
 	doNotShowMostRecents?: boolean;
+	searchString?: string;
 	className?: string;
 }
 
-export const ParticipantListList: FC<Props> = ({ participants, doNotShowMostRecents = false, className, ...rest }) => {
+export const ParticipantListList: FC<Props> = ({ participants, doNotShowMostRecents = false, searchString, className, ...rest }) => {
 	const t = useTranslation();
 
-	const { students, teachers, rooms, classes } = Array.isArray(participants)
-		? parseParticipants(participants)
-		: ("student" in participants)
-		? { students: Object.keys(participants.student), teachers: Object.keys(participants.teacher), rooms: Object.keys(participants.room), classes: Object.keys(participants.class) }
-		: participants;
+	const participantGroups = useSearchableParticipantGroups(participants, searchString);
+	const { students, teachers, rooms, classes } = participantGroups;
 
 	const isOnlyOneMatchingParticipant: boolean =
 		students.length + teachers.length + rooms.length + classes.length === 1;
@@ -45,7 +37,7 @@ export const ParticipantListList: FC<Props> = ({ participants, doNotShowMostRece
 
 	const filter = (recentP: string) =>
 		(participants as Participant[])?.map?.((p) => p.text).includes(recentP) ??
-		Object.values(participants as MehParticipants)
+		Object.values(participants as GroupedParticipants)
 			.flat()
 			.includes(recentP);
 
@@ -206,15 +198,16 @@ export const ParticipantListItem: FC<{
 	isOnlyOneMatchingParticipant?: boolean;
 }> = ({
 	participant, //
-	isOnlyOneMatchingParticipant = false,
+	/** TODO: enable back (needs to be made global) */
+	// isOnlyOneMatchingParticipant = false,
 	children,
 }) => (
 		<li
 			key={participant}
-			className={css`
-				${isOnlyOneMatchingParticipant && "font-weight: 600; font-size: 1.69rem;"}
-				${isOnlyOneMatchingParticipant && "border-bottom: 3px solid #000;"}
-			`}
+			// className={css`
+			// 	${isOnlyOneMatchingParticipant && "font-weight: 600; font-size: 1.69rem;"}
+			// 	${isOnlyOneMatchingParticipant && "border-bottom: 3px solid #000;"}
+			// `}
 		>
 			<button
 				type="button"

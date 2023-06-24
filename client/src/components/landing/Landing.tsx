@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState } from "react";
 import { css } from "emotion";
-import fuzzysort from "fuzzysort";
-import { deburr } from "lodash";
 
-
-import { PreparedLessolessP, useFetchParticipants } from "../../hooks/useFetchers";
+import { useFetchParticipants } from "../../hooks/useFetchers";
 import { history } from "../../utils/history";
 import { ParticipantListList } from "../studentSchedule/ParticipantList";
 import { FancyStickyBackgroundForSearch, Search } from "../navbar/Search";
@@ -12,40 +9,13 @@ import { Navbar } from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import { Archive } from "../../pages/archive/Archive";
 
-export const simplifyStrForSearching = (str: string): string => deburr(str.toLowerCase());
-
 /** TODO FIXME WWidth - this bad boy ain't even re-sizing */
 const Landing = () => {
 	const [searchString, setSearchString] = useState<string>("");
 
 	const [participants] = useFetchParticipants([], []);
 
-	const participantsForSearching = useMemo<PreparedLessolessP[]>(
-		() => participants.map((p): PreparedLessolessP => ({ ...p, textPrepared: fuzzysort.prepare(simplifyStrForSearching(p.text)) })),
-		[participants]
-	);
-	const [matchingParticipants, setMatchingParticipants] = useState<PreparedLessolessP[]>([]);
-
-	useEffect(() => {
-		if (!searchString || !searchString.trim()) {
-			setMatchingParticipants(participantsForSearching);
-			return;
-		}
-
-		const searchStringSimplified = simplifyStrForSearching(searchString);
-
-		const newParticipants: Fuzzysort.KeyResults<PreparedLessolessP> = fuzzysort.go(
-			searchStringSimplified,
-			participantsForSearching,
-			{
-				key: "textPrepared",
-			}
-		);
-
-		const newParticipantsReady: PreparedLessolessP[] = newParticipants.map(p => p.obj);
-
-		setMatchingParticipants(newParticipantsReady);
-	}, [searchString, participantsForSearching, setMatchingParticipants]);
+	const matchingParticipants: any[] = [] // TODO FIXME - enable back together with `isOnlyOneMatchingParticipant`.
 
 	/**
 	 *  select first autoCompletion
@@ -90,9 +60,9 @@ const Landing = () => {
 						<Search searchString={searchString} setSearchString={setSearchString} onKeyDown={handleOnKeyDown} />
 					</FancyStickyBackgroundForSearch>
 
-					<ParticipantListList participants={matchingParticipants} />
+					<ParticipantListList participants={participants} searchString={searchString} />
 
-					<Archive />
+					<Archive searchString={searchString} />
 				</div>
 			</div>
 
