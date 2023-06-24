@@ -24,7 +24,8 @@ export const useFetchParticipant = createUseFetchedState<
 );
 
 export type LessonlessP = Omit<Participant, "lessons">;
-export type PreparedLessolessP = LessonlessP & { textPrepared: Fuzzysort.Prepared };
+export type TextPreparedForSearching = { textPrepared: Fuzzysort.Prepared };
+export type PreparedLessolessP = LessonlessP & TextPreparedForSearching;
 export const useFetchParticipants = createUseFetchedState<
 	{ participants?: LessonlessP[] }, //
 	LessonlessP[]

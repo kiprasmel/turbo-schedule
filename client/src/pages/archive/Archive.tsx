@@ -3,7 +3,6 @@ import { css } from "emotion";
 
 import { ParticipantListList } from "../../components/studentSchedule/ParticipantList";
 import { useFetchArchiveParticipantsInSnapshots } from "../../hooks/useFetchers";
-import { ParticipantLabelToTextToSnapshotObj } from "@turbo-schedule/database";
 
 // const ARCHIVES_DATA = [
 // 	{
@@ -24,10 +23,12 @@ import { ParticipantLabelToTextToSnapshotObj } from "@turbo-schedule/database";
 // 	}
 // ] as const;
 
-export const Archive: FC = () => {
-	const [ARCHIVES_DATA] = useFetchArchiveParticipantsInSnapshots({}, []);
+export type ArchiveProps = {
+	searchString: string;
+}
 
-	console.log({ARCHIVES_DATA})
+export const Archive: FC<ArchiveProps> = ({ searchString }) => {
+	const [ARCHIVES_DATA] = useFetchArchiveParticipantsInSnapshots({}, []);
 
 	// let a
 	return <div>
@@ -50,7 +51,7 @@ export const Archive: FC = () => {
 					</hgroup>
 
 					{/* <ParticipantListList doNotShowMostRecents participants={archive as any} /> */}
-					<ParticipantListList doNotShowMostRecents participants={(yearData as ParticipantLabelToTextToSnapshotObj)} />
+					<ParticipantListList doNotShowMostRecents participants={(yearData)} searchString={searchString} />
 				</li>
 			))}
 		</ul>
