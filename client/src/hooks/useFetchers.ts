@@ -67,7 +67,6 @@ export const useFetchHealth = createUseFetchedState<{ health: Health }, Health>(
 );
 
 export const useFetchArchiveParticipantsInSnapshots = createUseFetchedState<{ data: ArchiveYearToParticipantLabelToTextToSnapshotObj }, ArchiveYearToParticipantLabelToTextToSnapshotObj>(
-	// "/api/v1/archive/participants-in-snapshots-deepgroup", //
 	"/api/v1/archive/participants-in-snapshots?group=schoolYear,label,text&leafItemKey=snapshot",
 	(data) => data.data
 );

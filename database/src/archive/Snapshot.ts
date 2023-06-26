@@ -25,3 +25,10 @@ export const getYearOfSnapshot = (snapshot: Snapshot): SnapshotYear => Number(sn
 export const getMonthOfSnapshot = (snapshot: Snapshot): Month => (Number(snapshot.split("-")[1]) - 1) as Month;
 
 export const snapshot2pretty = (snapshot: string): string => snapshot.replace(/[-_]/g, " ");
+
+/**
+ * for deep grouping, especially when used inside UI
+ */
+export type ParticipantToSnapshotsObj = Record<Participant["text"], Snapshot[]>;
+export type ParticipantLabelToTextToSnapshotObj = Record<ParticipantLabel, ParticipantToSnapshotsObj>;
+export type ArchiveYearToParticipantLabelToTextToSnapshotObj = Record<SnapshotYear, ParticipantLabelToTextToSnapshotObj>;

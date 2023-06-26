@@ -9,8 +9,8 @@ export * from "./get-meaningful-snapshots";
 export * from "./iso2file";
 
 export * from "./archive/snapshots-by-year";
-export * from "./archive/participants-in-snapshots";
 export * from "./archive/participants-in-snapshots-raw";
+export * from "./archive/Snapshot";
 
 /** @deprecated */
 export * from "./setNewDbState";
