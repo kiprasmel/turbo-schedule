@@ -3,6 +3,7 @@ import * as thread from "threads";
 import { Participant, ParticipantLabel } from "@turbo-schedule/common";
 
 import { getDatabaseSnapshotFiles } from "../get-db-snapshot-files";
+import { lastPath2dateSort } from "../detect-data-changed";
 
 import { GetParticipantsInSnapshot } from "./participants-in-snapshots-worker";
 import { ParticipantInSnapshot, Snapshot, SchoolYear, SnapshotYear, getYearOfSnapshot, inferSchoolYear  } from "./Snapshot";
@@ -57,6 +58,8 @@ export async function getParticipantsInSnapshots(): Promise<ParticipantInSnapsho
 
 	await threadpool.completed();
 	await threadpool.terminate();
+
+	arr.sort((A, B) => lastPath2dateSort(A.snapshot, B.snapshot))
 
 	return arr;
 }

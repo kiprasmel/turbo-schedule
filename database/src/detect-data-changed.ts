@@ -147,11 +147,11 @@ export async function defaultRun(): Promise<string[]> {
 }
 
 export const timedJsonFilename2UnixMillis = (jsonFilename: string): number => new Date(file2iso(jsonFilename.replace(".json", ""))).getTime();
-export const timedJsonFileSort = (A: string, B: string) => timedJsonFilename2UnixMillis(A) - timedJsonFilename2UnixMillis(B);
+export const timedJsonFileSort = (A: string, B: string) => timedJsonFilename2UnixMillis(B) - timedJsonFilename2UnixMillis(A);
 
 export const last = <T = any>(xs: T[]): T => xs[xs.length - 1];
 export const getTimeStrFromJsonFilepath = (pathToFileWithDateFormatName: string): string => last(pathToFileWithDateFormatName.split(path.sep))
-export const lastPath2dateSort = (A: string, B: string) => timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(A)) - timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(B));
+export const lastPath2dateSort = (A: string, B: string) => timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(B)) - timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(A));
 
 export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number, reduceProcCountBy: number = process.env.NODE_ENV === "production" ? 0 : 2): { proc: number; itemRanges: number[][] } {
 	const nproc: number = os.cpus().length;
