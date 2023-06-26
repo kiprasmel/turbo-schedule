@@ -2,6 +2,8 @@ import React, { useEffect, useRef, FC } from "react";
 import { match as Match } from "react-router-dom";
 import { css } from "emotion";
 
+import { snapshot2pretty } from "@turbo-schedule/database/dist/archive/Snapshot"; // TODO non-node exports so that importing from default won't error
+
 import "./StudentSchedule.css";
 
 import { useWindow } from "../../hooks/useWindow";
@@ -150,10 +152,16 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 			</>;
 		}
 		case "search-archive-success": {
-			return <>
-				<h1>
+			const { snapshot } = stateM.context.participant;
+
+			const header = !snapshot
+				? <h1>
 					Moksleivis "{participant}" rastas archyvuose.
 				</h1>
+				: <h1>Moksleivis "{participant}" archyve "{snapshot}" nerastas, tačiau rastas kituose archyvuose. </h1>
+
+			return <>
+				{header}
 				<p>
 					Pasirinkite laikotarpį, kuriuo norite peržiūrėti tvarkaraštį:
 				</p>
@@ -166,9 +174,15 @@ const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 						<li key={s} className={css`
 							text-align: left;
 						`}>
-							<button type="button" onClick={() => {
-								sendM({ type: "FETCH_PARTICIPANT", participant, snapshot: s });
-							}}>{s}</button>
+							<button
+								type="button"
+								onClick={() => sendM({ type: "FETCH_PARTICIPANT", participant, snapshot: s })}
+								className={css`
+									font-variant-numeric: tabular-nums;
+								`}
+							>
+								{snapshot2pretty(s)}
+							</button>
 						</li>
 					))}
 				</ul>

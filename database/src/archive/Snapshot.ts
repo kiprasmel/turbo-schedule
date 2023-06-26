@@ -23,3 +23,5 @@ export const inferSchoolYear = (snapshot: Snapshot): SchoolYear => {
 
 export const getYearOfSnapshot = (snapshot: Snapshot): SnapshotYear => Number(snapshot.split("-")[0])
 export const getMonthOfSnapshot = (snapshot: Snapshot): Month => (Number(snapshot.split("-")[1]) - 1) as Month;
+
+export const snapshot2pretty = (snapshot: string): string => snapshot.replace(/[-_]/g, " ");
