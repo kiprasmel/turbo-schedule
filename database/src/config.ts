@@ -14,7 +14,7 @@ import low from "lowdb";
 import path from "path";
 
 export const defaultDatabaseDataDirPath: string =
-	process.env.NODE_ENV === "test"
+	!!process && process.env.NODE_ENV === "test"
 		? path.join(__dirname, "..", "data.test") // "database/data.test/"
 		: path.join(__dirname, "..", "data"); // "database/data/"
 

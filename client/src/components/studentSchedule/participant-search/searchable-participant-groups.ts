@@ -2,7 +2,8 @@ import { useMemo } from "react";
 import { deburr } from "lodash";
 import fuzzysort from "fuzzysort";
 
-import { Participant } from "@turbo-schedule/common";
+import { Participant, remapEntries } from "@turbo-schedule/common";
+import { ParticipantLabelToTextToSnapshotObj } from "@turbo-schedule/database";
 
 import { TextPreparedForSearching } from "../../../hooks/useFetchers";
 
@@ -17,59 +18,24 @@ export type GroupedParticipantReadyForSearchItem = {
 	text: Participant["text"];
 } & TextPreparedForSearching;
 
-export function useSearchableParticipantGroups(participants: ParticipantMix, searchString: string | undefined): GroupedParticipants {
-	const parsed: GroupedParticipants = useMemo(
+export function useSearchableParticipantGroups(participants: ParticipantMix, searchString: string | undefined): ParticipantLabelToTextToSnapshotObj {
+	const parsed: ParticipantLabelToTextToSnapshotObj = useMemo(
 		() => parseParticipantMixIntoGroups(participants),
 		[participants]
 	);
 
-	const preparedForSearch: GroupedParticipantsPreparedForSearching = useMemo<GroupedParticipantsPreparedForSearching>(
-		() =>
-			Object.entries(parsed).reduce(
-				(acc, [label, texts]) => {
-					acc[label] = texts.map((text) => ({
-						// label: label as ParticipantLabel,
-						text,
-						textPrepared: fuzzysort.prepare(simplifyStrForSearching(text)),
-					}));
+	const parsedFiltered: ParticipantLabelToTextToSnapshotObj = !searchString
+		? parsed
+		: remapEntries(parsed, ([label, texts2SnapshotsObj]) => [
+			label,
+			remapEntries(texts2SnapshotsObj, ([text, snapshots]) =>
+				fuzzysort.single(searchString, text) !== null
+					? [text, snapshots]
+					: null
+			)]
+		);
 
-					return acc;
-				},
-				{} as GroupedParticipantsPreparedForSearching
-			),
-		[parsed]
-	);
-
-	const filtered: GroupedParticipants = useMemo(() => {
-			if (!searchString || !searchString.trim()) {
-				return parsed;
-			}
-
-			const searchStringSimplified: string = simplifyStrForSearching(searchString);
-
-			return Object.entries(preparedForSearch).reduce(
-				(acc, [label, items]) => {
-					const matchingParticipants: Fuzzysort.KeyResults<GroupedParticipantReadyForSearchItem> = fuzzysort.go(
-						searchStringSimplified,
-						items,
-						{
-							key: "textPrepared",
-						}
-					);
-
-					const matchingTexts: string[] = matchingParticipants.map(p => p.obj.text);
-
-					acc[label] = matchingTexts;
-
-					return acc;
-				},
-				{} as GroupedParticipants
-			)
-		},
-		[parsed, preparedForSearch, searchString]
-	)
-
-	return filtered;
+	return parsedFiltered;
 }
 
 export const simplifyStrForSearching = (str: string): string => deburr(str.toLowerCase());

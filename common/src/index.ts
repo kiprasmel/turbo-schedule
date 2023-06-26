@@ -16,6 +16,8 @@ export * from "./util/throttle";
 export * from "./util/performance.now";
 export * from "./util/dynamicRequire";
 export * from "./util/assertNever";
+export * from "./util/remapEntries";
+export * from "./util/Tuple";
 
 export * from "./model/Participant";
 export * from "./model/Schedule";
