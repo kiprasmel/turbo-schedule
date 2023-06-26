@@ -37,13 +37,13 @@ export const Archive: FC<ArchiveProps> = ({ searchString }) => {
 			margin-bottom: 2.5rem;
 		`}>Archyvai</h1>
 
-		<ul className={css`
+		<article className={css`
 			& > * + * {
 				margin-top: 6rem;
 			}
 		`}>
 			{Object.entries(ARCHIVES_DATA).map(([year, yearData]) => (
-				<li key={year}>
+				<section key={year}>
 					{/* <h2><span>{archive.year}</span> (<span>{participantCount(archive)}</span> participants in <span>{archive.snapshots.length}</span> snapshots)</h2> */}
 					<hgroup>
 						<h2 className={css` margin-bottom: 0.5rem; `}><span>{year}</span></h2>
@@ -52,9 +52,9 @@ export const Archive: FC<ArchiveProps> = ({ searchString }) => {
 
 					{/* <ParticipantListList doNotShowMostRecents participants={archive as any} /> */}
 					<ParticipantListList doNotShowMostRecents participants={(yearData)} searchString={searchString} />
-				</li>
+				</section>
 			))}
-		</ul>
+		</article>
 	</div>;
 };
 

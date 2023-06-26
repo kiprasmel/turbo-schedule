@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import React, { FC } from "react";
-import { css } from "emotion";
+import { css, cx } from "emotion";
 
 import { useMostRecentlyViewedParticipantsSplit } from "../../hooks/useLRUCache";
 import { Dictionary } from "../../i18n/i18n";
@@ -75,7 +75,7 @@ export const ParticipantListList: FC<Props> = ({ participants, doNotShowMostRece
 
 	return (
 		<div
-			className={[
+			className={cx(
 				css`
 					display: grid;
 
@@ -87,7 +87,7 @@ export const ParticipantListList: FC<Props> = ({ participants, doNotShowMostRece
 					}
 				`,
 				className,
-			].join(" ")}
+			)}
 			{...rest}
 		>
 			{renderables.map(({ summary, participants, recent }) => (
@@ -152,18 +152,7 @@ const ParticipantList: FC<{
 		{doNotShowMostRecents || isOnlyOneMatchingParticipant || participants.length <= 1 ? null : (
 			<ol
 				type="1"
-				className={css`
-					display: flex;
-					flex-direction: column;
-
-					& > * {
-						list-style-type: decimal-leading-zero;
-					}
-
-					& > * + * {
-						margin-top: 0.25em;
-					}
-				`}
+				className={styles.orderedList}
 			>
 				{mostRecentParticipants.map((p) => (
 					<ParticipantListItem
@@ -178,18 +167,7 @@ const ParticipantList: FC<{
 		{/* regular full participant list */}
 		<ol
 			type="1"
-			className={css`
-				display: flex;
-				flex-direction: column;
-
-				& > * {
-					list-style-type: decimal-leading-zero;
-				}
-
-				& > * + * {
-					margin-top: 0.25em;
-				}
-			`}
+			className={styles.orderedList}
 		>
 			{participants.map((p) => (
 				<ParticipantListItem
@@ -201,6 +179,21 @@ const ParticipantList: FC<{
 		</ol>
 	</details>
 );
+
+const styles = {
+	orderedList: css`
+		display: flex;
+		flex-direction: column;
+
+		& > * {
+			list-style-type: decimal-leading-zero;
+		}
+
+		& > * + * {
+			margin-top: 0.25em;
+		}
+	`,
+};
 
 export const ParticipantListItem: FC<{
 	participant: string;
