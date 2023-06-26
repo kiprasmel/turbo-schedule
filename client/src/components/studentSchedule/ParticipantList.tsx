@@ -11,6 +11,7 @@ import { parseStudentScheduleParams, syncStudentScheduleStateToURL } from "./url
 import { GroupedParticipants, ParticipantMix } from "./participant-search/participant-mix";
 import { Participant } from "@turbo-schedule/common";
 import { useSearchableParticipantGroups } from "./participant-search/searchable-participant-groups";
+import { ParticipantLabelToTextToSnapshotObj, ParticipantToSnapshotsObj } from "@turbo-schedule/database";
 
 interface Props {
 	participants: ParticipantMix;
@@ -22,11 +23,11 @@ interface Props {
 export const ParticipantListList: FC<Props> = ({ participants, doNotShowMostRecents = false, searchString, className, ...rest }) => {
 	const t = useTranslation();
 
-	const participantGroups = useSearchableParticipantGroups(participants, searchString);
-	const { students, teachers, rooms, classes } = participantGroups;
+	const participantGroups: ParticipantLabelToTextToSnapshotObj = useSearchableParticipantGroups(participants, searchString);
+	const { student, teacher, room, class: classs } = participantGroups;
 
-	const isOnlyOneMatchingParticipant: boolean =
-		students.length + teachers.length + rooms.length + classes.length === 1;
+	const isOnlyOneMatchingParticipant: boolean = false // TODO GLOBAL
+		// students.length + teachers.length + rooms.length + classs.length === 1;
 
 	const {
 		mostRecentStudents, //
@@ -41,25 +42,33 @@ export const ParticipantListList: FC<Props> = ({ participants, doNotShowMostRece
 			.flat()
 			.includes(recentP);
 
-	const renderables: { summary: keyof Dictionary; participantStrings: string[]; recent: string[] }[] = [
+	// TODO FIXME - should show snapshots if avail, so that archive can select which one.
+	const tempRemapParticipants = (obj: ParticipantToSnapshotsObj): string[] => Object.keys(obj)
+
+	type Renderable = {
+		summary: keyof Dictionary;
+		participants: string[] /* ParticipantToSnapshotsObj */;
+		recent: string[];
+	};
+	const renderables: Renderable[] = [
 		{
 			summary: "Students",
-			participantStrings: students,
+			participants: tempRemapParticipants(student),
 			recent: doNotShowMostRecents ? [] : mostRecentStudents.filter(filter),
 		},
 		{
 			summary: "Teachers",
-			participantStrings: teachers,
+			participants: tempRemapParticipants(teacher),
 			recent: doNotShowMostRecents ? [] : mostRecentTeachers.filter(filter),
 		},
 		{
 			summary: "Rooms",
-			participantStrings: rooms,
+			participants: tempRemapParticipants(room),
 			recent: doNotShowMostRecents ? [] : mostRecentRooms.filter(filter),
 		},
 		{
 			summary: "Classes",
-			participantStrings: classes,
+			participants: tempRemapParticipants(classs),
 			recent: doNotShowMostRecents ? [] : mostRecentClasses.filter(filter),
 		},
 	];
@@ -81,13 +90,13 @@ export const ParticipantListList: FC<Props> = ({ participants, doNotShowMostRece
 			].join(" ")}
 			{...rest}
 		>
-			{renderables.map(({ summary, participantStrings, recent }) => (
+			{renderables.map(({ summary, participants, recent }) => (
 				<ParticipantList
 					key={summary}
-					participants={participantStrings}
+					participants={participants}
 					mostRecentParticipants={recent}
 					doNotShowMostRecents={doNotShowMostRecents}
-					summary={`${t(summary)  } (${participantStrings.length})`}
+					summary={`${t(summary)} (${participants.length})`}
 					isOnlyOneMatchingParticipant={isOnlyOneMatchingParticipant}
 				/>
 			))}
@@ -122,7 +131,7 @@ const ParticipantList: FC<{
 		`}
 		open={!!open}
 	>
-		{!!summary && (
+		{!summary ? null : (
 			<summary
 				className={css`
 					cursor: pointer;
