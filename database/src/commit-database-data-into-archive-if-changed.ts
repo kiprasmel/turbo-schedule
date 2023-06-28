@@ -13,6 +13,8 @@ export const writeAsync = util.promisify(fs.writeFile);
 export const readAsync = util.promisify(fs.readFile);
 export const mkdirAsync = util.promisify(fs.mkdir);
 export const existsAsync = util.promisify(fs.exists);
+export const rmdirAsync = util.promisify(fs.rmdir);
+export const renameAsync = util.promisify(fs.rename);
 
 const homedir: string = os.homedir();
 const sshdir: string = path.join(homedir, ".ssh");
@@ -107,8 +109,12 @@ export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo:
 	}
 
 	if (!hasGitDir) {
-		await execInDataDir(`git clone --bare ${repoURL} .git`);
-		await execInDataDir(`git config --unset core.bare`);
+		const tmpRepoDir = ".tmp-repo";
+		const tmpRepoPath = path.join(dbDirPath, tmpRepoDir);
+		await rmdirAsync(tmpRepoPath);
+
+		await execInDataDir(`git clone ${repoURL} ${tmpRepoDir}`);
+		await renameAsync(path.join(tmpRepoPath, ".git"), path.join(dbDirPath, ".git"));
 	}
 
 	await execInDataDir(`git config user.email "${process.env.ARCHIVE_GIT_EMAIL || "bot@tvarkarastis.com"}"`);
@@ -119,8 +125,10 @@ export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo:
 		await execInDataDir(`git commit -m "add ${path.basename(newDbFilepath)}"`);
 	}
 
+	const branch: string = process.env.ARCHIVE_GIT_BRANCH || "master";
+
 	await execInDataDir(`git pull --rebase`);
-	await execInDataDir(`git push origin "${process.env.ARCHIVE_GIT_BRANCH || "master"}"`);
+	await execInDataDir(`git push origin "${branch}"`);
 
 	return;
 }
