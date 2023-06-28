@@ -18,6 +18,7 @@ export * from "./util/dynamicRequire";
 export * from "./util/assertNever";
 export * from "./util/remapEntries";
 export * from "./util/Tuple";
+export * from "./util/matchMatrix";
 
 export * from "./model/Participant";
 export * from "./model/Schedule";

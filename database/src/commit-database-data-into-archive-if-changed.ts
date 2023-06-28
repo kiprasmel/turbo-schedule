@@ -3,9 +3,8 @@ import path from "path";
 import cp, { ExecOptions } from "child_process";
 import os from "os";
 import util from "util";
-import assert from "assert";
 
-import { ScrapeInfo } from "@turbo-schedule/common";
+import { ScrapeInfo, matchMatrix } from "@turbo-schedule/common";
 
 import { getDatabaseFilepath } from "./config";
 
@@ -19,28 +18,37 @@ const homedir: string = os.homedir();
 const sshdir: string = path.join(homedir, ".ssh");
 const sshFilepath: string = path.join(sshdir, "turbo-schedule-archive-deploy-bot");
 
-
 export type CanCommitMeaningfulSnapshotsRet = {
-	hasEnvVar: boolean;
-	hasSSHFile: boolean;
+	hasEnvVarNotEmpty: boolean;
+	hasSSHFileNotEmpty: boolean;
 	canCommit: boolean;
-	sshFileContentSameAsEnvVar: boolean;
+	sshFileNeedsWriteFromEnv: boolean;
 };
 
 export async function canCommitMeaningfulSnapshots(): Promise<CanCommitMeaningfulSnapshotsRet> {
-	const hasEnvVar: boolean = !!process.env.ARCHIVE_DEPLOY_KEY;
-	const hasSSHFile: boolean = await existsAsync(sshFilepath);
-	const canCommit: boolean = hasEnvVar || hasSSHFile;
-
-	const sshFileContent: string = hasSSHFile ? (await readAsync(sshFilepath, { encoding: "utf-8" })).trim() : "";
 	const envVarContent: string = process.env.ARCHIVE_DEPLOY_KEY?.trim() || "";
-	const sshFileContentSameAsEnvVar: boolean = sshFileContent === envVarContent;
+	const hasEnvVarNotEmpty: boolean = envVarContent !== "";
+
+	const hasSSHFile: boolean = await existsAsync(sshFilepath);
+	const sshFileContent: string | undefined = hasSSHFile ? (await readAsync(sshFilepath, { encoding: "utf-8" })).trim() : "";
+	const hasSSHFileNotEmpty: boolean = hasSSHFile && sshFileContent !== "";
+
+	const canCommit: boolean = hasEnvVarNotEmpty || hasSSHFileNotEmpty;
+
+	const sshFileNeedsWriteFromEnv: boolean = !canCommit
+		? false
+		: matchMatrix([hasSSHFileNotEmpty, hasEnvVarNotEmpty], [
+			true, true, true, // => true if different, otherwise won't matter. but can just always default to true.
+			true, false, false, // does not have the ENV var, but already has the ssh file, thus do nothing.
+			false, true, true, // does not have the ssh file, but has the env var, thus prepare the ssh deploy key.
+			false, false, false, // eliminated because canCommit === false in this case.
+		]);
 
 	return {
-		hasEnvVar,
-		hasSSHFile,
+		hasEnvVarNotEmpty,
+		hasSSHFileNotEmpty,
 		canCommit,
-		sshFileContentSameAsEnvVar,
+		sshFileNeedsWriteFromEnv,
 	} as const;
 }
 
@@ -59,29 +67,13 @@ export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo:
 		return;
 	}
 
-	if (!canCommit.sshFileContentSameAsEnvVar) {
-		if (canCommit.hasSSHFile) {
-			assert.deepStrictEqual(canCommit.hasEnvVar, false);
+	if (canCommit.sshFileNeedsWriteFromEnv) {
+		await mkdirAsync(sshdir, { recursive: true });
 
-			/**
-			 * does not have the ENV var, but already has the ssh file,
-			 * thus do nothing.
-			 */
-		} else {
-			assert.deepStrictEqual(canCommit.hasEnvVar, true);
-
-			/**
-			 * does not have the ssh file, but has the env var,
-			 * thus prepare the ssh deploy key.
-			 */
-
-			await mkdirAsync(sshdir, { recursive: true });
-
-			// https://superuser.com/a/1565830/1012390
-			await writeAsync(sshFilepath, process.env.ARCHIVE_DEPLOY_KEY + "\n", {
-				mode: "600"
-			});
-		}
+		// https://superuser.com/a/1565830/1012390
+		await writeAsync(sshFilepath, process.env.ARCHIVE_DEPLOY_KEY + "\n", {
+			mode: "600"
+		});
 	}
 
 	/**
