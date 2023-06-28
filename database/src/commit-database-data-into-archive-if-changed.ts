@@ -20,24 +20,24 @@ const sshFilepath: string = path.join(sshdir, "turbo-schedule-archive-deploy");
 
 export type CanCommitMeaningfulSnapshotsRet = {
 	hasEnvVar: boolean;
-	hasSSHFile: boolean;
+	hasSSHFileNotEmpty: boolean;
 	canCommit: boolean;
-	sshFileContentSameAsEnvVar: boolean;
 	repoDeployKey: string | null;
 };
 
 export async function hasDeployKeyEnvOrFile(): Promise<CanCommitMeaningfulSnapshotsRet> {
-	const hasEnvVar: boolean = !!process.env.ARCHIVE_DEPLOY_KEY;
-	const hasSSHFile: boolean = await existsAsync(sshFilepath);
-	const canCommit: boolean = hasEnvVar || hasSSHFile;
+	const envVarContent: string = (process.env.ARCHIVE_DEPLOY_KEY || "").trim();
+	const hasEnvVar: boolean = !!envVarContent;
 
-	const sshFileContent: string = hasSSHFile ? (await readAsync(sshFilepath, { encoding: "utf-8" })).trim() : "";
-	const envVarContent: string = process.env.ARCHIVE_DEPLOY_KEY?.trim() || "";
-	const sshFileContentSameAsEnvVar: boolean = sshFileContent === envVarContent;
+	const hasSSHFile: boolean = await existsAsync(sshFilepath);
+	const sshFileContent: string | undefined = hasSSHFile ? (await readAsync(sshFilepath, { encoding: "utf-8" })).trim() : "";
+	const hasSSHFileNotEmpty: boolean = hasSSHFile && sshFileContent !== "";
+
+	const canCommit: boolean = hasEnvVar || hasSSHFileNotEmpty;
 
 	const repoDeployKey = hasEnvVar
 		? envVarContent //
-		: hasSSHFile
+		: hasSSHFileNotEmpty
 			? sshFileContent
 			: null;
 
@@ -47,14 +47,13 @@ export async function hasDeployKeyEnvOrFile(): Promise<CanCommitMeaningfulSnapsh
 
 	return {
 		hasEnvVar,
-		hasSSHFile,
+		hasSSHFileNotEmpty,
 		canCommit,
-		sshFileContentSameAsEnvVar,
 		repoDeployKey,
 	} as const;
 }
 
-async function writeSSHKey(repoDeployKey: string): void {
+async function writeSSHKey(repoDeployKey: string): Promise<void> {
 	await mkdirAsync(sshdir, { recursive: true });
 	await writeAsync(sshFilepath, repoDeployKey + "\n", {
 		mode: "600"
