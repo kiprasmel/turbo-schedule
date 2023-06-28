@@ -1,3 +1,5 @@
+#!/usr/bin/env ts-node-dev
+
 import fs from "fs";
 import path from "path";
 
@@ -5,6 +7,7 @@ import { defaultDatabaseDataDirPath, getDatabaseFilepath } from "./config";
 import { getMeaningfulSnapshots } from "./get-meaningful-snapshots";
 import { canCommitMeaningfulSnapshots } from "./commit-database-data-into-archive-if-changed";
 import { lastPath2dateSort } from "./detect-data-changed";
+import { readRawDb } from "./read-raw-db";
 
 export type GetDatabaseSnapshotFilesOpts = {
 	datadir?: string;
@@ -65,4 +68,16 @@ export function snapshotExistsInArchive(snapshot: string): boolean {
 
 	const exists: boolean = fs.existsSync(snapshotPath);
 	return exists;
+}
+
+if (!module.parent) {
+	getDatabaseSnapshotFiles({ onlyMeaningful: true }).then(meaningfulSnaps => {
+		for (const snap of meaningfulSnaps) {
+			const isDataFake = readRawDb(snap)?.isDataFake
+			const out = "\n" + snap + " " + isDataFake;
+			process.stdout.write(out);
+		}
+
+		process.stdout.write("\n\n");
+	});
 }
