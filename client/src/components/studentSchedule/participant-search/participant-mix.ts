@@ -21,7 +21,7 @@ export function parseParticipantMixIntoGroups(participants: ParticipantMix): Par
 		: ("student" in participants)
 		// ? { students: participants.student, teachers: participants.teacher, rooms: participants.room, classes: participants.class }
 		? participants
-		: Object.fromEntries((Object.entries(participants).filter(([key]) => key in labelMultipleToSingleMap) as Entries<GroupedParticipants>).map(([label, texts]) => [labelMultipleToSingleMap[label], Object.fromEntries(texts.map(t => [t, databaseFileName]))]))
+		: Object.fromEntries((Object.entries(participants).filter(([key]) => key in labelMultipleToSingleMap) as Entries<GroupedParticipants>).map(([label, texts]) => [labelMultipleToSingleMap[label], Object.fromEntries(texts.map(t => [t, [databaseFileName]]))])) as ParticipantLabelToTextToSnapshotObj;
 
 	return parsed;
 }
