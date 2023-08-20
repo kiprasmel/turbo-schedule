@@ -42,9 +42,11 @@ export async function setDbState(
  */
 export async function backupDbState(currentDatabaseFilePath: string = getDatabaseFilepath()): Promise<void> {
 	const currentFileExists: boolean = await fs.pathExists(currentDatabaseFilePath);
-	debug("backupDbState: currentFileExists =", currentFileExists);
+	debug("backupDbState: currentFileExists =", currentFileExists, "; file =", currentDatabaseFilePath);
 
 	if (!currentFileExists) {
+		const msg = `an explicit backup of the database state was requested, but path of current database file was non-existing. path = ${currentDatabaseFilePath}`
+		console.warn(msg)
 		return;
 	}
 
@@ -98,7 +100,8 @@ export async function setDbStateAndBackupCurrentOne(
 	currentDatabaseFileName: string = databaseFileName
 ): Promise<DbStateReturn> {
 	/** make a backup to a different file */
-	await backupDbState(currentDatabaseFileName);
+	const fullDbFilePath = getDatabaseFilepath(currentDatabaseFileName)
+	await backupDbState(fullDbFilePath);
 
 	/** override the state in the current file */
 	const result: DbStateReturn = await setDbState(newState, currentDatabaseFileName);
