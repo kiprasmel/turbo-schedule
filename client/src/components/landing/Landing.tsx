@@ -68,7 +68,7 @@ const Landing = () => {
 				</div>
 			</div>
 
-			<Footer />
+			<Footer enableMailingListJoiner />
 		</>
 	);
 };

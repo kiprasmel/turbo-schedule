@@ -6,7 +6,6 @@ import "./StudentSchedule.scss";
 
 import { useWindow } from "../../hooks/useWindow";
 import { useAddMostRecentParticipantOnPageChange } from "../../hooks/useLRUCache";
-import Footer from "../footer/Footer";
 import { Navbar } from "../navbar/Navbar";
 import { history } from "../../utils/history";
 import StudentListModal from "./StudentListModal";
@@ -277,8 +276,6 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 						}}
 						lesson={selectedLesson}
 					/>
-
-					<Footer />
 				</>
 			)}
 		</>

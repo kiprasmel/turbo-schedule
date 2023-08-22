@@ -10,8 +10,8 @@
 	"scripts": {
 		"start": "yarn dev",
 		"test": "yarn test:api --forceExit",
-		"build": "     yarn build:ts && yarn build:content      && yarn build:docs",
-		"build:prod": "cross-env NODE_ENV=production yarn build:ts && yarn build:content:prod && yarn build:docs:prod",
+		"build": "     yarn build:ts && yarn build:content      && yarn build:docs && yarn after-build",
+		"build:prod": "cross-env NODE_ENV=production yarn build:ts && yarn build:content:prod && yarn build:docs:prod && yarn after-build",
 		"serve": "cross-env NODE_ENV=production node --max-http-header-size 64000 dist/script/start-server.js",
 		"-----": "-----",
 		"watch:ts": "tsc -b -w",
@@ -22,7 +22,8 @@
 		"build:content": "     yarn ts-node-dev ./src/script/scrape-content.ts   ",
 		"build:content:prod": "cross-env NODE_ENV=production     node        ./dist/script/scrape-content.js          # depends on `build:ts`",
 		"build:docs": "        yarn ts-node-dev      ./src/script/generate-openapi-docs.ts                          ",
-		"build:docs:prod": "cross-env NODE_ENV=production        node        ./dist/script/generate-openapi-docs.js   # depends on `build:ts`"
+		"build:docs:prod": "cross-env NODE_ENV=production        node        ./dist/script/generate-openapi-docs.js   # depends on `build:ts`",
+		"after-build": "node ./dist/script/build-info.js store"
 	},
 	"dependencies": {
 		"@turbo-schedule/common": "^2.32.1",

@@ -1,6 +1,7 @@
 *
 !package.json
 !yarn.lock
+!build-info.json
 
 !common/package.json
 !database/package.json

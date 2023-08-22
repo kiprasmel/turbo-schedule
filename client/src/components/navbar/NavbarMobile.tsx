@@ -13,12 +13,11 @@ import { TweenMax } from "gsap";
 import { NavbarLinksOne, NavbarLinksTwo } from "./Navbar";
 import { Divider } from "../studentSchedule/Divider";
 
-import { useTranslation } from "../../i18n/useTranslation";
-
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import { ReactComponent as More } from "../../assets/more.svg";
 import { LangSelect } from "./LangSelect";
 import { StickyInfoOrWarningAboutFreshOrOutdatedData } from "./StickyInfoOrWarningAboutFreshOrOutdatedData";
+import Footer from "../footer/Footer";
 
 const menuMachine = createMachine({
 	id: "menu",
@@ -63,8 +62,6 @@ export const NavbarMobile = forwardRef<
 		disableWarningAboutOutdatedData?: boolean;
 	}
 >(function NavbarMobile({ SearchElement, ...props }, ref) {
-	const t = useTranslation();
-
 	const menuElementRef = useRef<HTMLElement>(null);
 
 	/** make sure we're getting the latest ref etc. -- much like `useEffect`, but for a function/callback */
@@ -238,32 +235,7 @@ export const NavbarMobile = forwardRef<
 					</ul>
 				</section>
 
-				<footer
-					className={css`
-						margin-bottom: 2.5rem;
-					`}
-				>
-					<span dangerouslySetInnerHTML={{ __html: t("Made with love by (__html)") }} />{" "}
-					<a
-						href="https://kipras.org"
-						className={css`
-							font-weight: 700;
-						`}
-					>
-						<span
-							className={css`
-								background-color: hsl(240, 37%, 54%);
-								color: hsl(240, 100%, 95%);
-
-								padding: 0.5rem 1rem;
-
-								border-radius: 2px;
-							`}
-						>
-							Kipras
-						</span>
-					</a>
-				</footer>
+				<Footer enableMadeBy disableBuildMetaInfo />
 			</nav>
 
 			{props.disableWarningAboutOutdatedData ? null : <StickyInfoOrWarningAboutFreshOrOutdatedData />}

@@ -16,6 +16,7 @@ import { useQueryFor, EncoderDecoder, arrayEncoderDecoder } from "../../hooks/us
 import { Navbar } from "../../components/navbar/Navbar";
 import { useTranslation } from "../../i18n/useTranslation";
 import { ParticipantPicker } from "./ParticipantPicker";
+import Footer from "../../components/footer/Footer";
 
 const mapRatioToHSLThroughHue = (ratio: number, hueStart: number = 240, hueEnd: number = 360): string => {
 	const hue: number = hueStart + (hueEnd - hueStart) * ratio;
@@ -840,6 +841,8 @@ export const Availability: FC = () => {
 					}
 				`}
 			/>
+
+			<Footer />
 		</>
 	);
 };

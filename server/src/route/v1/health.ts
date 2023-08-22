@@ -4,10 +4,11 @@
 
 import { Router } from "express";
 
-import { getDefaultHealth, Health } from "@turbo-schedule/common";
+import { BuildInfo, getDefaultHealth, Health } from "@turbo-schedule/common";
 import { initDb, Db } from "@turbo-schedule/database";
 
 import { WithErr, withSender } from "../../middleware/withSender";
+import { getStoredBuildInfo } from "../../script/build-info";
 
 const router: Router = Router();
 
@@ -32,9 +33,17 @@ router.get<never, HealthRes>("/", withSender({ health: getDefaultHealth() }), as
 			db.get("scrapeInfo").value(),
 		] as const);
 
+		let buildInfo: BuildInfo | null = null
+		try {
+			buildInfo = getStoredBuildInfo()
+		} catch (err) {
+			console.warn("health: build info error:", err)
+		}
+
 		const health: HealthRes["health"] = {
 			isDataFake,
 			scrapeInfo,
+			buildInfo,
 		};
 
 		return send(200, { health });

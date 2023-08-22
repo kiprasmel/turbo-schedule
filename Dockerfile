@@ -21,6 +21,7 @@ WORKDIR ${workdir}
 
 # root dir
 COPY package.json yarn.lock ./
+COPY build-info.json ./
 
 # packages
 COPY common/package.json ./common/

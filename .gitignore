@@ -28,3 +28,7 @@ yarn-error.log*
 lerna-debug.log*
 
 .yarn-integrity
+
+# generated after a build.
+# will be copied to a docker image, or if built in prod - will remain there.
+build-info.json
