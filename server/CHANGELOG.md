@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.33.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.32.6...v2.33.0) (2023-08-22)
+
+
+### Features
+
+* introduce build info ([6005b29](https://github.com/kiprasmel/turbo-schedule/commit/6005b296265c5fd2f290057c45860d33a7525413))
+
+
+
+
+
 ## [2.32.4](https://github.com/kiprasmel/turbo-schedule/compare/v2.32.3...v2.32.4) (2022-08-29)
 
 **Note:** Version bump only for package @turbo-schedule/server

@@ -1,6 +1,6 @@
 {
 	"name": "@turbo-schedule/server",
-	"version": "2.32.4",
+	"version": "2.33.0",
 	"description": "",
 	"main": "dist/src/server.js",
 	"typings": "dist/src/index.d.ts",
@@ -26,9 +26,9 @@
 		"after-build": "node ./dist/script/build-info.js store"
 	},
 	"dependencies": {
-		"@turbo-schedule/common": "^2.32.1",
-		"@turbo-schedule/database": "^2.32.1",
-		"@turbo-schedule/scraper": "^2.32.4",
+		"@turbo-schedule/common": "^2.33.0",
+		"@turbo-schedule/database": "^2.33.0",
+		"@turbo-schedule/scraper": "^2.33.0",
 		"@types/cors": "2.8.6",
 		"@types/cron": "1.7.1",
 		"@types/debug": "4.1.5",
