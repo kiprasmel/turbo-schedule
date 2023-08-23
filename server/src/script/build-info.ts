@@ -26,7 +26,7 @@ export function inferBuildInfo(): BuildInfo {
 		commitFull,
 		commitShort: e(`git log -1 --pretty="format:%h"`),
 		commitURL: getRepoCommitURL(commitFull),
-		isCommitDirty: e(`git status -s`) === "",
+		isCommitDirty: e(`git status -s`) !== "",
 		branch,
 		branchURL: getRepoBranchURL(branch),
 		dateISO: new Date().toISOString(),
