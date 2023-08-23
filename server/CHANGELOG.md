@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.33.1](https://github.com/kiprasmel/turbo-schedule/compare/v2.33.0...v2.33.1) (2023-08-23)
+
+
+### Bug Fixes
+
+* invert `isCommitDirty` check ([ebe3948](https://github.com/kiprasmel/turbo-schedule/commit/ebe39484d3146c86f64d0b467a7bb0594af7f28a))
+
+
+
+
+
 # [2.33.0](https://github.com/kiprasmel/turbo-schedule/compare/v2.32.6...v2.33.0) (2023-08-22)
 
 
