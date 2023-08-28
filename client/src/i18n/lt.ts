@@ -106,4 +106,27 @@ export const lt: Dictionary = {
 	"outdated-data-warning: I understand.": "Supratau.",
 
 	"outdated-data-warning: Last time the data collection happened: ": "Paskutinį kartą duomenų surinkimas įvyko: ",
+
+	"Choose your school": "Pasirink savo mokyklą",
+	"Work in Progress": "Vyksta darbai",
+	"Not available yet...": "Kol kas neprienama...",
+	"Don't see your school?": "Nematai savo mokyklos?",
+	"Message us!": "Parašyk mums!",
+	"I want Turbo Schedule!": "Noriu Turbo Tvarkaraščio!",
+	"i-want-turbo-schedule--mailto-subject": "Norime Turbo Tvarkaraščio",
+	"i-want-turbo-schedule--mailto-body": "Mūsų mokyklos tvarkaraštis pasiekiamas adresu [mano-mokykla.lt/tvarkarastis]. Ar būtų įmanoma integruoti Turbo Tvarkaraštį?",
+
+
+	// "school-full-name: kpg": "Kretingos Pranciškonų gimnazija",
+	"school-core-name: kpg": "Kretingos Pranciškonų",
+	"school-type: kpg": "gimnazija",
+
+	// "school-full-name: kjpug": "Kretingos Jurgio Pabrėžos universitetinė gimnazija",
+	"school-core-name: kjpug": "Kretingos Jurgio Pabrėžos",
+	"school-type: kjpug": "universitetinė gimnazija",
+
+	// "school-full-name: kdp": "Kretingos Simono Daukanto Progimnazija",
+	"school-core-name: kdp": "Kretingos Simono Daukanto",
+	"school-type: kdp": "progimnazija",
+	//
 };

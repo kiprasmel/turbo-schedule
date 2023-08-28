@@ -32,7 +32,7 @@ export const Search: FC<SearchProps> = ({ searchString, setSearchString, onKeyDo
 
 	useLayoutEffect(() => {
 		// eslint-disable-next-line no-unused-expressions
-		ref.current?.focus();
+		// ref.current?.focus();
 	}, []);
 
 	return (
@@ -40,7 +40,7 @@ export const Search: FC<SearchProps> = ({ searchString, setSearchString, onKeyDo
 			<input
 				type="search"
 				name="search"
-				autoFocus
+				// autoFocus
 				ref={ref}
 				className={css`
 					font-size: 1.5em;

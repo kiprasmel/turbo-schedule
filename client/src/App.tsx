@@ -6,7 +6,8 @@ import "./App.css";
 import CurrentLangContextProvider from "./components/currentLangContext/CurrentLangContextProvider";
 
 /** pages */
-import Landing from "./components/landing/Landing";
+import { Landing } from "./pages/landing/Landing";
+import SchoolLanding from "./components/school-landing/SchoolLanding";
 import { StudentSchedulePage } from "./components/studentSchedule/StudentSchedule";
 import { Availability } from "./pages/availability/Availability";
 
@@ -26,14 +27,9 @@ const App: FC = () => (
 						<Switch>
 							<Route exact path="/" component={Landing} />
 
-							<Route exact path="/avail" component={Availability} />
-
-							<Route path="/:participant" component={StudentSchedulePage} />
-
-							{/* <Route exact path="/:studentName/:dayIndex" component={StudentSchedulePage} />
-							<Route exact path="/:studentName/:dayIndex/:timeIndex" component={StudentSchedulePage} />
-							<Route exact path="/:studentName/:dayIndex/\*" component={StudentSchedulePage} />
-							<Route exact path="/:studentName/:dayIndex/:timeIndex/\*" component={StudentSchedulePage} /> */}
+							<Route exact path="/:school/" component={SchoolLanding} />
+							<Route exact path="/:school/avail" component={Availability} />
+							<Route path="/:school/:participant" component={StudentSchedulePage} />
 						</Switch>
 					</Router>
 				</div>

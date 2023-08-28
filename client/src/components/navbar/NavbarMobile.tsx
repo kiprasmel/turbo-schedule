@@ -18,6 +18,7 @@ import { ReactComponent as More } from "../../assets/more.svg";
 import { LangSelect } from "./LangSelect";
 import { StickyInfoOrWarningAboutFreshOrOutdatedData } from "./StickyInfoOrWarningAboutFreshOrOutdatedData";
 import Footer from "../footer/Footer";
+import { useSelectedSchool } from "../../hooks/useSelectedSchool";
 
 const menuMachine = createMachine({
 	id: "menu",
@@ -62,6 +63,7 @@ export const NavbarMobile = forwardRef<
 		disableWarningAboutOutdatedData?: boolean;
 	}
 >(function NavbarMobile({ SearchElement, ...props }, ref) {
+	const school = useSelectedSchool()
 	const menuElementRef = useRef<HTMLElement>(null);
 
 	/** make sure we're getting the latest ref etc. -- much like `useEffect`, but for a function/callback */
@@ -134,17 +136,45 @@ export const NavbarMobile = forwardRef<
 					justify-content: space-between;
 				`}
 			>
-				<h1
-					onClick={(_e) => sendMenuState("CLOSE")}
-					className={css`
-						display: inline-block;
-						padding-top: 1rem;
-					`}
-				>
-					<Link to="/">
-						<Logo />
-					</Link>
-				</h1>
+				<div className={css`
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+
+					text-align: center;
+				`}>
+					<h1
+						onClick={(_e) => sendMenuState("CLOSE")}
+						className={css`
+							display: inline-block;
+							padding-top: 1rem;
+						`}
+					>
+						<Link to="/">
+							<Logo />
+						</Link>
+
+					</h1>
+
+					{!school ? null : (
+						<Link to={"/" + school} className={css`
+							text-transform: uppercase;
+
+							font-size: 2rem;
+							margin-bottom: -10px;
+							margin-left: 1.5rem;
+
+							// box-shadow: 10px 10px 0px 0px rgba(0,221,255,1);
+							// text-shadow: 2px 2px hsl(188, 100%, 50%), 4px 4px hsl(172, 100%, 50%), 6px 6px hsl(82, 100%, 50%), 8px 8px hsl(352, 100%, 50%);
+							// text-shadow: 2px 2px hsl(188, 100%, 50%), 4px 4px hsl(352, 100%, 50%);
+							text-shadow: 2px 2px hsl(188, 100%, 50%);
+							// text-shadow: 2px 2px hsl(352, 100%, 50%);
+							/* TODO MULTI_SCHOOL - different text-shadow for each school */
+						`}>
+							{school}
+						</Link>
+					)}
+				</div>
 
 				{SearchElement}
 

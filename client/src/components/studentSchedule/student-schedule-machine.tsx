@@ -241,6 +241,7 @@ export const StudentScheduleMachineProvider: FC<StudentScheduleMachineProviderPr
 
 	const syncStateToURL = useCallback((context: MachineContext = studentScheduleService.getSnapshot().context): void => {
 		return syncStudentScheduleStateToURL({
+			school: "kpg", // TODO
 			participant: context.participant.participant || participant,
 			day: context.ui.day,
 			time: context.ui.time,

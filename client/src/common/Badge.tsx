@@ -1,6 +1,8 @@
 import React, { FC } from "react";
 import { cx, css } from "emotion";
 
+import { useTranslation } from "../i18n/useTranslation";
+
 type Props = {
 	text: string;
 	gapWidth?: number;
@@ -32,6 +34,8 @@ export const Badge: FC<Props> = ({ text, gapWidth = 0, ...rest }) => (
 				font-weight: 600;
 				background-color: hsl(240, 100%, 95%);
 				color: hsl(240, 37%, 54%) !important;
+
+				z-index: 1;
 			`,
 			rest.className
 		)}
@@ -42,15 +46,35 @@ export const Badge: FC<Props> = ({ text, gapWidth = 0, ...rest }) => (
 
 type P = Omit<Props, "text">;
 
-export const BadgeNew: FC<P> = ({ gapWidth }) => <Badge text="New" gapWidth={gapWidth} />;
+export const BadgeNew: FC<P> = ({ gapWidth, ...rest }) => <Badge {...rest} text="New" gapWidth={gapWidth} />;
 
-export const BadgeBeta: FC<P> = ({ gapWidth }) => (
+export const BadgeBeta: FC<P> = ({ className, ...rest }) => (
 	<Badge
+		{...rest}
 		text="Beta"
-		gapWidth={gapWidth}
-		className={css`
-			background: hsl(50, 100%, 75%) !important;
-			color: hsl(50, 100%, 20%) !important;
-		`}
+		className={cx(
+			css`
+				background: hsl(50, 100%, 75%) !important;
+				color: hsl(50, 100%, 20%) !important;
+			`,
+			className,
+		)}
 	/>
 );
+
+export const BadgeWIP: FC<P> = ({ className, ...rest }) => {
+	const t = useTranslation()
+
+	return <Badge
+		{...rest}
+		text="WIP"
+		title={t("Work in Progress")}
+		className={cx(
+			css`
+				background: hsl(50, 100%, 75%) !important;
+				color: hsl(50, 100%, 20%) !important;
+			`,
+			className,
+		)}
+	/>
+}

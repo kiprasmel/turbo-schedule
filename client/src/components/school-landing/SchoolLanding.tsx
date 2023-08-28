@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { css } from "emotion";
 
 import { useFetchParticipants } from "../../hooks/useFetchers";
@@ -8,12 +8,44 @@ import { FancyStickyBackgroundForSearch, Search } from "../navbar/Search";
 import { Navbar } from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import { Archive } from "../../pages/archive/Archive";
+import { CURRENTLY_SUPPORTED_SCHOOLS, SchoolID } from "../../pages/landing/Landing";
 
 /** TODO FIXME WWidth - this bad boy ain't even re-sizing */
-const Landing = () => {
+const SchoolLanding = () => {
 	const [searchString, setSearchString] = useState<string>("");
 
 	const [participants] = useFetchParticipants([], []);
+
+	/**
+	 * BACKWARDS COMPAT (pre MULTI_SCHOOL) - rewrite /avail?p=...&... to /kpg/avail?p=...&...,
+	 *
+	 * since now /avail is tracked as a "school" and this component gets loaded for it,
+	 * instead of the Availability one.
+	 *
+	 * same with previous /:participant - participant is now taken as a "school" too.
+	 * so, need to check if we are actually supporting the school;
+	 * otherwise do the previous default - go to the participant's schedule.
+	 */
+	useEffect(() => {
+		const { pathname, search } = history.location
+
+		if (pathname === "/avail") {
+			const searchQuery = new URLSearchParams(search).toString()
+			const newPath = "/kpg/avail?" + searchQuery
+			history.replace(newPath)
+			return
+		}
+
+		const potentiallySchool = pathname.split("/")[1]
+		const isNotSchool = !CURRENTLY_SUPPORTED_SCHOOLS.includes(potentiallySchool as SchoolID)
+
+		if (isNotSchool) {
+			const searchQuery = new URLSearchParams(search).toString()
+			const newPath = "/kpg/" + potentiallySchool /** now is expected to be a participant */ + "?" + searchQuery
+			history.replace(newPath)
+			return
+		}
+	}, [])
 
 	const matchingParticipants: any[] = [] // TODO FIXME - enable back together with `isOnlyOneMatchingParticipant`.
 
@@ -71,4 +103,4 @@ const Landing = () => {
 	);
 };
 
-export default Landing;
+export default SchoolLanding;
