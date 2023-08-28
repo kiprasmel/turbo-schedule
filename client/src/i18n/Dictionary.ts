@@ -65,4 +65,28 @@ export interface Dictionary {
 	"outdated-data-warning: I understand.": string;
 	"outdated-data-warning: Last time the data collection happened: ": string;
 	// "outdated-data-warning: ": string;
+
+	/** multi-school */
+	"Choose your school": string;
+	"Work in Progress": string;
+	"Not available yet...": string;
+	"Don't see your school?": string;
+	"Message us!": string;
+	"I want Turbo Schedule!": string;
+	"i-want-turbo-schedule--mailto-subject": string;
+	"i-want-turbo-schedule--mailto-body": string;
+
+	/**
+	 * school list
+	 */
+	// "school-full-name: kpg": string;
+	"school-core-name: kpg": string;
+	"school-type: kpg": string;
+	// "school-full-name: kjpug": string;
+	"school-core-name: kjpug": string;
+	"school-type: kjpug": string;
+	// "school-full-name: kdp": string;
+	"school-core-name: kdp": string;
+	"school-type: kdp": string;
+	//
 }

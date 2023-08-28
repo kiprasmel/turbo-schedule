@@ -9,6 +9,7 @@ import { css } from "emotion";
 import { SearchProps, Search } from "./Search";
 import { LangSelect } from "./LangSelect";
 import { useTranslation } from "../../i18n/useTranslation";
+import { useSelectedSchool } from "../../hooks/useSelectedSchool";
 // eslint-disable-next-line import/no-cycle
 import { NavbarMobile } from "./NavbarMobile";
 
@@ -127,14 +128,22 @@ const NavbarDesktop = forwardRef<
 /** left / top */
 export const NavbarLinksOne: FC<React.HTMLProps<HTMLLIElement>> = (firstElementProps) => {
 	const t = useTranslation();
+	const school = useSelectedSchool()
+
+	const scheduleLink = !school ? "/" : "/" + school
+	const commonAvailLink = !school
+		? "/" /** global /avail is not a concept yet */
+		// ? "/kpg/avail" // TODO MULTI_SCHOOL
+		: "/" + school + "/avail"
 
 	return (
 		<>
 			<li {...firstElementProps}>
-				<Link to="/">{t("Schedule")}</Link>
+				{/* TODO SCHOOL_LIST */}
+				<Link to={scheduleLink}>{t("Schedule")}</Link>
 			</li>
 			<li>
-				<Link to="/avail">
+				<Link to={commonAvailLink}>
 					<div>
 						<span
 							className={css`
