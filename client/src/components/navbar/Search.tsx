@@ -36,7 +36,9 @@ export const Search: FC<SearchProps> = ({ searchString, setSearchString, onKeyDo
 	}, []);
 
 	return (
-		<span onKeyDown={onKeyDown}>
+		<div onKeyDown={onKeyDown} className={css`
+			position: relative;
+		`}>
 			<input
 				type="search"
 				name="search"
@@ -50,14 +52,12 @@ export const Search: FC<SearchProps> = ({ searchString, setSearchString, onKeyDo
 
 					border: 0.125em solid #000;
 					border-radius: 0.5em;
-
-					border-top-right-radius: 0;
-					border-bottom-right-radius: 0;
 				`}
 				value={searchString}
 				onChange={(e) => setSearchString(e.target.value)}
 				onFocus={(e) => e.target.select()}
 			/>
+
 			<button
 				type="button"
 				onClick={(_e) => {
@@ -66,6 +66,9 @@ export const Search: FC<SearchProps> = ({ searchString, setSearchString, onKeyDo
 					// searchElementRef?.current?.focus();
 				}}
 				className={css`
+					position: absolute;
+					right: 0;
+
 					/** same as input's - just different borders */
 					font-size: 1.5em;
 					max-width: 12em;
@@ -79,15 +82,13 @@ export const Search: FC<SearchProps> = ({ searchString, setSearchString, onKeyDo
 					border-top-left-radius: 0;
 					border-bottom-left-radius: 0;
 
-					border-left: none; /** avoid double border */
-
 					outline: none;
 					cursor: pointer;
 				`}
 			>
 				X
 			</button>
-		</span>
+		</div>
 	);
 };
 
