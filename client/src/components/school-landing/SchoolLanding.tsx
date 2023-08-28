@@ -9,11 +9,12 @@ import { Navbar } from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import { Archive } from "../../pages/archive/Archive";
 import { CURRENTLY_SUPPORTED_SCHOOLS, SchoolID } from "../../pages/landing/Landing";
+import { useWindow } from "../../hooks/useWindow";
 
 /** TODO FIXME WWidth - this bad boy ain't even re-sizing */
 const SchoolLanding = () => {
 	const [searchString, setSearchString] = useState<string>("");
-
+	const { notDesktop } = useWindow()
 	const [participants] = useFetchParticipants([], []);
 
 	/**
@@ -92,7 +93,11 @@ const SchoolLanding = () => {
 						<Search searchString={searchString} setSearchString={setSearchString} onKeyDown={handleOnKeyDown} />
 					</FancyStickyBackgroundForSearch>
 
-					<ParticipantListList participants={participants} searchString={searchString} />
+					<ParticipantListList participants={participants} searchString={searchString} className={css`
+						${notDesktop} {
+							margin-top: -1rem;
+						}
+					`} />
 
 					<Archive searchString={searchString} />
 				</div>
