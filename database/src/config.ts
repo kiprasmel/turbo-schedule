@@ -20,8 +20,8 @@ export const defaultDatabaseDataDirPath: string =
 
 export const databaseFileName: string = "latest.json";
 
-export const getDatabaseFilepath = (snapshot: string = databaseFileName): string =>
-	path.join(defaultDatabaseDataDirPath, snapshot);
+export const getDatabaseFilepath = (snapshot: string = databaseFileName, jsonSuffix = snapshot.endsWith(".json") ? "" : ".json"): string =>
+	path.join(defaultDatabaseDataDirPath, snapshot + jsonSuffix);
 
 export interface DbSchema {
 	participants: Participant[];
