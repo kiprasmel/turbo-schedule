@@ -14,6 +14,7 @@ import { useSelectedSchool } from "../../hooks/useSelectedSchool";
 import { NavbarMobile } from "./NavbarMobile";
 
 import { StickyInfoOrWarningAboutFreshOrOutdatedData } from "./StickyInfoOrWarningAboutFreshOrOutdatedData";
+import { BadgeBeta } from "../../common/Badge";
 
 interface Props {
 	search?: SearchProps;
@@ -136,6 +137,17 @@ export const NavbarLinksOne: FC<React.HTMLProps<HTMLLIElement>> = (firstElementP
 		// ? "/kpg/avail" // TODO MULTI_SCHOOL
 		: "/" + school + "/avail"
 
+	/**
+	 * TODO: should we include the participant in the url?
+	 *
+	 * i.e. statistics from their perspective?
+	 * is it always the case that someone's perspective is needed,
+	 * or sometimes 0 or >1 is avail?
+	 */
+	const statsLink = !school
+		? "/" /** global /stats is not a concept yet */
+		: "/" + school + "/stats"
+
 	return (
 		<>
 			<li {...firstElementProps}>
@@ -175,6 +187,21 @@ export const NavbarLinksOne: FC<React.HTMLProps<HTMLLIElement>> = (firstElementP
 					</div>
 				</Link>
 			</li>
+			<li>
+				<Link to={statsLink}>
+					<span className={css`
+                         display: inline-flex;
+                         flex-direction: column;
+
+                         position: relative;
+                     `}>
+						<span>
+							{t("Statistics")}
+						</span>
+						<BadgeBeta />
+					</span>
+				</Link>
+			</li>
 			{/* <li>
 				<Link to="/archive">
 					<span
@@ -192,22 +219,6 @@ export const NavbarLinksOne: FC<React.HTMLProps<HTMLLIElement>> = (firstElementP
 					</span>
 				</Link>
 			</li> */}
-			{/* SOON™ */}
-			{/* <li>
-						<Link
-							to={`/${participant.text}`}
-							className={css`
-								border-bottom: 0.125em solid #000;
-								font-weight: bold;
-							`}
-						>
-							{t("Schedule")}
-						</Link>
-					</li>
-					<li>
-						<Link to={`/${participant.text}/stats`}>{t("Statistics")}</Link>
-					</li> */}
-			{/* SOON™ */}
 		</>
 	);
 };

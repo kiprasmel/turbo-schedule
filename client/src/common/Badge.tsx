@@ -8,6 +8,25 @@ type Props = {
 	gapWidth?: number;
 } & React.HTMLProps<HTMLDivElement>;
 
+/**
+ * @example usage:
+ *
+ * ```tsx
+	<Link to={statsLink}>
+		<span className={css`
+				display: inline-flex;
+				flex-direction: column;
+
+				position: relative;
+			`}>
+			<span>
+				{t("Statistics")}
+			</span>
+			<BadgeNew></BadgeNew>
+		</span>
+	</Link>
+ * ```
+ */
 export const Badge: FC<Props> = ({ text, gapWidth = 0, ...rest }) => (
 	<div
 		{...rest}

@@ -10,11 +10,13 @@ import { healthRouter } from "./health";
 import { openAPIDocsJSONHandler, openAPIDocsHTMLHandler } from "./openAPIDocs";
 import { redirectToApiDocs } from "../../util/redirectToApiDocs";
 import { archiveRouter } from "./archive";
+import { statsRouter } from "./stats";
 
 const router: Router = Router();
 
 router.use("/health", healthRouter);
 router.use("/archive", archiveRouter);
+router.use("/stats", statsRouter);
 
 router.use("/participant", participantRouter);
 router.use("/class", classRouter);
