@@ -10,7 +10,7 @@ import { DbSchema } from "./config";
 
 import { CompareDBFiles } from "./compare-db-files";
 import { getDatabaseSnapshotFiles } from "./get-db-snapshot-files";
-import { file2iso } from "./iso2file";
+import { file2iso } from "./paths";
 
 export type DataChangedRet = {
 	changed: boolean;
