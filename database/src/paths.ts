@@ -30,7 +30,12 @@ export function databaseSnapshotNameToFullFilepath(snapshot: string, databaseDir
 		snapshot += DB_FILE_EXT
 	}
 
-	return path.join(databaseDirPath, snapshot);
+	const hasDatabaseDirPath = snapshot.includes(databaseDirPath)
+	if (!hasDatabaseDirPath) {
+		snapshot = path.join(databaseDirPath, snapshot)
+	}
+
+	return snapshot
 }
 
 /**
