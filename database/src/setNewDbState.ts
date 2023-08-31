@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { defaultDatabaseDataDirPath, getDatabaseFilepath, DbSchema, defaultDbState, Db } from "./config";
 import { initDb } from "./initDb";
-import { iso2file } from "./iso2file";
+import { iso2file } from "./paths";
 
 const debug = require("debug")("turbo-schedule:database:setNewDbState");
 

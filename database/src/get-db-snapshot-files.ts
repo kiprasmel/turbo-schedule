@@ -8,6 +8,7 @@ import { getMeaningfulSnapshots } from "./get-meaningful-snapshots";
 import { canCommitMeaningfulSnapshots } from "./commit-database-data-into-archive-if-changed";
 import { lastPath2dateSort } from "./detect-data-changed";
 import { readRawDb } from "./read-raw-db";
+import { DB_FILE_EXT } from "./paths";
 
 export type GetDatabaseSnapshotFilesOpts = {
 	datadir?: string;
@@ -37,7 +38,7 @@ export async function getDatabaseSnapshotFiles({
 	filenamesInsteadOfPaths = false,
 	moreRecentArchivesFirst = true,
 }: GetDatabaseSnapshotFilesOpts): Promise<GetDatabaseSnapshotFilesRet> {
-	const filenames: string[] = fs.readdirSync(datadir).filter((x) => x.endsWith(".json"));
+	const filenames: string[] = fs.readdirSync(datadir).filter((x) => x.endsWith(DB_FILE_EXT));
 
 	if (moreRecentArchivesFirst) {
 		filenames.sort(lastPath2dateSort);

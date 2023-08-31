@@ -13,15 +13,21 @@ import {
 import low from "lowdb";
 import path from "path";
 
+import { databaseSnapshotNameToFullFilepath } from "./paths";
+
+/** TODO MOVE into ./paths */
 export const defaultDatabaseDataDirPath: string =
 	!!process && process.env.NODE_ENV === "test"
 		? path.join(__dirname, "..", "data.test") // "database/data.test/"
 		: path.join(__dirname, "..", "data"); // "database/data/"
 
+/** TODO RENAME `latestDatabaseFilename` */
 export const databaseFileName: string = "latest.json";
 
-export const getDatabaseFilepath = (snapshot: string = databaseFileName, jsonSuffix = snapshot.endsWith(".json") ? "" : ".json"): string =>
-	path.join(defaultDatabaseDataDirPath, snapshot + jsonSuffix);
+/** TODO REMOVE & use the underlying fn instead */
+export const getDatabaseFilepath = (snapshot: string = databaseFileName): string => {
+	return databaseSnapshotNameToFullFilepath(snapshot)
+}
 
 export interface DbSchema {
 	participants: Participant[];

@@ -9,7 +9,7 @@ import { initDb } from "./initDb";
 /** TODO get rid of this & have it here */
 // eslint-disable-next-line import/no-cycle
 import { DbStateReturn } from "./setNewDbState";
-import { iso2file } from "./iso2file";
+import { databaseSnapshotNameToFullFilepath } from "./paths";
 
 const debug = require("debug")("turbo-schedule:database:setDbState");
 
@@ -36,75 +36,84 @@ export async function setDbState(
 	};
 }
 
+export type OnDestinationAlreadyExists = "do-nothing" | "create-another"
+export type BackupDbStateOpts = {
+	onDestinationAlreadyExists?: OnDestinationAlreadyExists
+}
+
 /**
- * backs up the current database file into a filename
- * that's name composed of the state's `timeStartISO`
+ * backs up a database snapshot file (usually the latest one)
+ * into a its own file, which will be named based on the scrapeInfo.timeStartISO.
  */
-export async function backupDbState(currentDatabaseFilePath: string = getDatabaseFilepath()): Promise<void> {
-	const currentFileExists: boolean = await fs.pathExists(currentDatabaseFilePath);
-	debug("backupDbState: currentFileExists =", currentFileExists, "; file =", currentDatabaseFilePath);
+export async function backupDbState(
+	snapshot: string = databaseFileName,
+	{
+		onDestinationAlreadyExists = "create-another"
+	}: BackupDbStateOpts = {}
+): Promise<string | null> {
+	const snapshotFilepath: string = getDatabaseFilepath(snapshot);
+	const currentFileExists: boolean = await fs.pathExists(snapshotFilepath);
+	debug("backupDbState: currentFileExists =", currentFileExists, "; file =", snapshotFilepath);
 
 	if (!currentFileExists) {
-		const msg = `an explicit backup of the database state was requested, but path of current database file was non-existing. path = ${currentDatabaseFilePath}`
+		const msg = `an explicit backup of the database state was requested, but path of current database file was non-existing. path = ${snapshotFilepath}`
 		console.warn(msg)
-		return;
+		return null;
 	}
 
-	const db: Db = await initDb();
+	const db: Db = await initDb(snapshot);
+	const timeStartISO: string = await db.get("scrapeInfo").value().timeStartISO || new Date().toISOString();
 
-	const { dir } = path.parse(currentDatabaseFilePath);
-
-	const filenameExt: string = "json";
-	const { timeStartISO } = await db.get("scrapeInfo").value() || new Date();
-	const filename = iso2file(timeStartISO + "." + filenameExt);
-
-	let backupDestinationPath: string = path.join(dir, filename);
+	let backupDestinationPath: string = databaseSnapshotNameToFullFilepath(timeStartISO)
 
 	/**
 	 * it's possible that a collision could happen (the backup file with the same name already exists),
 	 * and thus we handle this situation
 	 */
 	if (await fs.pathExists(backupDestinationPath)) {
-		/** cut `.json` */
-		backupDestinationPath = backupDestinationPath.slice(0, -1 - filenameExt.length);
+		if (onDestinationAlreadyExists === "do-nothing") {
+			return null
+		}
 
-		let numberOfTries = 0;
-		backupDestinationPath += `.${numberOfTries}`;
+		let nth = 0
+		const getPotentialPath = (x: string): string => x + "." + nth
 
-		do {
-			/** remove the `.XYZ` */
-			backupDestinationPath = backupDestinationPath.slice(0, -1 - numberOfTries.toString().length);
-
-			/** append `.(XYZ + 1) */
-			numberOfTries++;
-			backupDestinationPath += `.${numberOfTries}`;
-
-			/** & repeat until we finally get a unique filename */
-		} while (await fs.pathExists(backupDestinationPath));
-
-		/** bring back the `.json` */
-		backupDestinationPath += `.${filenameExt}`;
+		while (true) {
+			++nth
+			const potentialPath: string = getPotentialPath(backupDestinationPath)
+			const exists: boolean = await fs.pathExists(potentialPath)
+			if (!exists) {
+				backupDestinationPath = potentialPath
+				break
+			}
+		}
 	}
 
 	debug("backupDbState: backupDestinationPath = ", backupDestinationPath);
 
-	await fs.copyFile(currentDatabaseFilePath, backupDestinationPath);
+	await fs.copyFile(snapshotFilepath, backupDestinationPath);
+
+	return backupDestinationPath;
 }
 
-/**
- * backs up the current state / file, and then overrides the current state
- * (without affecting the backup)
- */
 export async function setDbStateAndBackupCurrentOne(
 	newState: Partial<DbSchema> = {},
-	currentDatabaseFileName: string = databaseFileName
+	currentDatabaseFilename: string = databaseFileName,
 ): Promise<DbStateReturn> {
-	/** make a backup to a different file */
-	const fullDbFilePath = getDatabaseFilepath(currentDatabaseFileName)
-	await backupDbState(fullDbFilePath);
+	/** make a backup to its own file, if doesn't exist already */
+	await backupDbState(currentDatabaseFilename, { onDestinationAlreadyExists: "do-nothing" });
 
 	/** override the state in the current file */
-	const result: DbStateReturn = await setDbState(newState, currentDatabaseFileName);
+	const result: DbStateReturn = await setDbState(newState, currentDatabaseFilename);
+
+	/**
+	 * store the (now new) current database file into its own file,
+	 * so that will be available immediatelly as its own file,
+	 * instead of waiting for the next backup to happen.
+	 *
+	 * needed for e.g. `commitDatabaseDataIntoArchiveIfChanged`
+	 */
+	await backupDbState(currentDatabaseFilename, { onDestinationAlreadyExists: "create-another" })
 
 	return result;
 }
