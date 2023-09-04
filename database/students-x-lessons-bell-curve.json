@@ -1,0 +1,501 @@
+{
+  "students": {
+    "28": [
+      "Mizgiris Vykintas IVGd",
+      "Čepelevas Sidas IVGa"
+    ],
+    "29": [
+      "Rimkus Neilas IIIGc",
+      "Diminskytė Kamilė IIIGd",
+      "Miežetytė Agnė IIIGd",
+      "Druskinytė Deimantė IIIGc",
+      "Šleinius Pranas IIIGd",
+      "Staponas Nedas IVGd",
+      "Šiuipytė Urtė IIIGb",
+      "Mizgiris Paulius IVGe",
+      "Beniušytė Gustė IVGb",
+      "Trakytė Karolina IVGd",
+      "Macius Dovydas IVGc",
+      "Stonkutė Martyna IVGe",
+      "Zenkovas Edas IVGe",
+      "Jonutis Martynas IVGc",
+      "Šauklytė Darija IVGd",
+      "Šalkauskas Edvinas IVGb",
+      "Anužytė Fausta IVGa",
+      "Cibulskas Nojus IVGa",
+      "Valaitis Karolis IVGa",
+      "Jurgilaitė Anelė IVGc"
+    ],
+    "30": [
+      "Šalnytė Agota IIIGb",
+      "Žukovskis Eligijus IIIGd",
+      "Lesutytė Marija IVGc",
+      "Grikštaitė Augustė IVGd",
+      "Bončkus Martynas IVGb",
+      "Domarkas Agnius IVGb",
+      "Vaičiūtė Egidija IIIGd",
+      "Kareckas Arnas IVGa",
+      "Zakarauskas Aronas IVGa",
+      "Keblys Matas IVGe",
+      "Špuntovaitė Neringa IVGa",
+      "Mačernis Martynas IVGe",
+      "Tamošauskaitė Beatričė IVGe",
+      "Grigalevičiūtė Gabrielė IVGb",
+      "Kiškytė Kotryna IVGb",
+      "Urbonavičius Vėjas IVGc",
+      "Jonuškevičiūtė Gintarė IVGb",
+      "Kvecytė Smiltė IVGb",
+      "Tamošauskis Lukas IIIGa",
+      "Gedrimaitė Gerda IVGa",
+      "Žiubrys Justas IVGa"
+    ],
+    "31": [
+      "Armalytė Luka IIIGa",
+      "Jedenkutė Kamilė IIIGa",
+      "Liaudinskaitė Vanesa IIIGa",
+      "Pociūtė Neda IIIGa",
+      "Zybartaitė Adriana IIIGb",
+      "Gudauskaitė Diminyka IIIGc",
+      "Januškaitė Ieva IIIGc",
+      "Ramonas Domantas IIIGc",
+      "Vaičekauskaitė Agneta IIIGb",
+      "Narvilas Edgaras IIIGa",
+      "Raminas Edvinas IIIGa",
+      "Benetytė Nortė IIIGb",
+      "Kerpytė Saulė IIIGb",
+      "Paulauskas Augustinas IIIGb",
+      "Stonkus Kostas Kazys IIIGd",
+      "Stripeikaitė Urtė IVGb",
+      "Dapkutė Gabija IVGc",
+      "Balčytis Gustavas IVGd",
+      "Šimkutė Klaudija IVGe",
+      "Paulauskas Karolis IVGa",
+      "Gimbutas Mykolas IVGb",
+      "Ruika Aurimas IVGb",
+      "Girskytė Greta IIIGa",
+      "Kazlauskas Jonas IIIGa",
+      "Neverauskas Dominykas IIIGa",
+      "Serapinas Mykolas IIIGd",
+      "Norvilas Nojus IIIGd",
+      "Talmontaitė Kamilė IIIGd",
+      "Pucaitė Viltė Marija IVGa",
+      "Anužis Arnas IVGe",
+      "Misiūtė Emilija IVGe",
+      "Jedenkus Dovydas IVGa",
+      "Kripaitė Martyna IVGb",
+      "Martinaitis Antanas IVGb",
+      "Norvilaitė Erika IVGd",
+      "Markauskaitė Smiltė IVGd",
+      "Melnikova Miglė IVGd",
+      "Petrauskytė Gintarė IVGb",
+      "Spučys Kornelijus IVGb",
+      "Vizgirdaitė Samanta IVGb",
+      "Žurlis Mantas IVGb",
+      "Jokubauskaitė Darina IIIGd",
+      "Urbonaitė Gintarė IVGd"
+    ],
+    "32": [
+      "Zandovaitė Elinga IIIGc",
+      "Želvys Eduardas Nedas IIIGd",
+      "Mykolaitytė Paula IIIGb",
+      "Kurlinkus Jonas IIIGc",
+      "Prišmontas Armandas IIIGc",
+      "Samulionytė Kamilė IIIGc",
+      "Senūtaitė Karolina IIIGc",
+      "Viršilaitė Dominyka IIIGa",
+      "Stroputė Airida IIIGb",
+      "Ceinoriūtė Gabija IVGa",
+      "Miežetis Dominykas IVGc",
+      "Paulauskaitė Gabija IVGc",
+      "Stropus Nedas IVGc",
+      "Vaikėnaitė Gita IVGc",
+      "Čičiūnas Edvardas IVGd",
+      "Kaubrys Emilis IVGb",
+      "Mažonytė Kamilė IIIGb",
+      "Športkaitė Austėja IIIGb",
+      "Špučytė Paulina IIIGb",
+      "Kniukštaitė Augustė IIIGc",
+      "Petrauskaitė Kamilė IIIGc",
+      "Pilybaitė Brigita IIIGc",
+      "Burbaitė Evelina IIIGd",
+      "Petraitytė Enrika IIIGd",
+      "Šakinis Deividas IIIGc",
+      "Urbonavičius Elijus IIIGa",
+      "Vaičiūtė Sandra IIIGc",
+      "Adomavičius Žilvinas IIIGd",
+      "Paulauskaitė Austėja IVGa",
+      "Žeimytė Mantė IVGa",
+      "Šutaitė Rugilė IVGe",
+      "Pauliukonis Rokas IVGd",
+      "Čičiūnaitė Kotryna IVGd",
+      "Valiūnas Tomas IVGd",
+      "Laukineitytė Doviltė IVGb",
+      "Tamošauskaitė Gabija IVGb",
+      "Mažonaitė Ieva IVGa",
+      "Zeigis Vilius IVGa"
+    ],
+    "33": [
+      "Stonkutė Ugnė IIIGc",
+      "Žemaitytė Mintautė IVGb",
+      "Tkhir Natalija IVGd",
+      "Gedutis Mantas IVGd",
+      "Petravičiūtė Beatričė IIIGa",
+      "Krugelytė Viltė IVGa",
+      "Dulcaitė Augustė IVGa",
+      "Viščiūnaitė Kotryna IVGb",
+      "Vaitkevičiūtė Laura IVGa",
+      "Jurėnaitė Auksė IVGe",
+      "Kazakevičiūtė Marija IVGe",
+      "Mažonytė Greta IVGe",
+      "Bružas Gustas IVGc",
+      "Matulaitytė Emilija IVGd",
+      "Miltinis Salvijus IVGb",
+      "Kiškys Matas IVGc"
+    ],
+    "34": [
+      "Safronovaitė Žaneta IIIGa",
+      "Bernotaitė Augustė IIIGb",
+      "Budreckytė Beatričė IIIGc",
+      "Paulauskaitė Augustė IVGc",
+      "Tarikas Martynas IVGc",
+      "Baltūsis Martynas IVGd",
+      "Adomavičiūtė Lukrecija IVGe",
+      "Steckytė Skaiva IVGe",
+      "Anužis Julius IVGc",
+      "Mikalauskis Gvidas IIIGd",
+      "Kutkevičius Kasparas IVGa",
+      "Strakšytė Skaiva IVGd"
+    ],
+    "35": [
+      "Kindurys Lukas IIIGa",
+      "Lūža Edgaras IIIGa",
+      "Mickus Edvinas IIIGa",
+      "Ūbaitė Karolina IIIGa",
+      "Vaitelavičius Juras IIIGb",
+      "Navasaitytė Urtė IIIGc",
+      "Daraškevičiūtė Lauryna IIIGd",
+      "Rožmanovas Nojus IIIGd",
+      "Žukauskaitė Brigita IIIGd",
+      "Derkintis Karolis IIIGa",
+      "Domarkas Gintaras IIIGa",
+      "Jucius Rokas IIIGa",
+      "Burba Aleksas IIIGb",
+      "Grišmanauskas Linas IIIGb",
+      "Stanislauskas Dominykas IIIGb",
+      "Budrikis Matas IIIGc",
+      "Mažonaitė Dominyka IVGc",
+      "Bernotas Hugas IVGd",
+      "Šolinskaitė Elinga IIIGa",
+      "Bačiulis Matas IIIGb",
+      "Skripkauskaitė Agnė IIIGc",
+      "Girdenis Matas IIIGd",
+      "Totilas Julius IIIGd",
+      "Motužytė Agnė IVGa",
+      "Biliūtė Augustė IVGd",
+      "Kauneckaitė Aušrinė IVGd"
+    ],
+    "36": [
+      "Rumbutytė Smiltė IIIGa",
+      "Brazauskaitė Gustė IIIGa",
+      "Klumbytė Gustė IIIGb",
+      "Šimkus Titas IIIGb",
+      "Šiaudvytis Jokūbas IIIGc",
+      "Jašinskaitė Deimantė IIIGd",
+      "Žilytė Marija IIIGd",
+      "Gotautaitė Emilija IIIGb",
+      "Rimutytė Emilija IIIGb",
+      "Gimbutaitė Morta IIIGc",
+      "Pociūtė Austėja IIIGd",
+      "Preibys Lukas IIIGd",
+      "Stupelis Artūras IIIGc",
+      "Valys Domas IIIGc",
+      "Valužis Lukas IIIGa",
+      "Jonkutė Goda IIIGd",
+      "Kazlauskaitė Aistė IVGe",
+      "Žilys Osvaldas IVGb",
+      "Urbonaitė Ieva IVGc"
+    ],
+    "37": [
+      "Pakalniškis Augustas IIIGd"
+    ]
+  },
+  "classes": {
+    "5": [
+      "1b",
+      "1a",
+      "2a"
+    ],
+    "7": [
+      "3b",
+      "3a",
+      "2b"
+    ],
+    "28": [
+      "5a",
+      "5b",
+      "5c",
+      "5d"
+    ],
+    "31": [
+      "6b",
+      "6c",
+      "6d"
+    ],
+    "32": [
+      "6a",
+      "8d"
+    ],
+    "33": [
+      "7a",
+      "7b",
+      "7d",
+      "7e",
+      "8b",
+      "8c",
+      "8e",
+      "IIGa",
+      "IIGb",
+      "IIGc",
+      "IIGd"
+    ],
+    "34": [
+      "7c"
+    ],
+    "35": [
+      "8a",
+      "IGa",
+      "IGb",
+      "IGc",
+      "IGd"
+    ]
+  },
+  "teachers": {
+    "1": [
+      "(10:55) A301 sporto salė",
+      "(12:10) A301 sporto salė",
+      "(08:55) A301 sporto salė",
+      "(13:10) A301 sporto salė",
+      "(15:05) A301 sporto salė"
+    ],
+    "2": [
+      "(9:55) A301 sporto salė",
+      "Jankuvienė Rūta"
+    ],
+    "4": [
+      "Mačėnaitė Sigutė",
+      "Žiubrienė Roberta",
+      "Mizgirienė Aušra",
+      "Grajauskienė Livija",
+      "Krikščiūnaitė-Buitvydė Vaiva"
+    ],
+    "5": [
+      "Šneideraitis Antanas"
+    ],
+    "8": [
+      "Silickienė Liuda",
+      "Kiberlienė Ema"
+    ],
+    "12": [
+      "Bėrantaitė Aurelija"
+    ],
+    "13": [
+      "Mackevičius Vaidas"
+    ],
+    "14": [
+      "Mackevičienė Toma"
+    ],
+    "15": [
+      "Puškorienė Irena"
+    ],
+    "16": [
+      "Tutinienė Janina"
+    ],
+    "18": [
+      "Kulvietis Aleksas Eugenijus",
+      "Novikienė Rima"
+    ],
+    "19": [
+      "Padriezienė Ilona",
+      "Zemdliauskaitė Rasa"
+    ],
+    "20": [
+      "Kalniuvienė Irma",
+      "Arlauskienė Giedrė",
+      "Adomaitis Vilius"
+    ],
+    "21": [
+      "Račkuvienė Dovilė",
+      "Urbonas Arūnas"
+    ],
+    "22": [
+      "Norvaišienė Regina",
+      "Špokauskienė Olivija",
+      "Muraškaitė Martyna",
+      "Kuprelis Vaidas",
+      "Miežetienė Edita"
+    ],
+    "23": [
+      "Domarkienė Vilma",
+      "Žiubrienė Remigija",
+      "Valiūnienė Virginija",
+      "Zaborienė Gražina",
+      "Baltūsienė Violeta",
+      "Galinskaitė Živilė"
+    ],
+    "24": [
+      "Šidlauskaitė Dainora",
+      "Gagytė Alina",
+      "Raudienė Audronė",
+      "Ančerytė Danutė",
+      "Simaitienė Jolanta",
+      "Paulauskienė Kristina",
+      "Kavoliūnienė Virgilija",
+      "Šedienė Irma",
+      "Žygaitienė Rasa"
+    ],
+    "25": [
+      "Gumbaragienė Raimonda",
+      "Kaulius Kęstutis",
+      "Drąsutytė-Stanienė Lina",
+      "Slušnys Arnoldas",
+      "Ataitė Daiva"
+    ],
+    "26": [
+      "Švitrienė Vilma",
+      "Žiubrys Rolandas"
+    ],
+    "27": [
+      "Meilienė Vilma",
+      "Jucytė Lina"
+    ],
+    "28": [
+      "Kybartienė Dalia",
+      "Palilionytė Agnė",
+      "Černeckienė Irena",
+      "Cegelnikienė Aurelija"
+    ],
+    "29": [
+      "Verseckienė Stanislava",
+      "Čičiūnienė Reda",
+      "Odinienė Lina",
+      "Bružienė Laima"
+    ],
+    "30": [
+      "Macienė Genovaitė",
+      "Petrauskienė Jolanta",
+      "Budrienė Audronė"
+    ],
+    "31": [
+      "Bambalaitė Jovita",
+      "Buožius Egidijus"
+    ],
+    "32": [
+      "Šidlauskaitė Birutė",
+      "Bastienė Ada"
+    ],
+    "34": [
+      "Būgienė Inga"
+    ]
+  },
+  "rooms": {
+    "4": [
+      "K215 choreografijos salė"
+    ],
+    "15": [
+      "K102 anglų k."
+    ],
+    "17": [
+      "K401 anglų k."
+    ],
+    "18": [
+      "K105 ispanų k.",
+      "K204 anglų k.",
+      "A309 anglų k.",
+      "A209 tikybos"
+    ],
+    "19": [
+      "K206 vokiečių",
+      "A keramikos",
+      "K216 tikybos",
+      "K306 matematikos",
+      "A302 chemijos"
+    ],
+    "20": [
+      "K310 istorijos",
+      "A307 prancūzų k."
+    ],
+    "21": [
+      "K114 anglų k.",
+      "K308 gamtos",
+      "K106 Sporto salė (b)"
+    ],
+    "22": [
+      "K311 anglų k."
+    ],
+    "23": [
+      "A214 anglų k.",
+      "A306 anglų k.",
+      "K112 dailės",
+      "K316 tikybos",
+      "A313 anglų k.",
+      "A104 socialinių m.",
+      "Dirbtuvės 1",
+      "A207 matematikos",
+      "A3D"
+    ],
+    "24": [
+      "K205 geografijos",
+      "K307 istorijos",
+      "A108 muzikos",
+      "A204 lietuvių k.",
+      "A210 lietuvių k."
+    ],
+    "25": [
+      "K103 muzikos k.",
+      "K405 biologijos",
+      "A technologijų",
+      "K104 lietuvių k.",
+      "A212 lietuvių k."
+    ],
+    "26": [
+      "K113 lietuvių k.",
+      "K403 chemijos"
+    ],
+    "27": [
+      "A100 istorijos",
+      "A311 lietuvių k.",
+      "K309 matematikos",
+      "K404 gamtos"
+    ],
+    "28": [
+      "A312 matematikos",
+      "Dirbtuvės 2",
+      "K402 fizikos",
+      "K101 rusų k."
+    ],
+    "29": [
+      "A205 matematikos",
+      "K304 informacinių technologijų",
+      "K207 lietuvių",
+      "A213 matematikos"
+    ],
+    "30": [
+      "K312 lietuvių k. rusų k.",
+      "K208 matematikos"
+    ],
+    "31": [
+      "A103 soc. mokslų",
+      "K305 informacinių technologijų"
+    ],
+    "32": [
+      "K209 lietuvių",
+      "K106 Sporto salė (a)"
+    ],
+    "33": [
+      "A301 sporto salė"
+    ],
+    "34": [
+      "A101 ekonomikos matematikos"
+    ]
+  }
+}

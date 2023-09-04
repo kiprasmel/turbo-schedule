@@ -48,6 +48,8 @@ export interface Lesson extends Omit<NonUniqueLesson, "participants"> {
 	rooms: Array<Room["id"]>;
 }
 
+export const ParticipantKindsInLesson: readonly ("students" | "classes" | "teachers" | "rooms")[] = ["students", "classes", "teachers", "rooms"]
+
 export const getDefaultNonUniqueLesson = (): NonUniqueLesson => ({
 	id: "",
 

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+
+		<style>
+			#bellCurveChart {
+				width: 800px !important;
+				height: 500px !important;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="bellCurveChart"></canvas>
+
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script>
+			function getData() {
+				return [
+					{
+						x: "28",
+						y: 2
+					},
+					{
+						x: "29",
+						y: 20
+					},
+					{
+						x: "30",
+						y: 21
+					},
+					{
+						x: "31",
+						y: 43
+					},
+					{
+						x: "32",
+						y: 38
+					},
+					{
+						x: "33",
+						y: 16
+					},
+					{
+						x: "34",
+						y: 12
+					},
+					{
+						x: "35",
+						y: 26
+					},
+					{
+						x: "36",
+						y: 19
+					},
+					{
+						x: "37",
+						y: 1
+					}
+				];
+			}
+
+			// Generate random data for the bell curve
+			function generateData() {
+				const data = [];
+				const mean = 0; // Mean of the normal distribution
+				const stdDev = 1; // Standard deviation of the normal distribution
+
+				for (let x = -50; x <= 50; x += 1) {
+					const y =
+						(1 / (stdDev * Math.sqrt(2 * Math.PI))) *
+						Math.exp(-0.5 * Math.pow((x / 10 - mean) / stdDev, 2));
+					data.push({ x, y });
+				}
+
+				console.log({ data });
+				return data;
+			}
+
+			// Create the bell curve chart
+			function createBellCurveChart() {
+				const canvas = document.getElementById("bellCurveChart");
+
+				if (!canvas) {
+					return;
+				}
+
+				const ctx = canvas.getContext("2d");
+
+				// const data = generateData();
+				const data = getData();
+
+				new Chart(ctx, {
+					type: "bar",
+					data: {
+						datasets: [
+							{
+								data,
+								label: "",
+								borderColor: "blue",
+								backgroundColor: "blue",
+								pointRadius: 5,
+								showLine: false
+							}
+						]
+					},
+					options: {
+						scales: {
+							x: {
+								title: {
+									display: true,
+									text: "Pamokų skaičius"
+								}
+							},
+							y: {
+								title: {
+									display: true,
+									text: "Mokiniai"
+								}
+							}
+						}
+					}
+				});
+			}
+
+			// Call the function to create the chart
+			createBellCurveChart();
+		</script>
+	</body>
+</html>

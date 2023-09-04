@@ -104,3 +104,5 @@ export const findParticipantsWithMultipleLessonsInSameTime = (
 
 	return dupes;
 };
+
+export const ParticipantLabels: ParticipantLabel[] = ["student", "class", "teacher", "room"]
