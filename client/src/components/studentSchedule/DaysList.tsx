@@ -5,12 +5,14 @@ import React, { FC } from "react";
 import { css } from "emotion";
 import { scheduleDaysArray, ScheduleDay } from "../../utils/selectSchedule";
 
+import { dayIndexPretty } from "./day-index";
+
 interface Props {
 	selectedDay: ScheduleDay;
-	setSelectedDay: React.Dispatch<React.SetStateAction<ScheduleDay>>;
+	onSelectDay: (day: ScheduleDay) => void
 }
 
-export const DaysList: FC<Props> = ({ selectedDay, setSelectedDay }) => (
+export const DaysList: FC<Props> = ({ selectedDay, onSelectDay }) => (
 	<nav
 		className={css`
 			/* background: lightcyan; */
@@ -73,7 +75,7 @@ export const DaysList: FC<Props> = ({ selectedDay, setSelectedDay }) => (
 
 					<button
 						type="button"
-						onClick={(_e) => setSelectedDay(dayIndex)}
+						onClick={(_e) => onSelectDay(dayIndex)}
 						className={css`
 										display: flex;
 										align-items: center;
@@ -86,7 +88,7 @@ export const DaysList: FC<Props> = ({ selectedDay, setSelectedDay }) => (
 										/* ${dayIndex === selectedDay && "font-weight: 700; background: #000; color: lightcyan;"} */
 									`}
 					>
-						<span>{dayIndex === "*" ? dayIndex : dayIndex + 1}</span>
+						<span>{dayIndexPretty(dayIndex)}</span>
 					</button>
 				</li>
 			))}

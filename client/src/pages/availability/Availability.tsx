@@ -2,7 +2,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable indent, no-multi-str, flowtype/space-after-type-colon */
 
-import React, { FC, useState, useEffect, useRef, useReducer, useCallback, useMemo, startTransition } from "react";
+import React, { FC, useState, useEffect, useRef, useReducer, useCallback, useMemo } from "react";
 import { cx, css } from "emotion";
 
 import { Availability as IAvailability, Participant, WantedParticipant } from "@turbo-schedule/common";
@@ -54,19 +54,17 @@ const mapRatioToHSBThroughBrightness = (ratio: number, start: number = 0, end: n
 	return `hsla(${hue}, ${saturation}%, ${lightness}%, ${Math.max(0.05, 1 - alpha)})`;
 };
 
+const invalidEnDeVal = -1;
+const defaultNumberEnde: EncoderDecoder<number> = {
+	encode: (x) => (x === invalidEnDeVal ? "" : x.toString()), //
+	decode: (x) => (!x ? invalidEnDeVal : Number(x)),
+};
+
 export const Availability: FC = () => {
 	const t = useTranslation();
 
-	const invalidEnDeVal = -1;
-	const ende: EncoderDecoder<number> = useMemo(
-		() => ({
-			encode: (x) => (x === invalidEnDeVal ? "" : x.toString()), //
-			decode: (x) => (!x ? invalidEnDeVal : Number(x)),
-		}),
-		[invalidEnDeVal]
-	);
-	const [selectedDay, setSelectedDay] = useQueryFor("day", ende);
-	const [selectedTime, setSelectedTime] = useQueryFor("time", ende);
+	const [selectedDay, setSelectedDay] = useQueryFor("day", defaultNumberEnde);
+	const [selectedTime, setSelectedTime] = useQueryFor("time", defaultNumberEnde);
 
 	const hasSelectedExtraInfo: boolean =
 		/* wantedParticipants.length === 0 ? false : */
@@ -175,13 +173,13 @@ export const Availability: FC = () => {
 				| WantedParticipant[]
 				| ((currentlyWantedParticipants: WantedParticipant[]) => WantedParticipant[])
 		): void => {
-			startTransition(() => {
+			// startTransition(() => {
 				if (typeof newWantedParticipants === "function") {
 					__setWantedParticipants(newWantedParticipants(wantedParticipants));
 				} else {
 					__setWantedParticipants(newWantedParticipants);
 				}
-			});
+			// });
 		},
 		[__setWantedParticipants, wantedParticipants]
 	);
@@ -258,7 +256,7 @@ export const Availability: FC = () => {
 	const unselectAvailability = useCallback(() => {
 		setSelectedDay(invalidEnDeVal);
 		setSelectedTime(invalidEnDeVal);
-	}, [setSelectedDay, setSelectedTime, invalidEnDeVal]);
+	}, [setSelectedDay, setSelectedTime]);
 
 	const availabilityGridRef = useRef<HTMLDivElement>(null);
 
@@ -795,8 +793,6 @@ export const Availability: FC = () => {
 										<ParticipantListItem
 											key={p.participant}
 											participant={p.participant}
-											dayIndex={selectedAvailability.dayIndex}
-											timeIndex={selectedAvailability.timeIndex}
 										/>
 									))}
 								</ul>
@@ -811,8 +807,6 @@ export const Availability: FC = () => {
 										<ParticipantListItem
 											key={`${p.participant}/${p.lesson.id}`}
 											participant={p.participant}
-											dayIndex={selectedAvailability.dayIndex}
-											timeIndex={selectedAvailability.timeIndex}
 										>
 											{" "}
 											({p.lesson.name})

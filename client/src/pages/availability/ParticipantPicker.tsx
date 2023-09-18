@@ -5,7 +5,6 @@ import React, {
 	useCallback,
 	PropsWithChildren,
 	ReactElement,
-	startTransition,
 	useMemo,
 } from "react";
 import { css, cx } from "emotion";
@@ -86,13 +85,13 @@ function ParticipantSubsetPicker<T extends WantedParticipant = WantedParticipant
 
 	const handleCheckboxClick = useCallback(
 		(p: T) => (isSelected: boolean): void => {
-			startTransition(() => {
+			// startTransition(() => {
 				if (isSelected) {
 					setWantedParticipants([...wantedParticipants, p]);
 				} else {
 					setWantedParticipants(wantedParticipants.filter((x) => x.text !== p.text));
 				}
-			});
+			// });
 		},
 		[wantedParticipants, setWantedParticipants]
 	);

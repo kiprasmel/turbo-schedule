@@ -1,33 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { css } from "emotion";
-
-import { Participant } from "@turbo-schedule/common";
 
 import { useFetchParticipants } from "../../hooks/useFetchers";
 import { history } from "../../utils/history";
 import { ParticipantListList } from "../studentSchedule/ParticipantList";
-import { Search } from "../navbar/Search";
+import { FancyStickyBackgroundForSearch, Search } from "../navbar/Search";
 import { Navbar } from "../navbar/Navbar";
 import Footer from "../footer/Footer";
+import { Archive } from "../../pages/archive/Archive";
 
 /** TODO FIXME WWidth - this bad boy ain't even re-sizing */
 const Landing = () => {
 	const [searchString, setSearchString] = useState<string>("");
 
 	const [participants] = useFetchParticipants([], []);
-	const [matchingParticipants, setMatchingParticipants] = useState<Participant[]>([]);
 
-	useEffect(() => {
-		if (!searchString || !searchString.trim()) {
-			setMatchingParticipants(participants);
-		}
-
-		const newParticipants: Participant[] = participants.filter(
-			({ text }) => !!text.toLowerCase().match(searchString.toLowerCase())
-		);
-
-		setMatchingParticipants(newParticipants);
-	}, [searchString, participants]);
+	const matchingParticipants: any[] = [] // TODO FIXME - enable back together with `isOnlyOneMatchingParticipant`.
 
 	/**
 	 *  select first autoCompletion
@@ -53,18 +41,28 @@ const Landing = () => {
 			>
 				<Navbar disableWarningAboutOutdatedData />
 
+				{/* TODO: extract into "reusables" `CompleteParticipantSearch` */}
 				<div
 					className={css`
-						margin-top: 2em;
+						margin-top: 1em;
 						margin-bottom: 1em;
 
 						& > * + * {
-							margin-top: 4em;
+							margin-top: 2.7em;
 						}
+
+						margin-bottom: 3rem;
+
+						position: relative;
 					`}
 				>
-					<Search searchString={searchString} setSearchString={setSearchString} onKeyDown={handleOnKeyDown} />
-					<ParticipantListList participants={matchingParticipants} />
+					<FancyStickyBackgroundForSearch>
+						<Search searchString={searchString} setSearchString={setSearchString} onKeyDown={handleOnKeyDown} />
+					</FancyStickyBackgroundForSearch>
+
+					<ParticipantListList participants={participants} searchString={searchString} />
+
+					<Archive searchString={searchString} />
 				</div>
 			</div>
 

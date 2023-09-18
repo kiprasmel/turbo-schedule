@@ -28,7 +28,7 @@ import { scrapeScheduleItemListFactory } from "./util/scrapeScheduleItemList";
 import { createPageVersionIdentifier } from "./util/createPageVersionIdentifier";
 import { extractLessonsFromIndividualHtmlPage } from "./util/extractLessons";
 
-export const scrape = async (config: IScraperConfig): Promise<void> => {
+export const scrape = async (config: IScraperConfig): Promise<ScrapeInfo> => {
 	try {
 		const startTime: Date = new Date();
 
@@ -70,12 +70,9 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 		/** TODO typescript should do this \/ automatically */
 		// let participants2D: OrderedParticipants2D = participantCollectors.map((collector) =>
 		let participants2D: Participant[][] = participantCollectors.map((collector) =>
-			scrapeScheduleItemListFactory(
-				collector.from,
-				collector.to,
-				collector.labels,
-				collector.initializer
-			)(frontPageHtml)
+			scrapeScheduleItemListFactory(collector.from, collector.to, collector.labels, collector.initializer)(
+				frontPageHtml
+			)
 		);
 
 		if (process.env.FAST !== undefined && process.env.FAST !== null && process.env.FAST !== "") {
@@ -157,7 +154,8 @@ export const scrape = async (config: IScraperConfig): Promise<void> => {
 
 		console.log("\n -> scraper finished \n\n");
 		console.table(scrapeInfo);
-		return;
+
+		return scrapeInfo;
 	} catch (err) {
 		console.error("\nError! \n==> `@turbo-schedule/scraper`\n -> function `scrape`");
 		throw err;

@@ -36,6 +36,7 @@ The following environment variables affect some parts of the functionality
 | `START_SCRAPER_NOW`                 | Start scrapping schedule data immediately instead of when it gets updated / periodically todo.                                                                                                                                |
 | `FAST`                              | (only applicable if data is being scraped) scrape only a limited amount of users from the schedule instead of all of them. Useful for prototyping/debugging the scraper without overloading the upstream.                     |
 | `USE_FAKE_DATA_INSTEAD_OF_SCRAPING` | Forget the scraper -- just use some fake data bro.                                                                                                                                                                            |
+| `ARCHIVE_DEPLOY_KEY`                | give a valid ssh deploy key to make the server commit database files which have new changes, and push them to the https://github.com/kiprasmel/turbo-schedule-archive
 
 ## Adding a new package folder (like `server` or `database`)
 

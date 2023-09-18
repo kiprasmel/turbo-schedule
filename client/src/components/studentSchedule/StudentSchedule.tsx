@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, FC } from "react";
+import { match as Match } from "react-router-dom";
+import { css } from "emotion";
 
-import { Lesson, Student, ParticipantLabel, getDefaultParticipant } from "@turbo-schedule/common";
+import { snapshot2pretty } from "@turbo-schedule/database/dist/archive/Snapshot"; // TODO non-node exports so that importing from default won't error
 
-import "./StudentSchedule.scss";
+import "./StudentSchedule.css";
 
 import { useWindow } from "../../hooks/useWindow";
 import { useAddMostRecentParticipantOnPageChange } from "../../hooks/useLRUCache";
@@ -12,18 +14,32 @@ import StudentListModal from "./StudentListModal";
 import Loading from "../../common/Loading";
 import BackBtn from "../../common/BackBtn";
 
-import { useFetchParticipant } from "../../hooks/useFetchers";
 import DaySelector from "./DaySelector";
-import { ScheduleDay, getTodaysScheduleDay } from "../../utils/selectSchedule";
 import { useTranslation } from "../../i18n/useTranslation";
 import { SchedulePageDesktop } from "./SchedulePageDesktop";
 import { LessonsList } from "./LessonsList";
+import { SSMachineState, StudentScheduleMachineProvider, getStuffFromSSM, useStudentScheduleMachine } from "./student-schedule-machine";
 
-export interface IStudentScheduleProps {
-	match: any /** TODO */;
+export type StudentSchedulePageProps = {
+	match: Match<{
+		participant: string;
+	}>
+}
+export const StudentSchedulePage: FC<StudentSchedulePageProps> = ({ match }) => {
+	const { participant } = match.params;
+
+	return <>
+		<StudentScheduleMachineProvider participant={participant} >
+			<StudentSchedule participant={participant} />
+		</StudentScheduleMachineProvider>
+	</>;
+};
+
+export type StudentScheduleProps = {
+	participant: string;
 }
 
-const StudentSchedule = ({ match }: IStudentScheduleProps) => {
+const StudentSchedule: FC<StudentScheduleProps> = ({ participant }) => {
 	const t = useTranslation();
 
 	/** scroll to top of page on mount */
@@ -44,85 +60,9 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 
 	/** END TODO week component */
 
-	const { params } = match;
-	const { studentName } = params;
+	const { state: stateM, send: sendM } = useStudentScheduleMachine();
 
-	const [scheduleByDays, setScheduleByDays] = useState([[]] as Array<Array<Lesson>>);
-
-	const [participantType, setParticipantType] = useState<ParticipantLabel | null>(null);
-	useAddMostRecentParticipantOnPageChange(studentName, participantType);
-
-	const [, , isLoading] = useFetchParticipant(getDefaultParticipant, [studentName], {
-		urlCtx: studentName, //
-		onError: () => setScheduleByDays([[]]),
-		onSuccess: ({ lessons, labels }) => {
-			setParticipantType(labels[0]);
-
-			if (!lessons?.length) {
-				setScheduleByDays([[]]);
-				return;
-			}
-
-			const tempScheduleByDays: Array<Array<Lesson>> = [];
-
-			lessons.forEach((lesson) => {
-				/** make sure there's always an array inside an array */
-				if (!tempScheduleByDays[lesson.dayIndex]?.length) {
-					tempScheduleByDays[lesson.dayIndex] = [];
-				}
-
-				tempScheduleByDays[lesson.dayIndex].push(lesson);
-			});
-
-			setScheduleByDays(tempScheduleByDays);
-		},
-	});
-
-	const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
-
-	/**
-	 * mimic the selectedDay
-	 *
-	 * TODO FIXME PARAMS - everything that comes from the route params, SHALL BE the single source of truth
-	 * without any additional bs states, because we have to sync them & bugs come real quick
-	 */
-	const [selectedDay, __setSelectedDay] = useState<ScheduleDay>(getTodaysScheduleDay({ defaultToDay: 0 }));
-	useEffect(() => {
-		let dayIdx: ScheduleDay | undefined = decodeDay(params.dayIndex);
-
-		if (!dayIdx && dayIdx !== 0) {
-			dayIdx = getTodaysScheduleDay({ defaultToDay: 0 });
-
-			navigateToDesiredPath({
-				studentName,
-				day: dayIdx,
-				timeIndex: params.timeIndex,
-				shouldShowTheLesson: !!selectedLesson || isDesktop,
-				replaceInsteadOfPush: true,
-			});
-		}
-
-		__setSelectedDay(dayIdx);
-	}, [params.dayIndex, params.timeIndex, studentName, isDesktop, selectedLesson]);
-
-	useEffect(() => {
-		if (params.timeIndex === undefined || !scheduleByDays?.[selectedDay]?.length) {
-			setSelectedLesson(null);
-			return;
-		}
-
-		const lesson: Lesson = scheduleByDays[selectedDay].find(
-			(l: Lesson) => l.dayIndex === selectedDay && l.timeIndex === decodeTimeIndex(params.timeIndex)
-		);
-
-		console.log("lesson", lesson);
-
-		if (!lesson) {
-			return;
-		}
-
-		setSelectedLesson(lesson);
-	}, [params.timeIndex, scheduleByDays, selectedDay]);
+	useAddMostRecentParticipantOnPageChange(participant, stateM.context.participant.participantType);
 
 	/**
 	 * used to handle cases where a user comes to a URL with the `timeIndex` already set,
@@ -136,98 +76,149 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 	 * & thus the handling will be slightly incorrect,
 	 * but it's better & worth it either way.
 	 */
-	const canGoBackInHistory = useRef<boolean>(params.timeIndex === undefined);
+	// const canGoBackInHistory = useRef<boolean>(timeIndex === undefined);
+	const canGoBackInHistory = useRef<boolean>(true); // TODO FIXME
 
-	if (isLoading) {
-		return (
-			<>
+	const { selectedDay, selectedLessons, selectedLesson } = getStuffFromSSM(stateM);
+
+	switch ((stateM.value as SSMachineState).participant) {
+		case "init": {
+			return <></>;
+		}
+		case "fetch-participant": {
+			const { snapshot } = stateM.context.participant;
+
+			if (snapshot) {
+				return <>
+					<h1>Siurbiame moksleivio "{participant}" duomenis iš archyvo "{stateM.context.participant.snapshot}"...</h1>
+				</>;
+			}
+
+			return (
+				<>
+					<h1>{participant}</h1>
+					<Loading />
+				</>
+			);
+		}
+		case "loading-failure": {
+			const { snapshot } = stateM.context.participant;
+
+			if (snapshot) {
+				return <>
+					<Navbar />
+
+					<h1>{t("Student not found")(participant)}</h1>
+					<p>
+						(archyve {snapshot})
+					</p>
+					<h2>ieškome kituose archyvuose...</h2>
+				</>;
+			}
+
+			return <>
+				<Navbar />
+
+				<h1>{t("Student not found")(participant)}</h1>
+				<p>
+					(naujausioje duomenų bazės versijoje).
+				</p>
+
+				<h2>ieškome archyvuose...</h2>
+			</>;
+		}
+		case "search-archive-failure": {
+			const { snapshot } = stateM.context.participant;
+
+			const notFoundInArchivesText: string = !!snapshot ? `Nei archyve "${snapshot}", nei kituose archyvuose irgi nerasta...` : "Archyvuose irgi nerasta...";
+
+			return <>
+				<Navbar />
+
+				<h1>{t("Student not found")(participant)}</h1>
+
+				<h2>{notFoundInArchivesText}</h2>
+
+				{/*
+					TODO: fuzzy search similar names in archyves.
+
+					"Maybe you meant:"
+					- "Similar Name 1 (found in X archyves in years A, B, C)"
+					- "Similar Name 2 (found in Y archyves in years B, C, D)"
+					...
+				*/}
+
 				<BackBtn />
+			</>;
+		}
+		case "search-archive-success": {
+			const { snapshot } = stateM.context.participant;
 
-				<h1>{studentName}</h1>
+			const header = !snapshot
+				? <h1>
+					Moksleivis "{participant}" rastas archyvuose.
+				</h1>
+				: <h1>Moksleivis "{participant}" archyve "{snapshot}" nerastas, tačiau rastas kituose archyvuose. </h1>
 
-				<Loading />
-			</>
-		);
-	}
+			return <>
+				{header}
+				<p>
+					Pasirinkite laikotarpį, kuriuo norite peržiūrėti tvarkaraštį:
+				</p>
+				<ul className={css`
+					display: inline-block;
 
-	if (!scheduleByDays || !scheduleByDays.length || !scheduleByDays[0] /* || !scheduleByDays[0].length */) {
-		return (
-			<>
-				<BackBtn />
-
-				<h1>{t("Student not found")(studentName)}</h1>
-				<p>{t("Go back and search for a different one")}</p>
-			</>
-		);
-	}
-
+					margin-bottom: 2em;
+				`}>
+					{stateM.context.participant.snapshots!.map(s => (
+						<li key={s} className={css`
+							text-align: left;
+						`}>
+							<button
+								type="button"
+								onClick={() => sendM({ type: "FETCH_PARTICIPANT", participant, snapshot: s })}
+								className={css`
+									font-variant-numeric: tabular-nums;
+								`}
+							>
+								{snapshot2pretty(s)}
+							</button>
+						</li>
+					))}
+				</ul>
+			</>;
+		}
+		case "loading-success": {
 	return (
 		<>
 			{isDesktop ? (
-				<SchedulePageDesktop match={match} />
+				<SchedulePageDesktop />
 			) : (
 				<>
 					<Navbar />
 
-					<h1>{studentName}</h1>
+					<h1>{participant}</h1>
 
 					<DaySelector
 						selectedDay={selectedDay}
-						handleClick={(_e, day) => {
-							// dispatchSelectedDayState({ day, causedBy: "daySelection" });
-
-							navigateToDesiredPath({
-								studentName,
-								day: day,
-								timeIndex: selectedLesson?.timeIndex,
-								shouldShowTheLesson: !!selectedLesson || isDesktop,
-							});
-						}}
+						handleClick={(_e, day) => sendM({ type: "SELECT_DAY", day })}
 					/>
 
 					<br />
 
-					{/* {selectedDayState.day === "*" ? ( */}
-					{selectedDay === "*" ? (
-						scheduleByDays.map((lessonsArray, index) => (
+					{(!selectedDay && selectedDay !== 0)
+						? null :
+						selectedDay === "*" ? (
+						stateM.context.participant.scheduleByDays.map((lessonsArray, index) => (
 							<div key={index} style={weekStyles}>
 								<h3 style={{ padding: "1em 2em" }}>{t("weekday")(index)}</h3>
 
-								<LessonsList
-									lessons={lessonsArray}
-									selectedDay={selectedDay}
-									selectedLesson={null}
-									handleClick={(_e, lesson) => {
-										navigateToDesiredPath({
-											studentName,
-											day: selectedDay,
-											timeIndex: lesson?.timeIndex,
-											shouldShowTheLesson: !!lesson || isDesktop,
-										});
-
-										setSelectedLesson(lesson);
-									}}
-								/>
+								<LessonsList lessons={lessonsArray} />
 							</div>
 						))
 					) : (
 						<>
-							<LessonsList
-								lessons={scheduleByDays[selectedDay]}
-								selectedDay={selectedDay}
-								// selectedLesson={null}
-								selectedLesson={selectedLesson}
-								handleClick={(_e, lesson) => {
-									navigateToDesiredPath({
-										studentName,
-										day: selectedDay,
-										timeIndex: lesson?.timeIndex,
-										shouldShowTheLesson: !!lesson || isDesktop,
-									});
-
-									setSelectedLesson(lesson);
-								}}
-							/>
+							<LessonsList lessons={selectedLessons} />
 						</>
 					)}
 
@@ -259,20 +250,24 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 								 *             /\              =>                /\
 								 */
 
-								const newLocation1st: string = `/`;
-								const newLocation2nd: string = `/${studentName}/${encodeDay(selectedDay)}`;
-								const oldLocation3rd: string = history.location.pathname;
+								/**
+								 * TODO FIXME
+								 */
 
-								history.replace(newLocation1st);
+								// const newLocation1st: string = `/`;
+								// const newLocation2nd: string = `/${studentName}/${encodeDay(selectedDay)}`;
+								// const oldLocation3rd: string = history.location.pathname;
 
-								history.push(newLocation2nd);
+								// history.replace(newLocation1st);
 
-								history.push(oldLocation3rd);
+								// history.push(newLocation2nd);
+
+								// history.push(oldLocation3rd);
 
 								history.goBack();
 							}
 
-							setSelectedLesson(null);
+							sendM({ type: "SELECT_TIME", time: undefined });
 						}}
 						lesson={selectedLesson}
 					/>
@@ -280,64 +275,11 @@ const StudentSchedule = ({ match }: IStudentScheduleProps) => {
 			)}
 		</>
 	);
-};
-
-export default StudentSchedule;
-
-/** TODO architect in such a way that we won't need this */
-const encodeDay = (day: ScheduleDay) => (day === "*" ? "*" : Number(day) + 1);
-const decodeDay = (day: number | "*"): ScheduleDay => (day === "*" ? "*" : ((day - 1) as ScheduleDay));
-
-const encodeTimeIndex = (time: number): number => time + 1;
-const decodeTimeIndex = (time: number | string): number => Number(time) - 1;
-
-const navigateToDesiredPath = (data: {
-	studentName: Student["text"];
-	day?: ScheduleDay;
-	timeIndex?: number;
-	shouldShowTheLesson: boolean;
-	replaceInsteadOfPush?: boolean /** should be used on the initial page load */;
-}): void => {
-	const path: string | undefined = getDesiredPath(data);
-
-	console.log("path", `"${path}"`);
-
-	if (!path) {
-		return;
+		}
+		default: {
+			console.error(stateM.value);
+			throw new Error(`unhandled state value "${(stateM.value as SSMachineState).participant}"`);
+			// assertNever(stateM.value); // TODO TS
+		}
 	}
-
-	if (data.replaceInsteadOfPush) {
-		history.replace(path);
-		return;
-	}
-
-	history.push(path);
-};
-
-const getDesiredPath = ({
-	studentName,
-	day,
-	timeIndex,
-	shouldShowTheLesson /** shall be `false` on mobile unless the lesson was selected; always `true` on desktop */,
-}: {
-	studentName: Student["text"];
-	day?: ScheduleDay;
-	timeIndex?: number;
-	shouldShowTheLesson: boolean;
-}): string | undefined => {
-	if (!studentName?.trim() || day === undefined) {
-		return undefined;
-	}
-
-	const encodedDay = encodeDay(day);
-
-	if (timeIndex === undefined || !shouldShowTheLesson) {
-		// history.push(`/${studentName}/${encodedDay}`);
-		return `/${studentName}/${encodedDay}`;
-	}
-
-	const encodedTimeIndex = encodeTimeIndex(timeIndex);
-
-	// history.push(`/${studentName}/${encodedDay}/${encodedTimeIndex}`);
-	return `/${studentName}/${encodedDay}/${encodedTimeIndex}`;
 };

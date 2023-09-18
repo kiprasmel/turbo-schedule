@@ -1,9 +1,15 @@
 import { Availability, getDefaultParticipant, Participant, Health } from "@turbo-schedule/common";
-import { createUseFetchedState } from "use-fetched-state";
+import { ArchiveYearToParticipantLabelToTextToSnapshotObj } from "@turbo-schedule/database";
+import { UseFetchedStateReturn, createUseFetchedState } from "use-fetched-state";
 
 /**
  * TODO: could be auto-generated from the express api :o
  */
+
+export const fetchParticipantCore = [
+	(participantName: string, snapshot?: string) => `/api/v1/participant/${encodeURIComponent(participantName)}${  !snapshot ? "" : `?snapshot=${snapshot}`}`,
+	(data: UseFetchedStateReturn<{ participant: Participant }>[0]) => data.participant ?? getDefaultParticipant()
+] as const;
 
 // TODO FIXME
 // @ts-expect-error
@@ -12,11 +18,14 @@ export const useFetchParticipant = createUseFetchedState<
 	Participant,
 	string
 >(
-	(participantName) => `/api/v1/participant/${encodeURIComponent(participantName)}`,
-	(data) => data.participant ?? getDefaultParticipant()
+	...fetchParticipantCore
+	// (participantName) => `/api/v1/participant/${encodeURIComponent(participantName)}`,
+	// (data) => data.participant ?? getDefaultParticipant()
 );
 
-type LessonlessP = Omit<Participant, "lessons">;
+export type LessonlessP = Omit<Participant, "lessons">;
+export type TextPreparedForSearching = { textPrepared: Fuzzysort.Prepared };
+export type PreparedLessolessP = LessonlessP & TextPreparedForSearching;
 export const useFetchParticipants = createUseFetchedState<
 	{ participants?: LessonlessP[] }, //
 	LessonlessP[]
@@ -55,4 +64,9 @@ export const useFetchJoinMailingList = createUseFetchedState<boolean>(
 export const useFetchHealth = createUseFetchedState<{ health: Health }, Health>(
 	"/api/v1/health", //
 	(data) => data.health
+);
+
+export const useFetchArchiveParticipantsInSnapshots = createUseFetchedState<{ data: ArchiveYearToParticipantLabelToTextToSnapshotObj }, ArchiveYearToParticipantLabelToTextToSnapshotObj>(
+	"/api/v1/archive/participants-in-snapshots?group=schoolYear,label,text&leafItemKey=snapshot",
+	(data) => data.data
 );

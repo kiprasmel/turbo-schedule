@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
 
-import "./AutoCompleteInput.scss";
+import "./AutoCompleteInput.css";
 
 export interface IAutocompleInputProps<T = any> {
 	autoCompletionsArray: Array<T>;

@@ -15,6 +15,11 @@ export * from "./util/poolPromises";
 export * from "./util/throttle";
 export * from "./util/performance.now";
 export * from "./util/dynamicRequire";
+export * from "./util/assertNever";
+export * from "./util/remapEntries";
+export * from "./util/Tuple";
+export * from "./util/Entries";
+export * from "./util/matchMatrix";
 
 export * from "./model/Participant";
 export * from "./model/Schedule";
@@ -28,3 +33,4 @@ export * from "./model/ScrapeInfo";
 export * from "./model/Availability";
 export * from "./model/Health";
 export * from "./model/BuildInfo";
+export * from "./model/Archive";

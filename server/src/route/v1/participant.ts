@@ -32,10 +32,10 @@ export interface ParticipantsRes extends WithErr {
 }
 
 router.get<never, ParticipantsRes>("/", withSender({ participants: [] }), async (_req, res) => {
-	const send = res.sender;
+	const { sender: send, snapshot } = res;
 
 	try {
-		const db: Db = await initDb();
+		const db: Db = await initDb(snapshot);
 
 		const participants: ParticipantsRes["participants"] = await db.get("participants").value();
 
@@ -59,27 +59,27 @@ export interface ParticipantRandomRes extends WithErr {
 }
 
 router.get<never, ParticipantRandomRes>("/random", withSender({ participants: [] }), async (req, res) => {
-	const send = res.sender;
+	const { sender: send, snapshot } = res;
 
 	try {
-		const db: Db = await initDb();
+		const db: Db = await initDb(snapshot);
 		const participants: Participant[] = await db.get("participants").value();
 
-		if (!req.query["count"]) {
-			const maxCount: number = Number(req.query["max"]) || 32;
+		if (!req.query.count) {
+			const maxCount: number = Number(req.query.max) || 32;
 			return send(200, { participants: pickSome(participants, { maxCount }) });
-		} else {
-			const n = Number(req.query["count"]);
+		}
+			const n = Number(req.query.count);
 
 			if (Number.isNaN(n)) {
 				return send(400, {
 					participants: [],
-					err: `req.query.count NaN (provided as \`${req.query["count"]}\`, parsed as ${n})`,
+					err: `req.query.count NaN (provided as \`${req.query.count}\`, parsed as ${n})`,
 				});
-			} else {
-				return send(200, { participants: pickNPseudoRandomly(n)(participants) });
 			}
-		}
+				return send(200, { participants: pickNPseudoRandomly(n)(participants) });
+
+
 	} catch (err) {
 		return send(500, { err });
 	}
@@ -93,10 +93,10 @@ router.get<never, ParticipantHierarchyRes>(
 	"/hierarchy",
 	withSender({ hierarchy: createParticipantHierarchy([]) }), // TODO - is this even working?
 	async (_req, res) => {
-		const send = res.sender;
+		const { sender: send, snapshot } = res;
 
 		try {
-			const db: Db = await initDb();
+			const db: Db = await initDb(snapshot);
 			const participants: Participant[] = await db.get("participants").value();
 
 			const hierarchy: ParticipantHierarchyManual = createParticipantHierarchy(participants);
@@ -128,10 +128,10 @@ router.get<never, ParticipantCommonAvailabilityRes>(
 	"/common-availability",
 	withSender(getDefaultParticipantCommonAvailRes()),
 	async (req, res) => {
-		const send = res.sender;
+		const { sender: send, snapshot } = res;
 
 		try {
-			const db: Db = await initDb();
+			const db: Db = await initDb(snapshot);
 
 			const wantedParticipants: Participant["text"][] =
 				req.query?.["wanted-participants"]
@@ -250,7 +250,7 @@ export interface ParticipantClassifyRes extends WithErr {
 }
 
 router.get<never, ParticipantClassifyRes>("/classify", withSender({ participants: [] }), async (req, res) => {
-	const send = res.sender;
+	const { sender: send, snapshot } = res;
 
 	try {
 		const participants: string[] =
@@ -263,7 +263,7 @@ router.get<never, ParticipantClassifyRes>("/classify", withSender({ participants
 			return send(400, { err: `No participants included in request.query (${participants})` });
 		}
 
-		const db: Db = await initDb();
+		const db: Db = await initDb(snapshot);
 
 		const classifiedParticipants: ParticipantClassifyRes["participants"] = await db
 			.get("participants")
@@ -307,14 +307,14 @@ router.get<{ participantName: string }, ParticipantScheduleByNameRes>(
 	"/:participantName",
 	withSender({ participant: getDefaultParticipant() }),
 	async (req, res) => {
-		const send = res.sender;
+		const { sender: send, snapshot } = res;
 
 		try {
-			const db: Db = await initDb();
+			const db: Db = await initDb(snapshot);
 
 			const participantName: string = decodeURIComponent(req.params.participantName);
 
-			console.log("name", participantName);
+			console.log("name", participantName, "snapshot", snapshot);
 
 			const participant: Participant = await db
 				.get("participants")

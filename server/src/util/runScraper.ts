@@ -1,12 +1,20 @@
+#!/usr/bin/env ts-node-dev
+
 import scraper, { wasScheduleUpdated } from "@turbo-schedule/scraper";
+import { ScrapeInfo } from "@turbo-schedule/common";
+import { databaseFileName, initDb } from "@turbo-schedule/database";
+
 import { scrapedDataDirPath } from "../config";
+import { commitDatabaseDataIntoArchiveIfChanged } from "@turbo-schedule/database";
 
 export const runScraper = async (): Promise<void> => {
+	const previousScrapeInfo: ScrapeInfo = await initDb(databaseFileName).then(x => x.get("scrapeInfo").value())
+
 	const startDate: Date = new Date();
 
 	console.log("\n~ Starting scraper:", startDate, "\n");
 
-	await scraper(scrapedDataDirPath);
+	const scrapeInfo: ScrapeInfo = await scraper(scrapedDataDirPath);
 
 	const endDate: Date = new Date();
 
@@ -14,6 +22,8 @@ export const runScraper = async (): Promise<void> => {
 	const secDifference: number = msDifference / 1000;
 
 	console.log("\n~ Finished scraper.", endDate, "\n difference in secs: ", secDifference, "\n");
+
+	await commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo, scrapeInfo);
 
 	/**
 	 * TODO
@@ -38,3 +48,7 @@ export const runScraperIfUpdatesAvailable = async (): Promise<void> => {
 		await runScraper();
 	}
 };
+
+if (!module.parent) {
+	runScraper();
+}
