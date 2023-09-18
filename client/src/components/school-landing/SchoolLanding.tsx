@@ -7,7 +7,7 @@ import { ParticipantListList } from "../studentSchedule/ParticipantList";
 import { FancyStickyBackgroundForSearch, Search } from "../navbar/Search";
 import { Navbar } from "../navbar/Navbar";
 import Footer from "../footer/Footer";
-import { Archive } from "../../pages/archive/Archive";
+// import { Archive } from "../../pages/archive/Archive";
 import { CURRENTLY_SUPPORTED_SCHOOLS, SchoolID } from "../../pages/landing/Landing";
 import { useWindow } from "../../hooks/useWindow";
 
@@ -99,7 +99,7 @@ const SchoolLanding = () => {
 						}
 					`} />
 
-					<Archive searchString={searchString} />
+					{/* <Archive searchString={searchString} /> */}
 				</div>
 			</div>
 
