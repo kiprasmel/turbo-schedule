@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { css } from "emotion";
+import { css, cx } from "emotion";
 
 import MailingListJoiner from "./MailingListJoiner";
 import { BuildMetaInfo } from "./BuildMetaInfo";
@@ -9,17 +9,21 @@ export type FooterProps = {
 	enableMailingListJoiner?: boolean
 	enableMadeBy?: boolean
 	disableBuildMetaInfo?: boolean
+
+	className?: string;
 }
 
 const Footer: FC<FooterProps> = ({
 	enableMailingListJoiner = false,
 	enableMadeBy = false,
 	disableBuildMetaInfo = false,
+	className = "",
 }) => (
-	<footer className={css`
+	<footer className={cx(
+		css`
 		margin-top: 4rem;
 		margin-bottom: 0.5rem;
-	`}>
+	`, className)}>
 		{!enableMailingListJoiner ? null : <MailingListJoiner />}
 		{!enableMadeBy ? null :
 			<div className={css`margin-bottom: 2.5rem; `}>

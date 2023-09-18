@@ -41,7 +41,7 @@ const getMatchingAutoCompletions = (autoCompletionsArray: Array<any> = [], searc
 const AutoCompleteInput = ({
 	autoCompletionsArray = [],
 	handleAutoCompletionSelection,
-	autoFocus = false,
+	// autoFocus = false,
 }: IAutocompleInputProps) => {
 	const [searchString, setSearchString] = useState("");
 
@@ -106,7 +106,7 @@ const AutoCompleteInput = ({
 				onChange={(e) => handleInputChange(e)}
 				style={{ padding: "8px 16px" }}
 				// ref={inputRef}
-				autoFocus={!!autoFocus}
+				// autoFocus={!!autoFocus}
 			/>
 
 			<ul style={{ marginTop: "1em" }}>{matchingAutoCompletionList}</ul>

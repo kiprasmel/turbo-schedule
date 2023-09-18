@@ -7,6 +7,7 @@
 	"license": "UNLICENSED",
 	"private": true,
 	"scripts": {
+		"build": "tsc -b -v",
 		"create-fake-data": "yarn ts-node-dev ./src/script/create-fake-data.ts",
 		"copy-prod-data": "bash ./copy-prod-data.sh",
 		"test": "./src/test/index.ts"

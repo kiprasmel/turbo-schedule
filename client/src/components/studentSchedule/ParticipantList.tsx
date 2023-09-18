@@ -214,6 +214,7 @@ export const ParticipantListItem: FC<{
 			<button
 				type="button"
 				onClick={() => syncStudentScheduleStateToURL({
+					school: "kpg", // TODO
 					participant,
 					snapshot: parseStudentScheduleParams(participant).snapshot,
 					day: undefined,

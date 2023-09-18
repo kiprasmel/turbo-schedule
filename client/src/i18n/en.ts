@@ -92,4 +92,24 @@ export const en: Dictionary = {
 	"outdated-data-warning: I understand.": "I understand.",
 
 	"outdated-data-warning: Last time the data collection happened: ": "Last time the data collection happened: ",
+
+	"Choose your school": "Choose your school",
+	"Work in Progress": "Work in progress",
+	"Not available yet...": "Not available yet...",
+	"Don't see your school?": "Don't see your school?",
+	"Message us!": "Message us!",
+	"I want Turbo Schedule!": "I want Turbo Schedule!",
+	"i-want-turbo-schedule--mailto-subject": "Our school wants Turbo Schedule",
+	"i-want-turbo-schedule--mailto-body": "Our school schedule is accessible thru the URL [my-school.com/schedule]. Would it be possible to integrate Turbo Schedule?",
+
+	// "school-full-name: kpg": "Kretinga Franciscan gymnasium",
+	"school-core-name: kpg": "Kretinga Franciscan",
+	"school-type: kpg": "gymnasium",
+	// "school-full-name: kjpug": "Kretinga Jurgis Pabrėža university gymnasium",
+	"school-core-name: kjpug": "Kretinga Jurgis Pabrėža",
+	"school-type: kjpug": "university gymnasium",
+	// "school-full-name: kdp": "Kretinga Simonas Daukantas middle school",
+	"school-core-name: kdp": "Kretinga Simonas Daukantas",
+	"school-type: kdp": "middle school",
+	//
 };
