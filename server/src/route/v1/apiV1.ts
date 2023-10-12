@@ -8,7 +8,7 @@ import { roomRouter } from "./room";
 import { emailRouter } from "./email";
 import { healthRouter } from "./health";
 import { openAPIDocsJSONHandler, openAPIDocsHTMLHandler } from "./openAPIDocs";
-import { redirectToApiDocs } from "../../util/redirectToApiDocs";
+// import { redirectToApiDocs } from "../../util/redirectToApiDocs";
 
 const router: Router = Router();
 
@@ -25,7 +25,7 @@ router.use("/email", emailRouter);
 router.use("/docs", openAPIDocsHTMLHandler);
 router.use("/docs.json", openAPIDocsJSONHandler);
 
-router.use("/", redirectToApiDocs);
+// router.use("/", redirectToApiDocs);
 
 export { router as apiRouterV1 };
 
