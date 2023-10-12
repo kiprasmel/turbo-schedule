@@ -1,12 +1,20 @@
 #!/usr/bin/env bash
 
-REMOTE="${1:-prod}"
+set -x
+
+REMOTE="${REMOTE:-prod}"
+FILENAME="${FILENAME:-latest.json}"
 
 ssh -o BatchMode=yes -o AddKeysToAgent=no "$REMOTE" <<"EOF"
-docker cp turbo-schedule:/usr/src/app/database/data/latest.json /tmp/latest.json
+docker cp turbo-schedule:/usr/src/app/database/data/"$FILENAME" /tmp/
 EOF
 
-DIR="$(dirname "$0")"
+ROOTDIR="$(dirname "$0")"
+DIR="$ROOTDIR/data"
 
-rm "$DIR"/data/latest.json
-scp -r "$REMOTE":/tmp/latest.json "$DIR"/data/
+mkdir -p "$DIR"
+
+EXISTING_FILEPATH="$DIR/$FILENAME"
+test -f "$EXISTING_FILEPATH" && rm "$EXISTING_FILEPATH"
+scp -r "$REMOTE":/tmp/"$FILENAME" "$DIR/$FILENAME"
+
