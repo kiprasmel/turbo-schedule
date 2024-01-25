@@ -27,7 +27,6 @@ import { initDb } from "@turbo-schedule/database";
 
 import { openAPIFilePath } from "./config";
 import { isProd } from "./util/isProd";
-import { setupLogger } from "./util/setupLogger";
 import { apiRouter } from "./route/apiRouter";
 import { serveStaticClientInProd } from "./util/serveStaticClientInProd";
 import { enableScraperCronjob } from "./util/enableScraperCronjob";
@@ -71,7 +70,6 @@ app.use(helmet()); // https://helmetjs.github.io/
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-setupLogger(app);
 
 /** routes */
 app.use("/api", apiRouter);
