@@ -103,7 +103,7 @@ const SchoolLanding = () => {
 				</div>
 			</div>
 
-			<Footer enableMailingListJoiner />
+			<Footer />
 		</>
 	);
 };
