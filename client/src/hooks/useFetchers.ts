@@ -44,23 +44,6 @@ export const useFetchAvailability = createUseFetchedState<
 	(data) => data?.availability ?? []
 );
 
-export const useFetchJoinMailingList = createUseFetchedState<boolean>(
-	`/api/v1/email`, //
-	(data) => data
-);
-
-// const [email, setEmail, isLoading] = useFetchJoinMailingList(undefined, [], {
-// 	fetchOpts: {
-// 		method: "POST",
-// 		body: JSON.stringify({ email: "lmao@kek.asdasasdasd" }), //
-// 		headers: {
-// 			"content-type": "application/json",
-// 		},
-// 	},
-// 	onSuccess: () => {},
-// 	onError: () => {},
-// });
-
 export const useFetchHealth = createUseFetchedState<{ health: Health }, Health>(
 	"/api/v1/health", //
 	(data) => data.health

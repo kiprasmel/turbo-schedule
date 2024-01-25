@@ -28,7 +28,6 @@ export * from "./model/Student";
 export * from "./model/Teacher";
 export * from "./model/Room";
 export * from "./model/Lesson";
-export * from "./model/Email";
 export * from "./model/ScrapeInfo";
 export * from "./model/Availability";
 export * from "./model/Health";
