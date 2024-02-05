@@ -1,70 +1,31 @@
 #!/usr/bin/env ts-node-dev
 
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
 import cp, { ExecOptions } from "child_process";
 import os from "os";
 import util from "util";
 
-import { ScrapeInfo, matchMatrix } from "@turbo-schedule/common";
+import { ScrapeInfo } from "@turbo-schedule/common";
 
 import { getDatabaseFilepath } from "./config";
 import { initDb } from "./initDb";
 import { databaseSnapshotNameToFullFilepath } from "./paths";
+import { syncEnvVarAndFile } from "./util/sync-env-var-and-file";
 
 export const execAsync = util.promisify(cp.exec);
-export const writeAsync = util.promisify(fs.writeFile);
-export const readAsync = util.promisify(fs.readFile);
-export const mkdirAsync = util.promisify(fs.mkdir);
-export const existsAsync = util.promisify(fs.exists);
-export const rmdirAsync = util.promisify(fs.rmdir);
-export const renameAsync = util.promisify(fs.rename);
 
-const homedir: string = os.homedir();
-const sshdir: string = path.join(homedir, ".ssh");
-const sshFilepath: string = path.join(sshdir, "turbo-schedule-archive-deploy-bot");
+const DEPLOY_KEY_FILEPATH: string = path.join(os.homedir(), ".ssh", "turbo-schedule-archive-deploy-bot");
 
-export type CanCommitMeaningfulSnapshotsRet = {
-	hasEnvVarNotEmpty: boolean;
-	hasSSHFileNotEmpty: boolean;
-	canCommit: boolean;
-	sshFileNeedsWriteFromEnv: boolean;
-};
-
-export async function canCommitMeaningfulSnapshots(): Promise<CanCommitMeaningfulSnapshotsRet> {
-	const envVarContent: string = process.env.ARCHIVE_DEPLOY_KEY?.trim() || "";
-	const hasEnvVarNotEmpty: boolean = envVarContent !== "";
-
-	const hasSSHFile: boolean = await existsAsync(sshFilepath);
-	const sshFileContent: string | undefined = hasSSHFile ? (await readAsync(sshFilepath, { encoding: "utf-8" })).trim() : "";
-	const hasSSHFileNotEmpty: boolean = hasSSHFile && sshFileContent !== "";
-
-	const canCommit: boolean = hasEnvVarNotEmpty || hasSSHFileNotEmpty;
-
-	const sshFileNeedsWriteFromEnv: boolean = !canCommit
-		? false
-		: matchMatrix([hasSSHFileNotEmpty, hasEnvVarNotEmpty], [
-			true, true, true, // => true if different, otherwise won't matter. but can just always default to true.
-			true, false, false, // does not have the ENV var, but already has the ssh file, thus do nothing.
-			false, true, true, // does not have the ssh file, but has the env var, thus prepare the ssh deploy key.
-			false, false, false, // eliminated because canCommit === false in this case.
-		]);
-
-	return {
-		hasEnvVarNotEmpty,
-		hasSSHFileNotEmpty,
-		canCommit,
-		sshFileNeedsWriteFromEnv,
-	} as const;
-}
+export const canCommitMeaningfulSnapshots = () => syncEnvVarAndFile("ARCHIVE_DEPLOY_KEY", DEPLOY_KEY_FILEPATH, { mode: "600" })
 
 export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: ScrapeInfo, scrapeInfo: ScrapeInfo): Promise<void> {
 	const databaseHasChanged: boolean = previousScrapeInfo.pageVersionIdentifier !== scrapeInfo.pageVersionIdentifier;
 	console.log({ databaseHasChanged });
 
-	const canCommit = await canCommitMeaningfulSnapshots()
+	const { hasEitherVarOrFile: canCommit } = await canCommitMeaningfulSnapshots()
 
-	if (!canCommit.canCommit) {
+	if (!canCommit) {
 		if (databaseHasChanged) {
 			console.warn(`database has new changes. We cannot commit nor push to the archive, because 'ARCHIVE_DEPLOY_KEY' not set/falsy.`);
 		} else {
@@ -72,15 +33,6 @@ export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo:
 		}
 
 		return;
-	}
-
-	if (canCommit.sshFileNeedsWriteFromEnv) {
-		await mkdirAsync(sshdir, { recursive: true });
-
-		// https://superuser.com/a/1565830/1012390
-		await writeAsync(sshFilepath, process.env.ARCHIVE_DEPLOY_KEY + "\n", {
-			mode: "600"
-		});
 	}
 
 	/**
@@ -104,23 +56,23 @@ export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo:
 				 * https://superuser.com/a/912281/1012390
 				 * other approaches, such as -c core.sshCommand, didn't work.
 				 */
-				GIT_SSH_COMMAND: `ssh -i "${sshFilepath}"` // GIT_SSH_COMMAND='ssh -i ~/.ssh/turbo-schedule-archive-deploy-bot'
+				GIT_SSH_COMMAND: `ssh -i "${DEPLOY_KEY_FILEPATH}"` // GIT_SSH_COMMAND='ssh -i ~/.ssh/turbo-schedule-archive-deploy-bot'
 			}
 		});
 	}
 
 	const branch: string = process.env.ARCHIVE_GIT_BRANCH || "master";
 
-	const hasGitDir: boolean = await existsAsync(path.join(dbDirPath, ".git"));
+	const hasGitDir: boolean = await fs.pathExists(path.join(dbDirPath, ".git"));
 	if (!hasGitDir) {
 		const repoURL: string = `git@github.com:kiprasmel/turbo-schedule-archive.git`;
 
 		const tmpRepoDir = ".tmp-repo";
 		const tmpRepoPath = path.join(dbDirPath, tmpRepoDir);
-		await rmdirAsync(tmpRepoPath);
+		await fs.rmdir(tmpRepoPath);
 
 		await execInDataDir(`git clone ${repoURL} ${tmpRepoDir}`);
-		await renameAsync(path.join(tmpRepoPath, ".git"), path.join(dbDirPath, ".git"));
+		await fs.rename(path.join(tmpRepoPath, ".git"), path.join(dbDirPath, ".git"));
 
 		await execInDataDir(`git pull`);
 		await execInDataDir(`git reset --hard origin/${branch}`);
