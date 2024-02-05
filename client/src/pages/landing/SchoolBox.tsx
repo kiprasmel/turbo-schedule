@@ -4,7 +4,7 @@ import { css, cx } from "emotion";
 import { ReactComponent as ArrowRight } from "../../assets/arrow-right.svg";
 import { useWindow } from "../../hooks/useWindow";
 import { BadgeNew, BadgeWIP } from "../../common/Badge";
-import { navigateToSchool } from "../../utils/navigation";
+import { navigateToSchool } from "../../hooks/useSelectedSchool";
 import { useTranslation } from "../../i18n/useTranslation";
 
 import { SCHOOL_ID__ADD_YOUR_SCHOOL } from "./Landing";

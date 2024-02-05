@@ -9,7 +9,7 @@ import { css } from "emotion";
 import { SearchProps, Search } from "./Search";
 import { LangSelect } from "./LangSelect";
 import { useTranslation } from "../../i18n/useTranslation";
-import { useSelectedSchool } from "../../hooks/useSelectedSchool";
+import { LANDING_NO_AUTO_SWITCH_TO_SCHOOL, useSelectedSchool } from "../../hooks/useSelectedSchool";
 // eslint-disable-next-line import/no-cycle
 import { NavbarMobile } from "./NavbarMobile";
 
@@ -85,7 +85,7 @@ const NavbarDesktop = forwardRef<
 						display: inline-block;
 					`}
 				>
-					<Link to="/">{t("Turbo Schedule")}</Link>
+					<Link to={`/?${LANDING_NO_AUTO_SWITCH_TO_SCHOOL}`}>{t("Turbo Schedule")}</Link>
 					{/* <Link to="/">{window.innerWidth >= 1024 ? t("Turbo Schedule") : <Logo />}</Link> */}
 				</h1>
 
@@ -130,9 +130,11 @@ export const NavbarLinksOne: FC<React.HTMLProps<HTMLLIElement>> = (firstElementP
 	const t = useTranslation();
 	const school = useSelectedSchool()
 
-	const scheduleLink = !school ? "/" : "/" + school
+	const scheduleLink = !school
+		? `/?${LANDING_NO_AUTO_SWITCH_TO_SCHOOL}`
+		: "/" + school
 	const commonAvailLink = !school
-		? "/" /** global /avail is not a concept yet */
+		? `/?${LANDING_NO_AUTO_SWITCH_TO_SCHOOL}` /** global /avail is not a concept yet */
 		// ? "/kpg/avail" // TODO MULTI_SCHOOL
 		: "/" + school + "/avail"
 
