@@ -1,5 +1,6 @@
 import path from "path";
 import { execSync } from "child_process";
+import { threadId } from "worker_threads"
 
 import { expose } from "threads/worker";
 
@@ -13,16 +14,16 @@ export type CompareDBFiles = typeof compareDBFiles;
 export type CompareDBFilesOpts = {
 	filepaths: string[];
 	dataDiffDir: string;
-	threadId?: number | string;
+	taskId?: number | string;
 };
 
 expose(async (opts: CompareDBFilesOpts) => compareDBFiles(opts));
 export function compareDBFiles({
 	filepaths,
 	dataDiffDir, //
-	threadId = 0,
+	taskId = 0,
 }: CompareDBFilesOpts): string[] {
-	const log = (...msgs: any[]): void => console.log(threadId, ...msgs);
+	const log = (...msgs: any[]): void => void process.stdout.write([threadId, taskId, ...msgs, "\n"].join(" "));
 
 	const fileStrLen: number = filepaths.length.toString().length;
 
@@ -82,7 +83,7 @@ export function compareDBFiles({
 			const patchfile = `${basenameExtless(fp1)}...${basenameExtless(fp2)}.diff`;
 			const patchpath = path.join(dataDiffDir, patchfile);
 			/** https://github.com/andreyvit/json-diff */
-			const cmd = `json-diff --raw-json --max-elisions 0 "${fp1}" "${fp2}" > "${patchpath}"`;
+			const cmd = `json-diff --raw-json --max-elisions 0 "${fp1}" "${fp2}" > "${patchpath}.${threadId}"`;
 			try {
 				execSync(cmd);
 			} catch (e) {
