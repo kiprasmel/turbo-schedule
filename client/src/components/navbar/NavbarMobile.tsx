@@ -18,7 +18,7 @@ import { ReactComponent as More } from "../../assets/more.svg";
 import { LangSelect } from "./LangSelect";
 import { StickyInfoOrWarningAboutFreshOrOutdatedData } from "./StickyInfoOrWarningAboutFreshOrOutdatedData";
 import Footer from "../footer/Footer";
-import { useSelectedSchool } from "../../hooks/useSelectedSchool";
+import { LANDING_NO_AUTO_SWITCH_TO_SCHOOL, useSelectedSchool } from "../../hooks/useSelectedSchool";
 
 const menuMachine = createMachine({
 	id: "menu",
@@ -150,7 +150,7 @@ export const NavbarMobile = forwardRef<
 							padding-top: 1rem;
 						`}
 					>
-						<Link to="/">
+						<Link to={`/?${LANDING_NO_AUTO_SWITCH_TO_SCHOOL}` }>
 							<Logo />
 						</Link>
 

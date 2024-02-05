@@ -5,6 +5,7 @@ import { Navbar } from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
 import { useWindow } from "../../hooks/useWindow";
 import { useTranslation } from "../../i18n/useTranslation";
+import { useAutoSwitchToLastSelectedSchool } from "../../hooks/useSelectedSchool";
 
 import { SchoolBox } from "./SchoolBox";
 
@@ -17,6 +18,8 @@ export const Landing: FC<LandingProps> = () => {
 	const { desktop, notDesktop } = useWindow()
 
 	const schoolList = useMemo(() => SCHOOL_LIST(t as any /** TODO TS */), [t])
+
+	useAutoSwitchToLastSelectedSchool();
 
 	return <>
 			<div
