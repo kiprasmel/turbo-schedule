@@ -7,6 +7,14 @@ TAG=${TAG:-latest}
 
 echo "TAG $TAG"
 
+ARCHIVE_ENCRYPT_KEY_PATH="$HOME/.gnupg/turbo-schedule-archive.pub.asc"
+if [ -f "$ARCHIVE_ENCRYPT_KEY_PATH" ]; then
+	ARCHIVE_ENCRYPT_KEY="$(cat "$ARCHIVE_ENCRYPT_KEY_PATH")"
+	echo "ARCHIVE_ENCRYPT_KEY found."
+else
+	echo "ARCHIVE_ENCRYPT_KEY not found. tried $ARCHIVE_ENCRYPT_KEY_PATH"
+fi
+
 ARCHIVE_DEPLOY_KEY_PATH="$HOME/.ssh/turbo-schedule-archive-deploy"
 if [ -f "$ARCHIVE_DEPLOY_KEY_PATH" ]; then
 	ARCHIVE_DEPLOY_KEY="$(cat "$ARCHIVE_DEPLOY_KEY_PATH")"
@@ -23,6 +31,7 @@ fi
 
 ssh -o BatchMode=yes -o AddKeysToAgent=no "$REMOTE" \
 	"TAG=\"${TAG}\"" \
+	"ARCHIVE_ENCRYPT_KEY=\"${ARCHIVE_ENCRYPT_KEY}\"" \
 	"ARCHIVE_DEPLOY_KEY=\"${ARCHIVE_DEPLOY_KEY}\"" \
 	"ARCHIVE_GIT_REMOTE_URL=\"$ARCHIVE_GIT_REMOTE_URL\"" \
 	'bash -s' <<"EOF"
@@ -46,6 +55,7 @@ docker run \
         --mount source="$IMAGE_NAME"--generated,target=/usr/src/app/server/generated \
         --mount source="$IMAGE_NAME"--database,target=/usr/src/app/database/data \
 		--env ARCHIVE_DEPLOY_KEY="$ARCHIVE_DEPLOY_KEY" \
+		--env ARCHIVE_ENCRYPT_KEY="$ARCHIVE_ENCRYPT_KEY" \
         "$IMAGE"
 
 docker rm "$IMAGE_NAME".old 2>/dev/null

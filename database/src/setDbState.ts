@@ -1,5 +1,6 @@
 /* eslint-disable no-plusplus */
 
+import os from "os"
 import fs from "fs-extra";
 import path from "path";
 
@@ -10,6 +11,8 @@ import { initDb } from "./initDb";
 // eslint-disable-next-line import/no-cycle
 import { DbStateReturn } from "./setNewDbState";
 import { databaseSnapshotNameToFullFilepath } from "./paths";
+import { execAsync } from "./commit-database-data-into-archive-if-changed";
+import { syncEnvVarAndFile } from "./util/sync-env-var-and-file";
 
 const debug = require("debug")("turbo-schedule:database:setDbState");
 
@@ -36,6 +39,8 @@ export async function setDbState(
 	};
 }
 
+const ENCRYPT_KEY_FILEPATH = path.join(os.homedir(), ".gnupg", "turbo-schedule-archive.pub.asc")
+
 export type OnDestinationAlreadyExists = "do-nothing" | "create-another"
 export type BackupDbStateOpts = {
 	onDestinationAlreadyExists?: OnDestinationAlreadyExists
@@ -45,7 +50,7 @@ export type BackupDbStateOpts = {
  * backs up a database snapshot file (usually the latest one)
  * into a its own file, which will be named based on the scrapeInfo.timeStartISO.
  */
-export async function backupDbState(
+export async function backupDbStateWithEncrypt(
 	snapshot: string = databaseFileName,
 	{
 		onDestinationAlreadyExists = "create-another"
@@ -91,7 +96,32 @@ export async function backupDbState(
 
 	debug("backupDbState: backupDestinationPath = ", backupDestinationPath);
 
+	/**
+	 * encrypt & backup or don't backup at all
+	 */
+
+	const { hasVarOrFile: canEncrypt } = await syncEnvVarAndFile("ARCHIVE_ENCRYPT_KEY", ENCRYPT_KEY_FILEPATH, { mode: "600" })
+
+	if (!canEncrypt) {
+		const msg = `an explicit backup of the database state was requested, but encryption key for backup was not provided.\ntried $ARCHIVE_ENCRYPT_KEY and ${ENCRYPT_KEY_FILEPATH}`
+		console.warn(msg)
+
+		return null
+	}
+
 	await fs.copyFile(snapshotFilepath, backupDestinationPath);
+
+	try {
+		await execAsync(`gpg --encrypt --hidden-recipient-file ${ENCRYPT_KEY_FILEPATH} --output ${backupDestinationPath} ${backupDestinationPath}`)
+	} catch (err) {
+		/** abort if encryption failed */
+
+		const msg = `tried encrypting backup, but failed.`
+		console.warn(msg, err)
+
+		await fs.remove(backupDestinationPath)
+		return null
+	}
 
 	return backupDestinationPath;
 }
@@ -101,7 +131,7 @@ export async function setDbStateAndBackupCurrentOne(
 	currentDatabaseFilename: string = databaseFileName,
 ): Promise<DbStateReturn> {
 	/** make a backup to its own file, if doesn't exist already */
-	await backupDbState(currentDatabaseFilename, { onDestinationAlreadyExists: "do-nothing" });
+	await backupDbStateWithEncrypt(currentDatabaseFilename, { onDestinationAlreadyExists: "do-nothing" });
 
 	/** override the state in the current file */
 	const result: DbStateReturn = await setDbState(newState, currentDatabaseFilename);
@@ -113,7 +143,7 @@ export async function setDbStateAndBackupCurrentOne(
 	 *
 	 * needed for e.g. `commitDatabaseDataIntoArchiveIfChanged`
 	 */
-	await backupDbState(currentDatabaseFilename, { onDestinationAlreadyExists: "create-another" })
+	await backupDbStateWithEncrypt(currentDatabaseFilename, { onDestinationAlreadyExists: "create-another" })
 
 	return result;
 }

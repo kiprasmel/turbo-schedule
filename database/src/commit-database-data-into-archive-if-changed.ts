@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node-dev
 
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
 import cp, { ExecOptions } from "child_process";
 import os from "os";
@@ -11,60 +11,13 @@ import { ScrapeInfo } from "@turbo-schedule/common";
 import { getDatabaseFilepath } from "./config";
 import { initDb } from "./initDb";
 import { databaseSnapshotNameToFullFilepath } from "./paths";
+import { syncEnvVarAndFile } from "./util/sync-env-var-and-file";
 
 export const execAsync = util.promisify(cp.exec);
-export const writeAsync = util.promisify(fs.writeFile);
-export const readAsync = util.promisify(fs.readFile);
-export const mkdirAsync = util.promisify(fs.mkdir);
-export const existsAsync = util.promisify(fs.exists);
-export const rmdirAsync = util.promisify(fs.rmdir);
-export const renameAsync = util.promisify(fs.rename);
 
-const homedir: string = os.homedir();
-const sshdir: string = path.join(homedir, ".ssh");
-const sshFilepath: string = path.join(sshdir, "turbo-schedule-archive-deploy");
+const DEPLOY_KEY_FILEPATH: string = path.join(os.homedir(), ".ssh", "turbo-schedule-archive-deploy");
 
-export type CanCommitMeaningfulSnapshotsRet = {
-	hasEnvVar: boolean;
-	hasSSHFileNotEmpty: boolean;
-	canCommit: boolean;
-	repoDeployKey: string | null;
-};
-
-export async function hasDeployKeyEnvOrFile(): Promise<CanCommitMeaningfulSnapshotsRet> {
-	const envVarContent: string = (process.env.ARCHIVE_DEPLOY_KEY || "").trim();
-	const hasEnvVar: boolean = !!envVarContent;
-
-	const hasSSHFile: boolean = await existsAsync(sshFilepath);
-	const sshFileContent: string | undefined = hasSSHFile ? (await readAsync(sshFilepath, { encoding: "utf-8" })).trim() : "";
-	const hasSSHFileNotEmpty: boolean = hasSSHFile && sshFileContent !== "";
-
-	const canCommit: boolean = hasEnvVar || hasSSHFileNotEmpty;
-
-	const repoDeployKey = hasEnvVar
-		? envVarContent //
-		: hasSSHFileNotEmpty
-			? sshFileContent
-			: null;
-
-	if (hasEnvVar) {
-		await writeSSHKey(envVarContent);
-	}
-
-	return {
-		hasEnvVar,
-		hasSSHFileNotEmpty,
-		canCommit,
-		repoDeployKey,
-	} as const;
-}
-
-async function writeSSHKey(repoDeployKey: string): Promise<void> {
-	await mkdirAsync(sshdir, { recursive: true });
-	await writeAsync(sshFilepath, repoDeployKey + "\n", {
-		mode: "600"
-	});
-}
+export const canCommitMeaningfulSnapshots = () => syncEnvVarAndFile("ARCHIVE_DEPLOY_KEY", DEPLOY_KEY_FILEPATH, { mode: "600" })
 
 export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: ScrapeInfo, scrapeInfo: ScrapeInfo): Promise<void> {
 	const databaseHasChanged: boolean = previousScrapeInfo.pageVersionIdentifier !== scrapeInfo.pageVersionIdentifier;
@@ -73,8 +26,8 @@ export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo:
 	const newDbFilepath: string = getDatabaseFilepath(scrapeInfo.timeStartISO);
 	const dbDirPath: string = path.dirname(newDbFilepath);
 
-	const hasGitDir: boolean = await existsAsync(path.join(dbDirPath, ".git"));
-	const repoDeployKey = (await hasDeployKeyEnvOrFile()).repoDeployKey || "";
+	const hasGitDir: boolean = await fs.pathExists(path.join(dbDirPath, ".git"));
+	const repoDeployKey = (await canCommitMeaningfulSnapshots()).value || "";
 	const repoURL = process.env.ARCHIVE_GIT_REMOTE_URL || "";
 
 	if (!hasGitDir) {
@@ -98,7 +51,7 @@ export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo:
 	 * or has everything (repo url + repo deploy key) to set it up.
 	 */
 
-	const gitSSHCommand: string = !repoDeployKey ? "" : `ssh -i "${sshFilepath}`;
+	const gitSSHCommand: string = !repoDeployKey ? "" : `ssh -i "${DEPLOY_KEY_FILEPATH}`;
 
 	const execInDataDir = (cmd: string, extra: ExecOptions = {}) => {
 		console.log({ cmd });
@@ -120,10 +73,10 @@ export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo:
 	if (!hasGitDir) {
 		const tmpRepoDir = ".tmp-repo";
 		const tmpRepoPath = path.join(dbDirPath, tmpRepoDir);
-		await rmdirAsync(tmpRepoPath);
+		await fs.rmdir(tmpRepoPath);
 
 		await execInDataDir(`git clone ${repoURL} ${tmpRepoDir}`);
-		await renameAsync(path.join(tmpRepoPath, ".git"), path.join(dbDirPath, ".git"));
+		await fs.rename(path.join(tmpRepoPath, ".git"), path.join(dbDirPath, ".git"));
 	}
 
 	await execInDataDir(`git config user.email "${process.env.ARCHIVE_GIT_EMAIL || "bot@tvarkarastis.com"}"`);

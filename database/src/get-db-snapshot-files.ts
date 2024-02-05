@@ -47,7 +47,7 @@ export async function getDatabaseSnapshotFiles({
 	const ret = (xs: string[]): GetDatabaseSnapshotFilesRet => (filenamesInsteadOfPaths ? xs : xs.map(x => path.join(datadir, x))) as GetDatabaseSnapshotFilesRet;
 
 	if (onlyMeaningful) {
-		const { canCommit } = await canCommitMeaningfulSnapshots();
+		const { hasVarOrFile: canCommit } = await canCommitMeaningfulSnapshots();
 		if (canCommit) {
 			const allMeaningfulSnapshots: string[] = getMeaningfulSnapshots();
 			const filesThatMatchedMeaningful: string[] = filenames.filter(file => allMeaningfulSnapshots.includes(file));
