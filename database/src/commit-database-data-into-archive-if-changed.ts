@@ -77,8 +77,13 @@ export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo:
 		const tmpRepoPath = path.join(dbDirPath, tmpRepoDir);
 		await fs.rmdir(tmpRepoPath);
 
-		await execInDataDir(`git clone ${repoURL} ${tmpRepoDir}`);
+		if (await fs.pathExists(tmpRepoPath)) {
+			await fs.rmdir(tmpRepoPath);
+		}
+
+		await execInDataDir(`git clone ${repoURL} ${tmpRepoPath}`);
 		await fs.rename(path.join(tmpRepoPath, ".git"), path.join(dbDirPath, ".git"));
+		await fs.remove(tmpRepoPath);
 	}
 
 	await execInDataDir(`git config user.email "${process.env.ARCHIVE_GIT_EMAIL || "bot@tvarkarastis.com"}"`);
