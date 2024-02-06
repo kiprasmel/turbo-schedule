@@ -28,3 +28,14 @@ export const initDb = async (snapshot: string = databaseFileName): Promise<Db> =
 
 	return database;
 };
+
+export const hasAnyDb = async (snapshot: string = databaseFileName): Promise<boolean> => {
+	const filepath: string = getDatabaseFilepath(snapshot);
+
+	if (!(await fs.pathExists(filepath))) return false;
+
+	const content: string = await fs.readFile(filepath, { encoding: "utf-8" }).then(x => x.trim())
+	if (!content || content[0] !== "{") return false
+
+	return true
+}
