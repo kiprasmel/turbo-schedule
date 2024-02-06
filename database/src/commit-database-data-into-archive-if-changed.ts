@@ -15,7 +15,8 @@ import { syncEnvVarAndFile } from "./util/sync-env-var-and-file";
 
 export const execAsync = util.promisify(cp.exec);
 
-const DEPLOY_KEY_FILEPATH: string = path.join(os.homedir(), ".ssh", "turbo-schedule-archive-deploy");
+const SSH_DIR = path.join(os.homedir(), ".ssh")
+const DEPLOY_KEY_FILEPATH: string = path.join(SSH_DIR, "turbo-schedule-archive-deploy");
 
 export const canCommitMeaningfulSnapshots = () => syncEnvVarAndFile("ARCHIVE_DEPLOY_KEY", DEPLOY_KEY_FILEPATH, { mode: "600" })
 
@@ -67,7 +68,8 @@ export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo:
 	}
 
 	if (!!repoURL && repoURL.includes("github.com")) {
-		await execAsync(`ssh-keyscan -t rsa -H github.com >> ~/.ssh/known_hosts`);
+		await fs.mkdirp(SSH_DIR);
+		await execAsync(`ssh-keyscan -t rsa -H github.com >> ${SSH_DIR}/known_hosts`);
 	}
 
 	if (!hasGitDir) {
