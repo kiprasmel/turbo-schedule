@@ -4,6 +4,8 @@ import os from "os"
 import fs from "fs-extra";
 import path from "path";
 
+import { noop } from "@turbo-schedule/common";
+
 import { DbSchema, Db, defaultDbState, getDatabaseFilepath, databaseFileName } from "./config";
 import { initDb } from "./initDb";
 
@@ -13,6 +15,8 @@ import { DbStateReturn } from "./setNewDbState";
 import { databaseSnapshotNameToFullFilepath } from "./paths";
 import { execAsync } from "./commit-database-data-into-archive-if-changed";
 import { syncEnvVarAndFile } from "./util/sync-env-var-and-file";
+import { identifyMeaningfulFiles } from "./detect-data-changed";
+import { getMeaningfulSnapshots } from "./get-meaningful-snapshots";
 
 const debug = require("debug")("turbo-schedule:database:setDbState");
 
@@ -38,8 +42,6 @@ export async function setDbState(
 		databaseDirPath: path.parse(databaseFilePath).dir,
 	};
 }
-
-const ENCRYPT_KEY_FILEPATH = path.join(os.homedir(), ".gnupg", "turbo-schedule-archive.pub.asc")
 
 export type OnDestinationAlreadyExists = "do-nothing" | "create-another"
 export type BackupDbStateOpts = {
@@ -112,7 +114,7 @@ export async function backupDbStateWithEncrypt(
 	await fs.copyFile(snapshotFilepath, backupDestinationPath);
 
 	try {
-		await execAsync(`gpg --encrypt --hidden-recipient-file ${ENCRYPT_KEY_FILEPATH} --output ${backupDestinationPath} ${backupDestinationPath}`)
+		await encryptInplace(backupDestinationPath)
 	} catch (err) {
 		/** abort if encryption failed */
 
@@ -124,6 +126,30 @@ export async function backupDbStateWithEncrypt(
 	}
 
 	return backupDestinationPath;
+}
+
+const ENCRYPT_KEY_FILEPATH = path.join(os.homedir(), ".gnupg", "turbo-schedule-archive.pub.asc")
+
+async function encryptInplace(filepath: string) {
+	const tmpfile = `${filepath}.gpg`
+	await execAsync(`gpg --encrypt --yes --hidden-recipient-file ${ENCRYPT_KEY_FILEPATH} --output ${tmpfile} ${filepath}`)
+	await fs.remove(filepath)
+	await fs.rename(tmpfile, filepath)
+}
+
+noop(encryptCommitMeaningfulButNotYetProcessedFiles)
+/**
+ * in case forgot to setup encryption & now have some dangling files
+ */
+async function encryptCommitMeaningfulButNotYetProcessedFiles() {
+	const alreadyCommittedThusEncrypted: string[] = getMeaningfulSnapshots();
+	const allMeaningfulFiles: string[] = await identifyMeaningfulFiles();
+	const meaningfulFilesNotYetEncrypted: string[] = allMeaningfulFiles.filter(x => !alreadyCommittedThusEncrypted.includes(x))
+
+	for (const fp of meaningfulFilesNotYetEncrypted) {
+		await encryptInplace(fp);
+		await execAsync(`git add ${fp}`, { cwd: path.dirname(fp) })
+	}
 }
 
 export async function setDbStateAndBackupCurrentOne(
@@ -146,4 +172,8 @@ export async function setDbStateAndBackupCurrentOne(
 	await backupDbStateWithEncrypt(currentDatabaseFilename, { onDestinationAlreadyExists: "create-another" })
 
 	return result;
+}
+
+if (!module.parent) {
+	// encryptCommitMeaningfulButNotYetProcessedFiles()
 }
