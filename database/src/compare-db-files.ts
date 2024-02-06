@@ -15,6 +15,7 @@ export type CompareDBFilesOpts = {
 	filepaths: string[];
 	dataDiffDir: string;
 	taskId?: number | string;
+	createDiffs?: boolean;
 };
 
 expose(async (opts: CompareDBFilesOpts) => compareDBFiles(opts));
@@ -22,6 +23,7 @@ export function compareDBFiles({
 	filepaths,
 	dataDiffDir, //
 	taskId = 0,
+	createDiffs = false,
 }: CompareDBFilesOpts): string[] {
 	const log = (...msgs: any[]): void => void process.stdout.write([threadId, taskId, ...msgs, "\n"].join(" "));
 
@@ -80,18 +82,20 @@ export function compareDBFiles({
 			];
 			log(...info);
 
-			const patchfile = `${basenameExtless(fp1)}...${basenameExtless(fp2)}.diff`;
-			const patchpath = path.join(dataDiffDir, patchfile);
-			/** https://github.com/andreyvit/json-diff */
-			const cmd = `json-diff --raw-json --max-elisions 0 "${fp1}" "${fp2}" > "${patchpath}.${threadId}"`;
-			try {
-				execSync(cmd);
-			} catch (e) {
-				if ((e as any).status === 1) {
-					// expected to exit 1 since has diff
-				} else {
-					log(`caught error from json-diff, exit code != 1, throwing.`, e);
-					throw e;
+			if (createDiffs) {
+				const patchfile = `${basenameExtless(fp1)}...${basenameExtless(fp2)}.diff`;
+				const patchpath = path.join(dataDiffDir, patchfile);
+				/** https://github.com/andreyvit/json-diff */
+				const cmd = `json-diff --raw-json --max-elisions 0 "${fp1}" "${fp2}" > "${patchpath}.${threadId}"`;
+				try {
+					execSync(cmd);
+				} catch (e) {
+					if ((e as any).status === 1) {
+						// expected to exit 1 since has diff
+					} else {
+						log(`caught error from json-diff, exit code != 1, throwing.`, e);
+						throw e;
+					}
 				}
 			}
 		}
