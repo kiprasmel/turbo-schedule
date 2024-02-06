@@ -24,12 +24,6 @@ export const pickNPseudoRandomly = (n: number) => <T>(origArr: T[], alreadyTaken
 		return origArr.filter((item) => !alreadyTakenArr.includes(item));
 	}
 
-	console.log(
-		`n ${n}, origArr.len ${origArr.length}, already taken len, ${
-			alreadyTakenArr.length
-		}, remaining items ${remainingItems}, n > remainingItems ${n > remainingItems}`
-	);
-
 	const selectedItems: Set<T> = new Set();
 
 	let tempN: number = n;
@@ -54,8 +48,6 @@ export const pickNPseudoRandomly = (n: number) => <T>(origArr: T[], alreadyTaken
 		const candidateIdx: number = toInt(Math.random() * maxIdx);
 
 		const candidate: T = origArr[candidateIdx];
-
-		console.log("tempN", tempN, "candidateIdx", candidateIdx, "candidate", candidate);
 
 		if (selectedItems.has(candidate) || alreadyTakenArr.includes(candidate)) {
 			availableFailureTries--;
