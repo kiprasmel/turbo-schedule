@@ -103,8 +103,13 @@ export const padFor = (x: number, maxlen: number, pad = " "): string => {
 	return padding;
 };
 
-export async function defaultRun(): Promise<string[]> {
-	const files: string[] = await getDatabaseSnapshotFiles({ onlyMeaningful: false, ignoreFilesWithFakeData: true });
+export async function identifyMeaningfulFiles(): Promise<string[]> {
+	/**
+	 * reverse to oldest files first, because we want to go from oldest to newest,
+	 * and if a newer file is different from an older one, then track it,
+	 * instead of the opposite (there's a difference).
+	*/
+	const files: string[] = await getDatabaseSnapshotFiles({ onlyMeaningful: false, moreRecentArchivesFirst: false }).then(xs => xs.sort(lastPath2dateSortOldestFirst))
 
 	const { proc, itemRanges: fileRanges } = splitItemsIntoNGroupsBasedOnCPUCores(files.length);
 
@@ -136,7 +141,7 @@ export async function defaultRun(): Promise<string[]> {
 	await threadpool.completed();
 	console.log("threadpool: all tasks completed.");
 
-	meaningfulFiles.sort(lastPath2dateSort);
+	meaningfulFiles.sort(lastPath2dateSortOldestFirst);
 
 	console.log({ meaningfulFiles, meaningful_file_count: meaningfulFiles.length });
 
@@ -152,6 +157,7 @@ export const timedJsonFileSort = (A: string, B: string) => timedJsonFilename2Uni
 export const last = <T = any>(xs: T[]): T => xs[xs.length - 1];
 export const getTimeStrFromJsonFilepath = (pathToFileWithDateFormatName: string): string => last(pathToFileWithDateFormatName.split(path.sep))
 export const lastPath2dateSort = (A: string, B: string) => timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(B)) - timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(A));
+export const lastPath2dateSortOldestFirst = (A: string, B: string) => timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(A)) - timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(B));
 
 export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number, reduceProcCountBy: number = process.env.NODE_ENV === "production" ? 0 : 2): { proc: number; itemRanges: number[][] } {
 	const nproc: number = os.cpus().length;
@@ -210,5 +216,5 @@ export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number, reducePr
 }
 
 if (!module.parent) {
-	defaultRun();
+	identifyMeaningfulFiles();
 }
