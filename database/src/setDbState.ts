@@ -20,6 +20,13 @@ import { getMeaningfulSnapshots } from "./get-meaningful-snapshots";
 
 const debug = require("debug")("turbo-schedule:database:setDbState");
 
+export async function writeRawDb(newState: Partial<DbSchema>, snapshot: string = databaseFileName) {
+	const fullNewState: DbSchema = { ...defaultDbState, ...newState };
+	const filepath = getDatabaseFilepath(snapshot)
+
+	await fs.writeFile(filepath, JSON.stringify(fullNewState, null, 2))
+}
+
 /**
  * A sane version of `db.setState()`
  */
@@ -69,6 +76,10 @@ export async function backupDbStateWithEncrypt(
 	}
 
 	const db: Db = await initDb(snapshot);
+
+	const isFake: boolean = await db.get("isDataFake").value()
+	if (isFake) return null
+
 	const timeStartISO: string = await db.get("scrapeInfo").value().timeStartISO || new Date().toISOString();
 
 	let backupDestinationPath: string = databaseSnapshotNameToFullFilepath(timeStartISO)
