@@ -69,15 +69,19 @@ export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo:
 	if (!hasGitDir) {
 		const repoURL: string = `git@github.com:kiprasmel/turbo-schedule-archive.git`;
 
-		const tmpRepoDir = ".tmp-repo";
-		const tmpRepoPath = path.join(dbDirPath, tmpRepoDir);
-		await fs.rmdir(tmpRepoPath);
+		const tmpRepoPath = path.join(dbDirPath, ".tmp-repo");
 
-		await execInDataDir(`git clone ${repoURL} ${tmpRepoDir}`);
+		if (await fs.pathExists(tmpRepoPath)) {
+			await fs.rmdir(tmpRepoPath);
+		}
+
+		await execInDataDir(`git clone ${repoURL} ${tmpRepoPath}`);
 		await fs.rename(path.join(tmpRepoPath, ".git"), path.join(dbDirPath, ".git"));
 
 		await execInDataDir(`git pull`);
 		await execInDataDir(`git reset --hard origin/${branch}`);
+
+		await fs.remove(tmpRepoPath);
 	}
 
 	await execInDataDir(`git config user.email "${process.env.ARCHIVE_GIT_EMAIL || "bot@tvarkarastis.com"}"`);
