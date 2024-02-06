@@ -62,8 +62,8 @@
 		"docker:login:my-current-workspace": "docker login",
 		"docker:push:my-current-workspace": "docker push kipras/turbo-schedule:$(./get-commit-tag.sh)",
 		"docker:complete-deploy:my-current-workspace": "bash ./deploy.sh \"$(./get-commit-tag.sh)\"",
-		"docker:deploy:my-current-workspace": "yarn docker:deploy:my-current-workspace:no-finish && yarn docker:complete-deploy:my-current-workspace && echo $(./get-commit-tag.sh)",
-		"docker:deploy:my-current-workspace:no-finish": "echo $(./get-commit-tag.sh) && yarn docker:build:my-current-workspace && yarn docker:login:my-current-workspace && yarn docker:push:my-current-workspace",
+		"docker:deploy:my-current-workspace": "yarn docker:deploy:my-current-workspace:no-finish && yarn docker:login:my-current-workspace && yarn docker:push:my-current-workspace && yarn docker:complete-deploy:my-current-workspace && echo $(./get-commit-tag.sh)",
+		"docker:deploy:my-current-workspace:no-finish": "echo $(./get-commit-tag.sh) && yarn docker:build:my-current-workspace",
 		"purge:build": "rm -rf ./client/build ./*/dist/ ./dist/ ./*/tsconfig.tsbuildinfo",
 		"purge:modules": "rm -rf ./*/node_modules/ ./node_modules/",
 		"purge:all": "yarn purge:build & yarn purge:modules & echo \"Do NOT forget to re-setup: \n\nyarn setup\n\""
