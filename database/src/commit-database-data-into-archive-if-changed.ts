@@ -8,7 +8,7 @@ import util from "util";
 
 import { ScrapeInfo } from "@turbo-schedule/common";
 
-import { getDatabaseFilepath } from "./config";
+import { databaseFileName, getDatabaseFilepath } from "./config";
 import { initDb } from "./initDb";
 import { databaseSnapshotNameToFullFilepath } from "./paths";
 import { syncEnvVarAndFile } from "./util/sync-env-var-and-file";
@@ -20,9 +20,23 @@ const DEPLOY_KEY_FILEPATH: string = path.join(SSH_DIR, "turbo-schedule-archive-d
 
 export const canCommitMeaningfulSnapshots = () => syncEnvVarAndFile("ARCHIVE_DEPLOY_KEY", DEPLOY_KEY_FILEPATH, { mode: "600" })
 
+const shouldCleanupIdenticalIfNotChanged = (): boolean => process.env.NODE_ENV === "production"
+
 export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: ScrapeInfo, scrapeInfo: ScrapeInfo): Promise<void> {
 	const databaseHasChanged: boolean = previousScrapeInfo.pageVersionIdentifier !== scrapeInfo.pageVersionIdentifier;
 	console.log({ databaseHasChanged });
+
+	if (!databaseHasChanged) {
+		const oldDbFilepath: string = getDatabaseFilepath(previousScrapeInfo.timeStartISO);
+
+		/** old might not exist - e.g. if no encryption provided */
+		const oldExists = await fs.pathExists(oldDbFilepath);
+
+		if (oldExists && shouldCleanupIdenticalIfNotChanged()) {
+			console.log(`data hasn't changed, we're removing the previous (now duplicate) db.`);
+			await fs.remove(oldDbFilepath);
+		}
+	}
 
 	const newDbFilepath: string = getDatabaseFilepath(scrapeInfo.timeStartISO);
 	const dbDirPath: string = path.dirname(newDbFilepath);
@@ -92,6 +106,17 @@ export async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo:
 	if (databaseHasChanged) {
 		await execInDataDir(`git add "${newDbFilepath}"`);
 		await execInDataDir(`git commit -m "add ${path.basename(newDbFilepath)}"`);
+	}
+
+	/** remove uncommitted files. only in production */
+	if (shouldCleanupIdenticalIfNotChanged()) {
+		const UNCOMMITTED_FILES_TO_KEEP = [
+			databaseFileName,
+		];
+		const excludeRules = UNCOMMITTED_FILES_TO_KEEP.map(x => `-e ${x}`)
+
+		const cmd = `git clean -xdf ${excludeRules}`
+		await execInDataDir(cmd);
 	}
 
 	const branch: string = process.env.ARCHIVE_GIT_BRANCH || "master";
