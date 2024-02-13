@@ -45,7 +45,8 @@ git pull --rebase || exit 1
 
 echo "TAG in remote: $TAG"
 
-yarn docker:deploy:my-current-workspace
+# will finish from local w/ deploy.sh
+yarn docker:deploy:my-current-workspace:no-finish
 
 exit
 

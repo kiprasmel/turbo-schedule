@@ -1,7 +1,10 @@
 /* eslint-disable no-plusplus */
 
+import os from "os"
 import fs from "fs-extra";
 import path from "path";
+
+import { noop } from "@turbo-schedule/common";
 
 import { DbSchema, Db, defaultDbState, getDatabaseFilepath, databaseFileName } from "./config";
 import { initDb } from "./initDb";
@@ -10,8 +13,19 @@ import { initDb } from "./initDb";
 // eslint-disable-next-line import/no-cycle
 import { DbStateReturn } from "./setNewDbState";
 import { databaseSnapshotNameToFullFilepath } from "./paths";
+import { execAsync } from "./commit-database-data-into-archive-if-changed";
+import { syncEnvVarAndFile } from "./util/sync-env-var-and-file";
+import { identifyMeaningfulFiles } from "./detect-data-changed";
+import { getMeaningfulSnapshots } from "./get-meaningful-snapshots";
 
 const debug = require("debug")("turbo-schedule:database:setDbState");
+
+export async function writeRawDb(newState: Partial<DbSchema>, snapshot: string = databaseFileName) {
+	const fullNewState: DbSchema = { ...defaultDbState, ...newState };
+	const filepath = getDatabaseFilepath(snapshot)
+
+	await fs.writeFile(filepath, JSON.stringify(fullNewState, null, 2))
+}
 
 /**
  * A sane version of `db.setState()`
@@ -45,7 +59,7 @@ export type BackupDbStateOpts = {
  * backs up a database snapshot file (usually the latest one)
  * into a its own file, which will be named based on the scrapeInfo.timeStartISO.
  */
-export async function backupDbState(
+export async function backupDbStateWithEncrypt(
 	snapshot: string = databaseFileName,
 	{
 		onDestinationAlreadyExists = "create-another"
@@ -62,6 +76,10 @@ export async function backupDbState(
 	}
 
 	const db: Db = await initDb(snapshot);
+
+	const isFake: boolean = await db.get("isDataFake").value()
+	if (isFake) return null
+
 	const timeStartISO: string = await db.get("scrapeInfo").value().timeStartISO || new Date().toISOString();
 
 	let backupDestinationPath: string = databaseSnapshotNameToFullFilepath(timeStartISO)
@@ -91,9 +109,58 @@ export async function backupDbState(
 
 	debug("backupDbState: backupDestinationPath = ", backupDestinationPath);
 
+	/**
+	 * encrypt & backup or don't backup at all
+	 */
+
+	const { hasEitherVarOrFile: canEncrypt } = await syncEnvVarAndFile("ARCHIVE_ENCRYPT_KEY", ENCRYPT_KEY_FILEPATH, { mode: "600" })
+
+	if (!canEncrypt) {
+		const msg = `an explicit backup of the database state was requested, but encryption key for backup was not provided.\ntried $ARCHIVE_ENCRYPT_KEY and ${ENCRYPT_KEY_FILEPATH}`
+		console.warn(msg)
+
+		return null
+	}
+
 	await fs.copyFile(snapshotFilepath, backupDestinationPath);
 
+	try {
+		await encryptInplace(backupDestinationPath)
+	} catch (err) {
+		/** abort if encryption failed */
+
+		const msg = `tried encrypting backup, but failed.`
+		console.warn(msg, err)
+
+		await fs.remove(backupDestinationPath)
+		return null
+	}
+
 	return backupDestinationPath;
+}
+
+const ENCRYPT_KEY_FILEPATH = path.join(os.homedir(), ".gnupg", "turbo-schedule-archive.pub.asc")
+
+async function encryptInplace(filepath: string) {
+	const tmpfile = `${filepath}.gpg`
+	await execAsync(`gpg --encrypt --yes --hidden-recipient-file ${ENCRYPT_KEY_FILEPATH} --output ${tmpfile} ${filepath}`)
+	await fs.remove(filepath)
+	await fs.rename(tmpfile, filepath)
+}
+
+noop(encryptCommitMeaningfulButNotYetProcessedFiles)
+/**
+ * in case forgot to setup encryption & now have some dangling files
+ */
+async function encryptCommitMeaningfulButNotYetProcessedFiles() {
+	const alreadyCommittedThusEncrypted: string[] = getMeaningfulSnapshots();
+	const allMeaningfulFiles: string[] = await identifyMeaningfulFiles();
+	const meaningfulFilesNotYetEncrypted: string[] = allMeaningfulFiles.filter(x => !alreadyCommittedThusEncrypted.includes(x))
+
+	for (const fp of meaningfulFilesNotYetEncrypted) {
+		await encryptInplace(fp);
+		await execAsync(`git add ${fp}`, { cwd: path.dirname(fp) })
+	}
 }
 
 export async function setDbStateAndBackupCurrentOne(
@@ -101,7 +168,7 @@ export async function setDbStateAndBackupCurrentOne(
 	currentDatabaseFilename: string = databaseFileName,
 ): Promise<DbStateReturn> {
 	/** make a backup to its own file, if doesn't exist already */
-	await backupDbState(currentDatabaseFilename, { onDestinationAlreadyExists: "do-nothing" });
+	await backupDbStateWithEncrypt(currentDatabaseFilename, { onDestinationAlreadyExists: "do-nothing" });
 
 	/** override the state in the current file */
 	const result: DbStateReturn = await setDbState(newState, currentDatabaseFilename);
@@ -113,7 +180,11 @@ export async function setDbStateAndBackupCurrentOne(
 	 *
 	 * needed for e.g. `commitDatabaseDataIntoArchiveIfChanged`
 	 */
-	await backupDbState(currentDatabaseFilename, { onDestinationAlreadyExists: "create-another" })
+	await backupDbStateWithEncrypt(currentDatabaseFilename, { onDestinationAlreadyExists: "create-another" })
 
 	return result;
+}
+
+if (!module.parent) {
+	// encryptCommitMeaningfulButNotYetProcessedFiles()
 }

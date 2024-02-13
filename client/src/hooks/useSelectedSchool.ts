@@ -48,3 +48,20 @@ export const parseSelectedSchoolFromURL = (location: Location = history.location
 
 	return paths[0]
 }
+
+export function navigateToSchool(id: string): void {
+	history.push(`/${id}`)
+}
+
+export const LANDING_NO_AUTO_SWITCH_TO_SCHOOL = "noswitch";
+
+export function useAutoSwitchToLastSelectedSchool() {
+	const school = useSelectedSchool()
+
+	useEffect(() => {
+		const noswitch: boolean = new URLSearchParams(history.location.search).has(LANDING_NO_AUTO_SWITCH_TO_SCHOOL);
+		if (school && !noswitch) {
+			navigateToSchool(school);
+		}
+	}, [school]);
+}

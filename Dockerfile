@@ -19,6 +19,9 @@ ENV workdir=/usr/src/app
 
 WORKDIR ${workdir}
 
+# preinstall packages for easier introspection
+RUN apt update && apt install -y vim less
+
 # root dir
 COPY package.json yarn.lock ./
 COPY build-info.json ./

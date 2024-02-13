@@ -103,8 +103,13 @@ export const padFor = (x: number, maxlen: number, pad = " "): string => {
 	return padding;
 };
 
-export async function defaultRun(): Promise<string[]> {
-	const files: string[] = await getDatabaseSnapshotFiles({ onlyMeaningful: false });
+export async function identifyMeaningfulFiles(): Promise<string[]> {
+	/**
+	 * reverse to oldest files first, because we want to go from oldest to newest,
+	 * and if a newer file is different from an older one, then track it,
+	 * instead of the opposite (there's a difference).
+	*/
+	const files: string[] = await getDatabaseSnapshotFiles({ onlyMeaningful: false, moreRecentArchivesFirst: false }).then(xs => xs.sort(lastPath2dateSortOldestFirst))
 
 	const { proc, itemRanges: fileRanges } = splitItemsIntoNGroupsBasedOnCPUCores(files.length);
 
@@ -128,7 +133,7 @@ export async function defaultRun(): Promise<string[]> {
 	for (let i = 0; i < fileRanges.length; i++) {
 		const [from, to] = fileRanges[i];
 		const filepaths: string[] = files.slice(from, to + 1);
-		const task = threadpool.queue((compareDBFiles) => compareDBFiles({ filepaths, dataDiffDir, threadId: i }));
+		const task = threadpool.queue((compareDBFiles) => compareDBFiles({ filepaths, dataDiffDir, taskId: i }));
 		task.then(onDone);
 		tasks.push(task);
 	}
@@ -136,7 +141,7 @@ export async function defaultRun(): Promise<string[]> {
 	await threadpool.completed();
 	console.log("threadpool: all tasks completed.");
 
-	meaningfulFiles.sort(lastPath2dateSort);
+	meaningfulFiles.sort(lastPath2dateSortOldestFirst);
 
 	console.log({ meaningfulFiles, meaningful_file_count: meaningfulFiles.length });
 
@@ -152,17 +157,18 @@ export const timedJsonFileSort = (A: string, B: string) => timedJsonFilename2Uni
 export const last = <T = any>(xs: T[]): T => xs[xs.length - 1];
 export const getTimeStrFromJsonFilepath = (pathToFileWithDateFormatName: string): string => last(pathToFileWithDateFormatName.split(path.sep))
 export const lastPath2dateSort = (A: string, B: string) => timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(B)) - timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(A));
+export const lastPath2dateSortOldestFirst = (A: string, B: string) => timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(A)) - timedJsonFilename2UnixMillis(getTimeStrFromJsonFilepath(B));
 
 export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number, reduceProcCountBy: number = process.env.NODE_ENV === "production" ? 0 : 2): { proc: number; itemRanges: number[][] } {
 	const nproc: number = os.cpus().length;
 	let proc: number = Math.min(Math.max(1, nproc - reduceProcCountBy), itemCount);
 
-	const calcItemsPerTask = () => Math.floor(itemCount / proc);
-	let ITEMS_PER_TASK: number = calcItemsPerTask();
+	const calcItemsPerProcessor = () => Math.floor(itemCount / proc);
+	let ITEMS_PER_PROCESSOR: number = calcItemsPerProcessor();
 
-	if (ITEMS_PER_TASK < 2) {
+	if (ITEMS_PER_PROCESSOR < 2) {
 		proc = Math.ceil(proc / 2);
-		ITEMS_PER_TASK = calcItemsPerTask();
+		ITEMS_PER_PROCESSOR = calcItemsPerProcessor();
 	}
 
 	/**
@@ -182,20 +188,24 @@ export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number, reducePr
 	 * ceil, because it's better to make it slightly harder for all (excl last) processors,
 	 * than to make it much harder for a single (the last) processor.
 	 */
-	const RANGE_STEP = Math.ceil(ITEMS_PER_TASK / TASK_SPLIT_FACTOR);
+	const RANGE_STEP = Math.ceil(ITEMS_PER_PROCESSOR / TASK_SPLIT_FACTOR);
 
 	const itemRanges = new Array(proc * TASK_SPLIT_FACTOR)
 		.fill(0)
 		.map((_, i) => [i * RANGE_STEP, (i + 1) * RANGE_STEP]);
 
 	// last thread should take on leftover items, if any
-	itemRanges[itemRanges.length - 1][1] = itemCount - 1;
+	if (itemRanges[itemRanges.length - 1][0] >= itemCount - 1) {
+		itemRanges.pop()
+	} else {
+		itemRanges[itemRanges.length - 1][1] = itemCount - 1;
+	}
 
 	console.log({
 		nproc,
 		proc,
 		item_count: itemCount,
-		ITEMS_PER_TASK,
+		ITEMS_PER_PROCESSOR,
 		TASK_SPLIT_FACTOR,
 		RANGE_STEP,
 		itemRanges,
@@ -206,5 +216,5 @@ export function splitItemsIntoNGroupsBasedOnCPUCores(itemCount: number, reducePr
 }
 
 if (!module.parent) {
-	defaultRun();
+	identifyMeaningfulFiles();
 }

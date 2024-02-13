@@ -27,7 +27,8 @@ import {
 } from "@turbo-schedule/common";
 
 // eslint-disable-next-line import/no-cycle
-import { setDbStateAndBackupCurrentOne } from "../../setDbState";
+import { writeRawDb } from "../../setDbState";
+import { databaseFileName } from "../../config";
 
 const createParticipantWithLabels = (labels: ParticipantLabel[]) => (name: string): ParticipantInLesson => ({
 	text: name,
@@ -71,8 +72,12 @@ export const getDefaultFakeDataOpts = (): CreateFakeDataOpts => ({
 	maxTimeIndex: 8,
 });
 
-export const createFakeData = (
+export const createFakeData = async (
 	{
+		snapshot = databaseFileName,
+	}: { snapshot?: string } = {}
+) => {
+	const {
 		studentNames,
 		classNames,
 		lessonNames,
@@ -83,15 +88,13 @@ export const createFakeData = (
 		maxDayIndex,
 		minTimeIndex,
 		maxTimeIndex,
-	}: CreateFakeDataOpts = getDefaultFakeDataOpts()
-) => {
+	}: CreateFakeDataOpts = getDefaultFakeDataOpts();
+
 	const generateInitDataForLessons = (): LessonInitData[] => {
 		const _initDataForLessons: LessonInitData[] = [];
 
 		for (let day = minDayIndex; day <= maxDayIndex; day++) {
 			for (let time = minTimeIndex; time <= maxTimeIndex; time++) {
-				console.log("day, time", day, time);
-
 				const pickedLessonNames: string[] = pickNPseudoRandomly(lessonNames.length)(lessonNames);
 
 				let alreadyPickedStudentNames: string[] = [];
@@ -230,7 +233,7 @@ export const createFakeData = (
 		originalScheduleURI: `http://kipras.org/fake-url/ayyy_lmao_${name}.html`,
 	});
 
-	setDbStateAndBackupCurrentOne({
+	await writeRawDb({
 		isDataFake: true,
 		lessons,
 		participants: (<{ names: string[]; labels: ParticipantLabel[] }[]>[
@@ -239,5 +242,5 @@ export const createFakeData = (
 			{ names: teacherNames, labels: ["teacher"] },
 			{ names: roomNames, labels: ["room"] },
 		]).flatMap(({ names, labels }) => names.map((name) => toParticipant(name, labels))),
-	});
+	}, snapshot);
 };

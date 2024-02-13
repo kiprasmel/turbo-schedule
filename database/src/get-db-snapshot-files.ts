@@ -9,10 +9,14 @@ import { canCommitMeaningfulSnapshots } from "./commit-database-data-into-archiv
 import { lastPath2dateSort } from "./detect-data-changed";
 import { readRawDb } from "./read-raw-db";
 import { DB_FILE_EXT } from "./paths";
+import { initDb } from "./initDb";
 
 export type GetDatabaseSnapshotFilesOpts = {
 	datadir?: string;
 	onlyMeaningful: boolean;
+
+	/** by default, ignores files with fake data. */
+	ignoreFilesWithFakeData?: boolean;
 
 	/** by default, returns full paths. */
 	filenamesInsteadOfPaths?: boolean;
@@ -26,42 +30,46 @@ export type GetDatabaseSnapshotFilesOpts = {
 	moreRecentArchivesFirst?: boolean;
 }
 
-/**
- * to ensure that we indeed wrap the return
- */
-type WrappedReturn = { __wrapped_return: never };
-type GetDatabaseSnapshotFilesRet = (string & WrappedReturn)[]
-
 export async function getDatabaseSnapshotFiles({
 	datadir = defaultDatabaseDataDirPath,
 	onlyMeaningful,
+	ignoreFilesWithFakeData = true,
 	filenamesInsteadOfPaths = false,
 	moreRecentArchivesFirst = true,
-}: GetDatabaseSnapshotFilesOpts): Promise<GetDatabaseSnapshotFilesRet> {
-	const filenames: string[] = fs.readdirSync(datadir).filter((x) => x.endsWith(DB_FILE_EXT));
+}: GetDatabaseSnapshotFilesOpts): Promise<string[]> {
+	let filenames: string[] = fs.readdirSync(datadir).filter((x) => x.endsWith(DB_FILE_EXT));
+
+	if (ignoreFilesWithFakeData) {
+		filenames = (
+			await Promise.all(
+				filenames.map(async f => {
+					const isFake: boolean = (await initDb(path.join(datadir, f))).get("isDataFake").value()
+					return [isFake, f]
+				})
+			)
+		)
+		.filter(([isFake]) => !isFake)
+		.map(([_, f]) => f) as string[]
+	}
 
 	if (moreRecentArchivesFirst) {
 		filenames.sort(lastPath2dateSort);
 	}
 
-	const ret = (xs: string[]): GetDatabaseSnapshotFilesRet => (filenamesInsteadOfPaths ? xs : xs.map(x => path.join(datadir, x))) as GetDatabaseSnapshotFilesRet;
-
 	if (onlyMeaningful) {
-		const { canCommit } = await canCommitMeaningfulSnapshots();
+		const { hasEitherVarOrFile: canCommit } = await canCommitMeaningfulSnapshots();
 		if (canCommit) {
-			const allMeaningfulSnapshots: string[] = getMeaningfulSnapshots();
-			const filesThatMatchedMeaningful: string[] = filenames.filter(file => allMeaningfulSnapshots.includes(file));
-
-			return ret(filesThatMatchedMeaningful);
+			const allMeaningfulSnapshots: string[] = getMeaningfulSnapshots(datadir);
+			filenames = filenames.filter(file => allMeaningfulSnapshots.includes(file));
 		} else {
 			const msg = `WARN: only meaningful snapshots were requested, but within current environment, meaningful snapshots CANNOT be committed.\n`;
 			console.warn(msg);
-
-			return ret(filenames);
 		}
 	}
 
-	return ret(filenames);
+	return filenamesInsteadOfPaths
+		? filenames
+		: filenames.map(x => path.join(datadir, x));
 }
 
 export function snapshotExistsInArchive(snapshot: string): boolean {
