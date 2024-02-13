@@ -19,8 +19,7 @@
 !client/build
 !use-fetched-state/dist
 
-!database/data/
-database/data/emails.json
+database/data
 
 #### this sucks
 ###!server/postinstall.ts

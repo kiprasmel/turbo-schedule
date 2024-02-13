@@ -1,12 +1,28 @@
+import fs from "fs";
+import path from "path";
+import cp from "child_process";
+import util from "util";
+import os from "os";
+
 import scraper, { wasScheduleUpdated } from "@turbo-schedule/scraper";
+import { ScrapeInfo } from "@turbo-schedule/common";
+import { databaseFileName, getDatabaseFilepath, initDb } from "@turbo-schedule/database";
+
 import { scrapedDataDirPath } from "../config";
 
+const execAsync = util.promisify(cp.exec);
+const writeAsync = util.promisify(fs.writeFile);
+const mkdirAsync = util.promisify(fs.mkdir);
+const existsAsync = util.promisify(fs.exists);
+
 export const runScraper = async (): Promise<void> => {
+	const previousScrapeInfo: ScrapeInfo = await initDb(databaseFileName).then(x => x.get("scrapeInfo").value())
+
 	const startDate: Date = new Date();
 
 	console.log("\n~ Starting scraper:", startDate, "\n");
 
-	await scraper(scrapedDataDirPath);
+	const scrapeInfo: ScrapeInfo = await scraper(scrapedDataDirPath);
 
 	const endDate: Date = new Date();
 
@@ -14,6 +30,8 @@ export const runScraper = async (): Promise<void> => {
 	const secDifference: number = msDifference / 1000;
 
 	console.log("\n~ Finished scraper.", endDate, "\n difference in secs: ", secDifference, "\n");
+
+	await commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo, scrapeInfo);
 
 	/**
 	 * TODO
@@ -29,6 +47,68 @@ export const runScraper = async (): Promise<void> => {
 	 *
 	 */
 };
+
+async function commitDatabaseDataIntoArchiveIfChanged(previousScrapeInfo: ScrapeInfo, scrapeInfo: ScrapeInfo): Promise<void> {
+	const databaseHasChanged: boolean = previousScrapeInfo.pageVersionIdentifier !== scrapeInfo.pageVersionIdentifier;
+
+	const newDbFilepath: string = getDatabaseFilepath(scrapeInfo.timeStartISO);
+	const dbDirPath: string = path.dirname(newDbFilepath);
+
+	const hasGitDir: boolean = await existsAsync(path.join(dbDirPath, ".git"));
+	const repoDeployKey = process.env.ARCHIVE_DEPLOY_KEY || "";
+	const repoURL = process.env.ARCHIVE_GIT_REMOTE_URL || "";
+
+	if (!hasGitDir) {
+		const canCreateGitDir: boolean = !!repoURL && !!repoDeployKey;
+
+		if (!canCreateGitDir) {
+			const unserVarInfo = `at least one of 'ARCHIVE_DEPLOY_KEY', 'ARCHIVE_GIT_REMOTE_URL' not set`;
+
+			if (databaseHasChanged) {
+				console.warn(`database has new changes. We cannot commit nor push to the archive, because ${unserVarInfo}.`);
+			} else {
+				console.warn(`even though database does NOT have new changes, we cannot pull/clone the archive, because ${unserVarInfo}.`);
+			}
+
+			return;
+		}
+	}
+
+	/**
+	 * now either already has git dir,
+	 * or has everything (repo url + repo deploy key) to set it up.
+	 */
+
+	const execInDataDir = (cmd: string) => execAsync(cmd, { cwd: dbDirPath });
+	const withDeployKey: string = !repoDeployKey ? "" : await writeAndGetDeployKeyCmdForGit(repoDeployKey);
+
+	if (!hasGitDir) {
+		await execInDataDir(`git ${withDeployKey} clone --bare ${repoURL} .git`);
+		await execInDataDir(`git config --unset core.bare`);
+	}
+
+	await execInDataDir(`git config user.email ${process.env.ARCHIVE_GIT_EMAIL || "bot@tvarkarastis.com"}`);
+	await execInDataDir(`git config user.name ${process.env.ARCHIVE_GIT_NAME || "Turbo Schedule BOT"}`);
+
+	if (databaseHasChanged) {
+		await execInDataDir(`git add "${newDbFilepath}"`);
+		await execInDataDir(`git commit -m "add ${path.basename(newDbFilepath)}"`);
+	}
+
+	await execInDataDir(`git ${withDeployKey} pull --rebase`);
+	await execInDataDir(`git ${withDeployKey} push origin ${process.env.ARCHIVE_GIT_BRANCH || "master"}`);
+
+	return;
+}
+
+async function writeAndGetDeployKeyCmdForGit(repoDeployKey: string) {
+	const homedir: string = os.homedir();
+	const sshdir: string = path.join(homedir, ".ssh")
+	const sshFilepath: string = path.join(sshdir, "turbo-schedule-archive-deploy")
+	await mkdirAsync(sshdir, { recursive: true });
+	await writeAsync(sshFilepath, repoDeployKey);
+	return `-c core.sshCommand "ssh -i ${sshFilepath} -F /dev/null"`;
+}
 
 export const runScraperIfUpdatesAvailable = async (): Promise<void> => {
 	const updatesAvailable: boolean = await wasScheduleUpdated();
