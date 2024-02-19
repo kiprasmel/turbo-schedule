@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 REMOTE="${REMOTE:-prod}"
 
 WORKSPACE_COMMIT_TAG="$(./get-commit-tag.sh)"
@@ -30,6 +32,7 @@ fi
 echo "TAG $TAG"
 
 ssh -o BatchMode=yes -o AddKeysToAgent=no "$REMOTE" TAG=\"${TAG}\" 'bash -s' <<"EOF"
+set -e
 
 cd "./apps/turbo-schedule"
 git pull --rebase || exit 1
@@ -44,6 +47,8 @@ git pull --rebase || exit 1
 #
 
 echo "TAG in remote: $TAG"
+
+yarn setup
 
 # will finish from local w/ deploy.sh
 yarn docker:deploy:my-current-workspace:no-finish
