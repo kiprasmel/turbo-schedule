@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 REMOTE="${REMOTE:-prod}"
 
 TAG="${TAG:-$1}"
@@ -63,3 +65,6 @@ docker rm "$IMAGE_NAME".old 2>/dev/null
 exit
 
 EOF
+
+printf "%s\n" "$TAG" >> .git/LAST_DEPLOY_TAG
+
