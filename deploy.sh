@@ -38,6 +38,8 @@ ssh -o BatchMode=yes -o AddKeysToAgent=no "$REMOTE" \
 	"ARCHIVE_GIT_REMOTE_URL=\"$ARCHIVE_GIT_REMOTE_URL\"" \
 	'bash -s' <<"EOF"
 
+set -e
+
 IMAGE_USER="kipras"
 IMAGE_NAME="turbo-schedule"
 
@@ -46,8 +48,12 @@ IMAGE="$IMAGE_USER/$IMAGE_NAME:$TAG"
 docker login
 docker pull "$IMAGE"
 
-docker stop "$IMAGE_NAME"
-docker rename "$IMAGE_NAME" "$IMAGE_NAME".old
+HAD_OLD=0
+docker ps | grep "$IMAGE_NAME" && {
+	HAD_OLD=1
+	docker stop "$IMAGE_NAME"
+	docker rename "$IMAGE_NAME" "$IMAGE_NAME".old
+}
 
 docker run \
         -p 127.0.0.1:7000:5000 \
@@ -60,7 +66,7 @@ docker run \
 		--env ARCHIVE_ENCRYPT_KEY="$ARCHIVE_ENCRYPT_KEY" \
         "$IMAGE"
 
-docker rm "$IMAGE_NAME".old 2>/dev/null
+test $HAD_OLD -eq 1 && docker rm "$IMAGE_NAME".old 2>/dev/null
 
 exit
 
