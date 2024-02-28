@@ -7,7 +7,7 @@ const weekdays: Array<string> = [
 	"Ketvirtadienis",
 	"Penktadienis",
 	"Šeštadienis",
-	"Sekmadienis",
+	"Sekmadienis"
 ];
 
 export const lt: Dictionary = {
@@ -28,7 +28,7 @@ export const lt: Dictionary = {
 	Week: "Savaitė",
 	"Go back": "Grįžti",
 	Lesson: "Pamoka",
-	custom: (count) => `county count ${count}`,
+	custom: count => `county count ${count}`,
 	Close: "Uždaryti",
 	Empty__lesson: "Laisva",
 	Students: "Mokiniai",
@@ -45,9 +45,9 @@ export const lt: Dictionary = {
 	"There're often situations when you have a group of people and want to find a common time to meet":
 		"Dažnai būna situacijų, kai turitę žmonių grupę ir norite rasti bendrą laiką susitikimui",
 	"is exactly the tool you need": "būtent tam ir skirtas",
-	"red - bussy; blue - available": "raudona - užimta; mėlyna - laisva",
-	"white - bussy; black - available": "balta - užimta; juoda - laisva",
-	participants: (count) => `${count}`,
+	"red - busy; blue - available": "raudona - užimta; mėlyna - laisva",
+	"white - busy; black - available": "balta - užimta; juoda - laisva",
+	participants: count => `${count}`,
 	/** this is a nightmare */
 	// count % 10 === 1
 	// 	? count % 100 !== 11
@@ -71,7 +71,7 @@ export const lt: Dictionary = {
 	day: "diena",
 	time: "laikas",
 	"available (adj, mult)": "laisvi",
-	"bussy (adj, mult)": "užimti",
+	"busy (adj, mult)": "užimti",
 	total: "iš viso",
 	"(to) clear": "išvalyti",
 	"See an example": "Pamatyti pavyzdį",
@@ -97,7 +97,8 @@ export const lt: Dictionary = {
 
 	"outdated-data-warning: I understand.": "Supratau.",
 
-	"outdated-data-warning: Last time the data collection happened: ": "Paskutinį kartą duomenų surinkimas įvyko: ",
+	"outdated-data-warning: Last time the data collection happened: ":
+		"Paskutinį kartą duomenų surinkimas įvyko: ",
 
 	"Choose your school": "Pasirink savo mokyklą",
 	"Work in Progress": "Vyksta darbai",
@@ -106,8 +107,8 @@ export const lt: Dictionary = {
 	"Message us!": "Parašyk mums!",
 	"I want Turbo Schedule!": "Noriu Turbo Tvarkaraščio!",
 	"i-want-turbo-schedule--mailto-subject": "Norime Turbo Tvarkaraščio",
-	"i-want-turbo-schedule--mailto-body": "Mūsų mokyklos tvarkaraštis pasiekiamas adresu [mano-mokykla.lt/tvarkarastis]. Ar būtų įmanoma integruoti Turbo Tvarkaraštį?",
-
+	"i-want-turbo-schedule--mailto-body":
+		"Mūsų mokyklos tvarkaraštis pasiekiamas adresu [mano-mokykla.lt/tvarkarastis]. Ar būtų įmanoma integruoti Turbo Tvarkaraštį?",
 
 	// "school-full-name: kpg": "Kretingos Pranciškonų gimnazija",
 	"school-core-name: kpg": "Kretingos Pranciškonų",
@@ -119,6 +120,6 @@ export const lt: Dictionary = {
 
 	// "school-full-name: kdp": "Kretingos Simono Daukanto Progimnazija",
 	"school-core-name: kdp": "Kretingos Simono Daukanto",
-	"school-type: kdp": "progimnazija",
+	"school-type: kdp": "progimnazija"
 	//
 };

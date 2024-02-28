@@ -9,7 +9,7 @@ import {
 	screen,
 	/* fireEvent, */
 	waitFor,
-	renderWrap,
+	renderWrap
 } from "../../test-utils";
 import { Availability } from "./Availability";
 
@@ -30,7 +30,7 @@ setupServerFull(
 						classCharOrig: "a",
 						fullClass: "5a",
 						classNum: 5,
-						classChar: "a",
+						classChar: "a"
 					},
 					{
 						id: "5b",
@@ -43,7 +43,7 @@ setupServerFull(
 						classCharOrig: "b",
 						fullClass: "5b",
 						classNum: 5,
-						classChar: "b",
+						classChar: "b"
 					},
 					{
 						id: "6d",
@@ -56,9 +56,9 @@ setupServerFull(
 						classCharOrig: "d",
 						fullClass: "6d",
 						classNum: 6,
-						classChar: "d",
-					},
-				],
+						classChar: "d"
+					}
+				]
 			} as const)
 		)
 	),
@@ -77,32 +77,44 @@ setupServerFull(
 							dayIndex: 0,
 							timeIndex: 0,
 							availableParticipants: [],
-							bussyParticipants: [
-								{ participant: "5a", lesson: { id: "69", name: "maths" } }, //
-								{ participant: "5b", lesson: { id: "420", name: "literature" } },
-								{ participant: "6d", lesson: { id: "1337", name: "physics" } },
-							],
+							busyParticipants: [
+								{
+									participant: "5a",
+									lesson: { id: "69", name: "maths" }
+								}, //
+								{
+									participant: "5b",
+									lesson: { id: "420", name: "literature" }
+								},
+								{
+									participant: "6d",
+									lesson: { id: "1337", name: "physics" }
+								}
+							]
 						},
 						{
 							dayIndex: 0,
 							timeIndex: 1,
 							availableParticipants: [
 								{ participant: "5a", lesson: { id: "0" } }, //
-								{ participant: "5b", lesson: { id: "0" } },
+								{ participant: "5b", lesson: { id: "0" } }
 							],
-							bussyParticipants: [
-								{ participant: "6d", lesson: { id: "21", name: "dance" } }, //
-							],
-						},
-					],
-				],
+							busyParticipants: [
+								{
+									participant: "6d",
+									lesson: { id: "21", name: "dance" }
+								} //
+							]
+						}
+					]
+				]
 			} as const)
 		)
 	)
 );
 
 describe("Availability on-load logic", () => {
-	it("should **not** clear the selected day and time (and thus - extra info selection) if >0 participants were selected", async (done) => {
+	it("should **not** clear the selected day and time (and thus - extra info selection) if >0 participants were selected", async done => {
 		const history = createBrowserHistory();
 
 		history.push(`/avail?p=5a,5b,6d&day=0&time=1`);
@@ -110,7 +122,9 @@ describe("Availability on-load logic", () => {
 		renderWrap(<Availability />, { history });
 
 		await waitFor(() => {
-			const params: URLSearchParams = new URLSearchParams(history.location.search);
+			const params: URLSearchParams = new URLSearchParams(
+				history.location.search
+			);
 
 			expect(params.get("day")).not.toBeNull();
 			expect(params.get("day")).toBe("0");
@@ -133,13 +147,13 @@ describe("Availability on-load logic", () => {
 			expect(screen.queryByText(/time: 2/g)).not.toBeNull();
 
 			expect(screen.queryByText(/available \(2\)/)).not.toBeNull();
-			expect(screen.queryByText(/bussy \(1\)/)).not.toBeNull();
+			expect(screen.queryByText(/busy \(1\)/)).not.toBeNull();
 		});
 
 		done();
 	});
 
-	it("should **do** clear the selected day and time (and thus - extra info selection) if <=0 participants were selected", async (done) => {
+	it("should **do** clear the selected day and time (and thus - extra info selection) if <=0 participants were selected", async done => {
 		const history = createBrowserHistory();
 
 		/**
@@ -156,7 +170,9 @@ describe("Availability on-load logic", () => {
 		await delay(1000);
 
 		await waitFor(() => {
-			const params: URLSearchParams = new URLSearchParams(history.location.search);
+			const params: URLSearchParams = new URLSearchParams(
+				history.location.search
+			);
 
 			expect(params.get("day")).toBeNull();
 
@@ -178,7 +194,7 @@ describe("Availability on-load logic", () => {
 			expect(screen.queryByText(/time: 2/g)).toBeNull();
 
 			expect(screen.queryByText(/available \(2\)/)).toBeNull();
-			expect(screen.queryByText(/bussy \(1\)/)).toBeNull();
+			expect(screen.queryByText(/busy \(1\)/)).toBeNull();
 		});
 
 		done();

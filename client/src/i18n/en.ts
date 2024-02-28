@@ -7,7 +7,7 @@ const weekdays: Array<string> = [
 	"Thursday",
 	"Friday",
 	"Saturday",
-	"Sunday",
+	"Sunday"
 ];
 
 export const en: Dictionary = {
@@ -22,13 +22,15 @@ export const en: Dictionary = {
 	weekday: (index: number) => weekdays[index],
 	"I am": "I am",
 	"Student not found": (name: string) => `Student "${name}" not found...`,
-	"Go back and search for a different one": "Go back search for a different one",
+	"Go back and search for a different one":
+		"Go back search for a different one",
 	"Loading data": "Loading data",
 	Enter: "Enter",
 	Week: "Week",
 	"Go back": "Go back",
 	Lesson: "Lesson",
-	custom: (count: number, count2: number | undefined) => `Sup nerd ${count}, how're you doing, ${count2}`,
+	custom: (count: number, count2: number | undefined) =>
+		`Sup nerd ${count}, how're you doing, ${count2}`,
 	Close: "Close",
 	Empty__lesson: "Empty",
 	Students: "Students",
@@ -36,7 +38,9 @@ export const en: Dictionary = {
 	Classes: "Classes",
 	Rooms: "Rooms",
 	toCompactString: (items: string[]): string =>
-		items.length > 1 ? `${items[0]} and ${items.length - 1} more` : items[0],
+		items.length > 1
+			? `${items[0]} and ${items.length - 1} more`
+			: items[0],
 	"Made with love by (__html)": `Made with <span aria-label="love">❤</span> by`,
 	Availability: "Availability",
 	Common: "Common",
@@ -44,9 +48,10 @@ export const en: Dictionary = {
 	"There're often situations when you have a group of people and want to find a common time to meet":
 		"There're often situations when you have a group of people and want to find a common time to meet",
 	"is exactly the tool you need": "is exactly the tool you need",
-	"red - bussy; blue - available": "red - bussy; blue - available",
-	"white - bussy; black - available": "white - bussy; black - available",
-	participants: (count) => (count === 1 ? `${count} participant` : `${count} participants`),
+	"red - busy; blue - available": "red - busy; blue - available",
+	"white - busy; black - available": "white - busy; black - available",
+	participants: count =>
+		count === 1 ? `${count} participant` : `${count} participants`,
 	"Click me!": "Click me!",
 	"Enter the participant names": "Enter the participant names",
 	"The UI/UX will be improved by the time the Beta phase is over":
@@ -58,7 +63,7 @@ export const en: Dictionary = {
 	day: "day",
 	time: "time",
 	"available (adj, mult)": "available",
-	"bussy (adj, mult)": "bussy",
+	"busy (adj, mult)": "busy",
 	total: "total",
 	"(to) clear": "clear",
 	"See an example": "See an example",
@@ -83,7 +88,8 @@ export const en: Dictionary = {
 
 	"outdated-data-warning: I understand.": "I understand.",
 
-	"outdated-data-warning: Last time the data collection happened: ": "Last time the data collection happened: ",
+	"outdated-data-warning: Last time the data collection happened: ":
+		"Last time the data collection happened: ",
 
 	"Choose your school": "Choose your school",
 	"Work in Progress": "Work in progress",
@@ -92,7 +98,8 @@ export const en: Dictionary = {
 	"Message us!": "Message us!",
 	"I want Turbo Schedule!": "I want Turbo Schedule!",
 	"i-want-turbo-schedule--mailto-subject": "Our school wants Turbo Schedule",
-	"i-want-turbo-schedule--mailto-body": "Our school schedule is accessible thru the URL [my-school.com/schedule]. Would it be possible to integrate Turbo Schedule?",
+	"i-want-turbo-schedule--mailto-body":
+		"Our school schedule is accessible thru the URL [my-school.com/schedule]. Would it be possible to integrate Turbo Schedule?",
 
 	// "school-full-name: kpg": "Kretinga Franciscan gymnasium",
 	"school-core-name: kpg": "Kretinga Franciscan",
@@ -102,6 +109,6 @@ export const en: Dictionary = {
 	"school-type: kjpug": "university gymnasium",
 	// "school-full-name: kdp": "Kretinga Simonas Daukantas middle school",
 	"school-core-name: kdp": "Kretinga Simonas Daukantas",
-	"school-type: kdp": "middle school",
+	"school-type: kdp": "middle school"
 	//
 };

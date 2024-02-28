@@ -6,6 +6,12 @@ export type MinimalLesson = Pick<Lesson, "id" | "name">;
 export interface Availability {
 	dayIndex: Lesson["dayIndex"];
 	timeIndex: Lesson["timeIndex"];
-	availableParticipants: { participant: Participant["text"]; lesson: MinimalLesson }[];
-	bussyParticipants: { participant: Participant["text"]; lesson: MinimalLesson }[];
+	availableParticipants: {
+		participant: Participant["text"];
+		lesson: MinimalLesson;
+	}[];
+	busyParticipants: {
+		participant: Participant["text"];
+		lesson: MinimalLesson;
+	}[];
 }

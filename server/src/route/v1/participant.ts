@@ -206,7 +206,7 @@ router.get<never, ParticipantCommonAvailabilityRes>(
 					];
 
 					let availableParticipants = getParticipants((l) => l.isEmpty);
-					const bussyParticipants = getParticipants((l) => !l.isEmpty);
+					const busyParticipants = getParticipants((l) => !l.isEmpty);
 
 					/**
 					 * TODO FIXME HACK:
@@ -214,20 +214,20 @@ router.get<never, ParticipantCommonAvailabilityRes>(
 					 * The scraper is messed up for some edge cases (upstream -_-),
 					 * and there might be duplicate lessons, some not properly scraped.
 					 *
-					 * We know for a fact, though, that if a participant is bussy,
+					 * We know for a fact, though, that if a participant is busy,
 					 * it cannot be available -- this fixes the issue (temporarily),
 					 * before we fix the underlying issue.
 					 *
 					 */
 					availableParticipants = availableParticipants.filter(
-						(p) => !bussyParticipants.some((bussyP) => p.participant === bussyP.participant)
+						(p) => !busyParticipants.some((busyP) => p.participant === busyP.participant)
 					);
 
 					availability[i][j] = {
 						dayIndex: i, //
 						timeIndex: j,
 						availableParticipants,
-						bussyParticipants,
+						busyParticipants,
 					};
 				}
 			}

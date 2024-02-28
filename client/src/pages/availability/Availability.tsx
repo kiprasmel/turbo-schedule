@@ -70,11 +70,11 @@ export const Availability: FC = () => {
 		/* wantedParticipants.length === 0 ? false : */
 		[selectedDay, selectedTime].some((x) => x !== invalidEnDeVal);
 
-	type TDisplayType = "+-=" | "available / total" | "bussy / total" | "mapped ratio to HSL";
+	type TDisplayType = "+-=" | "available / total" | "busy / total" | "mapped ratio to HSL";
 
 	const [displayType] = useState<TDisplayType>("mapped ratio to HSL");
 
-	/** begin bussy/available button indication */
+	/** begin busy/available button indication */
 	interface IColorMapperEntry {
 		name: string;
 		descriptionAccessor: keyof Dictionary;
@@ -85,13 +85,13 @@ export const Availability: FC = () => {
 	const colorMapperEntrys: IColorMapperEntry[] = [
 		{
 			name: "black-white",
-			descriptionAccessor: "white - bussy; black - available",
+			descriptionAccessor: "white - busy; black - available",
 			gradient: "linear-gradient(to right, hsl(0, 0%, 90%), hsl(0, 0%, 10%))",
 			fn: mapRatioToHSBThroughBrightness,
 		},
 		{
 			name: "red-blue",
-			descriptionAccessor: "red - bussy; blue - available",
+			descriptionAccessor: "red - busy; blue - available",
 			gradient: "linear-gradient(to right, hsl(360, 100%, 50%), hsl(240, 100%, 50%))",
 			fn: mapRatioToHSLThroughHue,
 		},
@@ -112,7 +112,7 @@ export const Availability: FC = () => {
 			return colorMapperEntrys[0];
 		}
 	}, colorMapperEntrys.filter((e) => e.name === colorMapperName)?.[0] ?? colorMapperEntrys[0]);
-	/** end bussy/available button indication */
+	/** end busy/available button indication */
 
 	const { desktop, notDesktop } = useWindow();
 
@@ -416,8 +416,8 @@ export const Availability: FC = () => {
 														className={css`
 											/*
 											background: ${mapRatioToHSLThroughHue(
-												a.bussyParticipants.length /
-													(a.availableParticipants.length + a.bussyParticipants.length)
+												a.busyParticipants.length /
+													(a.availableParticipants.length + a.busyParticipants.length)
 											)};
 											*/
 
@@ -445,7 +445,7 @@ export const Availability: FC = () => {
 																color: hsl(0, 100%, 50%);
 															`}
 														>
-															-{a.bussyParticipants}
+															-{a.busyParticipants}
 														</span>
 														<span
 															className={css`
@@ -458,7 +458,7 @@ export const Availability: FC = () => {
 														>
 															=
 															{a.availableParticipants.length +
-																a.bussyParticipants.length}
+																a.busyParticipants.length}
 														</span>
 													</li>
 												) : displayType === "mapped ratio to HSL" ? (
@@ -468,22 +468,22 @@ export const Availability: FC = () => {
 															css`
 													/*
 													background: ${mapRatioToHSLThroughHue(
-														a.bussyParticipants.length /
+														a.busyParticipants.length /
 															(a.availableParticipants.length +
-																a.bussyParticipants.length)
+																a.busyParticipants.length)
 													)};
 													*/
 
 													/* background: ${mapRatioToHSBThroughBrightness(
-														a.bussyParticipants.length /
+														a.busyParticipants.length /
 															(a.availableParticipants.length +
-																a.bussyParticipants.length)
+																a.busyParticipants.length)
 													)}; */
 
 													background: ${colorMapperEntry.fn(
-														a.bussyParticipants.length /
+														a.busyParticipants.length /
 															(a.availableParticipants.length +
-																a.bussyParticipants.length)
+																a.busyParticipants.length)
 													)};
 
 
@@ -538,7 +538,7 @@ export const Availability: FC = () => {
 																{/* {a.availableParticipants}/ */}
 																{a.availableParticipants.length}/
 																{a.availableParticipants.length +
-																	a.bussyParticipants.length}
+																	a.busyParticipants.length}
 															</span>
 														</button>
 
@@ -578,7 +578,7 @@ export const Availability: FC = () => {
 														filter: invert(100%);
 													`}
 												>
-													{a.availableParticipants + a.bussyParticipants}
+													{a.availableParticipants + a.busyParticipants}
 												</span>
 											</div> */}
 													</li>
@@ -800,10 +800,10 @@ export const Availability: FC = () => {
 
 							<article>
 								<h1>
-									{t("bussy (adj, mult)")} ({selectedAvailability.bussyParticipants.length}):
+									{t("busy (adj, mult)")} ({selectedAvailability.busyParticipants.length}):
 								</h1>
 								<ul>
-									{selectedAvailability.bussyParticipants.map((p) => (
+									{selectedAvailability.busyParticipants.map((p) => (
 										<ParticipantListItem
 											key={`${p.participant}/${p.lesson.id}`}
 											participant={p.participant}
@@ -819,7 +819,7 @@ export const Availability: FC = () => {
 								<h1>
 									{t("total")}:{" "}
 									{selectedAvailability.availableParticipants.length +
-										selectedAvailability.bussyParticipants.length}
+										selectedAvailability.busyParticipants.length}
 								</h1>
 							</article>
 						</>

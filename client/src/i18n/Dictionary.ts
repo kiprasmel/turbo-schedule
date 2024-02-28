@@ -31,8 +31,8 @@ export interface Dictionary {
 	"There're often situations when you have a group of people and want to find a common time to meet": string;
 	"Common Availability": string;
 	"is exactly the tool you need": string;
-	"red - bussy; blue - available": string;
-	"white - bussy; black - available": string;
+	"red - busy; blue - available": string;
+	"white - busy; black - available": string;
 	participants: (count: number) => string;
 	"Click me!": string;
 	"Enter the participant names": string;
@@ -44,7 +44,7 @@ export interface Dictionary {
 	day: string;
 	time: string;
 	"available (adj, mult)": string;
-	"bussy (adj, mult)": string;
+	"busy (adj, mult)": string;
 	total: string;
 	"(to) clear": string;
 	"See an example": string;
