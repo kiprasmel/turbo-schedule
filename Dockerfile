@@ -49,8 +49,6 @@ COPY server/dist ./server/dist
 COPY client/build ./client/build
 COPY use-fetched-state/dist ./use-fetched-state/dist
 
-COPY database/data ./database/data
-
 # not yet needed
 #COPY server/.env ./server/.env
 
