@@ -1,3 +1,5 @@
+import fs from "fs-extra"
+
 import {
 	Class,
 	Lesson,
@@ -26,7 +28,10 @@ export const databaseFileName: string = "latest.json";
 
 /** TODO REMOVE & use the underlying fn instead */
 export const getDatabaseFilepath = (snapshot: string = databaseFileName): string => {
-	return databaseSnapshotNameToFullFilepath(snapshot)
+	const fp = databaseSnapshotNameToFullFilepath(snapshot)
+	const dir = path.dirname(fp)
+	fs.ensureDir(dir)
+	return fp
 }
 
 export interface DbSchema {
