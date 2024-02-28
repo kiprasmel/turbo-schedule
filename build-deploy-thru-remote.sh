@@ -34,7 +34,7 @@ echo "TAG $TAG"
 ssh -o BatchMode=yes -o AddKeysToAgent=no "$REMOTE" TAG=\"${TAG}\" 'bash -s' <<"EOF"
 set -e
 
-cd "./apps/turbo-schedule"
+cd "$HOME/infra/server/turbo-schedule/turbo-schedule.git"
 git pull --rebase || exit 1
 
 # TODO: only docker:build instead of docker:deploy to avoid even needing a login to push
