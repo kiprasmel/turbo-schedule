@@ -46,7 +46,12 @@ IMAGE_NAME="turbo-schedule"
 IMAGE="$IMAGE_USER/$IMAGE_NAME:$TAG"
 
 docker login
-docker pull "$IMAGE"
+docker pull "$IMAGE" || {
+	docker image ls | grep "$TAG" || {
+		>&2 printf "error: image with tag $TAG not found neither remote nor local...\n"
+		exit 1
+	}
+}
 
 HAD_OLD=0
 docker ps | grep "$IMAGE_NAME" && {
