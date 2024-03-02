@@ -1,29 +1,25 @@
 #!/usr/bin/env bash
 
-set -e
+set -eu
 
 REMOTE="${REMOTE:-prod}"
+TAG="${TAG:-}"
 
 WORKSPACE_COMMIT_TAG="$(./get-commit-tag.sh)"
 if [ -z "$TAG" ]; then
-	printf "TAG not set. Which one to use?\n"
-	# printf "[(L)atest/(W)orkspace commit]: "
-	printf "[1] \"latest\"\n"
-	printf "[2] workspace commit \"$WORKSPACE_COMMIT_TAG\""
-	printf "\nEnter number 1-2\n"
-	printf "> "
-
+	printf "TAG not set.\nUse workspace commit? [Y/n] "
 	read -r ans
-
 	case "$ans" in
-		1|L|l)
-			TAG="latest"
-			;;
-		2|W|w|C|c)
+		""|y|Y|yes)
 			TAG="$WORKSPACE_COMMIT_TAG"
 			;;
+		n|N|no)
+			printf "\nInsert tag: "
+			read -r ans
+			TAG="$ans"
+			;;
 		*)
-		 	printf "invalid choice\n"
+			printf "\nInvalid choice.\n"
 			exit 1
 			;;
 	esac
@@ -32,7 +28,7 @@ fi
 echo "TAG $TAG"
 
 ssh -o BatchMode=yes -o AddKeysToAgent=no "$REMOTE" TAG=\"${TAG}\" 'bash -l -s' <<"EOF"
-set -e
+set -eux
 
 cd "$HOME/infra/server/turbo-schedule/turbo-schedule.git"
 git pull --rebase || exit 1
