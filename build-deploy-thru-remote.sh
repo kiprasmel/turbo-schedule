@@ -31,7 +31,7 @@ fi
 
 echo "TAG $TAG"
 
-ssh -o BatchMode=yes -o AddKeysToAgent=no "$REMOTE" TAG=\"${TAG}\" 'bash -s' <<"EOF"
+ssh -o BatchMode=yes -o AddKeysToAgent=no "$REMOTE" TAG=\"${TAG}\" 'bash -l -s' <<"EOF"
 set -e
 
 cd "$HOME/infra/server/turbo-schedule/turbo-schedule.git"
