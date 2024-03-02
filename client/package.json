@@ -38,7 +38,7 @@
 	},
 	"devDependencies": {
 		"@testing-library/jest-dom": "^5.14.1",
-		"@testing-library/react": "https://pkg.csb.dev/testing-library/react-testing-library/commit/0e2cf7da/@testing-library/react",
+		"@testing-library/react": "14.2.1",
 		"@types/jest": "^26.0.23",
 		"@types/react": "18.2.8",
 		"@types/react-dom": "18.2.4",
