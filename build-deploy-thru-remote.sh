@@ -2,7 +2,22 @@
 
 set -eu
 
-REMOTE="${REMOTE:-prod}"
+get_set_cache() {
+	VAR="$1"
+	STORE_PATH=".git/$VAR"
+
+	test -f "$STORE_PATH" || {
+		>&2 printf "Provide %s (will be cached to '%s'):\n> " "$VAR" "$STORE_PATH"
+		read -r ans
+		printf "%s" "$ans" > "$STORE_PATH"
+	}
+
+	cat "$STORE_PATH"
+}
+
+REMOTE="$(get_set_cache "REMOTE")"
+echo "Using remote '$REMOTE'"
+
 TAG="${TAG:-}"
 
 WORKSPACE_COMMIT_TAG="$(./get-commit-tag.sh)"
