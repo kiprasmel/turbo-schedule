@@ -2,21 +2,7 @@
 
 set -eu
 
-get_set_cache() {
-	VAR="$1"
-	STORE_PATH=".git/$VAR"
-
-	test -f "$STORE_PATH" || {
-		>&2 printf "Provide %s (will be cached to '%s'):\n> " "$VAR" "$STORE_PATH"
-		read -r ans
-		printf "%s" "$ans" > "$STORE_PATH"
-	}
-
-	cat "$STORE_PATH"
-}
-
-REMOTE="$(get_set_cache "REMOTE")"
-echo "Using remote '$REMOTE'"
+. ./lib.sh
 
 TAG="${TAG:-}"
 
@@ -40,12 +26,25 @@ if [ -z "$TAG" ]; then
 	esac
 fi
 
-echo "TAG $TAG"
+echo "TAG '$TAG'"
 
-ssh -o BatchMode=yes -o AddKeysToAgent=no "$REMOTE" TAG=\"${TAG}\" 'bash -l -s' <<"EOF"
+BRANCH="$(git branch --show-current)"
+echo "BRANCH '$BRANCH'"
+
+get_set_cache "REMOTE"
+REMOTE="$CACHE_VALUE"
+echo "REMOTE '$REMOTE' (from $CACHE_PATH)"
+
+ssh -o BatchMode=yes -o AddKeysToAgent=no "$REMOTE" \
+	TAG=\"${TAG}\" \
+	BRANCH=\"${BRANCH}\" \
+	"ROOTDIR=${ROOTDIR}" \
+	'bash -l -s' <<"EOF"
 set -eux
 
-cd "$HOME/infra/server/turbo-schedule/turbo-schedule.git"
+cd "$ROOTDIR"
+git fetch origin "+refs/heads/*:refs/remotes/origin/*"
+git checkout "$BRANCH"
 git pull --rebase || exit 1
 
 # TODO: only docker:build instead of docker:deploy to avoid even needing a login to push
@@ -63,8 +62,6 @@ yarn setup
 
 # will finish from local w/ deploy.sh
 yarn docker:deploy:my-current-workspace:no-finish
-
-exit
 
 EOF
 

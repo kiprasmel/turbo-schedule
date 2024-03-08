@@ -2,12 +2,15 @@
 
 set -e
 
-REMOTE="${REMOTE:-prod}"
+. ./lib.sh
 
 TAG="${TAG:-$1}"
 TAG=${TAG:-latest}
-
 echo "TAG $TAG"
+
+get_set_cache "REMOTE"
+REMOTE="$CACHE_VALUE"
+echo "REMOTE '$REMOTE' (from $CACHE_PATH)"
 
 ARCHIVE_ENCRYPT_KEY_PATH="$HOME/.gnupg/turbo-schedule-archive.pub.asc"
 if [ -f "$ARCHIVE_ENCRYPT_KEY_PATH" ]; then
@@ -31,16 +34,17 @@ else
 	echo "ARCHIVE_GIT_REMOTE_URL not set"
 fi
 
-RUN_DOCKER_SCRIPT="$(cat run-docker.sh)"
-
 ssh -o BatchMode=yes -o AddKeysToAgent=no "$REMOTE" \
 	"TAG=\"${TAG}\"" \
 	"ARCHIVE_ENCRYPT_KEY=\"${ARCHIVE_ENCRYPT_KEY}\"" \
 	"ARCHIVE_DEPLOY_KEY=\"${ARCHIVE_DEPLOY_KEY}\"" \
-	"ARCHIVE_GIT_REMOTE_URL=\"$ARCHIVE_GIT_REMOTE_URL\"" \
+	"ARCHIVE_GIT_REMOTE_URL=\"${ARCHIVE_GIT_REMOTE_URL}\"" \
+	"ROOTDIR=${ROOTDIR}" \
 	'bash -s' <<"EOF"
+set -e
 
-$RUN_DOCKER_SCRIPT
+cd $ROOTDIR
+./run-docker.sh
 
 exit
 

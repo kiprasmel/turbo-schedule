@@ -1,6 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 set -e
+set -x
+
+echo "in run-docker.sh"
 
 TAG="${TAG:-$1}"
 TAG=${TAG:-latest}
@@ -36,5 +39,5 @@ docker run \
 		--env ARCHIVE_ENCRYPT_KEY="$ARCHIVE_ENCRYPT_KEY" \
         "$IMAGE"
 
-test $HAD_OLD -eq 1 && docker rm "$IMAGE_NAME".old 2>/dev/null
+test $HAD_OLD -eq 0 || docker rm "$IMAGE_NAME".old 2>/dev/null
 
