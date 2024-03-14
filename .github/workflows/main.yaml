@@ -21,7 +21,7 @@ jobs:
 
             - uses: actions/setup-node@v2
               with:
-                node-version: '12'
+                node-version: '16'
 
             # https://github.com/actions/cache/blob/master/examples.md#node---yarn
             - name: Get yarn cache
@@ -67,7 +67,7 @@ jobs:
 
             - uses: actions/setup-node@v2
               with:
-                node-version: '12'
+                node-version: '16'
 
             # https://github.com/actions/cache/blob/master/examples.md#node---yarn
             - name: Get yarn cache
