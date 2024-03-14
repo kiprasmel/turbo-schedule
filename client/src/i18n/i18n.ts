@@ -31,6 +31,8 @@ export const defaultLang: ILang = "lt";
 
 export const availableLangs: Array<ILang> = Object.keys(translations).map((translation) => translation as ILang);
 
+export const isLang = (str: string) => availableLangs.includes(str as ILang);
+
 const localStorageIdentifier: string = "lang";
 
 export const setLang = (newLang: ILang) => {

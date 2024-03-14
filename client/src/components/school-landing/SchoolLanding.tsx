@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { css } from "emotion";
 
+import { noop } from "@turbo-schedule/common";
+
 import { useFetchParticipants } from "../../hooks/useFetchers";
 import { history } from "../../utils/history";
 import { ParticipantListList } from "../studentSchedule/ParticipantList";
@@ -8,14 +10,17 @@ import { FancyStickyBackgroundForSearch, Search } from "../navbar/Search";
 import { Navbar } from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 // import { Archive } from "../../pages/archive/Archive";
-import { CURRENTLY_SUPPORTED_SCHOOLS, SchoolID } from "../../pages/landing/Landing";
 import { useWindow } from "../../hooks/useWindow";
+import { ILang, isLang } from "i18n/i18n";
+import { useLang } from "components/currentLangContext/currentLangContext";
+import { isSchool } from "hooks/useSelectedSchool";
 
 /** TODO FIXME WWidth - this bad boy ain't even re-sizing */
 const SchoolLanding = () => {
 	const [searchString, setSearchString] = useState<string>("");
 	const { notDesktop } = useWindow()
 	const [participants] = useFetchParticipants([], []);
+	const { setLang } = useLang();
 
 	/**
 	 * BACKWARDS COMPAT (pre MULTI_SCHOOL) - rewrite /avail?p=...&... to /kpg/avail?p=...&...,
@@ -37,15 +42,38 @@ const SchoolLanding = () => {
 			return
 		}
 
-		const potentiallySchool = pathname.split("/")[1]
-		const isNotSchool = !CURRENTLY_SUPPORTED_SCHOOLS.includes(potentiallySchool as SchoolID)
+		const [_path0, path1, ...pathrest] = pathname.split("/")
+		noop(_path0);
+		const searchQuery = new URLSearchParams(search).toString()
+		const searchQueryReady = (!searchQuery ? "" : "?" + searchQuery)
 
-		if (isNotSchool) {
-			const searchQuery = new URLSearchParams(search).toString()
-			const newPath = "/kpg/" + potentiallySchool /** now is expected to be a participant */ + "?" + searchQuery
+		/**
+		 * TODO: "RedirectHandler" component.
+		 *
+		 * currently if >1 path, will go to different component
+		 * (Availability or StudentSchedulePage),
+		 * so won't end up here, so lang won't be handled correctly.
+		 *
+		 * this is minor issue since the only use case i have for /:lang
+		 * right now is linking from my resume to this project
+		 * and defaulting to english, so no need for deeper paths.
+		 * but ofc, should have proper solution eventually.
+		 *
+		 */
+
+		 if (isLang(path1)) {
+		 	 setLang(path1 as ILang);
+			 const newPath = "/" + pathrest + searchQueryReady;
+			 history.replace(newPath);
+			 return;
+		 }
+
+		if (!isSchool(path1)) {
+			const newPath = "/kpg/" + path1 + searchQueryReady
 			history.replace(newPath)
 			return
 		}
+		// eslint-disable-next-line
 	}, [])
 
 	const matchingParticipants: any[] = [] // TODO FIXME - enable back together with `isOnlyOneMatchingParticipant`.

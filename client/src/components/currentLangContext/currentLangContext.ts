@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { ILang, defaultLang, availableLangs } from "../../i18n/i18n";
 
@@ -39,3 +39,6 @@ export type ICurrentLangContext = React.Context<ICurrentLangContextValue>;
 export const CurrentLangContext: ICurrentLangContext = React.createContext<ICurrentLangContextValue>(
 	defaultContextValue
 );
+
+export const useLang = () => useContext(CurrentLangContext)
+

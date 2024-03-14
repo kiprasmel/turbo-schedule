@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
 
-import React, { FC, useContext } from "react";
+import React, { FC } from "react";
 import { css } from "emotion";
 
-import { CurrentLangContext } from "../currentLangContext/currentLangContext";
+import { useLang } from "../currentLangContext/currentLangContext";
 import { ILang } from "../../i18n/i18n";
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 
 /** TODO `react-select` @ https://react-select.com */
 export const LangSelect: FC<Props> = () => {
-	const { currentLang, setLang, availableLangs } = useContext(CurrentLangContext);
+	const { currentLang, setLang, availableLangs } = useLang();
 
 	return (
 		<select
